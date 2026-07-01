@@ -3,6 +3,19 @@
 Production deploy currently uses the AWS Global account manually from the
 trusted operator environment.
 
+## Staging
+
+Staging deploys are published by the `Buildchain Web Surface` workflow when a
+pull request has the `deploy-staging` label.
+
+```text
+https://staging.kungfu.tech/
+```
+
+Staging is protected by edge Basic Auth, sends `X-Robots-Tag: noindex,
+nofollow`, and uses the AWS Global staging resources declared in
+`buildchain.toml`. The Basic Auth credential is stored outside Git.
+
 Planned automation:
 
 1. Configure a GitHub OIDC role in AWS Global with write access limited to the
@@ -14,4 +27,3 @@ Planned automation:
    production release.
 
 Do not store AWS access keys or session tokens in this repository.
-

@@ -6,6 +6,8 @@ on:
       - opened
       - synchronize
       - reopened
+      - labeled
+      - unlabeled
   push:
     branches:
       - main
@@ -21,6 +23,9 @@ env:
   AWS_ROLE_ARN: arn:aws:iam::727884401362:role/site-kungfu-tech-preview-github-actions
   PREVIEW_BUCKET: kungfu-tech-preview-727884401362-us-east-1
   PREVIEW_DISTRIBUTION_ID: E1EHEH8NYQ85N3
+  STAGING_AWS_ROLE_ARN: arn:aws:iam::727884401362:role/site-kungfu-tech-staging-github-actions
+  STAGING_BUCKET: kungfu-tech-staging-727884401362-us-east-1
+  STAGING_DISTRIBUTION_ID: EV2PK94F6BHSQ
 
 jobs:
   validate:
@@ -124,3 +129,62 @@ jobs:
             --cwd . \
             --aliases pr-123,sha-abcdef123456 \
             --output buildchain-cleanup-plan.json
+
+      - name: Plan staging deploy
+        if: github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'deploy-staging')
+        env:
+          BUILDCHAIN_DIR: ${{ github.workspace }}/buildchain
+          BUILDCHAIN_SOURCE_SHA: ${{ github.sha }}
+        run: |
+          node "$BUILDCHAIN_DIR/scripts/web-surface.mjs" \
+            --mode deploy-plan \
+            --cwd . \
+            --channel staging \
+            --output buildchain-staging-plan.json
+
+      - name: Configure AWS staging credentials
+        if: github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'deploy-staging')
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ env.STAGING_AWS_ROLE_ARN }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Publish staging
+        if: github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'deploy-staging')
+        env:
+          STAGING_EDGE_AUTH_SECRET: ${{ secrets.STAGING_EDGE_AUTH_SECRET }}
+        run: |
+          test -n "$STAGING_EDGE_AUTH_SECRET"
+          aws s3 sync dist/ "s3://$STAGING_BUCKET/" \
+            --delete \
+            --exclude ".buildchain/*" \
+            --cache-control "no-store" \
+            --no-progress
+          aws s3 cp buildchain-staging-plan.json \
+            "s3://$STAGING_BUCKET/.buildchain/deployments/staging/latest.json" \
+            --content-type application/json \
+            --cache-control "no-store"
+          aws s3 cp buildchain-staging-plan.json \
+            "s3://$STAGING_BUCKET/.buildchain/deployments/staging/$GITHUB_SHA.json" \
+            --content-type application/json \
+            --cache-control "no-store"
+          aws cloudfront create-invalidation \
+            --distribution-id "$STAGING_DISTRIBUTION_ID" \
+            --paths "/*"
+
+      - name: Comment staging URL
+        if: github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'deploy-staging')
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          {
+            echo "### Buildchain staging"
+            echo
+            echo "[Open staging](https://staging.kungfu.tech/)"
+            echo
+            echo "- Source: \`$GITHUB_SHA\`"
+            echo "- Distribution: \`$STAGING_DISTRIBUTION_ID\`"
+            echo "- Auth: Basic Auth credential is stored outside Git."
+          } > /tmp/buildchain-staging-comment.md
+          gh pr comment "${{ github.event.pull_request.number }}" \
+            --body-file /tmp/buildchain-staging-comment.md
