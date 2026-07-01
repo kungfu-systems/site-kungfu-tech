@@ -25,8 +25,8 @@ bash scripts/check-site.sh
 ## Buildchain
 
 This site is a Buildchain `web-surface` project. Pull requests use the shared
-Buildchain v2 web-surface workflow for preview plans, PR-close cleanup plans,
-main-merge staging plans, and explicitly gated production plans.
+Buildchain v2 web-surface workflow for real preview deploys, PR-close preview
+cleanup, main-merge staging deploys, and explicitly gated production plans.
 
 Staging is protected by managed network access, not by a Buildchain-managed
 Basic Auth secret.
