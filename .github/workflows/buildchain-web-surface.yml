@@ -2,6 +2,10 @@ name: Buildchain Web Surface
 
 on:
   pull_request:
+    types:
+      - opened
+      - synchronize
+      - reopened
   push:
     branches:
       - main
@@ -9,6 +13,14 @@ on:
 
 permissions:
   contents: read
+  id-token: write
+  pull-requests: write
+
+env:
+  AWS_REGION: us-east-1
+  AWS_ROLE_ARN: arn:aws:iam::727884401362:role/site-kungfu-tech-preview-github-actions
+  PREVIEW_BUCKET: kungfu-tech-preview-727884401362-us-east-1
+  PREVIEW_DISTRIBUTION_ID: E1EHEH8NYQ85N3
 
 jobs:
   validate:
@@ -48,6 +60,7 @@ jobs:
           require-lifecycle-stages: build,verify
 
       - name: Plan preview deploy
+        id: preview-plan
         env:
           BUILDCHAIN_DIR: ${{ github.workspace }}/buildchain
           BUILDCHAIN_SOURCE_SHA: ${{ github.sha }}
@@ -58,6 +71,49 @@ jobs:
             --cwd . \
             --channel preview \
             --output buildchain-preview-plan.json
+
+      - name: Configure AWS preview credentials
+        if: github.event_name == 'pull_request'
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ env.AWS_ROLE_ARN }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Publish PR preview
+        if: github.event_name == 'pull_request'
+        env:
+          PREVIEW_ALIAS: pr-${{ github.event.pull_request.number }}
+        run: |
+          aws s3 sync dist/ "s3://$PREVIEW_BUCKET/$PREVIEW_ALIAS/" \
+            --delete \
+            --cache-control "no-store" \
+            --no-progress
+          aws s3 cp buildchain-preview-plan.json \
+            "s3://$PREVIEW_BUCKET/.buildchain/deployments/preview/$PREVIEW_ALIAS.json" \
+            --content-type application/json \
+            --cache-control "no-store"
+          aws cloudfront create-invalidation \
+            --distribution-id "$PREVIEW_DISTRIBUTION_ID" \
+            --paths "/*"
+
+      - name: Comment PR preview URL
+        if: github.event_name == 'pull_request'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PREVIEW_ALIAS: pr-${{ github.event.pull_request.number }}
+        run: |
+          preview_url="https://$PREVIEW_ALIAS.preview.kungfu.tech"
+          {
+            echo "### Buildchain preview"
+            echo
+            echo "[Open preview]($preview_url)"
+            echo
+            echo "- Alias: \`$PREVIEW_ALIAS\`"
+            echo "- Source: \`$GITHUB_SHA\`"
+            echo "- Distribution: \`$PREVIEW_DISTRIBUTION_ID\`"
+          } > /tmp/buildchain-preview-comment.md
+          gh pr comment "${{ github.event.pull_request.number }}" \
+            --body-file /tmp/buildchain-preview-comment.md
 
       - name: Plan preview cleanup
         env:
