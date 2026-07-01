@@ -24,16 +24,20 @@ bash scripts/check-site.sh
 
 ## Buildchain
 
-This site is a Buildchain `web-surface` project. Buildchain validation and
-deployment planning are dry-run only until AWS roles and non-production
-preview/staging resources are created.
+This site is a Buildchain `web-surface` project. Pull requests use the shared
+Buildchain v2 web-surface workflow for preview plans, PR-close cleanup plans,
+main-merge staging plans, and explicitly gated production plans.
+
+Staging is protected by managed network access, not by a Buildchain-managed
+Basic Auth secret.
 
 ```bash
 BUILDCHAIN_DIR=/path/to/buildchain
 bash scripts/build-site.sh
 node "$BUILDCHAIN_DIR/scripts/web-surface.mjs" --mode validate --cwd .
 node "$BUILDCHAIN_DIR/scripts/web-surface.mjs" --mode deploy-plan --cwd . --channel preview --source-sha "$(git rev-parse HEAD)"
-node "$BUILDCHAIN_DIR/scripts/web-surface.mjs" --mode cleanup-plan --cwd . --aliases pr-123,sha-abcdef123456
+node "$BUILDCHAIN_DIR/scripts/web-surface.mjs" --mode deploy-plan --cwd . --channel staging --source-sha "$(git rev-parse HEAD)"
+node "$BUILDCHAIN_DIR/scripts/web-surface.mjs" --mode cleanup-plan --cwd . --channel preview --pull-number 3 --source-sha "$(git rev-parse HEAD)" --dry-run false
 ```
 
 ## Current Production
