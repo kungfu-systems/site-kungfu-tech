@@ -122,6 +122,40 @@
       color: var(--muted);
     }
 
+    .trust {
+      display: grid;
+      grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+      gap: 28px;
+      padding: 28px 0;
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .trust h2 {
+      margin: 0;
+      font-size: 28px;
+      line-height: 1.1;
+      letter-spacing: 0;
+    }
+
+    .trust p {
+      margin: 0 0 14px;
+      color: var(--muted);
+      font-size: 17px;
+    }
+
+    .trust p:last-child { margin-bottom: 0; }
+
+    footer {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px 20px;
+      color: var(--muted);
+      font-size: 14px;
+      border-top: 1px solid var(--line);
+      padding-top: 18px;
+    }
+
     a {
       color: var(--accent);
       text-decoration-thickness: 1px;
@@ -134,6 +168,7 @@
       main { width: min(100% - 28px, 640px); gap: 32px; padding: 40px 0; }
       .grid { grid-template-columns: 1fr; }
       .principle { min-height: auto; }
+      .trust { grid-template-columns: 1fr; gap: 16px; }
       nav { display: grid; gap: 12px; }
     }
   </style>
@@ -172,7 +207,21 @@
       <a href="https://github.com/kungfu-systems/kungfu/issues">Feedback</a>
       <a class="security" href="https://github.com/kungfu-systems/kungfu/security">Security</a>
     </nav>
+
+    <section class="trust" aria-label="Open source and trust">
+      <h2>Open source core, commercial stewardship.</h2>
+      <div>
+        <p>Kungfu is commercially operated by Kungfu Origin Technology Limited.</p>
+        <p>Kungfu core software is released under the Apache License 2.0. The business model is not based on private-code scarcity.</p>
+        <p>Future commercial services may provide optional cloud, team, compute, storage, support, or governance capabilities without making the local core depend on login or hosted infrastructure.</p>
+        <p>Public feedback, bug reports, feature requests, and code contributions start on GitHub. Security issues should use GitHub private vulnerability reporting.</p>
+      </div>
+    </section>
+
+    <footer>
+      <span>&copy; 2026 Kungfu Origin Technology Limited. All rights reserved.</span>
+      <span>Kungfu core software is licensed under the Apache License 2.0.</span>
+    </footer>
   </main>
 </body>
 </html>
-

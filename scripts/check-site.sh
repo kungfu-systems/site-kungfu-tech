@@ -13,6 +13,11 @@ fi
 test -f public/index.html
 test -f public/.well-known/security.txt
 grep -q 'Local-first debugging infrastructure' public/index.html
+grep -q 'Kungfu Origin Technology Limited' public/index.html
+grep -q 'Apache License 2.0' public/index.html
+grep -q 'GitHub private vulnerability reporting' public/index.html
+grep -q 'journal-first' public/index.html
+grep -q 'Agent-native' public/index.html
 grep -q 'github.com/kungfu-systems/kungfu/security' public/.well-known/security.txt
 
 echo "site-kungfu-tech checks passed"
