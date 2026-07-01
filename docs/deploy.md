@@ -12,9 +12,9 @@ pull request has the `deploy-staging` label.
 https://staging.kungfu.tech/
 ```
 
-Staging is protected by edge Basic Auth, sends `X-Robots-Tag: noindex,
-nofollow`, and uses the AWS Global staging resources declared in
-`buildchain.toml`. The Basic Auth credential is stored outside Git.
+Staging is restricted by the managed network allowlist, sends
+`X-Robots-Tag: noindex, nofollow`, and uses the AWS Global staging resources
+declared in `buildchain.toml`. It does not require edge Basic Auth.
 
 Planned automation:
 

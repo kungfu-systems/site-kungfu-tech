@@ -38,7 +38,7 @@ bucket = "kungfu-tech-staging-727884401362-us-east-1"
 cloudfront_distribution = "EV2PK94F6BHSQ"
 artifact_path = "dist"
 manifest_prefix = ".buildchain/deployments/staging"
-secret_refs = ["AWS_ROLE_ARN", "STAGING_EDGE_AUTH_SECRET"]
+secret_refs = ["AWS_ROLE_ARN"]
 
 [deploy.production]
 adapter = "aws-s3-cloudfront"
@@ -60,11 +60,9 @@ keep_deploys = 10
 days = 365
 
 [security.staging]
-requires_auth = true
 noindex = true
 isolated_providers = true
 sandbox_data = true
-secret_refs = ["STAGING_EDGE_AUTH_SECRET"]
 
 [lifecycle.build]
 command = "bash scripts/build-site.sh"

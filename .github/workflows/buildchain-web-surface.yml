@@ -151,10 +151,7 @@ jobs:
 
       - name: Publish staging
         if: github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'deploy-staging')
-        env:
-          STAGING_EDGE_AUTH_SECRET: ${{ secrets.STAGING_EDGE_AUTH_SECRET }}
         run: |
-          test -n "$STAGING_EDGE_AUTH_SECRET"
           aws s3 sync dist/ "s3://$STAGING_BUCKET/" \
             --delete \
             --exclude ".buildchain/*" \
@@ -184,7 +181,7 @@ jobs:
             echo
             echo "- Source: \`$GITHUB_SHA\`"
             echo "- Distribution: \`$STAGING_DISTRIBUTION_ID\`"
-            echo "- Auth: Basic Auth credential is stored outside Git."
+            echo "- Access: restricted by the managed network allowlist; no Basic Auth."
           } > /tmp/buildchain-staging-comment.md
           gh pr comment "${{ github.event.pull_request.number }}" \
             --body-file /tmp/buildchain-staging-comment.md
