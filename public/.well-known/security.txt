@@ -1,0 +1,4 @@
+Contact: https://github.com/kungfu-systems/kungfu/security
+Preferred-Languages: en, zh
+Canonical: https://kungfu.tech/.well-known/security.txt
+
