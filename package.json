@@ -1,0 +1,8 @@
+{
+  "name": "site-kungfu-tech",
+  "private": true,
+  "scripts": {
+    "build": "bash scripts/build-site.sh",
+    "check": "bash scripts/check-site.sh"
+  }
+}

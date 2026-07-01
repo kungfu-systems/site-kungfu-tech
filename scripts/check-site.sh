@@ -20,4 +20,11 @@ grep -q 'journal-first' public/index.html
 grep -q 'Agent-native' public/index.html
 grep -q 'github.com/kungfu-systems/kungfu/security' public/.well-known/security.txt
 
+if [ -d dist ]; then
+  test -f dist/index.html
+  test -f dist/.well-known/security.txt
+  grep -q 'Local-first debugging infrastructure' dist/index.html
+  grep -q 'Kungfu Origin Technology Limited' dist/index.html
+fi
+
 echo "site-kungfu-tech checks passed"

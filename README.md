@@ -18,7 +18,22 @@ credentials, private release material, or unpublished product commitments.
 ## Local Check
 
 ```bash
+bash scripts/build-site.sh
 bash scripts/check-site.sh
+```
+
+## Buildchain
+
+This site is a Buildchain `web-surface` project. Buildchain validation and
+deployment planning are dry-run only until AWS roles and non-production
+preview/staging resources are created.
+
+```bash
+BUILDCHAIN_DIR=/path/to/buildchain
+bash scripts/build-site.sh
+node "$BUILDCHAIN_DIR/scripts/web-surface.mjs" --mode validate --cwd .
+node "$BUILDCHAIN_DIR/scripts/web-surface.mjs" --mode deploy-plan --cwd . --channel preview --source-sha "$(git rev-parse HEAD)"
+node "$BUILDCHAIN_DIR/scripts/web-surface.mjs" --mode cleanup-plan --cwd . --aliases pr-123,sha-abcdef123456
 ```
 
 ## Current Production
