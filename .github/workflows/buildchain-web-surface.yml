@@ -25,9 +25,9 @@ permissions:
 
 jobs:
   web-surface:
-    uses: kungfu-systems/buildchain/.github/workflows/.web-surface.yml@dev/v2/v2.0
+    uses: kungfu-systems/buildchain/.github/workflows/.web-surface.yml@v2.0-alpha
     with:
-      buildchain-ref: dev/v2/v2.0
+      buildchain-ref: v2.0-alpha
       node-version: "24"
       build-command: npm run build
       verify-command: npm run check
