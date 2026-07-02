@@ -31,6 +31,11 @@ cleanup, main-merge staging deploys, and explicitly gated production plans.
 Staging is protected by managed network access, not by a Buildchain-managed
 Basic Auth secret.
 
+The AWS delivery contract is mirrored in `infra/outputs.json` from the private
+`kungfu-systems/infra-kungfu-sites` repository. `bash scripts/check-site.sh`
+verifies that `buildchain.toml` and the GitHub Actions role assumptions still
+match that contract.
+
 ```bash
 BUILDCHAIN_DIR=/path/to/buildchain
 bash scripts/build-site.sh

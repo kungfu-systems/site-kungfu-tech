@@ -1,0 +1,32 @@
+{
+  "schema": 1,
+  "contract": "kungfu-site-infra-outputs",
+  "site": "site-kungfu-tech",
+  "domain": "kungfu.tech",
+  "infraRepo": "kungfu-systems/infra-kungfu-sites",
+  "region": "us-east-1",
+  "accountId": "727884401362",
+  "channels": {
+    "preview": {
+      "urlPattern": "https://{alias}.preview.kungfu.tech",
+      "bucket": "kungfu-tech-preview-727884401362-us-east-1",
+      "cloudfrontDistribution": "E1EHEH8NYQ85N3",
+      "roleArn": "arn:aws:iam::727884401362:role/site-kungfu-tech-preview-github-actions",
+      "status": "active"
+    },
+    "staging": {
+      "url": "https://staging.kungfu.tech",
+      "bucket": "kungfu-tech-staging-727884401362-us-east-1",
+      "cloudfrontDistribution": "EV2PK94F6BHSQ",
+      "roleArn": "arn:aws:iam::727884401362:role/site-kungfu-tech-staging-github-actions",
+      "status": "active"
+    },
+    "production": {
+      "url": "https://kungfu.tech",
+      "bucket": "kungfu-tech-site-727884401362-us-east-1",
+      "cloudfrontDistribution": "E204MRW1P4Z1G9",
+      "roleArn": null,
+      "status": "active"
+    }
+  }
+}

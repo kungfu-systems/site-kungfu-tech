@@ -3,6 +3,12 @@
 Production deploy currently uses the AWS Global account manually from the
 trusted operator environment.
 
+The AWS resource contract is owned by the private
+`kungfu-systems/infra-kungfu-sites` repository and mirrored into this repository
+as `infra/outputs.json`. Site changes may update content, Buildchain wiring, and
+the mirrored outputs after an infra change, but CloudFormation templates and AWS
+resource lifecycle decisions belong in the infra repository.
+
 Planned automation:
 
 1. Configure a GitHub OIDC role in AWS Global with write access limited to the
@@ -14,4 +20,3 @@ Planned automation:
    production release.
 
 Do not store AWS access keys or session tokens in this repository.
-
