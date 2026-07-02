@@ -37,6 +37,7 @@ secret_refs = ["AWS_ROLE_ARN"]
 [deploy.staging]
 adapter = "aws-s3-cloudfront"
 bucket = "kungfu-tech-staging-727884401362-us-east-1"
+prefix = ""
 cloudfront_distribution = "EV2PK94F6BHSQ"
 artifact_path = "dist"
 manifest_prefix = ".buildchain/deployments/staging"
@@ -45,6 +46,7 @@ secret_refs = ["AWS_ROLE_ARN"]
 [deploy.production]
 adapter = "aws-s3-cloudfront"
 bucket = "kungfu-tech-site-727884401362-us-east-1"
+prefix = ""
 cloudfront_distribution = "E204MRW1P4Z1G9"
 artifact_path = "dist"
 manifest_prefix = ".buildchain/deployments/production"
