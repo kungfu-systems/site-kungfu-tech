@@ -25,8 +25,8 @@ bash scripts/check-site.sh
 ## Buildchain
 
 This site is a Buildchain `web-surface` project. Pull requests use the shared
-Buildchain v2 web-surface workflow for real preview deploys, PR-close preview
-cleanup, main-merge staging deploys, and explicitly gated production plans.
+Buildchain v2.4 web-surface workflow for mutation-free preview, cleanup,
+staging, and production plans. Live apply remains disabled by default.
 
 Staging is protected by managed network access, not by a Buildchain-managed
 Basic Auth secret.
@@ -34,7 +34,8 @@ Basic Auth secret.
 The AWS delivery contract is mirrored in `infra/outputs.json` from the private
 `kungfu-systems/infra-kungfu-sites` repository. `bash scripts/check-site.sh`
 verifies that `buildchain.toml` and the GitHub Actions role assumptions still
-match that contract.
+match that contract, and that the shared workflow keeps apply switches off by
+default.
 
 ```bash
 BUILDCHAIN_DIR=/path/to/buildchain
