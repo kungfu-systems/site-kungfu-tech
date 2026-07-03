@@ -42,7 +42,10 @@ jobs:
       preview-aws-role-arn: arn:aws:iam::727884401362:role/site-kungfu-tech-preview-github-actions
       staging-apply: false
       staging-aws-role-arn: arn:aws:iam::727884401362:role/site-kungfu-tech-staging-github-actions
-      production-apply: ${{ github.event_name == 'workflow_dispatch' && inputs.production_approved }}
+      production-apply: ${{ (github.event_name == 'workflow_dispatch' && inputs.production_approved) || (github.event_name == 'push' && github.ref_name == 'main') }}
       production-approved: ${{ github.event_name == 'workflow_dispatch' && inputs.production_approved }}
+      production-release-on-main: true
+      production-release-label: buildchain-release
+      production-release-head-prefix: feature/release-
       production-aws-role-arn: arn:aws:iam::727884401362:role/site-kungfu-tech-production-github-actions
       production-environment: production

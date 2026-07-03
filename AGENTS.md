@@ -38,4 +38,5 @@ repository.
   signed URLs.
 - Do not change DNS, ACM, CloudFront aliases, bucket policies, or IAM resources
   from this repository.
-- Production apply must stay manual and approval-gated through Buildchain.
+- Production apply must stay approval-gated through Buildchain. A merged
+  `buildchain-release` pull request is the normal production approval path.
