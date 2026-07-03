@@ -24,9 +24,11 @@ bash scripts/check-site.sh
 
 ## Buildchain
 
-This site is a Buildchain `web-surface` project. Pull requests use the shared
-Buildchain v2.4 web-surface workflow for mutation-free preview, cleanup,
-staging, and production plans. Live apply remains disabled by default.
+This site is a Buildchain `web-surface` project. Pull requests and pushes use
+the shared Buildchain v2.4 web-surface workflow for mutation-free preview,
+cleanup, staging, and production plans. Production apply is available only
+through the manual workflow dispatch gate and is disabled by default because
+the `production_approved` input defaults to `false`.
 
 Staging is protected by managed network access, not by a Buildchain-managed
 Basic Auth secret.
@@ -34,8 +36,8 @@ Basic Auth secret.
 The AWS delivery contract is mirrored in `infra/outputs.json` from the private
 `kungfu-systems/infra-kungfu-sites` repository. `bash scripts/check-site.sh`
 verifies that `buildchain.toml` and the GitHub Actions role assumptions still
-match that contract, and that the shared workflow keeps apply switches off by
-default.
+match that contract, that preview/staging apply switches stay off by default,
+and that production apply remains bound to explicit workflow dispatch approval.
 
 ```bash
 BUILDCHAIN_DIR=/path/to/buildchain
@@ -43,6 +45,7 @@ bash scripts/build-site.sh
 node "$BUILDCHAIN_DIR/scripts/web-surface.mjs" --mode validate --cwd .
 node "$BUILDCHAIN_DIR/scripts/web-surface.mjs" --mode deploy-plan --cwd . --channel preview --source-sha "$(git rev-parse HEAD)"
 node "$BUILDCHAIN_DIR/scripts/web-surface.mjs" --mode deploy-plan --cwd . --channel staging --source-sha "$(git rev-parse HEAD)"
+node "$BUILDCHAIN_DIR/scripts/web-surface.mjs" --mode deploy-plan --cwd . --channel production --source-sha "$(git rev-parse HEAD)"
 node "$BUILDCHAIN_DIR/scripts/web-surface.mjs" --mode cleanup-plan --cwd . --channel preview --pull-number 3 --source-sha "$(git rev-parse HEAD)" --dry-run false
 ```
 
@@ -53,3 +56,4 @@ node "$BUILDCHAIN_DIR/scripts/web-surface.mjs" --mode cleanup-plan --cwd . --cha
 - Region for regional resources: `us-east-1`
 - Origin bucket: `kungfu-tech-site-727884401362-us-east-1`
 - CloudFront distribution: `E204MRW1P4Z1G9`
+- GitHub OIDC role: `site-kungfu-tech-production-github-actions`

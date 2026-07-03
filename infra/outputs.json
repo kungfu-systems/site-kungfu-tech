@@ -25,7 +25,7 @@
       "url": "https://kungfu.tech",
       "bucket": "kungfu-tech-site-727884401362-us-east-1",
       "cloudfrontDistribution": "E204MRW1P4Z1G9",
-      "roleArn": null,
+      "roleArn": "arn:aws:iam::727884401362:role/site-kungfu-tech-production-github-actions",
       "status": "active"
     }
   }

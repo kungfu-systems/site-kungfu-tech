@@ -43,10 +43,17 @@ if (
 ) {
   throw new Error(`Buildchain web-surface workflow must run ${expectedBuildchainRef}`);
 }
-for (const applySwitch of ["preview-apply", "preview-cleanup-apply", "staging-apply", "production-apply"]) {
+for (const applySwitch of ["preview-apply", "preview-cleanup-apply", "staging-apply"]) {
   if (!workflow.includes(`${applySwitch}: false`)) {
     throw new Error(`Buildchain web-surface workflow must keep ${applySwitch} false by default`);
   }
+}
+const productionGate = "github.event_name == 'workflow_dispatch' && inputs.production_approved";
+if (!workflow.includes(`production-apply: \${{ ${productionGate} }}`)) {
+  throw new Error("Buildchain web-surface workflow must gate production apply on workflow_dispatch approval");
+}
+if (!workflow.includes(`production-approved: \${{ ${productionGate} }}`)) {
+  throw new Error("Buildchain web-surface workflow must pass the same approval gate to Buildchain");
 }
 
 const config = parseTomlSections(buildchainToml);

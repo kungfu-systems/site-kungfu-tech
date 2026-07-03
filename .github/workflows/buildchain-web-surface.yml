@@ -12,8 +12,13 @@ on:
       - main
   workflow_dispatch:
     inputs:
+      buildchain_ref:
+        description: "Optional trusted Buildchain runtime ref for manual validation"
+        type: string
+        required: false
+        default: ""
       production_approved:
-        description: "Plan the gated production channel"
+        description: "Apply the gated production channel"
         type: boolean
         required: false
         default: false
@@ -27,6 +32,7 @@ jobs:
   web-surface:
     uses: kungfu-systems/buildchain/.github/workflows/.web-surface.yml@v2.4
     with:
+      buildchain-ref: ${{ github.event_name == 'workflow_dispatch' && inputs.buildchain_ref || '' }}
       node-version: "24"
       build-command: npm run build
       verify-command: npm run check
@@ -36,6 +42,7 @@ jobs:
       preview-aws-role-arn: arn:aws:iam::727884401362:role/site-kungfu-tech-preview-github-actions
       staging-apply: false
       staging-aws-role-arn: arn:aws:iam::727884401362:role/site-kungfu-tech-staging-github-actions
-      production-apply: false
+      production-apply: ${{ github.event_name == 'workflow_dispatch' && inputs.production_approved }}
       production-approved: ${{ github.event_name == 'workflow_dispatch' && inputs.production_approved }}
+      production-aws-role-arn: arn:aws:iam::727884401362:role/site-kungfu-tech-production-github-actions
       production-environment: production
