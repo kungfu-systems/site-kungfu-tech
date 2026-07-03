@@ -48,12 +48,19 @@ for (const applySwitch of ["preview-apply", "preview-cleanup-apply", "staging-ap
     throw new Error(`Buildchain web-surface workflow must keep ${applySwitch} false by default`);
   }
 }
-const productionGate = "github.event_name == 'workflow_dispatch' && inputs.production_approved";
-if (!workflow.includes(`production-apply: \${{ ${productionGate} }}`)) {
-  throw new Error("Buildchain web-surface workflow must gate production apply on workflow_dispatch approval");
+const manualProductionGate = "github.event_name == 'workflow_dispatch' && inputs.production_approved";
+const releasePrProductionGate = "github.event_name == 'push' && github.ref_name == 'main'";
+if (
+  !workflow.includes(manualProductionGate) ||
+  !workflow.includes(releasePrProductionGate) ||
+  !workflow.includes("production-release-on-main: true") ||
+  !workflow.includes("production-release-label: buildchain-release") ||
+  !workflow.includes("production-release-head-prefix: feature/release-")
+) {
+  throw new Error("Buildchain web-surface workflow must gate production apply on Buildchain release PR merge semantics");
 }
-if (!workflow.includes(`production-approved: \${{ ${productionGate} }}`)) {
-  throw new Error("Buildchain web-surface workflow must pass the same approval gate to Buildchain");
+if (!workflow.includes(`production-approved: \${{ ${manualProductionGate} }}`)) {
+  throw new Error("Buildchain web-surface workflow must keep manual production approval explicit");
 }
 
 const config = parseTomlSections(buildchainToml);

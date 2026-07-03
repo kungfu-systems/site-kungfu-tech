@@ -26,9 +26,11 @@ bash scripts/check-site.sh
 
 This site is a Buildchain `web-surface` project. Pull requests and pushes use
 the shared Buildchain v2.4 web-surface workflow for mutation-free preview,
-cleanup, staging, and production plans. Production apply is available only
-through the manual workflow dispatch gate and is disabled by default because
-the `production_approved` input defaults to `false`.
+cleanup, staging, and production plans. Production apply is owned by
+Buildchain release PR semantics: a pull request labeled `buildchain-release`
+from a `feature/release-*` branch becomes the production approval when it is
+merged into `main`. Manual workflow dispatch with `production_approved=true`
+remains available as an explicit operator fallback.
 
 Staging is protected by managed network access, not by a Buildchain-managed
 Basic Auth secret.
@@ -37,7 +39,7 @@ The AWS delivery contract is mirrored in `infra/outputs.json` from the private
 `kungfu-systems/infra-kungfu-sites` repository. `bash scripts/check-site.sh`
 verifies that `buildchain.toml` and the GitHub Actions role assumptions still
 match that contract, that preview/staging apply switches stay off by default,
-and that production apply remains bound to explicit workflow dispatch approval.
+and that production apply remains bound to Buildchain release PR semantics.
 
 ```bash
 BUILDCHAIN_DIR=/path/to/buildchain
