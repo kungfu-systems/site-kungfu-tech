@@ -5,6 +5,9 @@ repo_root=$(cd "$(dirname "$0")/.." && pwd)
 cd "$repo_root"
 
 test -d public
+test -f site/shared-layout.json
+
+node scripts/render-shared-layout.mjs
 
 rm -rf dist
 mkdir -p dist

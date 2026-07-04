@@ -43,16 +43,57 @@
       padding: 52px 0 64px;
     }
 
-    nav, footer {
+    .site-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      min-height: 52px;
+      border-bottom: 1px solid var(--line);
+      padding-bottom: 18px;
+      margin-bottom: 56px;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      color: var(--fg);
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .mark {
+      width: 42px;
+      height: 42px;
+      display: grid;
+      place-items: center;
+      border: 1px solid var(--line);
+      background: var(--surface);
+      color: var(--fg);
+      font-size: 16px;
+      letter-spacing: 0;
+    }
+
+    .site-nav {
       display: flex;
       flex-wrap: wrap;
-      gap: 10px 24px;
+      gap: 18px 28px;
+      align-items: center;
       color: var(--muted);
       font-size: 14px;
     }
 
-    nav { margin-bottom: 56px; }
-    footer { margin-top: 52px; border-top: 1px solid var(--line); padding-top: 18px; }
+    .site-footer {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px 20px;
+      color: var(--muted);
+      font-size: 14px;
+      margin-top: 52px;
+      border-top: 1px solid var(--line);
+      padding-top: 18px;
+    }
 
     h1 {
       max-width: 760px;
@@ -110,7 +151,8 @@
 
     @media (max-width: 760px) {
       main { width: min(100% - 28px, 640px); padding-top: 36px; }
-      nav { margin-bottom: 36px; }
+      .site-header { align-items: flex-start; margin-bottom: 36px; }
+      .site-nav { display: grid; gap: 12px; }
       .grid { grid-template-columns: 1fr; }
       section { min-height: auto; }
     }
@@ -118,11 +160,20 @@
 </head>
 <body>
   <main>
-    <nav aria-label="Site navigation">
-      <a href="/">Kungfu</a>
-      <a href="https://github.com/kungfu-systems/kungfu">Repository</a>
-      <a href="https://github.com/kungfu-systems/kungfu/security">Security</a>
-    </nav>
+    <!-- shared-header:start -->
+    <header class="site-header">
+      <a class="brand" href="/" aria-label="Kungfu">
+        <span class="mark" aria-hidden="true">KF</span>
+        <span>Kungfu</span>
+      </a>
+      <nav class="site-nav" aria-label="Project links">
+        <a href="https://github.com/kungfu-systems/kungfu">Repository</a>
+        <a href="https://github.com/kungfu-systems/kungfu/issues">Feedback</a>
+        <a href="/trust/index.html">Trust</a>
+        <a class="security" href="https://github.com/kungfu-systems/kungfu/security">Security</a>
+      </nav>
+    </header>
+    <!-- shared-header:end -->
 
     <h1>Trust is built from local facts and auditable releases.</h1>
     <p class="lead">Kungfu is a local-first runtime fact layer for agentic systems. The core project is open source, the default debugging workflow is local, and official releases are designed to carry explicit evidence rather than asking users to infer provenance.</p>
@@ -164,10 +215,12 @@
       </section>
     </div>
 
-    <footer>
-      <span>&copy; 2026 Kungfu Origin Technology Limited. All rights reserved.</span>
-      <span><a href="/">Home</a></span>
+    <!-- shared-footer:start -->
+    <footer class="site-footer">
+      <span>Copyright 2026 Kungfu Origin Technology Limited. All rights reserved.</span>
+      <span>Kungfu core software is licensed under the Apache License 2.0.</span>
     </footer>
+    <!-- shared-footer:end -->
   </main>
 </body>
 </html>

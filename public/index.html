@@ -65,7 +65,7 @@
       padding: 34px 0 56px;
     }
 
-    header {
+    .site-header {
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -81,6 +81,7 @@
       gap: 12px;
       color: var(--fg);
       font-weight: 700;
+      text-decoration: none;
     }
 
     .mark {
@@ -356,7 +357,7 @@
       color: var(--fg);
     }
 
-    nav {
+    .site-nav {
       display: flex;
       flex-wrap: wrap;
       gap: 18px 28px;
@@ -388,7 +389,7 @@
 
     .trust p:last-child { margin-bottom: 0; }
 
-    footer {
+    .site-footer {
       display: flex;
       flex-wrap: wrap;
       gap: 10px 20px;
@@ -420,7 +421,7 @@
 
     @media (max-width: 820px) {
       main { width: min(100% - 28px, 640px); gap: 32px; padding: 28px 0 40px; }
-      header { align-items: flex-start; }
+      .site-header { align-items: flex-start; }
       h1 { font-size: clamp(40px, 12vw, 58px); }
       .pane-topbar { align-items: flex-start; flex-direction: column; }
       .health { justify-content: flex-start; }
@@ -428,24 +429,26 @@
       .lane { min-height: auto; border-right: 0; border-bottom: 1px solid var(--line); }
       .lane:last-child { border-bottom: 0; }
       .trust { grid-template-columns: 1fr; gap: 16px; }
-      nav { display: grid; gap: 12px; }
+      .site-nav { display: grid; gap: 12px; }
     }
   </style>
 </head>
 <body>
   <main>
-    <header>
-      <div class="brand" aria-label="Kungfu">
-        <div class="mark" aria-hidden="true">KF</div>
+    <!-- shared-header:start -->
+    <header class="site-header">
+      <a class="brand" href="/" aria-label="Kungfu">
+        <span class="mark" aria-hidden="true">KF</span>
         <span>Kungfu</span>
-      </div>
-      <nav aria-label="Project links">
+      </a>
+      <nav class="site-nav" aria-label="Project links">
         <a href="https://github.com/kungfu-systems/kungfu">Repository</a>
         <a href="https://github.com/kungfu-systems/kungfu/issues">Feedback</a>
         <a href="/trust/index.html">Trust</a>
         <a class="security" href="https://github.com/kungfu-systems/kungfu/security">Security</a>
       </nav>
     </header>
+    <!-- shared-header:end -->
 
     <section class="hero" aria-label="Kungfu homepage">
       <p class="eyebrow">Long-running agent work control pane</p>
@@ -574,10 +577,12 @@
       </div>
     </section>
 
-    <footer>
-      <span>&copy; 2026 Kungfu Origin Technology Limited. All rights reserved.</span>
+    <!-- shared-footer:start -->
+    <footer class="site-footer">
+      <span>Copyright 2026 Kungfu Origin Technology Limited. All rights reserved.</span>
       <span>Kungfu core software is licensed under the Apache License 2.0.</span>
     </footer>
+    <!-- shared-footer:end -->
   </main>
 </body>
 </html>

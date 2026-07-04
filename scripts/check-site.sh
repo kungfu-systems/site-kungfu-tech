@@ -5,9 +5,10 @@ repo_root=$(cd "$(dirname "$0")/.." && pwd)
 cd "$repo_root"
 
 node scripts/check-infra-outputs.mjs
+node scripts/render-shared-layout.mjs --check
 
 if grep -RInE 'mailto:|[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}' \
-  README.md docs public; then
+  README.md docs public site; then
   echo "error: email address or mailto link found" >&2
   exit 1
 fi
@@ -26,6 +27,11 @@ grep -q 'GitHub private vulnerability reporting' public/index.html
 grep -q 'journal-first' public/index.html
 grep -q 'Agent-native' public/index.html
 grep -q 'href="/trust/index.html"' public/index.html
+grep -q 'shared-header:start' public/index.html
+grep -q 'shared-footer:start' public/index.html
+grep -q 'shared-header:start' public/trust/index.html
+grep -q 'shared-footer:start' public/trust/index.html
+grep -q 'href="https://github.com/kungfu-systems/kungfu/issues"' public/trust/index.html
 grep -q 'github.com/kungfu-systems/kungfu/security' public/.well-known/security.txt
 grep -q 'Buildchain release passport' public/trust/index.html
 grep -q 'Provider compliance' public/trust/index.html
