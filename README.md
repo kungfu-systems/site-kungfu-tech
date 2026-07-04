@@ -22,6 +22,10 @@ bash scripts/build-site.sh
 bash scripts/check-site.sh
 ```
 
+Header and footer content is generated from `site/shared-layout.json`. Update
+that file first, then run the build so every page receives the same navigation
+and footer.
+
 ## Buildchain
 
 This site is a Buildchain `web-surface` project. Pull requests and pushes use

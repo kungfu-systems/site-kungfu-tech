@@ -1,0 +1,38 @@
+{
+  "pages": [
+    "public/index.html",
+    "public/trust/index.html"
+  ],
+  "brand": {
+    "label": "Kungfu",
+    "mark": "KF",
+    "href": "/"
+  },
+  "navigation": [
+    {
+      "label": "Repository",
+      "href": "https://github.com/kungfu-systems/kungfu"
+    },
+    {
+      "label": "Feedback",
+      "href": "https://github.com/kungfu-systems/kungfu/issues"
+    },
+    {
+      "label": "Trust",
+      "href": "/trust/index.html"
+    },
+    {
+      "label": "Security",
+      "href": "https://github.com/kungfu-systems/kungfu/security",
+      "class": "security"
+    }
+  ],
+  "footer": [
+    {
+      "text": "Copyright 2026 Kungfu Origin Technology Limited. All rights reserved."
+    },
+    {
+      "text": "Kungfu core software is licensed under the Apache License 2.0."
+    }
+  ]
+}
