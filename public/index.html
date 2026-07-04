@@ -4,28 +4,40 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Kungfu</title>
-  <meta name="description" content="Kungfu is preparing open-source, local-first debugging infrastructure for agentic systems.">
+  <meta name="description" content="Kungfu is a local control pane for long-running agent work: cost, progress, evidence, and next actions.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%2314171f'/%3E%3Ctext x='32' y='39' text-anchor='middle' font-family='Arial,sans-serif' font-size='22' font-weight='700' fill='white'%3EKF%3C/text%3E%3C/svg%3E">
   <style>
     :root {
-      color-scheme: light dark;
-      --bg: #f6f5f1;
-      --fg: #16181b;
-      --muted: #5e6570;
-      --line: #c9c5bb;
+      color-scheme: light;
+      --bg: #f7f8fb;
+      --fg: #14171f;
+      --muted: #596273;
+      --line: #cfd6df;
       --accent: #0f766e;
-      --accent-2: #8a4b32;
-      --surface: rgba(255, 255, 255, 0.52);
+      --accent-2: #3158a8;
+      --warn: #b45309;
+      --danger: #b42318;
+      --ok: #15803d;
+      --surface: rgba(255, 255, 255, 0.84);
+      --panel: #ffffff;
+      --panel-soft: #eef2f8;
     }
 
     @media (prefers-color-scheme: dark) {
       :root {
-        --bg: #121313;
-        --fg: #eef1f4;
-        --muted: #aeb6bf;
-        --line: #34393f;
-        --accent: #37c8b5;
-        --accent-2: #d08b68;
+        color-scheme: dark;
+        --bg: #101318;
+        --fg: #f1f5f9;
+        --muted: #a8b3c2;
+        --line: #303844;
+        --accent: #2dd4bf;
+        --accent-2: #7aa2ff;
+        --warn: #f59e0b;
+        --danger: #fb7185;
+        --ok: #4ade80;
         --surface: rgba(255, 255, 255, 0.06);
+        --panel: #171c23;
+        --panel-soft: #1f2732;
       }
     }
 
@@ -36,82 +48,312 @@
       min-height: 100vh;
       font: 16px/1.55 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       background:
-        linear-gradient(90deg, transparent 0, transparent calc(100% - 1px), rgba(22, 24, 27, 0.08) calc(100% - 1px)),
-        linear-gradient(180deg, transparent 0, transparent calc(100% - 1px), rgba(22, 24, 27, 0.08) calc(100% - 1px)),
+        linear-gradient(90deg, transparent 0, transparent calc(100% - 1px), rgba(20, 23, 31, 0.06) calc(100% - 1px)),
+        linear-gradient(180deg, transparent 0, transparent calc(100% - 1px), rgba(20, 23, 31, 0.06) calc(100% - 1px)),
         var(--bg);
       background-size: 48px 48px;
       color: var(--fg);
     }
 
     main {
-      width: min(1120px, calc(100% - 40px));
+      width: min(1180px, calc(100% - 40px));
       min-height: 100vh;
       margin: 0 auto;
       display: grid;
-      align-content: center;
-      gap: 44px;
-      padding: 56px 0;
+      align-content: start;
+      gap: 42px;
+      padding: 34px 0 56px;
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      min-height: 52px;
+      border-bottom: 1px solid var(--line);
+      padding-bottom: 18px;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      color: var(--fg);
+      font-weight: 700;
     }
 
     .mark {
-      width: 72px;
-      height: 72px;
+      width: 42px;
+      height: 42px;
       display: grid;
       place-items: center;
       border: 1px solid var(--line);
       background: var(--surface);
-      font-size: 24px;
-      font-weight: 700;
+      font-size: 16px;
       letter-spacing: 0;
     }
 
-    h1 {
+    .hero {
+      display: grid;
+      gap: 28px;
+      padding-top: 22px;
+    }
+
+    .eyebrow {
       margin: 0;
-      font-size: clamp(48px, 10vw, 104px);
-      line-height: 0.95;
+      color: var(--accent);
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0;
+      text-transform: uppercase;
+    }
+
+    h1, h2, h3, p {
+      overflow-wrap: anywhere;
+    }
+
+    h1 {
+      max-width: 1040px;
+      margin: 0;
+      font-size: clamp(46px, 7vw, 86px);
+      line-height: 0.98;
       letter-spacing: 0;
     }
 
     .tagline {
-      max-width: 820px;
-      margin: 18px 0 0;
-      font-size: clamp(24px, 3.4vw, 42px);
-      line-height: 1.14;
+      max-width: 780px;
+      margin: 0;
+      font-size: clamp(22px, 2.6vw, 34px);
+      line-height: 1.18;
       color: var(--fg);
     }
 
     .summary {
-      max-width: 720px;
-      margin: 24px 0 0;
+      max-width: 760px;
+      margin: 0;
       color: var(--muted);
       font-size: 18px;
     }
 
-    .grid {
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .hero-actions a {
+      display: inline-flex;
+      align-items: center;
+      min-height: 42px;
+      padding: 9px 14px;
+      border: 1px solid var(--line);
+      background: var(--surface);
+      color: var(--fg);
+      text-decoration: none;
+      font-weight: 650;
+    }
+
+    .hero-actions a:first-child {
+      border-color: var(--accent);
+      background: var(--accent);
+      color: #ffffff;
+    }
+
+    .control-pane {
       display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 0;
+      border: 1px solid var(--line);
+      background: var(--panel);
+      box-shadow: 0 18px 50px rgba(15, 23, 42, 0.12);
+    }
+
+    .pane-topbar {
+      display: flex;
+      justify-content: space-between;
+      gap: 18px;
+      align-items: center;
+      min-height: 58px;
+      padding: 14px 18px;
+      border-bottom: 1px solid var(--line);
+      background: var(--panel-soft);
+    }
+
+    .pane-title {
+      display: grid;
+      gap: 2px;
+    }
+
+    .pane-title strong,
+    .lane h2,
+    .evidence strong,
+    .metric strong {
+      color: var(--fg);
+    }
+
+    .pane-title span,
+    .lane p,
+    .evidence span,
+    .metric span,
+    .row span {
+      color: var(--muted);
+    }
+
+    .health {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: flex-end;
+      font-size: 13px;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      min-height: 28px;
+      padding: 4px 9px;
+      border: 1px solid var(--line);
+      background: var(--surface);
+      color: var(--fg);
+      white-space: nowrap;
+    }
+
+    .pane-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .lane {
+      display: grid;
+      grid-template-rows: auto 1fr;
+      gap: 18px;
+      min-height: 360px;
+      padding: 18px;
+      border-right: 1px solid var(--line);
+    }
+
+    .lane:last-child { border-right: 0; }
+
+    .lane h2 {
+      margin: 0 0 4px;
+      font-size: 24px;
+      line-height: 1.1;
+      letter-spacing: 0;
+    }
+
+    .lane p { margin: 0; }
+
+    .metrics {
+      display: grid;
+      gap: 10px;
+      align-content: start;
+    }
+
+    .metric,
+    .evidence,
+    .work-row {
+      border: 1px solid var(--line);
+      background: var(--surface);
+    }
+
+    .metric {
+      display: grid;
+      gap: 8px;
+      min-height: 78px;
+      padding: 12px;
+    }
+
+    .meter {
+      height: 8px;
+      background: var(--panel-soft);
+      border: 1px solid var(--line);
+      overflow: hidden;
+    }
+
+    .meter i {
+      display: block;
+      height: 100%;
+      background: var(--accent);
+    }
+
+    .meter.warn i { background: var(--warn); }
+    .meter.danger i { background: var(--danger); }
+
+    .work-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .work-row {
+      display: grid;
+      gap: 9px;
+      padding: 12px;
+    }
+
+    .row {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: baseline;
+    }
+
+    .status {
+      color: var(--fg);
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .status.ok { color: var(--ok); }
+    .status.wait { color: var(--warn); }
+    .status.block { color: var(--danger); }
+    .status.ready { color: var(--accent-2); }
+
+    .evidence-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .evidence {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 10px;
+      align-items: start;
+      padding: 12px;
+    }
+
+    .evidence code {
+      color: var(--accent-2);
+      font: 13px/1.35 "SFMono-Regular", Consolas, monospace;
+      overflow-wrap: anywhere;
+    }
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      margin-top: 6px;
+      background: var(--accent);
+    }
+
+    .triangle {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
       border-top: 1px solid var(--line);
-      border-left: 1px solid var(--line);
+      padding-top: 28px;
     }
 
     .principle {
-      min-height: 132px;
-      padding: 18px;
-      border-right: 1px solid var(--line);
-      border-bottom: 1px solid var(--line);
-      background: var(--surface);
+      padding: 0;
     }
 
     .principle strong {
       display: block;
-      margin-bottom: 10px;
+      margin-bottom: 8px;
       font-size: 17px;
       color: var(--fg);
-    }
-
-    .principle span {
-      display: block;
-      color: var(--muted);
     }
 
     nav {
@@ -164,10 +406,27 @@
 
     .security { color: var(--accent-2); }
 
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
     @media (max-width: 820px) {
-      main { width: min(100% - 28px, 640px); gap: 32px; padding: 40px 0; }
-      .grid { grid-template-columns: 1fr; }
-      .principle { min-height: auto; }
+      main { width: min(100% - 28px, 640px); gap: 32px; padding: 28px 0 40px; }
+      header { align-items: flex-start; }
+      h1 { font-size: clamp(40px, 12vw, 58px); }
+      .pane-topbar { align-items: flex-start; flex-direction: column; }
+      .health { justify-content: flex-start; }
+      .pane-grid, .triangle { grid-template-columns: 1fr; }
+      .lane { min-height: auto; border-right: 0; border-bottom: 1px solid var(--line); }
+      .lane:last-child { border-bottom: 0; }
       .trust { grid-template-columns: 1fr; gap: 16px; }
       nav { display: grid; gap: 12px; }
     }
@@ -175,44 +434,139 @@
 </head>
 <body>
   <main>
-    <section aria-label="Kungfu identity">
-      <div class="mark" aria-hidden="true">KF</div>
-      <h1>Kungfu</h1>
-      <p class="tagline">Local-first debugging infrastructure for agentic systems.</p>
-      <p class="summary">Kungfu v4 is being prepared in the open as a journal-first runtime fact layer for developers and coding agents. Product details will be published when the v4 release gates are ready.</p>
-    </section>
+    <header>
+      <div class="brand" aria-label="Kungfu">
+        <div class="mark" aria-hidden="true">KF</div>
+        <span>Kungfu</span>
+      </div>
+      <nav aria-label="Project links">
+        <a href="https://github.com/kungfu-systems/kungfu">Repository</a>
+        <a href="https://github.com/kungfu-systems/kungfu/issues">Feedback</a>
+        <a class="security" href="https://github.com/kungfu-systems/kungfu/security">Security</a>
+      </nav>
+    </header>
 
-    <section class="grid" aria-label="v4 principles">
-      <div class="principle">
-        <strong>Local facts first</strong>
-        <span>No login or default upload for the core debugging workflow.</span>
-      </div>
-      <div class="principle">
-        <strong>Journal-first</strong>
-        <span>Runtime evidence should be inspectable, replayable, and exportable.</span>
-      </div>
-      <div class="principle">
-        <strong>Agent-native</strong>
-        <span>Humans choose the tool; coding agents should verify and operate it reliably.</span>
-      </div>
-      <div class="principle">
-        <strong>Auditable release path</strong>
-        <span>Artifacts, provenance, and checks should be explicit rather than guessed.</span>
+    <section class="hero" aria-label="Kungfu homepage">
+      <p class="eyebrow">Long-running agent work control pane</p>
+      <h1>See when your agents are making progress, getting stuck, or wasting tokens.</h1>
+      <p class="tagline">Kungfu gives long-running agent work a local control pane: cost, progress, evidence, and next actions.</p>
+      <p class="summary">Use Codex, Claude, Copilot, or your own execution surface. Kungfu is not another agent; it is the local-first place to verify whether delegated work is actually moving, blocked, ready, or done.</p>
+      <div class="hero-actions" aria-label="Primary actions">
+        <a href="https://github.com/kungfu-systems/kungfu">View the open-source core</a>
+        <a href="#trust-layer">Trust model</a>
       </div>
     </section>
 
-    <nav aria-label="Project links">
-      <span>Public collaboration starts on GitHub.</span>
-      <a href="https://github.com/kungfu-systems/kungfu">Repository</a>
-      <a href="https://github.com/kungfu-systems/kungfu/issues">Feedback</a>
-      <a class="security" href="https://github.com/kungfu-systems/kungfu/security">Security</a>
-    </nav>
+    <section class="control-pane" aria-label="Cost State Proof product preview">
+      <div class="pane-topbar">
+        <div class="pane-title">
+          <strong>Kungfu workspace</strong>
+          <span>Delegated agent work, local evidence, no default upload.</span>
+        </div>
+        <div class="health" aria-label="Workspace summary">
+          <span class="pill">4 active runs</span>
+          <span class="pill">1 stuck loop</span>
+          <span class="pill">2 ready for review</span>
+        </div>
+      </div>
+      <div class="pane-grid">
+        <article class="lane">
+          <div>
+            <h2>Cost</h2>
+            <p>Catch token and runtime waste early.</p>
+          </div>
+          <div class="metrics">
+            <div class="metric">
+              <strong>Stuck refactor loop</strong>
+              <span>42 minutes, 186k tokens, no file delta in 18 minutes.</span>
+              <div class="meter danger" aria-hidden="true"><i style="width: 82%"></i></div>
+            </div>
+            <div class="metric">
+              <strong>Worker dispatch</strong>
+              <span>3 short runs completed under budget.</span>
+              <div class="meter" aria-hidden="true"><i style="width: 38%"></i></div>
+            </div>
+            <div class="metric">
+              <strong>Review queue</strong>
+              <span>Waiting on human value decision, no active spend.</span>
+              <div class="meter warn" aria-hidden="true"><i style="width: 12%"></i></div>
+            </div>
+          </div>
+        </article>
 
-    <section class="trust" aria-label="Open source and trust">
+        <article class="lane">
+          <div>
+            <h2>State</h2>
+            <p>Know what is moving, stuck, waiting, ready, or done.</p>
+          </div>
+          <div class="work-list">
+            <div class="work-row">
+              <div class="row"><strong>Homepage cost/state/proof</strong><span class="status ok">moving</span></div>
+              <span>Editing first screen, validation pending.</span>
+            </div>
+            <div class="work-row">
+              <div class="row"><strong>Buildchain release passport</strong><span class="status ready">ready</span></div>
+              <span>Artifact evidence collected; PR review next.</span>
+            </div>
+            <div class="work-row">
+              <div class="row"><strong>Worker cleanup debt</strong><span class="status block">stuck</span></div>
+              <span>Needs exact owner before deleting any worktree.</span>
+            </div>
+            <div class="work-row">
+              <div class="row"><strong>Mission decision card</strong><span class="status wait">waiting</span></div>
+              <span>Human value input required before branch split.</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="lane">
+          <div>
+            <h2>Proof</h2>
+            <p>Trust results with local evidence.</p>
+          </div>
+          <div class="evidence-list">
+            <div class="evidence">
+              <span class="dot" aria-hidden="true"></span>
+              <div><strong>Files changed</strong><br><code>public/index.html</code></div>
+            </div>
+            <div class="evidence">
+              <span class="dot" aria-hidden="true"></span>
+              <div><strong>Validation</strong><br><code>bash scripts/check-site.sh</code></div>
+            </div>
+            <div class="evidence">
+              <span class="dot" aria-hidden="true"></span>
+              <div><strong>Decision trail</strong><br><span>cost / state / proof maps back to Cost control / Responsibility state / Transparency.</span></div>
+            </div>
+            <div class="evidence">
+              <span class="dot" aria-hidden="true"></span>
+              <div><strong>Next action</strong><br><span>Stop, continue, approve, or resume from the recorded artifact.</span></div>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="triangle" aria-label="Strategic trust triangle">
+      <div class="principle">
+        <strong>Cost control</strong>
+        <span>See whether agent work is spending money, time, tokens, runtime, or attention without progress.</span>
+      </div>
+      <div class="principle">
+        <strong>Responsibility state</strong>
+        <span>Scan whether delegated work is progressing, blocked, waiting, ready for review, or done.</span>
+      </div>
+      <div class="principle">
+        <strong>Transparency</strong>
+        <span>Follow local, journal-first proof: files, tests, artifacts, decisions, and recovery notes.</span>
+      </div>
+    </section>
+
+    <section class="trust" id="trust-layer" aria-label="Open source and trust">
       <h2>Open source core, commercial stewardship.</h2>
       <div>
         <p>Kungfu is commercially operated by Kungfu Origin Technology Limited.</p>
         <p>Kungfu core software is released under the Apache License 2.0. The business model is not based on private-code scarcity.</p>
+        <p>The local core remains Agent-native and journal-first, so humans and coding agents can inspect the same evidence instead of trusting an opaque dashboard.</p>
         <p>Future commercial services may provide optional cloud, team, compute, storage, support, or governance capabilities without making the local core depend on login or hosted infrastructure.</p>
         <p>Public feedback, bug reports, feature requests, and code contributions start on GitHub. Security issues should use GitHub private vulnerability reporting.</p>
       </div>
