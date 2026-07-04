@@ -14,11 +14,14 @@ resource lifecycle decisions belong in the infra repository.
 
 Default automation:
 
-- Pull requests run Buildchain v2.4 web-surface planning and verification.
-- Ordinary pushes to `main` run staging planning and verification.
+- Pull requests run Buildchain v2.4 web-surface planning, verification, and
+  preview apply for `pr-N.preview.kungfu.tech`.
+- Closing or merging a pull request runs preview cleanup for the PR alias.
+- Ordinary pushes to `main` run staging planning, verification, and apply to
+  `https://staging.kungfu.tech`.
+- Release PR pages show the staging review URL. After staging is verified,
+  merging the release PR is the production approval event.
 - Release PR merges into `main` run production planning and apply.
-- Preview, preview cleanup, and staging apply stay disabled in this repository
-  workflow.
 - Manual `workflow_dispatch` with `production_approved=true` remains available
   as an explicit operator fallback.
 
@@ -45,7 +48,8 @@ gh pr create --base main --head feature/release-YYYYMMDD-topic --label buildchai
 
 After the release PR checks pass, merging that PR publishes production. Do not
 merge the release PR until the production role exists and the release operator
-has reviewed the Buildchain plan and preflight evidence.
+has reviewed staging from the release PR page plus the Buildchain plan and
+preflight evidence.
 
 Manual fallback:
 
