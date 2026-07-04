@@ -12,5 +12,6 @@ cp -R public/. dist/
 
 test -f dist/index.html
 test -f dist/.well-known/security.txt
+test -f dist/trust/index.html
 
 echo "site-kungfu-tech built dist/"
