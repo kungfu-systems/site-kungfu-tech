@@ -44,8 +44,8 @@ if (
   throw new Error(`Buildchain web-surface workflow must run ${expectedBuildchainRef}`);
 }
 for (const applySwitch of ["preview-apply", "preview-cleanup-apply", "staging-apply"]) {
-  if (!workflow.includes(`${applySwitch}: false`)) {
-    throw new Error(`Buildchain web-surface workflow must keep ${applySwitch} false by default`);
+  if (!workflow.includes(`${applySwitch}: true`)) {
+    throw new Error(`Buildchain web-surface workflow must enable ${applySwitch} for the standard release flow`);
   }
 }
 const manualProductionGate = "github.event_name == 'workflow_dispatch' && inputs.production_approved";
