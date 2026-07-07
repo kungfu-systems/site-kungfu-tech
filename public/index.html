@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Kungfu</title>
-  <meta name="description" content="Kungfu is a local control pane for long-running agent work: cost, progress, evidence, and next actions.">
+  <meta name="description" content="Kungfu is preparing a local control pane for long-running agent work: cost, progress, evidence, and next actions.">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%2314171f'/%3E%3Ctext x='32' y='39' text-anchor='middle' font-family='Arial,sans-serif' font-size='22' font-weight='700' fill='white'%3EKF%3C/text%3E%3C/svg%3E">
   <style>
     :root {
@@ -442,21 +442,24 @@
         <span>Kungfu</span>
       </a>
       <nav class="site-nav" aria-label="Project links">
-        <a href="https://github.com/kungfu-systems/kungfu">Repository</a>
-        <a href="https://github.com/kungfu-systems/kungfu/issues">Feedback</a>
+        <a href="/about/index.html">About</a>
+        <a href="/services/index.html">Services</a>
+        <a href="https://libkungfu.dev">Developers</a>
         <a href="/trust/index.html">Trust</a>
-        <a class="security" href="https://github.com/kungfu-systems/kungfu/security">Security</a>
+        <a href="/legal/index.html">Legal</a>
+        <a class="security" href="https://github.com/kungfu-systems/kungfu">GitHub</a>
       </nav>
     </header>
     <!-- shared-header:end -->
 
     <section class="hero" aria-label="Kungfu homepage">
-      <p class="eyebrow">Long-running agent work control pane</p>
+      <p class="eyebrow">Coming soon · long-running agent work control pane</p>
       <h1>See when your agents are making progress, getting stuck, or wasting tokens.</h1>
-      <p class="tagline">Kungfu gives long-running agent work a local control pane: cost, progress, evidence, and next actions.</p>
-      <p class="summary">Use Codex, Claude, Copilot, or your own execution surface. Kungfu is not another agent; it is the local-first place to verify whether delegated work is actually moving, blocked, ready, or done.</p>
+      <p class="tagline">Kungfu is being prepared as a local control pane for agent work: cost, progress, evidence, and next actions.</p>
+      <p class="summary">Use Codex, Claude, Copilot, or your own execution surface. Kungfu is not another agent; it is the local-first product direction for verifying whether delegated work is moving, blocked, ready, or done.</p>
       <div class="hero-actions" aria-label="Primary actions">
-        <a href="https://github.com/kungfu-systems/kungfu">View the open-source core</a>
+        <a href="https://github.com/kungfu-systems/kungfu">Follow v4 on GitHub</a>
+        <a href="https://libkungfu.dev">Developer substrate</a>
         <a href="#trust-layer">Trust model</a>
       </div>
     </section>
@@ -464,13 +467,13 @@
     <section class="control-pane" aria-label="Cost State Proof product preview">
       <div class="pane-topbar">
         <div class="pane-title">
-          <strong>Kungfu workspace</strong>
+          <strong>Product direction preview</strong>
           <span>Delegated agent work, local evidence, no default upload.</span>
         </div>
         <div class="health" aria-label="Workspace summary">
-          <span class="pill">4 active runs</span>
-          <span class="pill">1 stuck loop</span>
-          <span class="pill">2 ready for review</span>
+          <span class="pill">coming soon</span>
+          <span class="pill">open-source core</span>
+          <span class="pill">local-first</span>
         </div>
       </div>
       <div class="pane-grid">
@@ -505,16 +508,16 @@
           </div>
           <div class="work-list">
             <div class="work-row">
-              <div class="row"><strong>Homepage cost/state/proof</strong><span class="status ok">moving</span></div>
-              <span>Editing first screen, validation pending.</span>
+              <div class="row"><strong>Agent session</strong><span class="status ok">moving</span></div>
+              <span>Work is changing files and collecting validation evidence.</span>
             </div>
             <div class="work-row">
               <div class="row"><strong>Buildchain release passport</strong><span class="status ready">ready</span></div>
               <span>Artifact evidence collected; PR review next.</span>
             </div>
             <div class="work-row">
-              <div class="row"><strong>Worker cleanup debt</strong><span class="status block">stuck</span></div>
-              <span>Needs exact owner before deleting any worktree.</span>
+              <div class="row"><strong>Long refactor</strong><span class="status block">stuck</span></div>
+              <span>No material progress after repeated tool calls.</span>
             </div>
             <div class="work-row">
               <div class="row"><strong>Mission decision card</strong><span class="status wait">waiting</span></div>
@@ -531,11 +534,11 @@
           <div class="evidence-list">
             <div class="evidence">
               <span class="dot" aria-hidden="true"></span>
-              <div><strong>Files changed</strong><br><code>public/index.html</code></div>
+              <div><strong>Local facts</strong><br><code>journal / files / artifacts</code></div>
             </div>
             <div class="evidence">
               <span class="dot" aria-hidden="true"></span>
-              <div><strong>Validation</strong><br><code>bash scripts/check-site.sh</code></div>
+              <div><strong>Validation</strong><br><code>tests / checks / release evidence</code></div>
             </div>
             <div class="evidence">
               <span class="dot" aria-hidden="true"></span>
@@ -566,14 +569,11 @@
     </section>
 
     <section class="trust" id="trust-layer" aria-label="Open source and trust">
-      <h2>Open source core, commercial stewardship.</h2>
+      <h2>Open core. Commercial stewardship.</h2>
       <div>
-        <p>Kungfu is commercially operated by Kungfu Origin Technology Limited.</p>
-        <p>Kungfu core software is released under the Apache License 2.0. The business model is not based on private-code scarcity.</p>
-        <p>The local core remains Agent-native and journal-first, so humans and coding agents can inspect the same evidence instead of trusting an opaque dashboard.</p>
-        <p>Future commercial services may provide optional cloud, team, compute, storage, support, or governance capabilities without making the local core depend on login or hosted infrastructure.</p>
-        <p>Public feedback, bug reports, feature requests, and code contributions start on GitHub. Security issues should use GitHub private vulnerability reporting.</p>
-        <p><a href="/trust/index.html">Read the trust posture</a></p>
+        <p>Kungfu is commercially operated by Kungfu Origin Technology Limited. The core project is open source, local-first, journal-first, and being prepared in public.</p>
+        <p>Developers who want the substrate view can start at <a href="https://libkungfu.dev">libkungfu.dev</a>. Product, trust, service, and legal details live on this site.</p>
+        <p><a href="/about/index.html">About</a> · <a href="/services/index.html">Services</a> · <a href="/trust/index.html">Trust</a> · <a href="/legal/index.html">Legal</a></p>
       </div>
     </section>
 
