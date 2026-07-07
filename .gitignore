@@ -1,4 +1,4 @@
 .DS_Store
+.playwright-cli/
 dist/
 node_modules/
-

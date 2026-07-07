@@ -6,94 +6,14 @@
   <title>Trust | Kungfu</title>
   <meta name="description" content="Kungfu trust posture: local facts, open source core, auditable releases, provider compliance, and honest cost attribution.">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%2314171f'/%3E%3Ctext x='32' y='39' text-anchor='middle' font-family='Arial,sans-serif' font-size='22' font-weight='700' fill='white'%3EKF%3C/text%3E%3C/svg%3E">
+  <link rel="stylesheet" href="/assets/site.css">
   <style>
-    :root {
-      color-scheme: light dark;
-      --bg: #f6f5f1;
-      --fg: #16181b;
-      --muted: #5e6570;
-      --line: #c9c5bb;
-      --accent: #0f766e;
-      --surface: rgba(255, 255, 255, 0.52);
-    }
-
-    @media (prefers-color-scheme: dark) {
-      :root {
-        --bg: #121313;
-        --fg: #eef1f4;
-        --muted: #aeb6bf;
-        --line: #34393f;
-        --accent: #37c8b5;
-        --surface: rgba(255, 255, 255, 0.06);
-      }
-    }
-
-    * { box-sizing: border-box; }
-
-    body {
-      margin: 0;
-      min-height: 100vh;
-      font: 16px/1.6 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: var(--bg);
-      color: var(--fg);
-    }
 
     main {
+      --header-gap: 56px;
       width: min(980px, calc(100% - 40px));
       margin: 0 auto;
       padding: 52px 0 64px;
-    }
-
-    .site-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 24px;
-      min-height: 52px;
-      border-bottom: 1px solid var(--line);
-      padding-bottom: 18px;
-      margin-bottom: 56px;
-    }
-
-    .brand {
-      display: inline-flex;
-      align-items: center;
-      gap: 12px;
-      color: var(--fg);
-      font-weight: 700;
-      text-decoration: none;
-    }
-
-    .mark {
-      width: 42px;
-      height: 42px;
-      display: grid;
-      place-items: center;
-      border: 1px solid var(--line);
-      background: var(--surface);
-      color: var(--fg);
-      font-size: 16px;
-      letter-spacing: 0;
-    }
-
-    .site-nav {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 18px 28px;
-      align-items: center;
-      color: var(--muted);
-      font-size: 14px;
-    }
-
-    .site-footer {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px 20px;
-      color: var(--muted);
-      font-size: 14px;
-      margin-top: 52px;
-      border-top: 1px solid var(--line);
-      padding-top: 18px;
     }
 
     h1 {
@@ -144,16 +64,8 @@
 
     li { margin: 8px 0; }
 
-    a {
-      color: var(--accent);
-      text-decoration-thickness: 1px;
-      text-underline-offset: 4px;
-    }
-
     @media (max-width: 760px) {
       main { width: min(100% - 28px, 640px); padding-top: 36px; }
-      .site-header { align-items: flex-start; margin-bottom: 36px; }
-      .site-nav { display: grid; gap: 12px; }
       .grid { grid-template-columns: 1fr; }
       section { min-height: auto; }
     }
@@ -164,16 +76,18 @@
     <!-- shared-header:start -->
     <header class="site-header">
       <a class="brand" href="/" aria-label="Kungfu">
-        <span class="mark" aria-hidden="true">KF</span>
-        <span>Kungfu</span>
+        <span class="mark" aria-hidden="true">🧘</span>
+        <span class="brand-copy"><span>Kungfu</span><span class="brand-tagline">Agent Work Ledger</span></span>
       </a>
       <nav class="site-nav" aria-label="Project links">
         <a href="/about/index.html">About</a>
-        <a href="/services/index.html">Services</a>
-        <a href="https://libkungfu.dev">Developers</a>
-        <a href="/trust/index.html">Trust</a>
-        <a href="/legal/index.html">Legal</a>
-        <a class="security" href="https://github.com/kungfu-systems/kungfu">GitHub</a>
+        <details class="nav-menu">
+          <summary>Developers</summary>
+          <div class="nav-menu-panel">
+          <a href="https://libkungfu.dev">libkungfu.dev</a>
+          <a href="https://github.com/kungfu-systems/kungfu">GitHub</a>
+          </div>
+        </details>
       </nav>
     </header>
     <!-- shared-header:end -->
@@ -219,7 +133,7 @@
 
       <section>
         <h2>Developer source material</h2>
-        <p>The commercial product surface lives on kungfu.tech. The developer substrate, API-facing material, and first-party technical facts are linked from <a href="https://libkungfu.dev">libkungfu.dev</a>.</p>
+        <p>The commercial product surface lives on kungfu.tech. Developer-facing material, API references, and first-party technical facts are linked from <a href="https://libkungfu.dev">libkungfu.dev</a>.</p>
       </section>
 
       <section>
@@ -231,9 +145,28 @@
 
     <!-- shared-footer:start -->
     <footer class="site-footer">
-      <span>Copyright 2026 Kungfu Origin Technology Limited. All rights reserved.</span>
-      <span>Kungfu core software is licensed under the Apache License 2.0.</span>
+      <nav class="footer-links" aria-label="Footer links">
+        <a href="/services/index.html">Services</a>
+        <a href="/trust/index.html">Trust</a>
+        <a href="/legal/index.html">Legal</a>
+      </nav>
+      <p class="footer-note">Kungfu core software is licensed under the Apache License 2.0.</p>
+      <p class="footer-copy">Copyright 2026 Kungfu Origin Technology Limited. All rights reserved.</p>
     </footer>
+    <script>
+      document.addEventListener("click", (event) => {
+        document.querySelectorAll("details.nav-menu[open]").forEach((menu) => {
+          if (!menu.contains(event.target)) menu.removeAttribute("open");
+        });
+      });
+      document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape") {
+          document.querySelectorAll("details.nav-menu[open]").forEach((menu) => {
+            menu.removeAttribute("open");
+          });
+        }
+      });
+    </script>
     <!-- shared-footer:end -->
   </main>
 </body>
