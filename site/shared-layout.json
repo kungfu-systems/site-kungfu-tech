@@ -1,7 +1,10 @@
 {
   "pages": [
     "public/index.html",
-    "public/trust/index.html"
+    "public/about/index.html",
+    "public/services/index.html",
+    "public/trust/index.html",
+    "public/legal/index.html"
   ],
   "brand": {
     "label": "Kungfu",
@@ -10,20 +13,28 @@
   },
   "navigation": [
     {
-      "label": "Repository",
-      "href": "https://github.com/kungfu-systems/kungfu"
+      "label": "About",
+      "href": "/about/index.html"
     },
     {
-      "label": "Feedback",
-      "href": "https://github.com/kungfu-systems/kungfu/issues"
+      "label": "Services",
+      "href": "/services/index.html"
+    },
+    {
+      "label": "Developers",
+      "href": "https://libkungfu.dev"
     },
     {
       "label": "Trust",
       "href": "/trust/index.html"
     },
     {
-      "label": "Security",
-      "href": "https://github.com/kungfu-systems/kungfu/security",
+      "label": "Legal",
+      "href": "/legal/index.html"
+    },
+    {
+      "label": "GitHub",
+      "href": "https://github.com/kungfu-systems/kungfu",
       "class": "security"
     }
   ],

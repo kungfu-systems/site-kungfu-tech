@@ -3,28 +3,30 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Trust | Kungfu</title>
-  <meta name="description" content="Kungfu trust posture: local facts, open source core, auditable releases, provider compliance, and honest cost attribution.">
+  <title>Legal | Kungfu</title>
+  <meta name="description" content="Kungfu legal and policy center: license, trademarks, acceptable use, provider compliance, security, and privacy posture.">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%2314171f'/%3E%3Ctext x='32' y='39' text-anchor='middle' font-family='Arial,sans-serif' font-size='22' font-weight='700' fill='white'%3EKF%3C/text%3E%3C/svg%3E">
   <style>
     :root {
       color-scheme: light dark;
-      --bg: #f6f5f1;
-      --fg: #16181b;
-      --muted: #5e6570;
-      --line: #c9c5bb;
+      --bg: #f7f8fb;
+      --fg: #14171f;
+      --muted: #596273;
+      --line: #cfd6df;
       --accent: #0f766e;
-      --surface: rgba(255, 255, 255, 0.52);
+      --surface: rgba(255, 255, 255, 0.78);
+      --panel: #ffffff;
     }
 
     @media (prefers-color-scheme: dark) {
       :root {
-        --bg: #121313;
-        --fg: #eef1f4;
-        --muted: #aeb6bf;
-        --line: #34393f;
-        --accent: #37c8b5;
+        --bg: #101318;
+        --fg: #f1f5f9;
+        --muted: #a8b3c2;
+        --line: #303844;
+        --accent: #2dd4bf;
         --surface: rgba(255, 255, 255, 0.06);
+        --panel: #171c23;
       }
     }
 
@@ -39,9 +41,9 @@
     }
 
     main {
-      width: min(980px, calc(100% - 40px));
+      width: min(1040px, calc(100% - 40px));
       margin: 0 auto;
-      padding: 52px 0 64px;
+      padding: 34px 0 60px;
     }
 
     .site-header {
@@ -52,7 +54,7 @@
       min-height: 52px;
       border-bottom: 1px solid var(--line);
       padding-bottom: 18px;
-      margin-bottom: 56px;
+      margin-bottom: 58px;
     }
 
     .brand {
@@ -76,7 +78,8 @@
       letter-spacing: 0;
     }
 
-    .site-nav {
+    .site-nav,
+    .site-footer {
       display: flex;
       flex-wrap: wrap;
       gap: 18px 28px;
@@ -86,27 +89,31 @@
     }
 
     .site-footer {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px 20px;
-      color: var(--muted);
-      font-size: 14px;
       margin-top: 52px;
       border-top: 1px solid var(--line);
       padding-top: 18px;
     }
 
+    .eyebrow {
+      margin: 0 0 16px;
+      color: var(--accent);
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0;
+      text-transform: uppercase;
+    }
+
     h1 {
-      max-width: 760px;
+      max-width: 860px;
       margin: 0;
-      font-size: clamp(44px, 8vw, 86px);
+      font-size: clamp(44px, 8vw, 82px);
       line-height: 0.98;
       letter-spacing: 0;
     }
 
     .lead {
-      max-width: 760px;
-      margin: 24px 0 44px;
+      max-width: 780px;
+      margin: 24px 0 42px;
       color: var(--muted);
       font-size: 20px;
     }
@@ -114,16 +121,14 @@
     .grid {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
-      border-top: 1px solid var(--line);
-      border-left: 1px solid var(--line);
+      gap: 16px;
     }
 
     section {
-      min-height: 210px;
+      min-height: 220px;
       padding: 24px;
-      border-right: 1px solid var(--line);
-      border-bottom: 1px solid var(--line);
-      background: var(--surface);
+      border: 1px solid var(--line);
+      background: var(--panel);
     }
 
     h2 {
@@ -136,22 +141,16 @@
     p { margin: 0 0 12px; color: var(--muted); }
     p:last-child { margin-bottom: 0; }
 
-    ul {
-      margin: 0;
-      padding-left: 20px;
-      color: var(--muted);
-    }
-
-    li { margin: 8px 0; }
-
     a {
       color: var(--accent);
       text-decoration-thickness: 1px;
       text-underline-offset: 4px;
     }
 
+    .security { color: var(--accent); }
+
     @media (max-width: 760px) {
-      main { width: min(100% - 28px, 640px); padding-top: 36px; }
+      main { width: min(100% - 28px, 640px); padding-top: 28px; }
       .site-header { align-items: flex-start; margin-bottom: 36px; }
       .site-nav { display: grid; gap: 12px; }
       .grid { grid-template-columns: 1fr; }
@@ -178,54 +177,45 @@
     </header>
     <!-- shared-header:end -->
 
-    <h1>Trust starts with local facts, not another opaque dashboard.</h1>
-    <p class="lead">Kungfu is being prepared as a local-first control pane for long-running agent work. The trust model connects cost, responsibility state, and proof so users can decide whether to stop, continue, approve, or resume delegated work from evidence.</p>
+    <p class="eyebrow">Legal and policy</p>
+    <h1>Policy links for the open-source core and official Kungfu identity.</h1>
+    <p class="lead">This page collects public policy entrypoints and conservative website-level disclosures. Kungfu v4 is still being prepared, so this is not a hosted-service terms package.</p>
 
     <div class="grid">
       <section>
-        <h2>Open source core</h2>
-        <p>Kungfu core software is released under the Apache License 2.0. Public collaboration happens in the open repository, with security issues routed through GitHub private vulnerability reporting.</p>
+        <h2>License</h2>
+        <p>Kungfu core software is released under the Apache License 2.0. Open-source rights do not automatically grant rights to official hosted services, package identity, or trademarks.</p>
         <p><a href="https://github.com/kungfu-systems/kungfu/blob/dev/v4/v4.0/LICENSE-POLICY.md">License policy</a></p>
       </section>
 
       <section>
-        <h2>Local-first posture</h2>
-        <p>The product direction is built around local journals, replayable evidence, and explicit export. Optional future services should add team, support, compute, storage, or governance capabilities without making the local core depend on login.</p>
-      </section>
-
-      <section>
-        <h2>Auditable release evidence</h2>
-        <p>Buildchain records release and deployment evidence so official artifacts, source revisions, checks, and promotion decisions can be inspected. Release passports are the intended public entrypoint for that evidence as the system matures.</p>
-        <p><a href="https://github.com/kungfu-systems/buildchain/blob/dev/v2/v2.4/docs/release-passport.md">Buildchain release passport</a></p>
-      </section>
-
-      <section>
-        <h2>Provider compliance</h2>
-        <p>Official integrations should respect provider terms, credential boundaries, billing and quota attribution, and usage transparency. Kungfu should not hide costs, forge usage evidence, or bypass provider protections.</p>
-        <p><a href="https://github.com/kungfu-systems/kungfu/blob/dev/v4/v4.0/PROVIDER_COMPLIANCE.md">Provider compliance</a></p>
-      </section>
-
-      <section>
-        <h2>Official identity boundaries</h2>
-        <p>Open source rights do not grant trademark rights or imply that a fork is an official Kungfu service. Official project names, domains, package identity, and hosted services are governed separately from the code license.</p>
+        <h2>Trademark and identity</h2>
+        <p>Official project names, domains, and commercial identity are governed separately from the source code license.</p>
         <p><a href="https://github.com/kungfu-systems/kungfu/blob/dev/v4/v4.0/TRADEMARK.md">Trademark policy</a></p>
       </section>
 
       <section>
         <h2>Acceptable use</h2>
-        <p>Kungfu is intended to help developers and agents inspect runtime behavior honestly. Official services and integrations should preserve user control, evidence quality, security reporting, and truthful attribution.</p>
+        <p>Kungfu is intended to help developers and agents inspect runtime behavior honestly. Official integrations should preserve evidence quality, user control, and truthful attribution.</p>
         <p><a href="https://github.com/kungfu-systems/kungfu/blob/dev/v4/v4.0/ACCEPTABLE_USE.md">Acceptable use</a></p>
       </section>
 
       <section>
-        <h2>Developer source material</h2>
-        <p>The commercial product surface lives on kungfu.tech. The developer substrate, API-facing material, and first-party technical facts are linked from <a href="https://libkungfu.dev">libkungfu.dev</a>.</p>
+        <h2>Provider compliance</h2>
+        <p>Official integrations should respect provider terms, credential boundaries, billing and quota attribution, and usage transparency.</p>
+        <p><a href="https://github.com/kungfu-systems/kungfu/blob/dev/v4/v4.0/PROVIDER_COMPLIANCE.md">Provider compliance</a></p>
       </section>
 
       <section>
-        <h2>Legal center</h2>
-        <p>Trademark, acceptable use, provider compliance, security reporting, and website-level privacy posture are collected in the legal center.</p>
-        <p><a href="/legal/index.html">Read legal and policy links</a></p>
+        <h2>Security reporting</h2>
+        <p>Public feedback and code contributions start on GitHub. Security issues should use GitHub private vulnerability reporting for the open-source repository.</p>
+        <p><a href="https://github.com/kungfu-systems/kungfu/security">Security reporting</a></p>
+      </section>
+
+      <section>
+        <h2>Privacy posture</h2>
+        <p>This public website does not ask visitors to create an account. The product direction keeps the core workflow local-first and avoids default upload for local evidence.</p>
+        <p>Hosting, CDN, browser, and GitHub surfaces may process ordinary operational logs according to their own infrastructure and policy boundaries.</p>
       </section>
     </div>
 
