@@ -6,96 +6,14 @@
   <title>About | Kungfu</title>
   <meta name="description" content="About Kungfu: a commercial product line preparing a local-first control pane for real-world work with agents.">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%2314171f'/%3E%3Ctext x='32' y='39' text-anchor='middle' font-family='Arial,sans-serif' font-size='22' font-weight='700' fill='white'%3EKF%3C/text%3E%3C/svg%3E">
+  <link rel="stylesheet" href="/assets/site.css">
   <style>
-    :root {
-      color-scheme: light dark;
-      --bg: #f7f8fb;
-      --fg: #14171f;
-      --muted: #596273;
-      --line: #cfd6df;
-      --accent: #0f766e;
-      --surface: rgba(255, 255, 255, 0.78);
-      --panel: #ffffff;
-    }
-
-    @media (prefers-color-scheme: dark) {
-      :root {
-        --bg: #101318;
-        --fg: #f1f5f9;
-        --muted: #a8b3c2;
-        --line: #303844;
-        --accent: #2dd4bf;
-        --surface: rgba(255, 255, 255, 0.06);
-        --panel: #171c23;
-      }
-    }
-
-    * { box-sizing: border-box; }
-
-    body {
-      margin: 0;
-      min-height: 100vh;
-      font: 16px/1.6 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background:
-        linear-gradient(90deg, transparent 0, transparent calc(100% - 1px), rgba(20, 23, 31, 0.05) calc(100% - 1px)),
-        linear-gradient(180deg, transparent 0, transparent calc(100% - 1px), rgba(20, 23, 31, 0.05) calc(100% - 1px)),
-        var(--bg);
-      background-size: 48px 48px;
-      color: var(--fg);
-    }
 
     main {
+      --header-gap: 58px;
       width: min(1040px, calc(100% - 40px));
       margin: 0 auto;
       padding: 34px 0 60px;
-    }
-
-    .site-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 24px;
-      min-height: 52px;
-      border-bottom: 1px solid var(--line);
-      padding-bottom: 18px;
-      margin-bottom: 58px;
-    }
-
-    .brand {
-      display: inline-flex;
-      align-items: center;
-      gap: 12px;
-      color: var(--fg);
-      font-weight: 700;
-      text-decoration: none;
-    }
-
-    .mark {
-      width: 42px;
-      height: 42px;
-      display: grid;
-      place-items: center;
-      border: 1px solid var(--line);
-      background: var(--surface);
-      color: var(--fg);
-      font-size: 16px;
-      letter-spacing: 0;
-    }
-
-    .site-nav,
-    .site-footer {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 18px 28px;
-      align-items: center;
-      color: var(--muted);
-      font-size: 14px;
-    }
-
-    .site-footer {
-      margin-top: 52px;
-      border-top: 1px solid var(--line);
-      padding-top: 18px;
     }
 
     .eyebrow {
@@ -145,18 +63,10 @@
     p { margin: 0 0 12px; color: var(--muted); }
     p:last-child { margin-bottom: 0; }
 
-    a {
-      color: var(--accent);
-      text-decoration-thickness: 1px;
-      text-underline-offset: 4px;
-    }
-
     .security { color: var(--accent); }
 
     @media (max-width: 760px) {
       main { width: min(100% - 28px, 640px); padding-top: 28px; }
-      .site-header { align-items: flex-start; margin-bottom: 36px; }
-      .site-nav { display: grid; gap: 12px; }
       .grid { grid-template-columns: 1fr; }
       section { min-height: auto; }
     }
@@ -167,23 +77,25 @@
     <!-- shared-header:start -->
     <header class="site-header">
       <a class="brand" href="/" aria-label="Kungfu">
-        <span class="mark" aria-hidden="true">KF</span>
-        <span>Kungfu</span>
+        <span class="mark" aria-hidden="true">🧘</span>
+        <span class="brand-copy"><span>Kungfu</span><span class="brand-tagline">Agent Work Ledger</span></span>
       </a>
       <nav class="site-nav" aria-label="Project links">
         <a href="/about/index.html">About</a>
-        <a href="/services/index.html">Services</a>
-        <a href="https://libkungfu.dev">Developers</a>
-        <a href="/trust/index.html">Trust</a>
-        <a href="/legal/index.html">Legal</a>
-        <a class="security" href="https://github.com/kungfu-systems/kungfu">GitHub</a>
+        <details class="nav-menu">
+          <summary>Developers</summary>
+          <div class="nav-menu-panel">
+          <a href="https://libkungfu.dev">libkungfu.dev</a>
+          <a href="https://github.com/kungfu-systems/kungfu">GitHub</a>
+          </div>
+        </details>
       </nav>
     </header>
     <!-- shared-header:end -->
 
     <p class="eyebrow">About Kungfu</p>
     <h1>A commercial product line for real-world work with agents.</h1>
-    <p class="lead">Kungfu is preparing a local-first control pane for long-running agent work. The public product story belongs on kungfu.tech; the developer substrate and API-facing material live at <a href="https://libkungfu.dev">libkungfu.dev</a>.</p>
+    <p class="lead">Kungfu is preparing a local-first control pane for long-running agent work. The public product story belongs on kungfu.tech; developer-facing material lives at <a href="https://libkungfu.dev">libkungfu.dev</a>.</p>
 
     <div class="grid">
       <section>
@@ -200,22 +112,41 @@
 
       <section>
         <h2>Developer axis</h2>
-        <p>Developers and agents need the same first-party technical facts: runtime substrate, contracts, package surfaces, and trust documentation.</p>
+        <p>Developers and agents need the same first-party technical facts: runtime behavior, contracts, package surfaces, and trust documentation.</p>
         <p>That material is intentionally separated at <a href="https://libkungfu.dev">libkungfu.dev</a> so this site can stay focused on the product and commercial axis.</p>
       </section>
 
       <section>
         <h2>Current availability</h2>
-        <p>Kungfu v4 is being prepared in the open. This site describes product direction and stewardship, not a claim that all shown product capabilities are already generally available.</p>
+        <p>Kungfu is being prepared in the open. This site describes product direction and stewardship, not a claim that all shown product capabilities are already generally available.</p>
         <p>Follow the open-source core and public issues on <a href="https://github.com/kungfu-systems/kungfu">GitHub</a>.</p>
       </section>
     </div>
 
     <!-- shared-footer:start -->
     <footer class="site-footer">
-      <span>Copyright 2026 Kungfu Origin Technology Limited. All rights reserved.</span>
-      <span>Kungfu core software is licensed under the Apache License 2.0.</span>
+      <nav class="footer-links" aria-label="Footer links">
+        <a href="/services/index.html">Services</a>
+        <a href="/trust/index.html">Trust</a>
+        <a href="/legal/index.html">Legal</a>
+      </nav>
+      <p class="footer-note">Kungfu core software is licensed under the Apache License 2.0.</p>
+      <p class="footer-copy">Copyright 2026 Kungfu Origin Technology Limited. All rights reserved.</p>
     </footer>
+    <script>
+      document.addEventListener("click", (event) => {
+        document.querySelectorAll("details.nav-menu[open]").forEach((menu) => {
+          if (!menu.contains(event.target)) menu.removeAttribute("open");
+        });
+      });
+      document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape") {
+          document.querySelectorAll("details.nav-menu[open]").forEach((menu) => {
+            menu.removeAttribute("open");
+          });
+        }
+      });
+    </script>
     <!-- shared-footer:end -->
   </main>
 </body>

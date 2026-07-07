@@ -8,7 +8,8 @@
   ],
   "brand": {
     "label": "Kungfu",
-    "mark": "KF",
+    "mark": "🧘",
+    "tagline": "Agent Work Ledger",
     "href": "/"
   },
   "navigation": [
@@ -17,33 +18,42 @@
       "href": "/about/index.html"
     },
     {
-      "label": "Services",
-      "href": "/services/index.html"
-    },
-    {
       "label": "Developers",
-      "href": "https://libkungfu.dev"
-    },
-    {
-      "label": "Trust",
-      "href": "/trust/index.html"
-    },
-    {
-      "label": "Legal",
-      "href": "/legal/index.html"
-    },
-    {
-      "label": "GitHub",
-      "href": "https://github.com/kungfu-systems/kungfu",
-      "class": "security"
+      "items": [
+        {
+          "label": "libkungfu.dev",
+          "href": "https://libkungfu.dev"
+        },
+        {
+          "label": "GitHub",
+          "href": "https://github.com/kungfu-systems/kungfu"
+        }
+      ]
     }
   ],
   "footer": [
     {
-      "text": "Copyright 2026 Kungfu Origin Technology Limited. All rights reserved."
+      "role": "link",
+      "text": "Services",
+      "href": "/services/index.html"
     },
     {
+      "role": "link",
+      "text": "Trust",
+      "href": "/trust/index.html"
+    },
+    {
+      "role": "link",
+      "text": "Legal",
+      "href": "/legal/index.html"
+    },
+    {
+      "role": "license",
       "text": "Kungfu core software is licensed under the Apache License 2.0."
+    },
+    {
+      "role": "copyright",
+      "text": "Copyright 2026 Kungfu Origin Technology Limited. All rights reserved."
     }
   ]
 }
