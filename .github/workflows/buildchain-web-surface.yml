@@ -18,21 +18,25 @@ on:
         required: false
         default: ""
       production_approved:
-        description: "Apply the gated production channel"
+        description: "Apply the gated production channel for trusted manual dispatch"
         type: boolean
         required: false
         default: false
 
 permissions:
-  contents: read
+  contents: write
+  issues: write
   id-token: write
   pull-requests: write
 
 jobs:
   web-surface:
-    uses: kungfu-systems/buildchain/.github/workflows/.web-surface.yml@v2.4
+    uses: kungfu-systems/buildchain/.github/workflows/.web-surface.yml@v2
     with:
       buildchain-ref: ${{ github.event_name == 'workflow_dispatch' && inputs.buildchain_ref || '' }}
+      buildchain-contract-lock-path: .buildchain/contract-lock.json
+      buildchain-contract-compatibility-policy: major-compatible
+      buildchain-contract-drift-issue-mode: compatible-and-breaking
       node-version: "24"
       build-command: npm run build
       verify-command: npm run check
@@ -42,10 +46,13 @@ jobs:
       preview-aws-role-arn: arn:aws:iam::727884401362:role/site-kungfu-tech-preview-github-actions
       staging-apply: true
       staging-aws-role-arn: arn:aws:iam::727884401362:role/site-kungfu-tech-staging-github-actions
-      production-apply: ${{ (github.event_name == 'workflow_dispatch' && inputs.production_approved) || (github.event_name == 'push' && github.ref_name == 'main') }}
+      production-apply: true
       production-approved: ${{ github.event_name == 'workflow_dispatch' && inputs.production_approved }}
       production-release-on-main: true
+      production-release-app-client-id: ${{ vars.KUNGFU_RELEASE_APP_CLIENT_ID }}
       production-release-label: buildchain-release
       production-release-head-prefix: feature/release-
       production-aws-role-arn: arn:aws:iam::727884401362:role/site-kungfu-tech-production-github-actions
       production-environment: production
+    secrets:
+      production-release-app-private-key: ${{ secrets.KUNGFU_RELEASE_APP_PRIVATE_KEY }}
