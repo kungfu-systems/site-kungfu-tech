@@ -40,6 +40,11 @@ approval when it is merged into `main`. Manual workflow dispatch with
 Staging is protected by managed network access, not by a Buildchain-managed
 Basic Auth secret.
 
+Preview keeps `directory_index_rewrite = "external"` because the preview
+CloudFront distribution already uses `site-kungfu-tech-preview-prefix` to route
+`pr-N.preview.kungfu.tech` host aliases into matching S3 prefixes. Staging and
+production use Buildchain-managed directory index rewrites.
+
 The AWS delivery contract is mirrored in `infra/outputs.json` from the private
 `kungfu-systems/infra-kungfu-sites` repository. `bash scripts/check-site.sh`
 verifies that `.buildchain/buildchain.toml` and the GitHub Actions role assumptions still

@@ -16,6 +16,10 @@ Default automation:
 
 - Pull requests run Buildchain v2 web-surface planning, verification, and
   preview apply for `pr-N.preview.kungfu.tech`.
+- Preview uses the existing `site-kungfu-tech-preview-prefix` CloudFront
+  Function as an external directory-index and alias-prefix router. Do not
+  replace that viewer-request association with the Buildchain directory-index
+  function unless Buildchain also owns the preview alias-prefix routing logic.
 - Closing or merging a pull request runs preview cleanup for the PR alias.
 - Ordinary pushes to `main` run staging planning, verification, and apply to
   `https://staging.kungfu.tech`.
