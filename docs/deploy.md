@@ -4,7 +4,7 @@ Production deploy is modeled as an explicit Buildchain release operation. It
 is approved by merging a final release pull request. The GitHub merge button is
 the human approval act; Buildchain then verifies that the `main` push came from
 a same-repository, merged pull request labeled `buildchain-release` whose head
-branch starts with `feature/release-`, and only then applies production.
+branch starts with `release/`, and only then applies production.
 
 The AWS resource contract is owned by the private
 `kungfu-systems/infra-kungfu-sites` repository and mirrored into this repository
@@ -14,7 +14,7 @@ resource lifecycle decisions belong in the infra repository.
 
 Default automation:
 
-- Pull requests run Buildchain v2.4 web-surface planning, verification, and
+- Pull requests run Buildchain `@v2` web-surface planning, verification, and
   preview apply for `pr-N.preview.kungfu.tech`.
 - Closing or merging a pull request runs preview cleanup for the PR alias.
 - Ordinary pushes to `main` run staging planning, verification, and apply to
@@ -31,7 +31,7 @@ Production apply prerequisites:
    `kungfu-tech-site-727884401362-us-east-1` bucket and CloudFront distribution
    `E204MRW1P4Z1G9`.
 2. The release pull request must be same-repository, merged into `main`, labeled
-   `buildchain-release`, and use a `feature/release-*` source branch.
+   `buildchain-release`, and use a `release/` source branch.
 3. The Buildchain production plan must bind the source SHA, artifact hash,
    production bucket, CloudFront distribution, actor, run id, and rollback
    pointer.
@@ -41,9 +41,9 @@ Production apply prerequisites:
 Release PR shape:
 
 ```sh
-git switch -c feature/release-YYYYMMDD-topic
-git push origin feature/release-YYYYMMDD-topic
-gh pr create --base main --head feature/release-YYYYMMDD-topic --label buildchain-release
+git switch -c release/production-<source-sha>
+git push origin release/production-<source-sha>
+gh pr create --base main --head release/production-<source-sha> --label buildchain-release
 ```
 
 After the release PR checks pass, merging that PR publishes production. Do not

@@ -7,6 +7,13 @@ cd "$repo_root"
 node scripts/check-infra-outputs.mjs
 node scripts/render-shared-layout.mjs --check
 
+test -f .buildchain/buildchain.toml
+test -f .buildchain/contract-lock.json
+if [ -e buildchain.toml ] || [ -e buildchain.contract-lock.json ]; then
+  echo "error: Buildchain config and contract lock must live under .buildchain/" >&2
+  exit 1
+fi
+
 shared_block() {
   block_name=$1
   page_path=$2
