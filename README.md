@@ -29,7 +29,7 @@ and footer.
 ## Buildchain
 
 This site is a Buildchain `web-surface` project. Pull requests and pushes use
-the shared Buildchain v2.4 web-surface workflow for the standard release flow:
+the shared Buildchain v2 web-surface workflow for the standard release flow:
 feature PRs publish preview, normal merges publish staging, and release PR
 pages show the staging review URL before production approval. Production apply
 is owned by Buildchain release PR semantics: a pull request labeled
@@ -42,10 +42,15 @@ Basic Auth secret.
 
 The AWS delivery contract is mirrored in `infra/outputs.json` from the private
 `kungfu-systems/infra-kungfu-sites` repository. `bash scripts/check-site.sh`
-verifies that `buildchain.toml` and the GitHub Actions role assumptions still
+verifies that `.buildchain/buildchain.toml` and the GitHub Actions role assumptions still
 match that contract, that preview and staging apply are enabled through the
 shared Buildchain workflow, and that production apply remains bound to
 Buildchain release PR semantics.
+
+Buildchain is managed through the canonical `.buildchain/` layout. The
+repository commits `.buildchain/contract-lock.json` so the floating `@v2`
+workflow can detect compatible or breaking Buildchain runtime drift before
+build, deploy planning, or apply.
 
 ```bash
 BUILDCHAIN_DIR=/path/to/buildchain

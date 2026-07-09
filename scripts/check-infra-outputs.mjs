@@ -2,9 +2,9 @@
 import fs from "node:fs";
 
 const outputs = JSON.parse(fs.readFileSync("infra/outputs.json", "utf8"));
-const buildchainToml = fs.readFileSync("buildchain.toml", "utf8");
+const buildchainToml = fs.readFileSync(".buildchain/buildchain.toml", "utf8");
 const workflow = fs.readFileSync(".github/workflows/buildchain-web-surface.yml", "utf8");
-const expectedBuildchainRef = "v2.4";
+const expectedBuildchainRef = "v2";
 const expectedBuildchainShell = `kungfu-systems/buildchain/.github/workflows/.web-surface.yml@${expectedBuildchainRef}`;
 
 function parseTomlSections(text) {
@@ -37,11 +37,23 @@ if (outputs.contract !== "kungfu-site-infra-outputs") {
 if (outputs.site !== "site-kungfu-tech") {
   throw new Error("infra outputs site mismatch");
 }
-if (
-  !workflow.includes(expectedBuildchainShell) &&
-  !workflow.includes(`buildchain-ref: ${expectedBuildchainRef}`)
-) {
+if (fs.existsSync("buildchain.toml") || fs.existsSync("buildchain.contract-lock.json")) {
+  throw new Error("legacy Buildchain root layout files are not allowed");
+}
+if (!fs.existsSync(".buildchain/contract-lock.json")) {
+  throw new Error("missing Buildchain contract lock: .buildchain/contract-lock.json");
+}
+if (!workflow.includes(expectedBuildchainShell)) {
   throw new Error(`Buildchain web-surface workflow must run ${expectedBuildchainRef}`);
+}
+for (const lockInput of [
+  "buildchain-contract-lock-path: .buildchain/contract-lock.json",
+  "buildchain-contract-compatibility-policy: major-compatible",
+  "buildchain-contract-drift-issue-mode: compatible-and-breaking",
+]) {
+  if (!workflow.includes(lockInput)) {
+    throw new Error(`Buildchain web-surface workflow is missing ${lockInput}`);
+  }
 }
 for (const applySwitch of ["preview-apply", "preview-cleanup-apply", "staging-apply"]) {
   if (!workflow.includes(`${applySwitch}: true`)) {
@@ -49,10 +61,9 @@ for (const applySwitch of ["preview-apply", "preview-cleanup-apply", "staging-ap
   }
 }
 const manualProductionGate = "github.event_name == 'workflow_dispatch' && inputs.production_approved";
-const releasePrProductionGate = "github.event_name == 'push' && github.ref_name == 'main'";
 if (
   !workflow.includes(manualProductionGate) ||
-  !workflow.includes(releasePrProductionGate) ||
+  !workflow.includes("production-apply: true") ||
   !workflow.includes("production-release-on-main: true") ||
   !workflow.includes("production-release-label: buildchain-release") ||
   !workflow.includes("production-release-head-prefix: feature/release-")

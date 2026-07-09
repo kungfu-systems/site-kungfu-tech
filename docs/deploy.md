@@ -14,7 +14,7 @@ resource lifecycle decisions belong in the infra repository.
 
 Default automation:
 
-- Pull requests run Buildchain v2.4 web-surface planning, verification, and
+- Pull requests run Buildchain v2 web-surface planning, verification, and
   preview apply for `pr-N.preview.kungfu.tech`.
 - Closing or merging a pull request runs preview cleanup for the PR alias.
 - Ordinary pushes to `main` run staging planning, verification, and apply to
@@ -61,3 +61,17 @@ gh workflow run buildchain-web-surface.yml \
 ```
 
 Do not store AWS access keys or session tokens in this repository.
+
+## Buildchain Runtime Management
+
+The repository uses the canonical Buildchain `.buildchain/` layout:
+
+- `.buildchain/buildchain.toml` is the web-surface configuration.
+- `.buildchain/contract-lock.json` records the accepted floating `v2` runtime
+  contract.
+- The caller workflow uses
+  `kungfu-systems/buildchain/.github/workflows/.web-surface.yml@v2` plus
+  `buildchain-contract-lock-path: .buildchain/contract-lock.json`.
+
+Root-level `buildchain.toml` and `buildchain.contract-lock.json` are legacy
+layout files and should not be reintroduced.
