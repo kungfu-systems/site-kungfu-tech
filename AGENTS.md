@@ -24,9 +24,15 @@ Kungfu packages and specifications.
 Run the local checks before opening a pull request:
 
 ```sh
+corepack pnpm@11.7.0 install --frozen-lockfile --ignore-scripts --registry=https://registry.npmjs.org/
 bash scripts/build-site.sh
 bash scripts/check-site.sh
 ```
+
+White paper product facts and the PDF come from the pinned
+`@kungfu-tech/paper-kungfu-product-white-paper` package. Keep rendering and
+navigation in this repository; do not copy upstream paper content into local
+HTML source.
 
 Keep the GitHub workflow thin: site releases should call the shared Buildchain
 `web-surface` workflow rather than copying deployment internals into this

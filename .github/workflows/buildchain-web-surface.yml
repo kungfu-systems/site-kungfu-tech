@@ -38,8 +38,8 @@ jobs:
       buildchain-contract-compatibility-policy: major-compatible
       buildchain-contract-drift-issue-mode: compatible-and-breaking
       node-version: "24"
-      build-command: npm run build
-      verify-command: npm run check
+      build-command: pnpm run build
+      verify-command: pnpm run check
       artifact-path: dist
       preview-apply: true
       preview-cleanup-apply: true

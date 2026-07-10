@@ -29,6 +29,12 @@ Default automation:
 - Manual `workflow_dispatch` with `production_approved=true` remains available
   as an explicit operator fallback.
 
+The build installs the exact white paper package from `pnpm-lock.yaml`, renders
+the `kungfu.tech` brand bundle, and copies the PDF only after its digest matches
+the upstream Buildchain publication manifest. Preview and staging links under
+`/whitepaper/**` remain on the active deployment origin; only cross-site
+evidence links use canonical hosts.
+
 Production apply prerequisites:
 
 1. The GitHub OIDC role must exist in AWS Global with write access limited to the
