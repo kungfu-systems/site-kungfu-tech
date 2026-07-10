@@ -9,16 +9,16 @@ importers:
   .:
     dependencies:
       '@kungfu-tech/paper-kungfu-product-white-paper':
-        specifier: 0.1.0-alpha.1
-        version: 0.1.0-alpha.1
+        specifier: 0.1.0-alpha.2
+        version: 0.1.0-alpha.2
       markdown-it:
         specifier: 14.1.0
         version: 14.1.0
 
 packages:
 
-  '@kungfu-tech/paper-kungfu-product-white-paper@0.1.0-alpha.1':
-    resolution: {integrity: sha512-fWIlJ8csaWDfZtEeJCkIWtKe2XoiFabjJjeCURrqswwfvDGNYkPiFG0ZD7rm37FkJZ68+S4zRvq7QV1TNh6Dcg==}
+  '@kungfu-tech/paper-kungfu-product-white-paper@0.1.0-alpha.2':
+    resolution: {integrity: sha512-Bmfh7LYXH9wc2Vcz/kEVXevwwd08gH7wZGd+G5RM3aif+gJi9NdYbmSfIOsuhB4Zdo4NeVMpVgvT7zmsqhDaaA==}
 
   argparse@2.0.1:
     resolution: {integrity: sha512-8+9WqebbFzpX9OR+Wa6O29asIogeRMzcGtAINdpMHHyAg10f05aSFVBbcEqGf/PXw1EjAZ+q2/bEBg3DvurK3Q==}
@@ -46,7 +46,7 @@ packages:
 
 snapshots:
 
-  '@kungfu-tech/paper-kungfu-product-white-paper@0.1.0-alpha.1': {}
+  '@kungfu-tech/paper-kungfu-product-white-paper@0.1.0-alpha.2': {}
 
   argparse@2.0.1: {}
 

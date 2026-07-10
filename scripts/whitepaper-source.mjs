@@ -7,7 +7,7 @@ import path from "node:path";
 const require = createRequire(import.meta.url);
 
 export const WHITEPAPER_PACKAGE = "@kungfu-tech/paper-kungfu-product-white-paper";
-export const WHITEPAPER_VERSION = "0.1.0-alpha.1";
+export const WHITEPAPER_VERSION = "0.1.0-alpha.2";
 export const WHITEPAPER_CONTRACT = "kungfu-white-paper-brand-site-bundle";
 export const WHITEPAPER_CONSUMER = "kungfu.tech";
 export const WHITEPAPER_ORIGIN = "https://kungfu.tech";
@@ -45,14 +45,10 @@ export function loadWhitepaperSource(repoRoot = process.cwd()) {
   const packageJsonPath = require.resolve(`${WHITEPAPER_PACKAGE}/package.json`, { paths: [repoRoot] });
   const packageRoot = path.dirname(packageJsonPath);
   const packageInfo = readJson(packageJsonPath);
-  const bundlePath = path.join(packageRoot, "site", "brand-site.json");
-  const publicationManifestPath = path.join(
-    packageRoot,
-    ".buildchain",
-    "publication",
-    "publication-artifact.json",
-  );
-  const pdfPath = path.join(packageRoot, "_build", "main.pdf");
+  const bundlePath = require.resolve(`${WHITEPAPER_PACKAGE}/site/brand-site.json`, { paths: [repoRoot] });
+  const publicationManifestPath = require.resolve(`${WHITEPAPER_PACKAGE}/publication-artifact.json`, { paths: [repoRoot] });
+  const pdfPath = require.resolve(`${WHITEPAPER_PACKAGE}/pdf`, { paths: [repoRoot] });
+  const pdfPackagePath = path.relative(packageRoot, pdfPath).replaceAll(path.sep, "/");
   const bundle = readJson(bundlePath);
   const publicationManifest = readJson(publicationManifestPath);
 
@@ -85,8 +81,8 @@ export function loadWhitepaperSource(repoRoot = process.cwd()) {
   assert(fs.existsSync(pdfPath), "white paper package PDF is missing");
 
   const publicArtifacts = publicationManifest.publication?.archive?.publicArtifacts?.artifacts || [];
-  const pdfArtifact = publicArtifacts.find((artifact) => artifact.path === "_build/main.pdf");
-  assert(pdfArtifact, "publication manifest does not describe _build/main.pdf");
+  const pdfArtifact = publicArtifacts.find((artifact) => artifact.path === pdfPackagePath);
+  assert(pdfArtifact, `publication manifest does not describe exported PDF ${pdfPackagePath}`);
   assert(pdfArtifact.sha256 === sha256File(pdfPath), "white paper PDF digest does not match publication manifest");
   assert(pdfArtifact.bytes === fs.statSync(pdfPath).size, "white paper PDF byte count does not match publication manifest");
 
