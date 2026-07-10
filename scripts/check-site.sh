@@ -6,6 +6,7 @@ cd "$repo_root"
 
 node scripts/check-infra-outputs.mjs
 node scripts/render-shared-layout.mjs --check
+node scripts/check-whitepaper.mjs
 
 shared_block() {
   block_name=$1
@@ -72,6 +73,7 @@ grep -q 'href="/services/index.html"' public/index.html
 grep -q 'href="/trust/index.html"' public/index.html
 grep -q 'href="/legal/index.html"' public/index.html
 assert_shared_contains header public/index.html 'href="/about/index.html"'
+assert_shared_contains header public/index.html 'href="/whitepaper/"'
 assert_shared_contains header public/index.html 'class="nav-menu"'
 assert_shared_contains header public/index.html 'libkungfu.dev'
 assert_shared_contains header public/index.html 'github.com/kungfu-systems/kungfu'

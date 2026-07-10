@@ -18,6 +18,7 @@ credentials, private release material, or unpublished product commitments.
 ## Local Check
 
 ```bash
+corepack pnpm@11.7.0 install --frozen-lockfile --ignore-scripts --registry=https://registry.npmjs.org/
 bash scripts/build-site.sh
 bash scripts/check-site.sh
 ```
@@ -25,6 +26,26 @@ bash scripts/check-site.sh
 Header and footer content is generated from `site/shared-layout.json`. Update
 that file first, then run the build so every page receives the same navigation
 and footer.
+
+## White Paper
+
+The white paper pages are generated from the exact npm artifact
+`@kungfu-tech/paper-kungfu-product-white-paper@0.1.0-alpha.1`. The upstream
+`site/brand-site.json` bundle owns the title, product claims, selected sections,
+routes, and evidence links. The upstream publication manifest owns the PDF
+digest and source commit. This repository owns only the site layout, navigation,
+responsive presentation, and machine entry rendering.
+
+Generated routes:
+
+- `/whitepaper/`
+- `/whitepaper/kungfu-real-world-agent-work/`
+- `/whitepaper/kungfu-real-world-agent-work.pdf`
+- `/whitepaper/manifest.json`
+- `/whitepaper/llms.txt`
+
+The renderer keeps `kungfu.tech` links on the current preview, staging, or
+production origin. Cross-site evidence links remain canonical.
 
 ## Buildchain
 

@@ -1,8 +1,13 @@
 {
   "name": "site-kungfu-tech",
   "private": true,
+  "packageManager": "pnpm@11.7.0",
   "scripts": {
     "build": "bash scripts/build-site.sh",
     "check": "bash scripts/check-site.sh"
+  },
+  "dependencies": {
+    "@kungfu-tech/paper-kungfu-product-white-paper": "0.1.0-alpha.1",
+    "markdown-it": "14.1.0"
   }
 }
