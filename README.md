@@ -74,7 +74,7 @@ shared Buildchain workflow, and that production apply remains bound to
 Buildchain release PR semantics.
 
 Buildchain is managed through the canonical `.buildchain/` layout. The
-repository commits `.buildchain/contract-lock.json` so the floating `@v2`
+repository commits `.buildchain/contract-lock.json` so the floating `@v2-alpha`
 workflow can detect compatible or breaking Buildchain runtime drift before
 build, deploy planning, or apply.
 

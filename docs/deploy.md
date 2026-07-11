@@ -77,10 +77,10 @@ Do not store AWS access keys or session tokens in this repository.
 The repository uses the canonical Buildchain `.buildchain/` layout:
 
 - `.buildchain/buildchain.toml` is the web-surface configuration.
-- `.buildchain/contract-lock.json` records the accepted floating `v2` runtime
+- `.buildchain/contract-lock.json` records the accepted floating `v2-alpha` runtime
   contract.
 - The caller workflow uses
-  `kungfu-systems/buildchain/.github/workflows/.web-surface.yml@v2` plus
+  `kungfu-systems/buildchain/.github/workflows/.web-surface.yml@v2-alpha` plus
   `buildchain-contract-lock-path: .buildchain/contract-lock.json`.
 
 Root-level `buildchain.toml` and `buildchain.contract-lock.json` are legacy
