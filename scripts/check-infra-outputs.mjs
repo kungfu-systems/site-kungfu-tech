@@ -4,8 +4,8 @@ import fs from "node:fs";
 const outputs = JSON.parse(fs.readFileSync("infra/outputs.json", "utf8"));
 const buildchainToml = fs.readFileSync(".buildchain/buildchain.toml", "utf8");
 const workflow = fs.readFileSync(".github/workflows/buildchain-web-surface.yml", "utf8");
-const expectedBuildchainRef = "v2-alpha";
-const expectedBuildchainShell = `kungfu-systems/buildchain/.github/workflows/.web-surface.yml@${expectedBuildchainRef}`;
+const expectedBuildchainShellRef = "v2";
+const expectedBuildchainShell = `kungfu-systems/buildchain/.github/workflows/.web-surface.yml@${expectedBuildchainShellRef}`;
 
 function parseTomlSections(text) {
   const sections = {};
@@ -40,26 +40,31 @@ if (outputs.site !== "site-kungfu-tech") {
 if (fs.existsSync("buildchain.toml") || fs.existsSync("buildchain.contract-lock.json")) {
   throw new Error("legacy Buildchain root layout files are not allowed");
 }
-if (!fs.existsSync(".buildchain/contract-lock.json")) {
-  throw new Error("missing Buildchain contract lock: .buildchain/contract-lock.json");
-}
-const buildchainContractLock = JSON.parse(fs.readFileSync(".buildchain/contract-lock.json", "utf8"));
-if (
-  buildchainContractLock.contract !== "kungfu-buildchain-contract-lock" ||
-  buildchainContractLock.buildchain?.ref !== expectedBuildchainRef ||
-  buildchainContractLock.buildchain?.majorLine !== "v2" ||
-  buildchainContractLock.buildchain?.compatibilityPolicy !== "major-compatible" ||
-  !buildchainContractLock.buildchain?.resolvedSha ||
-  !buildchainContractLock.buildchain?.contractDigest ||
-  !buildchainContractLock.buildchain?.compatibilityDigest
-) {
-  throw new Error(`Buildchain contract lock must accept floating ${expectedBuildchainRef}`);
+for (const [channel, lockPath, expectedRef] of [
+  ["stable", ".buildchain/contract-lock.json", "v2"],
+  ["alpha", ".buildchain/alpha-contract-lock.json", "v2-alpha"],
+]) {
+  if (!fs.existsSync(lockPath)) throw new Error(`missing Buildchain ${channel} contract lock: ${lockPath}`);
+  const lock = JSON.parse(fs.readFileSync(lockPath, "utf8"));
+  if (
+    lock.contract !== "kungfu-buildchain-contract-lock" ||
+    lock.buildchain?.ref !== expectedRef ||
+    lock.buildchain?.majorLine !== "v2" ||
+    lock.buildchain?.compatibilityPolicy !== "major-compatible" ||
+    !lock.buildchain?.resolvedSha ||
+    !lock.buildchain?.contractDigest ||
+    !lock.buildchain?.compatibilityDigest
+  ) {
+    throw new Error(`Buildchain ${channel} contract lock must accept floating ${expectedRef}`);
+  }
 }
 if (!workflow.includes(expectedBuildchainShell)) {
-  throw new Error(`Buildchain web-surface workflow must run ${expectedBuildchainRef}`);
+  throw new Error(`Buildchain web-surface workflow must use stable ${expectedBuildchainShellRef} shell`);
 }
 for (const lockInput of [
-  "buildchain-contract-lock-path: .buildchain/contract-lock.json",
+  "buildchain-contract-lock-path: ${{",
+  ".buildchain/alpha-contract-lock.json",
+  ".buildchain/contract-lock.json",
   "buildchain-contract-compatibility-policy: major-compatible",
   "buildchain-contract-drift-issue-mode: compatible-and-breaking",
 ]) {
