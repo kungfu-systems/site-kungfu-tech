@@ -57,6 +57,26 @@
       font-size: 18px;
     }
 
+    .brand-principle {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 18px;
+      align-items: baseline;
+      padding-left: 14px;
+      border-left: 3px solid var(--accent);
+    }
+
+    .brand-principle strong {
+      color: var(--fg);
+      font-size: 18px;
+      line-height: 1.35;
+    }
+
+    .brand-principle a {
+      font-size: 14px;
+      font-weight: 650;
+    }
+
     .hero-actions {
       display: flex;
       flex-wrap: wrap;
@@ -321,7 +341,10 @@
 
     @media (max-width: 820px) {
       main { width: min(100% - 28px, 640px); gap: 32px; padding: 28px 0 40px; }
-      h1 { font-size: clamp(40px, 12vw, 58px); }
+      .hero { gap: 20px; padding-top: 14px; }
+      h1 { font-size: 40px; line-height: 1.02; }
+      .tagline { font-size: 20px; }
+      .summary { font-size: 16px; }
       .pane-topbar { align-items: flex-start; flex-direction: column; }
       .health { justify-content: flex-start; }
       .pane-grid, .triangle { grid-template-columns: 1fr; }
@@ -357,7 +380,11 @@
       <p class="eyebrow">Coming soon · long-running agent work control pane</p>
       <h1>See when your agents are making progress, getting stuck, or wasting tokens.</h1>
       <p class="tagline">Kungfu is being prepared as a local control pane for agent work: cost, progress, evidence, and next actions.</p>
-      <p class="summary">Use Codex, Claude, Copilot, or your own execution surface. Kungfu is not another agent; it is the local-first product direction for verifying whether delegated work is moving, blocked, ready, or done.</p>
+      <div class="brand-principle" aria-label="Kungfu brand principle">
+        <strong>Never Guess. Facts Unfold.</strong>
+        <a href="/why-kungfu/">Why Kungfu?</a>
+      </div>
+      <p class="summary">Use Codex, Claude, Copilot, or your own execution surface. Kungfu verifies delegated work; it is not another agent.</p>
       <div class="hero-actions" aria-label="Primary actions">
         <a href="https://github.com/kungfu-systems/kungfu">Follow Kungfu on GitHub</a>
         <a href="https://libkungfu.dev">Developer site</a>

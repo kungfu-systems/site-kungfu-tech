@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Why Kungfu?</title>
+  <meta name="description" content="Why Kungfu means Never Guess. Facts Unfold: the name's real origin, recursive technical meaning, and fact-first project commitment.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%2314171f'/%3E%3Ctext x='32' y='39' text-anchor='middle' font-family='Arial,sans-serif' font-size='22' font-weight='700' fill='white'%3EKF%3C/text%3E%3C/svg%3E">
+  <link rel="stylesheet" href="/assets/site.css">
+  <style>
+
+    main {
+      --header-gap: 58px;
+      width: min(1040px, calc(100% - 40px));
+      margin: 0 auto;
+      padding: 34px 0 60px;
+    }
+
+    .eyebrow {
+      margin: 0 0 16px;
+      color: var(--accent);
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      max-width: 880px;
+      margin: 0;
+      font-size: clamp(44px, 8vw, 82px);
+      line-height: 0.98;
+      letter-spacing: 0;
+    }
+
+    .lead {
+      max-width: 780px;
+      margin: 24px 0 38px;
+      color: var(--muted);
+      font-size: 20px;
+    }
+
+    .declaration {
+      margin: 0 0 52px;
+      padding: 24px 0 24px 22px;
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      border-left: 4px solid var(--accent);
+    }
+
+    .declaration strong {
+      display: block;
+      margin-bottom: 12px;
+      font-size: clamp(28px, 5vw, 46px);
+      line-height: 1.05;
+    }
+
+    .declaration code,
+    .recursion code {
+      color: var(--accent-2);
+      font: 15px/1.6 "SFMono-Regular", Consolas, monospace;
+      overflow-wrap: anywhere;
+    }
+
+    .sections {
+      display: grid;
+      gap: 0;
+    }
+
+    .section {
+      display: grid;
+      grid-template-columns: minmax(180px, 0.65fr) minmax(0, 1.35fr);
+      gap: 36px;
+      padding: 30px 0;
+      border-top: 1px solid var(--line);
+    }
+
+    .section:first-child { border-top: 0; }
+
+    .section h2 {
+      margin: 0;
+      font-size: 24px;
+      line-height: 1.12;
+      letter-spacing: 0;
+    }
+
+    .section p {
+      margin: 0 0 14px;
+      color: var(--muted);
+      font-size: 17px;
+    }
+
+    .section p:last-child { margin-bottom: 0; }
+
+    .recursion {
+      display: grid;
+      gap: 8px;
+      margin: 18px 0;
+      padding: 16px;
+      border: 1px solid var(--line);
+      background: var(--panel);
+    }
+
+    .commitments {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .commitment strong {
+      display: block;
+      margin-bottom: 6px;
+      color: var(--fg);
+    }
+
+    .commitment span { color: var(--muted); }
+
+    .nowrap { white-space: nowrap; }
+
+    @media (max-width: 760px) {
+      main { width: min(100% - 28px, 640px); padding-top: 28px; }
+      h1 { font-size: 40px; line-height: 1.02; }
+      .lead { margin: 20px 0 28px; font-size: 19px; }
+      .declaration { margin-bottom: 24px; }
+      .section { grid-template-columns: 1fr; gap: 12px; }
+      .commitments { grid-template-columns: 1fr; gap: 14px; }
+      .declaration { padding-left: 16px; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <!-- shared-header:start -->
+    <header class="site-header">
+      <a class="brand" href="/" aria-label="Kungfu">
+        <span class="mark" aria-hidden="true">🧘</span>
+        <span class="brand-copy"><span>Kungfu</span><span class="brand-tagline">Agent Work Ledger</span></span>
+      </a>
+      <nav class="site-nav" aria-label="Project links">
+        <a href="/whitepaper/">White paper</a>
+        <a href="/about/index.html">About</a>
+        <details class="nav-menu">
+          <summary>Developers</summary>
+          <div class="nav-menu-panel">
+          <a href="https://libkungfu.dev">libkungfu.dev</a>
+          <a href="https://github.com/kungfu-systems/kungfu">GitHub</a>
+          </div>
+        </details>
+      </nav>
+    </header>
+    <!-- shared-header:end -->
+
+    <p class="eyebrow">Why Kungfu?</p>
+    <h1>A name with a recursive promise.</h1>
+    <p class="lead">Kungfu began with the Chinese idea of <span class="nowrap">&#21151;&#22827;</span>: capability earned through disciplined practice. The name did not begin as an acronym. Its recursive technical meaning came later.</p>
+
+    <div class="declaration">
+      <strong>Never Guess. Facts Unfold.</strong>
+      <code>KUNGFU = KUNGFU UNGFU: Never Guess. Facts Unfold.</code>
+    </div>
+
+    <div class="sections">
+      <section class="section">
+        <h2>The name came first</h2>
+        <div>
+          <p>Kungfu was chosen for its original association with practice, internal capability, and foundations that make visible techniques possible. That history remains real; the project does not rewrite it as a newly discovered acronym.</p>
+          <p>The recursive definition is a later technical commitment carried by the same name.</p>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2>The recursion</h2>
+        <div>
+          <p>Removing the outer Kungfu name leaves UNGFU, which expands back into itself. The project describes the relationship explicitly:</p>
+          <div class="recursion" aria-label="Kungfu recursive definition">
+            <code>KUNGFU = KUNGFU + UNGFU + Never + Guess + Facts + Unfold</code>
+            <code>UNGFU&nbsp; = &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;UNGFU + Never + Guess + Facts + Unfold</code>
+          </div>
+          <p>This is not a second product or runtime. It is a compact expression of how Kungfu should behave.</p>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2>Never Guess</h2>
+        <div>
+          <p>Kungfu does not prohibit hypotheses, estimates, or human judgment. It requires the boundary between them and observed facts to remain visible.</p>
+          <p>A model claim, inferred state, or optimistic completion report must not silently become a load-bearing fact.</p>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2>Facts Unfold</h2>
+        <div>
+          <p>Facts do not interpret themselves. They become useful through explicit schemas, provenance, causal context, projections, and observer policy.</p>
+          <p>Kungfu records local runtime evidence so cost, state, proof, and next actions can be reconstructed instead of guessed.</p>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2>The project obligation</h2>
+        <div class="commitments">
+          <div class="commitment">
+            <strong>Fact-first</strong>
+            <span>Agent work state must resolve to inspectable local evidence.</span>
+          </div>
+          <div class="commitment">
+            <strong>Auditable</strong>
+            <span>Build, release, and product claims must expose their proof chain.</span>
+          </div>
+          <div class="commitment">
+            <strong>Self-proving</strong>
+            <span>Kungfu must use the same transparent mechanisms it asks users to trust.</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2>Read the full definition</h2>
+        <div>
+          <p>The open-source repository carries the canonical technical explanation, including semantic boundaries and its mapping to Facts, Episodes, Projections, Timelines, Proof, Product Layers, and Buildchain.</p>
+          <p><a href="https://github.com/kungfu-systems/kungfu/blob/dev/v4/v4.0/docs/concepts/why-kungfu.md">Read Why Kungfu? on GitHub</a></p>
+        </div>
+      </section>
+    </div>
+
+    <!-- shared-footer:start -->
+    <footer class="site-footer">
+      <nav class="footer-links" aria-label="Footer links">
+        <a href="/services/index.html">Services</a>
+        <a href="/trust/index.html">Trust</a>
+        <a href="/legal/index.html">Legal</a>
+      </nav>
+      <p class="footer-note">Kungfu core software is licensed under the Apache License 2.0.</p>
+      <p class="footer-copy">Copyright 2026 Kungfu Origin Technology Limited. All rights reserved.</p>
+    </footer>
+    <script>
+      document.addEventListener("click", (event) => {
+        document.querySelectorAll("details.nav-menu[open]").forEach((menu) => {
+          if (!menu.contains(event.target)) menu.removeAttribute("open");
+        });
+      });
+      document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape") {
+          document.querySelectorAll("details.nav-menu[open]").forEach((menu) => {
+            menu.removeAttribute("open");
+          });
+        }
+      });
+    </script>
+    <!-- shared-footer:end -->
+  </main>
+</body>
+</html>
