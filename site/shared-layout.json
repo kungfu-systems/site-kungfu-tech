@@ -1,6 +1,7 @@
 {
   "pages": [
     "public/index.html",
+    "public/why-kungfu/index.html",
     "public/about/index.html",
     "public/services/index.html",
     "public/trust/index.html",
