@@ -27,6 +27,15 @@ Header and footer content is generated from `site/shared-layout.json`. Update
 that file first, then run the build so every page receives the same navigation
 and footer.
 
+## Agent Builders
+
+The secondary `/agent-builders/` route explains the vendor adoption path
+without changing the Cost / State / Proof consumer first screen. Exact runtime,
+package, qualification, and claim status remain owned by the reviewed
+`site-libkungfu-dev` projection and its source authorities. Until that site's
+production release is approved, this repository links the exact source-bound
+fixture instead of publishing a parallel version ledger or a staging URL.
+
 ## White Paper
 
 The white paper pages are generated from the exact npm artifact
