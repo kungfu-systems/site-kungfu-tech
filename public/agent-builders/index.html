@@ -1,0 +1,388 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>For Agent Builders · Kungfu</title>
+  <meta name="description" content="Keep your Agent product and Hub. Add libkungfu runtime facts and portable KFD evidence without rebuilding the local runtime.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%2314171f'/%3E%3Ctext x='32' y='39' text-anchor='middle' font-family='Arial,sans-serif' font-size='22' font-weight='700' fill='white'%3EKF%3C/text%3E%3C/svg%3E">
+  <link rel="stylesheet" href="/assets/site.css">
+  <style>
+    main {
+      width: min(1120px, calc(100% - 40px));
+      min-height: 100vh;
+      margin: 0 auto;
+      padding: 34px 0 56px;
+    }
+
+    .builder-main {
+      display: grid;
+      gap: 54px;
+      padding-top: 42px;
+    }
+
+    .eyebrow {
+      margin: 0;
+      color: var(--accent);
+      font-size: 14px;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .builder-hero {
+      display: grid;
+      gap: 20px;
+      max-width: 920px;
+    }
+
+    .builder-hero h1 {
+      max-width: 900px;
+      margin: 0;
+      font-size: clamp(46px, 7vw, 78px);
+      line-height: 0.98;
+      letter-spacing: 0;
+    }
+
+    .lead {
+      max-width: 800px;
+      margin: 0;
+      color: var(--muted);
+      font-size: clamp(19px, 2.4vw, 25px);
+      line-height: 1.35;
+    }
+
+    .hero-actions,
+    .evidence-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .hero-actions a {
+      display: inline-flex;
+      align-items: center;
+      min-height: 42px;
+      padding: 9px 14px;
+      border: 1px solid var(--line);
+      background: var(--surface);
+      color: var(--fg);
+      font-weight: 650;
+      text-decoration: none;
+    }
+
+    .hero-actions a:first-child {
+      border-color: var(--accent);
+      background: var(--accent);
+      color: #fff;
+    }
+
+    .section-heading {
+      display: grid;
+      gap: 10px;
+      max-width: 760px;
+    }
+
+    .section-heading h2 {
+      margin: 0;
+      font-size: clamp(30px, 4.5vw, 48px);
+      line-height: 1.05;
+      letter-spacing: 0;
+    }
+
+    .section-heading p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 17px;
+    }
+
+    .architecture {
+      display: grid;
+      gap: 20px;
+    }
+
+    .architecture-stack {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      border: 1px solid var(--line);
+      background: var(--panel);
+      box-shadow: 0 22px 60px rgba(18, 23, 34, 0.10);
+    }
+
+    .layer {
+      display: grid;
+      align-content: start;
+      gap: 14px;
+      min-height: 250px;
+      padding: 22px;
+      border-right: 1px solid var(--line);
+    }
+
+    .layer:last-child { border-right: 0; }
+
+    .layer-number {
+      color: var(--accent);
+      font: 700 13px/1.2 "SFMono-Regular", Consolas, monospace;
+    }
+
+    .layer h3 {
+      margin: 0;
+      font-size: 23px;
+      line-height: 1.1;
+    }
+
+    .layer p {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .ownership {
+      display: inline-flex;
+      width: fit-content;
+      padding: 4px 8px;
+      border: 1px solid var(--line);
+      background: var(--panel-soft);
+      color: var(--fg);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .cloud-boundary {
+      display: grid;
+      grid-template-columns: minmax(0, 0.7fr) minmax(0, 1.3fr);
+      gap: 22px;
+      padding: 24px;
+      border-left: 4px solid var(--accent-2);
+      background: var(--panel-soft);
+    }
+
+    .cloud-boundary strong {
+      font-size: 18px;
+    }
+
+    .cloud-boundary p {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .adoption-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .adoption-step {
+      display: grid;
+      align-content: start;
+      gap: 12px;
+      min-height: 220px;
+      padding: 20px;
+      border: 1px solid var(--line);
+      background: var(--surface);
+    }
+
+    .adoption-step h3,
+    .adoption-step p {
+      margin: 0;
+    }
+
+    .adoption-step p {
+      color: var(--muted);
+    }
+
+    .adoption-step a {
+      align-self: end;
+      font-weight: 650;
+    }
+
+    .evidence-panel {
+      display: grid;
+      grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+      gap: 28px;
+      padding: 28px;
+      border: 1px solid var(--line);
+      background: var(--panel);
+    }
+
+    .evidence-panel h2 {
+      margin: 0;
+      font-size: 30px;
+      line-height: 1.08;
+    }
+
+    .evidence-copy {
+      display: grid;
+      gap: 14px;
+    }
+
+    .evidence-copy p {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .evidence-copy strong {
+      color: var(--fg);
+    }
+
+    .evidence-links a {
+      font-weight: 650;
+    }
+
+    @media (max-width: 860px) {
+      main { width: min(100% - 28px, 680px); padding: 28px 0 40px; }
+      .builder-main { gap: 40px; padding-top: 30px; }
+      .builder-hero h1 { font-size: 42px; line-height: 1.02; }
+      .architecture-stack, .adoption-grid, .cloud-boundary, .evidence-panel {
+        grid-template-columns: 1fr;
+      }
+      .layer {
+        min-height: auto;
+        border-right: 0;
+        border-bottom: 1px solid var(--line);
+      }
+      .layer:last-child { border-bottom: 0; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <!-- shared-header:start -->
+    <header class="site-header">
+      <a class="brand" href="/" aria-label="Kungfu">
+        <span class="mark" aria-hidden="true">🧘</span>
+        <span class="brand-copy"><span>Kungfu</span><span class="brand-tagline">Agent Work Ledger</span></span>
+      </a>
+      <nav class="site-nav" aria-label="Project links">
+        <a href="/whitepaper/">White paper</a>
+        <a href="/about/index.html">About</a>
+        <details class="nav-menu">
+          <summary>Developers</summary>
+          <div class="nav-menu-panel">
+          <a href="/agent-builders/">For Agent Builders</a>
+          <a href="https://libkungfu.dev">libkungfu.dev</a>
+          <a href="https://github.com/kungfu-systems/kungfu">GitHub</a>
+          </div>
+        </details>
+      </nav>
+    </header>
+    <!-- shared-header:end -->
+
+    <div class="builder-main">
+      <section class="builder-hero" aria-labelledby="builder-title">
+        <p class="eyebrow">For Agent Builders</p>
+        <h1 id="builder-title">Build your Hub. Don&rsquo;t rebuild the runtime.</h1>
+        <p class="lead">Keep your Agent interface, models, accounts, permissions, cloud, and customer relationship. Add a local or worker runtime fact layer with libkungfu, then exchange portable evidence through the open KFD protocol.</p>
+        <div class="hero-actions">
+          <a href="https://github.com/kungfu-systems/kungfu/tree/7eeb5bd1b45492f4da27eaacbe63eddfd6245176/examples/opencode-kungfu/quickstart">Start with the exact reference source</a>
+          <a href="https://github.com/kungfu-systems/site-libkungfu-dev/blob/a99441327038864bb0b05170a11277b81aabf722/src/fixtures/libkungfu-runtime-surface.json">Inspect machine facts</a>
+        </div>
+      </section>
+
+      <section class="architecture" aria-labelledby="architecture-heading">
+        <div class="section-heading">
+          <p class="eyebrow">Adoption architecture</p>
+          <h2 id="architecture-heading">Your product and Hub stay yours.</h2>
+          <p>The layers have explicit ownership. libkungfu and KFD add runtime facts and portable evidence; they do not take over the vendor&rsquo;s product surface or customer relationship.</p>
+        </div>
+        <div class="architecture-stack">
+          <article class="layer">
+            <span class="layer-number">01</span>
+            <h3>Your Agent product</h3>
+            <span class="ownership">Vendor-owned</span>
+            <p>TUI or GUI, models, accounts, permissions, provider routing, and product experience.</p>
+          </article>
+          <article class="layer">
+            <span class="layer-number">02</span>
+            <h3>libkungfu local or worker runtime</h3>
+            <span class="ownership">Open runtime layer</span>
+            <p>Runtime facts, Episode lifecycle, recovery, and bounded local evidence without default prompt or credential upload.</p>
+          </article>
+          <article class="layer">
+            <span class="layer-number">03</span>
+            <h3>KFD open protocol</h3>
+            <span class="ownership">Topology-neutral</span>
+            <p>Portable reports, conformance semantics, and exchange between local, remote, or hybrid implementations.</p>
+          </article>
+          <article class="layer">
+            <span class="layer-number">04</span>
+            <h3>Your Hub</h3>
+            <span class="ownership">Vendor-owned</span>
+            <p>Cloud workflows, fleet coordination, commercial services, and the customer relationship.</p>
+          </article>
+        </div>
+        <aside class="cloud-boundary" aria-label="Kungfu Cloud boundary">
+          <strong>Kungfu Cloud is a future option, not a current requirement.</strong>
+          <p>KFD is designed for plural Hubs. A future Kungfu Cloud may implement the same protocol, but adopting libkungfu or KFD does not require it and this page does not announce a cloud product.</p>
+        </aside>
+      </section>
+
+      <section aria-labelledby="adoption-heading">
+        <div class="section-heading">
+          <p class="eyebrow">A bounded starting path</p>
+          <h2 id="adoption-heading">Inspect. Integrate. Prove.</h2>
+          <p>The current public path is a first-party reference adopter, not certification or evidence of broad vendor adoption.</p>
+        </div>
+        <div class="adoption-grid">
+          <article class="adoption-step">
+            <span class="layer-number">01 · Inspect</span>
+            <h3>Choose the smallest language path.</h3>
+            <p>Review the source-linked C, Node, or Python quickstart. No registry install command is claimed where a public package does not yet exist.</p>
+            <a href="https://github.com/kungfu-systems/kungfu/tree/7eeb5bd1b45492f4da27eaacbe63eddfd6245176/examples/opencode-kungfu/quickstart">Open exact quickstart sources</a>
+          </article>
+          <article class="adoption-step">
+            <span class="layer-number">02 · Integrate</span>
+            <h3>Keep the adapter narrow.</h3>
+            <p>Project bounded lifecycle events into the runtime while prompts, tool payloads, provider data, models, and credentials remain outside the reference adapter.</p>
+            <a href="https://github.com/kungfu-systems/kungfu/pull/1171">Audit the reference integration</a>
+          </article>
+          <article class="adoption-step">
+            <span class="layer-number">03 · Prove</span>
+            <h3>Bind evidence to exact authority.</h3>
+            <p>Use KFD conformance reports and Buildchain release evidence to state only what the exact suite, platform, source, and residual-risk roots support.</p>
+            <a href="https://github.com/kungfu-systems/buildchain/pull/1435">Audit the Passport integration</a>
+          </article>
+        </div>
+      </section>
+
+      <section class="evidence-panel" aria-labelledby="evidence-heading">
+        <h2 id="evidence-heading">Current claim boundary</h2>
+        <div class="evidence-copy">
+          <p><strong>Public status:</strong> first-party reference adopter. The retained evidence is not external vendor adoption, certification, an OpenCode endorsement, or a multi-platform guarantee.</p>
+          <p>Exact source commits, package availability, suite root, platform, qualification result, data boundary, and known limits are bound in the reviewed developer-site projection. Its production machine route remains subject to that site&rsquo;s release approval.</p>
+          <div class="evidence-links">
+            <a href="https://github.com/kungfu-systems/site-libkungfu-dev/blob/a99441327038864bb0b05170a11277b81aabf722/src/fixtures/libkungfu-runtime-surface.json">Runtime machine facts</a>
+            <a href="https://kfd.libkungfu.dev">KFD protocol</a>
+            <a href="https://buildchain.libkungfu.dev">Buildchain release evidence</a>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- shared-footer:start -->
+    <footer class="site-footer">
+      <nav class="footer-links" aria-label="Footer links">
+        <a href="/services/index.html">Services</a>
+        <a href="/trust/index.html">Trust</a>
+        <a href="/legal/index.html">Legal</a>
+      </nav>
+      <p class="footer-note">Kungfu core software is licensed under the Apache License 2.0.</p>
+      <p class="footer-copy">Copyright 2026 Kungfu Origin Technology Limited. All rights reserved.</p>
+    </footer>
+    <script>
+      document.addEventListener("click", (event) => {
+        document.querySelectorAll("details.nav-menu[open]").forEach((menu) => {
+          if (!menu.contains(event.target)) menu.removeAttribute("open");
+        });
+      });
+      document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape") {
+          document.querySelectorAll("details.nav-menu[open]").forEach((menu) => {
+            menu.removeAttribute("open");
+          });
+        }
+      });
+    </script>
+    <!-- shared-footer:end -->
+  </main>
+</body>
+</html>
