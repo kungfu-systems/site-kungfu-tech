@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>About | Kungfu</title>
-  <meta name="description" content="About Kungfu: a commercial product line preparing a local-first control pane for real-world work with agents.">
+  <meta name="description" content="About Kungfu: the continuity layer for real-world agent work, with KFD as an open protocol and libkungfu as a local runtime.">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%2314171f'/%3E%3Ctext x='32' y='39' text-anchor='middle' font-family='Arial,sans-serif' font-size='22' font-weight='700' fill='white'%3EKF%3C/text%3E%3C/svg%3E">
   <link rel="stylesheet" href="/assets/site.css">
   <style>
@@ -53,6 +53,13 @@
       background: var(--panel);
     }
 
+    .boundary {
+      grid-column: 1 / -1;
+      min-height: 0;
+      border-color: rgba(121, 192, 255, 0.42);
+      background: linear-gradient(135deg, rgba(121, 192, 255, 0.09), var(--panel) 58%);
+    }
+
     h2 {
       margin: 0 0 12px;
       font-size: 22px;
@@ -68,6 +75,7 @@
     @media (max-width: 760px) {
       main { width: min(100% - 28px, 640px); padding-top: 28px; }
       .grid { grid-template-columns: 1fr; }
+      .boundary { grid-column: auto; }
       section { min-height: auto; }
     }
   </style>
@@ -78,7 +86,7 @@
     <header class="site-header">
       <a class="brand" href="/" aria-label="Kungfu">
         <span class="mark" aria-hidden="true">🧘</span>
-        <span class="brand-copy"><span>Kungfu</span><span class="brand-tagline">Agent Work Ledger</span></span>
+        <span class="brand-copy"><span>Kungfu</span><span class="brand-tagline">Continuity for Agent Work</span></span>
       </a>
       <nav class="site-nav" aria-label="Project links">
         <a href="/agent-builders/">Agent Builders</a>
@@ -96,32 +104,38 @@
     <!-- shared-header:end -->
 
     <p class="eyebrow">About Kungfu</p>
-    <h1>A commercial product line for real-world work with agents.</h1>
-    <p class="lead">Kungfu is preparing a local-first control pane for long-running agent work. The public product story belongs on kungfu.tech; developer-facing material lives at <a href="https://libkungfu.dev">libkungfu.dev</a>.</p>
+    <h1>Work should survive the agent that started it.</h1>
+    <p class="lead">Kungfu is building the continuity layer for real-world agent work: an open protocol and a local runtime that let work be resumed, handed off, and audited without forcing builders into a Kungfu-owned Hub or cloud.</p>
 
     <div class="grid">
       <section>
-        <h2>What Kungfu is preparing</h2>
-        <p>Kungfu is being prepared to help users see whether delegated agent work is progressing, blocked, ready, done, or wasting tokens and runtime.</p>
-        <p>The product direction connects cost, state, proof, and next actions instead of asking users to trust an opaque dashboard or a self-reported completion claim.</p>
+        <h2>Continuity, not another chat</h2>
+        <p>Chats end. Processes stop. Models and vendors change. The work should keep its identity, state, evidence, and next action.</p>
+        <p>Kungfu focuses on making delegated work understandable and resumable across those boundaries.</p>
+      </section>
+
+      <section>
+        <h2>The layer we chose</h2>
+        <p>KFD is the open protocol for carrying work and responsibility between independently owned Agent Hubs. libkungfu is the local runtime for admitting, recording, and continuing that work inside a host environment.</p>
+        <p>Neither requires a central Kungfu cloud. Technical contracts and package surfaces live at <a href="https://libkungfu.dev">libkungfu.dev</a>.</p>
+      </section>
+
+      <section class="boundary">
+        <h2>Kungfu does not compete for the Hub</h2>
+        <p>Builders keep their users, accounts, billing, models, UI, Agent, cloud, and customer relationship. Kungfu does not use integration as a route into that relationship.</p>
+        <p>KFD standardizes the boundary between Hubs; libkungfu remains a public capability layer inside the host. The highest-value Hub layer stays the Builder&rsquo;s domain.</p>
+      </section>
+
+      <section>
+        <h2>Public and auditable</h2>
+        <p>Kungfu is built and dogfooded in the open through public artifacts, bounded claims, and evidence-linked releases.</p>
+        <p>This site describes direction and current evidence, not a claim that every shown capability is already generally available. Follow the open-source core and public issues on <a href="https://github.com/kungfu-systems/kungfu">GitHub</a>.</p>
       </section>
 
       <section>
         <h2>Commercial stewardship</h2>
-        <p>Kungfu is commercially operated by Kungfu Origin Technology Limited.</p>
-        <p>The business model is intended to build on open-source trust, official artifacts, optional services, support, governance, and future team or cloud capabilities rather than private-code scarcity.</p>
-      </section>
-
-      <section>
-        <h2>Developer axis</h2>
-        <p>Developers and agents need the same first-party technical facts: runtime behavior, contracts, package surfaces, and trust documentation.</p>
-        <p>That material is intentionally separated at <a href="https://libkungfu.dev">libkungfu.dev</a> so this site can stay focused on the product and commercial axis.</p>
-      </section>
-
-      <section>
-        <h2>Current availability</h2>
-        <p>Kungfu is being prepared in the open. This site describes product direction and stewardship, not a claim that all shown product capabilities are already generally available.</p>
-        <p>Follow the open-source core and public issues on <a href="https://github.com/kungfu-systems/kungfu">GitHub</a>.</p>
+        <p>Kungfu Origin Technology Limited stewards the commercial product line and its public ecosystem.</p>
+        <p>The business can grow through official artifacts, optional services, support, governance, and future team or cloud capabilities without making interoperability depend on private code or customer capture.</p>
       </section>
     </div>
 
