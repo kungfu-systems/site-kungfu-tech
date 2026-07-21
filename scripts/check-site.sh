@@ -71,8 +71,9 @@ grep -q 'Never Guess. Facts Unfold.' public/index.html
 grep -q 'href="/why-kungfu/"' public/index.html
 grep -q 'durable work facts between sessions' public/index.html
 grep -q 'class="primary-builder-action" href="/agent-builders/">For Agent Builders</a>' public/index.html
-grep -q 'Build your Hub. Don&rsquo;t rebuild the runtime.' public/index.html
-grep -q 'Your product' public/index.html
+grep -q 'Build and own your Hub. Kungfu stays beneath it.' public/index.html
+grep -q 'it does not compete for the Hub' public/index.html
+grep -q 'Your Hub stays yours' public/index.html
 grep -q '7eeb5bd1b45492f4da27eaacbe63eddfd6245176/examples/opencode-kungfu/quickstart' public/index.html
 grep -q 'Coming soon' public/index.html
 grep -q 'being prepared' public/index.html
@@ -143,6 +144,15 @@ grep -q 'Privacy posture' public/legal/index.html
 grep -q 'shared-header:start' public/agent-builders/index.html
 grep -q 'shared-footer:start' public/agent-builders/index.html
 grep -q 'Build your Hub. Don&rsquo;t rebuild the runtime.' public/agent-builders/index.html
+grep -q 'Kungfu does not compete for your Hub.' public/agent-builders/index.html
+grep -q 'Your users stay yours.' public/agent-builders/index.html
+grep -q 'Your accounts and billing stay yours.' public/agent-builders/index.html
+grep -q 'Your models, UI, and Agent stay yours.' public/agent-builders/index.html
+grep -q 'Your cloud stays yours.' public/agent-builders/index.html
+grep -q 'Your customer relationship stays yours.' public/agent-builders/index.html
+grep -q 'KFD requires no central Kungfu cloud.' public/agent-builders/index.html
+grep -q 'not a wedge into your Hub' public/agent-builders/index.html
+grep -q 'Integration is not a channel into your customer relationship.' public/agent-builders/index.html
 grep -q 'An action is a loop through reality' public/agent-builders/index.html
 grep -q 'Fact Cut N+1' public/agent-builders/index.html
 grep -q 'ActionBinding' public/agent-builders/index.html
@@ -182,7 +192,7 @@ if [ -d dist ]; then
   test -f dist/legal/index.html
   grep -q "Your agent shouldn't start over when the chat ends." dist/index.html
   grep -q 'How continuity was tested' dist/how-tested/continuity/index.html
-  grep -q 'Build your Hub. Don&rsquo;t rebuild the runtime.' dist/agent-builders/index.html
+  grep -q 'Kungfu does not compete for your Hub.' dist/agent-builders/index.html
   grep -q 'Never Guess. Facts Unfold.' dist/index.html
   grep -q 'The name did not begin as an acronym.' dist/why-kungfu/index.html
   grep -q 'being prepared' dist/index.html
