@@ -291,9 +291,9 @@ ${sectionLines}
 
 const manifest = buildWhitepaperManifest(source);
 writeText("whitepaper/index.html", renderIndex());
-writeText("whitepaper/kungfu-real-world-agent-work/index.html", renderReader());
+writeText("whitepaper/kungfu-white-paper/index.html", renderReader());
 writeText("whitepaper/manifest.json", `${JSON.stringify(manifest, null, 2)}\n`);
 writeText("whitepaper/llms.txt", renderLlms(manifest));
-fs.copyFileSync(source.pdfPath, path.join(distRoot, "whitepaper", "kungfu-real-world-agent-work.pdf"));
+fs.copyFileSync(source.pdfPath, path.join(distRoot, "whitepaper", "kungfu-white-paper.pdf"));
 
 console.log(`rendered white paper from ${source.packageInfo.name}@${source.packageInfo.version}`);

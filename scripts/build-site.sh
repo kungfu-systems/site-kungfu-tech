@@ -24,8 +24,8 @@ test -f dist/services/index.html
 test -f dist/trust/index.html
 test -f dist/legal/index.html
 test -f dist/whitepaper/index.html
-test -f dist/whitepaper/kungfu-real-world-agent-work/index.html
-test -f dist/whitepaper/kungfu-real-world-agent-work.pdf
+test -f dist/whitepaper/kungfu-white-paper/index.html
+test -f dist/whitepaper/kungfu-white-paper.pdf
 test -f dist/whitepaper/manifest.json
 test -f dist/whitepaper/llms.txt
 
