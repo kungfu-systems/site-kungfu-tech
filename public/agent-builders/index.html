@@ -638,12 +638,12 @@
             <p class="eyebrow">Dogfood · public and auditable</p>
             <h2 id="dogfood-proof-heading">The mechanism is building Kungfu itself.</h2>
           </div>
-          <p>One fixed 30-day public snapshot connects repository work to retained Project Cuts, independent review, continuation, and production release.</p>
+          <p>The current rolling 30-day public observation connects repository work to retained Project Cuts, independent review, continuation, and production release.</p>
         </div>
         <div class="dogfood-metrics" aria-label="Kungfu public dogfood snapshot">
-          <article class="dogfood-metric"><strong>2,740</strong><span>merged public PRs across the observed window</span></article>
-          <article class="dogfood-metric"><strong>10</strong><span>public repositories with merged work</span></article>
-          <article class="dogfood-metric"><strong>148</strong><span>retained public Project Cuts with valid receipts</span></article>
+          <article class="dogfood-metric"><strong id="dogfood-prs">2,740</strong><span>merged public PRs across the observed window</span></article>
+          <article class="dogfood-metric"><strong id="dogfood-repositories">10</strong><span>public repositories with merged work</span></article>
+          <article class="dogfood-metric"><strong id="dogfood-cuts">148</strong><span>retained public Project Cuts with valid receipts</span></article>
         </div>
         <p class="dogfood-loop">Public work → exact Cut → independent review → release</p>
         <p class="dogfood-boundary"><strong>Counting boundary:</strong> A PR is a work item, not a feature count. An account is not an Agent actor. A review-search match is not an approval.</p>
@@ -652,6 +652,22 @@
           <a href="https://libkungfu.dev/dogfood-evidence.json">Open the machine-readable snapshot</a>
         </div>
       </section>
+
+      <script>
+        (() => {
+          const format = new Intl.NumberFormat("en-US");
+          const set = (id, value) => { const node = document.getElementById(id); if (node) node.textContent = format.format(value); };
+          fetch("https://libkungfu.dev/dogfood-evidence.json", { cache: "no-store" })
+            .then((response) => { if (!response.ok) throw new Error("upstream evidence unavailable"); return response.json(); })
+            .then((evidence) => {
+              document.documentElement.dataset.dogfoodSnapshot = evidence.snapshotId;
+              set("dogfood-prs", evidence.metrics.mergedPublicPullRequests.value);
+              set("dogfood-repositories", evidence.metrics.repositoriesWithMergedPullRequests.value);
+              set("dogfood-cuts", evidence.metrics.retainedPublicProjectCuts.value);
+            })
+            .catch(() => { document.documentElement.dataset.dogfoodSnapshot = "retained-fallback"; });
+        })();
+      </script>
 
       <section class="evidence-panel" aria-labelledby="evidence-heading">
         <h2 id="evidence-heading">Current claim boundary</h2>

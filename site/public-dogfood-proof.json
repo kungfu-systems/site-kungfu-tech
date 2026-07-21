@@ -1,29 +1,16 @@
 {
-  "schema": "kungfu.tech/public-dogfood-proof/v1",
-  "snapshotId": "kungfu-systems-2026-07-21T04:45:00Z",
-  "window": {
-    "duration": "P30D",
-    "startInclusive": "2026-06-21T04:45:00Z",
-    "endInclusive": "2026-07-21T04:45:00Z"
-  },
-  "metrics": {
-    "mergedPublicPullRequests": 2740,
-    "repositoriesWithMergedPullRequests": 10,
-    "retainedPublicProjectCuts": 148
+  "schema": "kungfu.tech/public-dogfood-proof/v2",
+  "projection": {
+    "mode": "client-latest",
+    "fallback": "retained-copy",
+    "claim": "kungfu.tech projects the current upstream observation and does not independently collect or pin its metrics."
   },
   "upstream": {
     "repository": "https://github.com/kungfu-systems/site-libkungfu-dev",
-    "sourceCommit": "5a15649d32d3fd669d9fb143680e19c7733776b5",
-    "sourceFixturePath": "src/fixtures/dogfood-evidence.json",
-    "sourceFixtureSha256": "3fa6bacc80304f427dcf3737719baaa8e0b97d0179cfdb7fe00a55f2d7501906",
-    "publishedEvidenceSha256": "5893623ebd225d3d90691241014270c2c4c9ffb5f347ae43d402d39c84d0ed2f",
     "humanPage": "https://libkungfu.dev/dogfood/",
-    "machineEvidence": "https://libkungfu.dev/dogfood-evidence.json"
+    "machineEvidence": "https://libkungfu.dev/dogfood-evidence.json",
+    "immutablePattern": "https://libkungfu.dev/dogfood-evidence/snapshots/{snapshotId}.json"
   },
-  "cases": [
-    "three-agent-project-cut-continuation",
-    "hub-architecture-cross-repository-delivery"
-  ],
   "boundaries": [
     "pull-request-not-feature",
     "author-account-not-agent-actor",

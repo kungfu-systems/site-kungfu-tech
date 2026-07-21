@@ -5,30 +5,19 @@ import fs from "node:fs";
 const proof = JSON.parse(fs.readFileSync("site/public-dogfood-proof.json", "utf8"));
 const page = fs.readFileSync("public/agent-builders/index.html", "utf8");
 
-assert.equal(proof.schema, "kungfu.tech/public-dogfood-proof/v1");
-assert.equal(
-  Date.parse(proof.window.endInclusive) - Date.parse(proof.window.startInclusive),
-  30 * 24 * 60 * 60 * 1000,
-  "dogfood proof window must span exactly 30 days",
-);
-assert.match(proof.upstream.sourceCommit, /^[0-9a-f]{40}$/);
-assert.equal(proof.upstream.sourceFixturePath, "src/fixtures/dogfood-evidence.json");
-assert.match(proof.upstream.sourceFixtureSha256, /^[0-9a-f]{64}$/);
-assert.match(proof.upstream.publishedEvidenceSha256, /^[0-9a-f]{64}$/);
-assert.notEqual(
-  proof.upstream.sourceFixtureSha256,
-  proof.upstream.publishedEvidenceSha256,
-  "source fixture and pretty-printed publication hashes must remain explicitly distinct",
-);
+assert.equal(proof.schema, "kungfu.tech/public-dogfood-proof/v2");
+assert.equal(proof.projection.mode, "client-latest");
+assert.equal(proof.projection.fallback, "retained-copy");
+for (const forbidden of ["snapshotId", "window", "metrics", "sourceCommit", "sourceFixtureSha256", "publishedEvidenceSha256"]) {
+  assert.ok(!(forbidden in proof) && !(forbidden in proof.upstream), `downstream proof must not pin ${forbidden}`);
+}
 assert.deepEqual(proof.boundaries, [
   "pull-request-not-feature",
   "author-account-not-agent-actor",
   "review-search-not-approval",
 ]);
 
-for (const value of Object.values(proof.metrics)) {
-  assert.ok(page.includes(new Intl.NumberFormat("en-US").format(value)), `missing dogfood metric: ${value}`);
-}
+assert.ok(page.includes('fetch("https://libkungfu.dev/dogfood-evidence.json"'), "page must project the upstream latest channel");
 for (const requiredText of [
   "The mechanism is building Kungfu itself.",
   "Public work → exact Cut → independent review → release",
@@ -42,4 +31,4 @@ for (const url of [proof.upstream.humanPage, proof.upstream.machineEvidence]) {
   assert.ok(page.includes(url), `missing dogfood proof URL: ${url}`);
 }
 
-console.log(`public dogfood proof valid: ${proof.snapshotId}`);
+console.log("public dogfood proof valid: upstream latest projection");
