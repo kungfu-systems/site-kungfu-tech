@@ -31,7 +31,11 @@ and footer.
 
 The `/agent-builders/` route is a primary path from the homepage header and
 hero. The homepage keeps the continuity-first message concise and leaves the
-adoption architecture to that dedicated route. Exact runtime, package,
+adoption architecture to that dedicated route. Both surfaces lead with the
+noncompetition commitment: Builders retain their users, accounts, billing,
+models, UI, Agent, cloud, and customer relationship; KFD needs no central
+Kungfu cloud; and libkungfu remains a public local capability layer rather than
+a route into the host product. Exact runtime, package,
 qualification, and claim status remain owned by the reviewed `site-libkungfu-dev`
 projection and its source authorities. Until that site's production release is
 approved, this repository links the exact source-bound fixture instead of

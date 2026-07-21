@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>For Agent Builders · Kungfu</title>
-  <meta name="description" content="Keep your Agent product and Hub. Add libkungfu runtime facts and portable KFD evidence without rebuilding the local runtime.">
+  <meta name="description" content="Kungfu does not compete for your Hub. Keep your users, accounts, billing, models, UI, Agent, cloud, and customer relationship while adopting KFD and libkungfu.">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%2314171f'/%3E%3Ctext x='32' y='39' text-anchor='middle' font-family='Arial,sans-serif' font-size='22' font-weight='700' fill='white'%3EKF%3C/text%3E%3C/svg%3E">
   <link rel="stylesheet" href="/assets/site.css">
   <style>
@@ -49,6 +49,97 @@
       color: var(--muted);
       font-size: clamp(19px, 2.4vw, 25px);
       line-height: 1.35;
+    }
+
+    .hub-promise {
+      display: grid;
+      gap: 22px;
+      padding: clamp(24px, 4vw, 40px);
+      border: 2px solid var(--fg);
+      border-top: 7px solid var(--accent);
+      background: var(--panel);
+      box-shadow: 0 22px 60px rgba(18, 23, 34, 0.10);
+    }
+
+    .promise-heading {
+      display: grid;
+      gap: 10px;
+      max-width: 900px;
+    }
+
+    .promise-heading h2 {
+      margin: 0;
+      font-size: clamp(36px, 5.8vw, 66px);
+      line-height: 0.98;
+    }
+
+    .promise-heading > p:last-child {
+      max-width: 820px;
+      margin: 0;
+      color: var(--muted);
+      font-size: 18px;
+    }
+
+    .promise-ownership {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .promise-ownership li {
+      min-width: 0;
+      padding: 16px;
+      border: 1px solid var(--line);
+      border-left: 4px solid #2e9d72;
+      background: var(--surface);
+      color: var(--fg);
+      font-weight: 700;
+    }
+
+    .promise-boundary {
+      margin: 0;
+      padding: 12px 14px;
+      border: 1px dashed var(--accent);
+      color: var(--accent);
+      font: 700 13px/1.4 "SFMono-Regular", Consolas, monospace;
+      text-align: center;
+    }
+
+    .promise-foundation {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .promise-foundation article {
+      display: grid;
+      min-width: 0;
+      gap: 8px;
+      padding: 18px;
+      border: 1px solid var(--line);
+      background: var(--panel-soft);
+    }
+
+    .promise-foundation strong {
+      font-size: 20px;
+    }
+
+    .promise-foundation p,
+    .promise-lock {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .promise-lock {
+      padding: 16px 18px;
+      border-left: 4px solid var(--fg);
+      background: var(--surface);
+      color: var(--fg);
+      font-size: 17px;
+      font-weight: 700;
     }
 
     .hero-actions,
@@ -474,7 +565,8 @@
       .builder-main { gap: 40px; padding-top: 30px; }
       .builder-hero h1 { font-size: 42px; line-height: 1.02; }
       .diagram-shell { overflow: hidden; padding: 16px; }
-      .action-loop, .authority-rail, .hub-network, .invariant-strip, .reason-grid,
+      .promise-ownership, .promise-foundation, .action-loop, .authority-rail,
+      .hub-network, .invariant-strip, .reason-grid,
       .adoption-grid, .cloud-boundary, .evidence-panel, .dogfood-proof-head,
       .dogfood-metrics {
         grid-template-columns: 1fr;
@@ -525,11 +617,39 @@
       <section class="builder-hero" aria-labelledby="builder-title">
         <p class="eyebrow">For Agent Builders</p>
         <h1 id="builder-title">Build your Hub. Don&rsquo;t rebuild the runtime.</h1>
-        <p class="lead">Keep your Agent interface, models, accounts, permissions, cloud, and customer relationship. Add a local or worker runtime fact layer with libkungfu, then exchange portable evidence through the open KFD protocol.</p>
+        <p class="lead">Our ambition is deliberately narrow: make KFD the standard interoperability protocol and libkungfu the local runtime. You build and own the Hub.</p>
         <div class="hero-actions">
           <a href="https://github.com/kungfu-systems/kungfu/tree/7eeb5bd1b45492f4da27eaacbe63eddfd6245176/examples/opencode-kungfu/quickstart">Start with the exact reference source</a>
           <a href="https://libkungfu.dev/runtime.json">Inspect machine facts</a>
         </div>
+      </section>
+
+      <section class="hub-promise" aria-labelledby="hub-promise-heading">
+        <div class="promise-heading">
+          <p class="eyebrow">The adoption promise</p>
+          <h2 id="hub-promise-heading">Kungfu does not compete for your Hub.</h2>
+          <p>The Hub is the highest-value product layer, and it remains entirely yours. Kungfu exists to make the capability layer beneath it interoperable—not to enter your customer relationship.</p>
+        </div>
+        <ul class="promise-ownership" aria-label="What remains owned by the Agent Builder">
+          <li>Your users stay yours.</li>
+          <li>Your accounts and billing stay yours.</li>
+          <li>Your models, UI, and Agent stay yours.</li>
+          <li>Your cloud stays yours.</li>
+          <li>Your product policy stays yours.</li>
+          <li>Your customer relationship stays yours.</li>
+        </ul>
+        <p class="promise-boundary">Kungfu does not cross this product and customer boundary.</p>
+        <div class="promise-foundation" aria-label="Kungfu public capability layer">
+          <article>
+            <strong>KFD · open protocol</strong>
+            <p>Portable responsibility and evidence between independent systems. KFD requires no central Kungfu cloud.</p>
+          </article>
+          <article>
+            <strong>libkungfu · local runtime</strong>
+            <p>A public capability layer for durable local facts and action continuity—not a wedge into your Hub.</p>
+          </article>
+        </div>
+        <p class="promise-lock">Integration is not a channel into your customer relationship.</p>
       </section>
 
       <section class="architecture" aria-labelledby="action-world-heading">
