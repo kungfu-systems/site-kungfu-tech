@@ -462,6 +462,68 @@
       color: var(--fg);
     }
 
+    .builder-entry {
+      display: grid;
+      grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+      gap: 28px;
+      align-items: start;
+      padding: 28px;
+      border: 1px solid var(--line);
+      background: var(--panel-soft);
+    }
+
+    .builder-entry h2 {
+      max-width: 420px;
+      margin: 5px 0 0;
+      font-size: clamp(28px, 4vw, 44px);
+      line-height: 1.04;
+      letter-spacing: 0;
+    }
+
+    .builder-copy {
+      display: grid;
+      gap: 16px;
+    }
+
+    .builder-copy p {
+      max-width: 680px;
+      margin: 0;
+      color: var(--muted);
+      font-size: 17px;
+    }
+
+    .builder-chain {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      color: var(--fg);
+      font-size: 14px;
+      font-weight: 650;
+    }
+
+    .builder-chain span {
+      padding: 5px 8px;
+      border: 1px solid var(--line);
+      background: var(--surface);
+    }
+
+    .builder-chain i {
+      color: var(--muted);
+      font-style: normal;
+    }
+
+    .builder-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .builder-actions a {
+      font-weight: 650;
+    }
+
     .trust {
       display: grid;
       grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
@@ -518,7 +580,8 @@
       .pane-grid, .triangle { grid-template-columns: 1fr; }
       .lane { min-height: auto; border-right: 0; border-bottom: 1px solid var(--line); }
       .lane:last-child { border-bottom: 0; }
-      .trust { grid-template-columns: 1fr; gap: 16px; }
+      .builder-entry, .trust { grid-template-columns: 1fr; gap: 16px; }
+      .builder-entry { padding: 20px; }
     }
 
     @keyframes continuity-transfer-mobile {
@@ -550,6 +613,7 @@
         <details class="nav-menu">
           <summary>Developers</summary>
           <div class="nav-menu-panel">
+          <a href="/agent-builders/">For Agent Builders</a>
           <a href="https://libkungfu.dev">libkungfu.dev</a>
           <a href="https://github.com/kungfu-systems/kungfu">GitHub</a>
           </div>
@@ -707,6 +771,26 @@
       <div class="principle">
         <strong>Transparency</strong>
         <span>Follow local, journal-first proof: files, tests, artifacts, decisions, and recovery notes.</span>
+      </div>
+    </section>
+
+    <section class="builder-entry" aria-labelledby="builder-entry-heading">
+      <div>
+        <p class="eyebrow">For Agent Builders</p>
+        <h2 id="builder-entry-heading">Build your Hub. Don&rsquo;t rebuild the runtime.</h2>
+      </div>
+      <div class="builder-copy">
+        <p>Keep your Agent interface, models, accounts, permissions, cloud, and customer relationship. Use libkungfu for local or worker runtime facts and KFD for portable evidence between plural Hubs.</p>
+        <div class="builder-chain" aria-label="Agent Builder architecture">
+          <span>Your product</span><i aria-hidden="true">→</i>
+          <span>libkungfu</span><i aria-hidden="true">→</i>
+          <span>KFD</span><i aria-hidden="true">→</i>
+          <span>Your Hub</span>
+        </div>
+        <div class="builder-actions">
+          <a href="/agent-builders/">See the adoption architecture</a>
+          <a href="https://github.com/kungfu-systems/kungfu/tree/7eeb5bd1b45492f4da27eaacbe63eddfd6245176/examples/opencode-kungfu/quickstart">Open the exact reference source</a>
+        </div>
       </div>
     </section>
 

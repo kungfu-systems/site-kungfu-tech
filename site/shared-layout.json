@@ -1,6 +1,7 @@
 {
   "pages": [
     "public/index.html",
+    "public/agent-builders/index.html",
     "public/why-kungfu/index.html",
     "public/about/index.html",
     "public/services/index.html",
@@ -25,6 +26,10 @@
     {
       "label": "Developers",
       "items": [
+        {
+          "label": "For Agent Builders",
+          "href": "/agent-builders/"
+        },
         {
           "label": "libkungfu.dev",
           "href": "https://libkungfu.dev"
