@@ -133,9 +133,11 @@ grep -q 'This is not a second product or runtime.' public/why-kungfu/index.html
 grep -q 'docs/concepts/why-kungfu.md' public/why-kungfu/index.html
 grep -q 'shared-header:start' public/about/index.html
 grep -q 'shared-footer:start' public/about/index.html
-grep -q 'commercial product line' public/about/index.html
+grep -q 'Work should survive the agent that started it.' public/about/index.html
+grep -q 'Continuity for Agent Work' public/about/index.html
+grep -q 'KFD is the open protocol' public/about/index.html
 grep -q 'libkungfu.dev' public/about/index.html
-grep -q 'being prepared in the open' public/about/index.html
+grep -q 'Kungfu does not compete for the Hub' public/about/index.html
 grep -q 'shared-header:start' public/services/index.html
 grep -q 'shared-footer:start' public/services/index.html
 grep -q 'not generally released yet' public/services/index.html
