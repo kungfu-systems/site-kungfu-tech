@@ -185,6 +185,8 @@ grep -q 'Each side keeps its runtime, policy, cloud, users, and admission author
 assert_before public/agent-builders/index.html 'id="hub-network-heading"' 'id="hub-promise-heading"'
 assert_before public/agent-builders/index.html 'id="adoption-tradeoff-heading"' 'id="hub-promise-heading"'
 assert_before public/agent-builders/index.html 'id="hub-promise-heading"' 'id="action-world-heading"'
+assert_before public/agent-builders/index.html 'id="action-world-heading"' 'id="dogfood-proof-heading"'
+assert_before public/agent-builders/index.html 'id="dogfood-proof-heading"' 'id="adoption-heading"'
 grep -q 'An action is a loop through reality' public/agent-builders/index.html
 grep -q 'Fact Cut N+1' public/agent-builders/index.html
 grep -q 'ActionBinding' public/agent-builders/index.html
