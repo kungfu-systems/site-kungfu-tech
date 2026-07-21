@@ -29,11 +29,11 @@ Default automation:
 - Manual `workflow_dispatch` with `production_approved=true` remains available
   as an explicit operator fallback.
 
-The build installs the exact white paper package from `pnpm-lock.yaml`, renders
-the `kungfu.tech` brand bundle, and copies the PDF only after its digest matches
-the upstream Buildchain publication manifest. Preview and staging links under
-`/whitepaper/**` remain on the active deployment origin; only cross-site
-evidence links use canonical hosts.
+The build installs the exact KFD, Buildchain, and paper packages from
+`pnpm-lock.yaml`. It renders the publication catalog from package-owned facts
+and copies the product white paper PDF only after its digest matches the
+upstream Buildchain publication manifest. Research-paper readers and evidence
+retain their canonical `papers.libkungfu.dev` routes.
 
 Production apply prerequisites:
 

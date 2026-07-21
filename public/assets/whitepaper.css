@@ -96,6 +96,8 @@
 }
 
 .paper-catalog {
+  display: grid;
+  gap: 18px;
   padding: 24px 0 12px;
   border-top: 1px solid var(--line);
 }
@@ -154,6 +156,59 @@
 
 .paper-listing > .paper-actions {
   grid-column: 1 / -1;
+}
+
+.paper-source-catalog {
+  display: grid;
+  gap: 24px;
+  padding: 54px 0 18px;
+}
+
+.paper-source-heading {
+  display: grid;
+  gap: 12px;
+  max-width: 820px;
+}
+
+.paper-source-heading h2,
+.paper-source-heading p {
+  margin: 0;
+}
+
+.paper-source-heading h2 {
+  font-size: 36px;
+}
+
+.paper-source-heading > p:last-child {
+  color: var(--muted);
+  font-size: 18px;
+}
+
+.paper-source-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.paper-source-card {
+  padding: 24px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--panel);
+}
+
+.paper-source-card h3 {
+  margin: 10px 0 14px;
+  font-size: 27px;
+}
+
+.paper-source-card p,
+.paper-source-card ul {
+  margin: 0 0 16px;
+}
+
+.paper-source-card ul {
+  padding-left: 20px;
 }
 
 .paper-preview {
@@ -345,6 +400,7 @@
   }
 
   .paper-listing,
+  .paper-source-grid,
   .paper-layout {
     grid-template-columns: 1fr;
   }

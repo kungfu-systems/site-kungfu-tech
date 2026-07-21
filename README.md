@@ -53,14 +53,21 @@ projection and its source authorities. Until that site's production release is
 approved, this repository links the exact source-bound fixture instead of
 publishing a parallel version ledger or a staging URL.
 
-## White Paper
+## Papers
 
-The white paper pages are generated from the exact npm artifact
-`@kungfu-tech/paper-kungfu-product-white-paper@0.1.0-alpha.8`. The upstream
-`site/brand-site.json` bundle owns the title, product claims, selected sections,
-routes, and evidence links. The upstream publication manifest owns the PDF
-digest and source commit. This repository owns only the site layout, navigation,
-responsive presentation, and machine entry rendering.
+The publication catalog is generated from exact npm artifacts:
+
+- `@kungfu-tech/paper-kungfu-product-white-paper@0.1.0-alpha.8`
+- `@kungfu-tech/paper-episodes-to-primitives@0.1.0-alpha.2`
+- `@kungfu-tech/paper-observer-declared-timelines@0.1.0-alpha.8`
+- `@kungfu-tech/paper-kfd-foundation-real-world-agent-work@0.1.0-alpha.7`
+
+The product white paper's upstream `site/brand-site.json` bundle owns its
+selected HTML reader content. Every paper's publication manifest owns its title,
+abstract, PDF digest, source commit, canonical route, and evidence links. The
+catalog also renders source-contract facts from `@kungfu-tech/kfd@1.0.0-alpha.40`
+and `@kungfu-tech/buildchain@2.14.8`. This repository owns only site layout,
+navigation, responsive presentation, and machine entry rendering.
 
 Generated routes:
 
@@ -68,10 +75,12 @@ Generated routes:
 - `/whitepaper/kungfu-white-paper/`
 - `/whitepaper/kungfu-white-paper.pdf`
 - `/whitepaper/manifest.json`
+- `/whitepaper/catalog.json`
 - `/whitepaper/llms.txt`
 
-The renderer keeps `kungfu.tech` links on the current preview, staging, or
-production origin. Cross-site evidence links remain canonical.
+The product white paper keeps its `kungfu.tech` reader on the active preview,
+staging, or production origin. Research papers retain their canonical
+`papers.libkungfu.dev` readers and evidence paths.
 
 ## Buildchain
 

@@ -29,10 +29,10 @@ bash scripts/build-site.sh
 bash scripts/check-site.sh
 ```
 
-White paper product facts and the PDF come from the pinned
-`@kungfu-tech/paper-kungfu-product-white-paper` package. Keep rendering and
-navigation in this repository; do not copy upstream paper content into local
-HTML source.
+Publication facts come from exact `@kungfu-tech/paper-*` packages. KFD and
+Buildchain source cards come from their package-owned site bundles. Keep
+rendering and navigation in this repository; do not copy upstream publication,
+standard, or release-system facts into local HTML source.
 
 Keep the GitHub workflow thin: site releases should call the shared Buildchain
 `web-surface` workflow rather than copying deployment internals into this
