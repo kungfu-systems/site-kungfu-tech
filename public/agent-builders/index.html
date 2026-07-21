@@ -396,13 +396,87 @@
       font-weight: 650;
     }
 
+    .dogfood-proof {
+      display: grid;
+      gap: 18px;
+      padding: clamp(22px, 4vw, 38px);
+      border: 1px solid var(--line);
+      border-top: 5px solid var(--accent);
+      background: var(--panel);
+      box-shadow: 0 22px 60px rgba(18, 23, 34, 0.10);
+    }
+
+    .dogfood-proof-head {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(260px, 0.65fr);
+      gap: 24px;
+      align-items: end;
+    }
+
+    .dogfood-proof-head h2 {
+      max-width: 720px;
+      margin: 5px 0 0;
+      font-size: clamp(34px, 5vw, 58px);
+      line-height: 1;
+    }
+
+    .dogfood-proof-head > p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 16px;
+    }
+
+    .dogfood-metrics {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .dogfood-metric {
+      display: grid;
+      min-width: 0;
+      gap: 8px;
+      padding: 20px;
+      border: 1px solid var(--line);
+      background: var(--surface);
+    }
+
+    .dogfood-metric strong {
+      font-size: clamp(38px, 6vw, 68px);
+      line-height: 0.9;
+      letter-spacing: -0.04em;
+    }
+
+    .dogfood-metric span {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .dogfood-loop {
+      margin: 0;
+      padding: 12px 14px;
+      border-left: 4px solid #2e9d72;
+      background: var(--panel-soft);
+      color: var(--fg);
+      font: 700 14px/1.4 "SFMono-Regular", Consolas, monospace;
+    }
+
+    .dogfood-boundary {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .dogfood-boundary strong { color: var(--fg); }
+
     @media (max-width: 860px) {
       main { width: min(calc(100% - 28px), 680px); padding: 28px 0 40px; }
       .builder-main { gap: 40px; padding-top: 30px; }
       .builder-hero h1 { font-size: 42px; line-height: 1.02; }
       .diagram-shell { overflow: hidden; padding: 16px; }
       .action-loop, .authority-rail, .hub-network, .invariant-strip, .reason-grid,
-      .adoption-grid, .cloud-boundary, .evidence-panel {
+      .adoption-grid, .cloud-boundary, .evidence-panel, .dogfood-proof-head,
+      .dogfood-metrics {
         grid-template-columns: 1fr;
       }
 
@@ -555,6 +629,27 @@
             <p>Use KFD conformance reports and Buildchain release evidence to state only what the exact suite, platform, source, and residual-risk roots support.</p>
             <a href="https://github.com/kungfu-systems/buildchain/pull/1435">Audit the Passport integration</a>
           </article>
+        </div>
+      </section>
+
+      <section class="dogfood-proof" aria-labelledby="dogfood-proof-heading">
+        <div class="dogfood-proof-head">
+          <div>
+            <p class="eyebrow">Dogfood · public and auditable</p>
+            <h2 id="dogfood-proof-heading">The mechanism is building Kungfu itself.</h2>
+          </div>
+          <p>One fixed 30-day public snapshot connects repository work to retained Project Cuts, independent review, continuation, and production release.</p>
+        </div>
+        <div class="dogfood-metrics" aria-label="Kungfu public dogfood snapshot">
+          <article class="dogfood-metric"><strong>2,740</strong><span>merged public PRs across the observed window</span></article>
+          <article class="dogfood-metric"><strong>10</strong><span>public repositories with merged work</span></article>
+          <article class="dogfood-metric"><strong>148</strong><span>retained public Project Cuts with valid receipts</span></article>
+        </div>
+        <p class="dogfood-loop">Public work → exact Cut → independent review → release</p>
+        <p class="dogfood-boundary"><strong>Counting boundary:</strong> A PR is a work item, not a feature count. An account is not an Agent actor. A review-search match is not an approval.</p>
+        <div class="evidence-links">
+          <a href="https://libkungfu.dev/dogfood/">Audit the complete evidence chain</a>
+          <a href="https://libkungfu.dev/dogfood-evidence.json">Open the machine-readable snapshot</a>
         </div>
       </section>
 

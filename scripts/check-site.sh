@@ -7,6 +7,7 @@ cd "$repo_root"
 node scripts/check-infra-outputs.mjs
 node scripts/render-shared-layout.mjs --check
 node scripts/check-whitepaper.mjs
+node scripts/check-dogfood-proof.mjs
 
 shared_block() {
   block_name=$1
@@ -50,6 +51,7 @@ test -f public/about/index.html
 test -f public/services/index.html
 test -f public/trust/index.html
 test -f public/legal/index.html
+test -f site/public-dogfood-proof.json
 for page in public/index.html public/how-tested/continuity/index.html public/agent-builders/index.html public/why-kungfu/index.html public/about/index.html public/services/index.html public/trust/index.html public/legal/index.html; do
   grep -q 'href="/assets/site.css"' "$page"
 done
@@ -159,6 +161,8 @@ grep -q 'kungfu/blob/1f3893fae1a7a666d8abe736cd9563128f48549b/docs/architecture/
 grep -q 'kfd/blob/35915676330696f888c73c154f431c99f37c19ec/protocols/agent-hub/README.md' public/agent-builders/index.html
 grep -q 'github.com/kungfu-systems/kungfu/pull/1171' public/agent-builders/index.html
 grep -q 'github.com/kungfu-systems/buildchain/pull/1435' public/agent-builders/index.html
+grep -q 'https://libkungfu.dev/dogfood/' public/agent-builders/index.html
+grep -q 'https://libkungfu.dev/dogfood-evidence.json' public/agent-builders/index.html
 
 if grep -RIn 'Kungfu v4\\|Developer substrate\\|substrate view\\|developer substrate' public; then
   echo "error: public copy contains internal or uncommon product wording" >&2

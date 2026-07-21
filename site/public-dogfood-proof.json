@@ -1,0 +1,30 @@
+{
+  "schema": "kungfu.tech/public-dogfood-proof/v1",
+  "snapshotId": "kungfu-systems-2026-07-21T04:45:00Z",
+  "window": {
+    "duration": "P30D",
+    "startInclusive": "2026-06-21T04:45:00Z",
+    "endInclusive": "2026-07-21T04:45:00Z"
+  },
+  "metrics": {
+    "mergedPublicPullRequests": 2740,
+    "repositoriesWithMergedPullRequests": 10,
+    "retainedPublicProjectCuts": 148
+  },
+  "upstream": {
+    "repository": "https://github.com/kungfu-systems/site-libkungfu-dev",
+    "sourceCommit": "5a15649d32d3fd669d9fb143680e19c7733776b5",
+    "evidenceSha256": "3fa6bacc80304f427dcf3737719baaa8e0b97d0179cfdb7fe00a55f2d7501906",
+    "humanPage": "https://libkungfu.dev/dogfood/",
+    "machineEvidence": "https://libkungfu.dev/dogfood-evidence.json"
+  },
+  "cases": [
+    "three-agent-project-cut-continuation",
+    "hub-architecture-cross-repository-delivery"
+  ],
+  "boundaries": [
+    "pull-request-not-feature",
+    "author-account-not-agent-actor",
+    "review-search-not-approval"
+  ]
+}
