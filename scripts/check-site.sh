@@ -70,16 +70,16 @@ grep -q 'href="/how-tested/continuity/"' public/index.html
 grep -q 'Never Guess. Facts Unfold.' public/index.html
 grep -q 'href="/why-kungfu/"' public/index.html
 grep -q 'durable work facts between sessions' public/index.html
-grep -q 'href="/agent-builders/"' public/index.html
+grep -q 'class="primary-builder-action" href="/agent-builders/">For Agent Builders</a>' public/index.html
 grep -q 'Build your Hub. Don&rsquo;t rebuild the runtime.' public/index.html
 grep -q 'Your product' public/index.html
 grep -q '7eeb5bd1b45492f4da27eaacbe63eddfd6245176/examples/opencode-kungfu/quickstart' public/index.html
 grep -q 'Coming soon' public/index.html
 grep -q 'being prepared' public/index.html
-grep -q 'Follow Kungfu on GitHub' public/index.html
-grep -q 'Cost control' public/index.html
-grep -q 'Responsibility state' public/index.html
-grep -q 'Transparency' public/index.html
+if grep -q 'class="control-pane"\|class="triangle"\|Cost, state, and proof' public/index.html; then
+  echo "error: homepage still contains the retired Cost / State / Proof first-screen treatment" >&2
+  exit 1
+fi
 grep -q 'Kungfu Origin Technology Limited' public/index.html
 grep -q 'Apache License 2.0' public/index.html
 grep -q 'journal-first' public/index.html

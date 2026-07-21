@@ -16,6 +16,10 @@
   },
   "navigation": [
     {
+      "label": "Agent Builders",
+      "href": "/agent-builders/"
+    },
+    {
       "label": "White paper",
       "href": "/whitepaper/"
     },
@@ -26,10 +30,6 @@
     {
       "label": "Developers",
       "items": [
-        {
-          "label": "For Agent Builders",
-          "href": "/agent-builders/"
-        },
         {
           "label": "libkungfu.dev",
           "href": "https://libkungfu.dev"
