@@ -258,210 +258,6 @@
       82%, 100% { transform: translateY(210px); opacity: 0; }
     }
 
-    .control-pane {
-      display: grid;
-      gap: 0;
-      min-width: 0;
-      border: 1px solid var(--line);
-      background: var(--panel);
-      box-shadow: 0 22px 60px rgba(18, 23, 34, 0.10);
-    }
-
-    .pane-topbar {
-      display: flex;
-      justify-content: space-between;
-      gap: 18px;
-      align-items: center;
-      min-height: 58px;
-      padding: 14px 18px;
-      border-bottom: 1px solid var(--line);
-      background: var(--panel-soft);
-    }
-
-    .pane-title {
-      display: grid;
-      gap: 2px;
-    }
-
-    .pane-title strong,
-    .lane h2,
-    .evidence strong,
-    .metric strong {
-      color: var(--fg);
-    }
-
-    .pane-title span,
-    .lane p,
-    .evidence span,
-    .metric span,
-    .row span {
-      color: var(--muted);
-    }
-
-    .health {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      justify-content: flex-end;
-      font-size: 13px;
-    }
-
-    .pill {
-      display: inline-flex;
-      align-items: center;
-      min-height: 28px;
-      padding: 4px 9px;
-      border: 1px solid var(--line);
-      background: var(--surface);
-      color: var(--fg);
-      white-space: nowrap;
-    }
-
-    .pane-grid {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-    }
-
-    .lane {
-      display: grid;
-      grid-template-rows: auto 1fr;
-      gap: 18px;
-      min-height: 360px;
-      padding: 18px;
-      border-right: 1px solid var(--line);
-    }
-
-    .lane:last-child { border-right: 0; }
-
-    .lane h2 {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin: 0 0 4px;
-      font-size: 24px;
-      line-height: 1.1;
-      letter-spacing: 0;
-    }
-
-    .lane-icon {
-      font-size: 28px;
-      line-height: 1;
-    }
-
-    .lane p { margin: 0; }
-
-    .metrics {
-      display: grid;
-      gap: 10px;
-      align-content: start;
-    }
-
-    .metric,
-    .evidence,
-    .work-row {
-      border: 1px solid var(--line);
-      background: var(--surface);
-    }
-
-    .metric {
-      display: grid;
-      gap: 8px;
-      min-height: 78px;
-      padding: 12px;
-    }
-
-    .meter {
-      height: 8px;
-      background: var(--panel-soft);
-      border: 1px solid var(--line);
-      overflow: hidden;
-    }
-
-    .meter i {
-      display: block;
-      height: 100%;
-      background: var(--accent);
-    }
-
-    .meter.warn i { background: var(--warn); }
-    .meter.danger i { background: var(--danger); }
-
-    .work-list {
-      display: grid;
-      gap: 10px;
-    }
-
-    .work-row {
-      display: grid;
-      gap: 9px;
-      padding: 12px;
-    }
-
-    .row {
-      display: flex;
-      justify-content: space-between;
-      gap: 12px;
-      align-items: baseline;
-    }
-
-    .status {
-      color: var(--fg);
-      font-size: 12px;
-      font-weight: 700;
-      text-transform: uppercase;
-      white-space: nowrap;
-    }
-
-    .status.ok { color: var(--ok); }
-    .status.wait { color: var(--warn); }
-    .status.block { color: var(--danger); }
-    .status.ready { color: var(--accent-2); }
-
-    .evidence-list {
-      display: grid;
-      gap: 10px;
-    }
-
-    .evidence {
-      display: grid;
-      grid-template-columns: auto 1fr;
-      gap: 10px;
-      align-items: start;
-      padding: 12px;
-    }
-
-    .evidence code {
-      color: var(--accent-2);
-      font: 13px/1.35 "SFMono-Regular", Consolas, monospace;
-      overflow-wrap: anywhere;
-    }
-
-    .dot {
-      width: 10px;
-      height: 10px;
-      margin-top: 6px;
-      background: var(--accent);
-    }
-
-    .triangle {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 16px;
-      border-top: 1px solid var(--line);
-      padding-top: 28px;
-    }
-
-    .principle {
-      padding: 0;
-    }
-
-    .principle strong {
-      display: block;
-      margin-bottom: 8px;
-      font-size: 17px;
-      color: var(--fg);
-    }
-
     .builder-entry {
       display: grid;
       grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
@@ -564,8 +360,6 @@
       h1 { font-size: 40px; line-height: 1.02; }
       .tagline { font-size: 20px; }
       .summary { font-size: 16px; }
-      .pane-topbar { align-items: flex-start; flex-direction: column; }
-      .health { justify-content: flex-start; }
       .continuity-heading { align-items: flex-start; flex-direction: column; }
       .continuity-grid { grid-template-columns: 1fr; }
       .continuity-path { min-height: 0; }
@@ -577,9 +371,6 @@
       }
       .continuity-transfer::before { inset: auto 0; width: auto; height: 3px; }
       .continuity-transfer::after { top: auto; left: 12%; width: 54px; height: 9px; animation-name: continuity-transfer-mobile; }
-      .pane-grid, .triangle { grid-template-columns: 1fr; }
-      .lane { min-height: auto; border-right: 0; border-bottom: 1px solid var(--line); }
-      .lane:last-child { border-bottom: 0; }
       .builder-entry, .trust { grid-template-columns: 1fr; gap: 16px; }
       .builder-entry { padding: 20px; }
     }
@@ -608,12 +399,12 @@
         <span class="brand-copy"><span>Kungfu</span><span class="brand-tagline">Agent Work Ledger</span></span>
       </a>
       <nav class="site-nav" aria-label="Project links">
+        <a href="/agent-builders/">Agent Builders</a>
         <a href="/whitepaper/">White paper</a>
         <a href="/about/index.html">About</a>
         <details class="nav-menu">
           <summary>Developers</summary>
           <div class="nav-menu-panel">
-          <a href="/agent-builders/">For Agent Builders</a>
           <a href="https://libkungfu.dev">libkungfu.dev</a>
           <a href="https://github.com/kungfu-systems/kungfu">GitHub</a>
           </div>
@@ -632,9 +423,8 @@
       </div>
       <p class="summary">Use Codex, Claude, Copilot, or your own execution surface. Kungfu keeps durable work facts between sessions; it is not another agent.</p>
       <div class="hero-actions" aria-label="Primary actions">
+        <a class="primary-builder-action" href="/agent-builders/">For Agent Builders</a>
         <a href="#continuity-demo">See the handoff</a>
-        <a href="/how-tested/continuity/">How this was tested</a>
-        <a href="https://github.com/kungfu-systems/kungfu">Follow Kungfu on GitHub</a>
       </div>
     </section>
 
@@ -667,110 +457,6 @@
       <div class="continuity-foot">
         <p>Preparatory fixture evidence—not a model comparison or multi-day result.</p>
         <a href="/how-tested/continuity/">Method, report, and limitations</a>
-      </div>
-    </section>
-
-    <section class="control-pane" aria-label="Cost State Proof explanation">
-      <div class="pane-topbar">
-        <div class="pane-title">
-          <strong>How continuity stays accountable</strong>
-          <span>Cost, state, and proof explain what the continuing work is doing.</span>
-        </div>
-        <div class="health" aria-label="Workspace summary">
-          <span class="pill">coming soon</span>
-          <span class="pill">open-source core</span>
-          <span class="pill">local-first</span>
-        </div>
-      </div>
-      <div class="pane-grid">
-        <article class="lane">
-          <div>
-            <h2><span class="lane-icon" aria-hidden="true">🧮</span>Cost</h2>
-            <p>Catch token and runtime waste early.</p>
-          </div>
-          <div class="metrics">
-            <div class="metric">
-              <strong>Stuck refactor loop</strong>
-              <span>Detect spend without a corresponding work delta.</span>
-              <div class="meter danger" aria-hidden="true"><i style="width: 82%"></i></div>
-            </div>
-            <div class="metric">
-              <strong>Worker dispatch</strong>
-              <span>Separate bounded worker runs from the parent task.</span>
-              <div class="meter" aria-hidden="true"><i style="width: 38%"></i></div>
-            </div>
-            <div class="metric">
-              <strong>Review queue</strong>
-              <span>Stop active spend while a human decision is required.</span>
-              <div class="meter warn" aria-hidden="true"><i style="width: 12%"></i></div>
-            </div>
-          </div>
-        </article>
-
-        <article class="lane">
-          <div>
-            <h2><span class="lane-icon" aria-hidden="true">🚦</span>State</h2>
-            <p>Know what is moving, stuck, waiting, ready, or done.</p>
-          </div>
-          <div class="work-list">
-            <div class="work-row">
-              <div class="row"><strong>Agent session</strong><span class="status ok">moving</span></div>
-              <span>Work is changing files and collecting validation evidence.</span>
-            </div>
-            <div class="work-row">
-              <div class="row"><strong>Buildchain release passport</strong><span class="status ready">ready</span></div>
-              <span>Artifact evidence collected; PR review next.</span>
-            </div>
-            <div class="work-row">
-              <div class="row"><strong>Long refactor</strong><span class="status block">stuck</span></div>
-              <span>No material progress after repeated tool calls.</span>
-            </div>
-            <div class="work-row">
-              <div class="row"><strong>Mission decision card</strong><span class="status wait">waiting</span></div>
-              <span>Human value input required before branch split.</span>
-            </div>
-          </div>
-        </article>
-
-        <article class="lane">
-          <div>
-            <h2><span class="lane-icon" aria-hidden="true">🧾</span>Proof</h2>
-            <p>Trust results with local evidence.</p>
-          </div>
-          <div class="evidence-list">
-            <div class="evidence">
-              <span class="dot" aria-hidden="true"></span>
-              <div><strong>Local facts</strong><br><code>journal / files / artifacts</code></div>
-            </div>
-            <div class="evidence">
-              <span class="dot" aria-hidden="true"></span>
-              <div><strong>Validation</strong><br><code>tests / checks / release evidence</code></div>
-            </div>
-            <div class="evidence">
-              <span class="dot" aria-hidden="true"></span>
-              <div><strong>Decision trail</strong><br><span>cost / state / proof maps back to Cost control / Responsibility state / Transparency.</span></div>
-            </div>
-            <div class="evidence">
-              <span class="dot" aria-hidden="true"></span>
-              <div><strong>Next action</strong><br><span>Stop, continue, approve, or resume from the recorded artifact.</span></div>
-            </div>
-          </div>
-        </article>
-      </div>
-    </section>
-
-    <section class="triangle" aria-label="Strategic trust triangle">
-      <div class="principle">
-        <strong>Cost control</strong>
-        <span>See whether agent work is spending money, time, tokens, runtime, or attention without progress.</span>
-      </div>
-      <div class="principle">
-        <strong>Responsibility state</strong>
-        <span>Scan whether delegated work is progressing, blocked, waiting, ready for review, or done.</span>
-      </div>
-      <div class="principle">
-        <strong>Transparency</strong>
-        <span>Follow local, journal-first proof: files, tests, artifacts, decisions, and recovery notes.</span>
       </div>
     </section>
 

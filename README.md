@@ -29,12 +29,13 @@ and footer.
 
 ## Agent Builders
 
-The secondary `/agent-builders/` route explains the vendor adoption path
-without changing the Cost / State / Proof consumer first screen. Exact runtime,
-package, qualification, and claim status remain owned by the reviewed
-`site-libkungfu-dev` projection and its source authorities. Until that site's
-production release is approved, this repository links the exact source-bound
-fixture instead of publishing a parallel version ledger or a staging URL.
+The `/agent-builders/` route is a primary path from the homepage header and
+hero. The homepage keeps the continuity-first message concise and leaves the
+adoption architecture to that dedicated route. Exact runtime, package,
+qualification, and claim status remain owned by the reviewed `site-libkungfu-dev`
+projection and its source authorities. Until that site's production release is
+approved, this repository links the exact source-bound fixture instead of
+publishing a parallel version ledger or a staging URL.
 
 ## White Paper
 
