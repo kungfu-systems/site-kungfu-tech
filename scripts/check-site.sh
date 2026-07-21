@@ -187,6 +187,16 @@ assert_before public/agent-builders/index.html 'id="adoption-tradeoff-heading"' 
 assert_before public/agent-builders/index.html 'id="hub-promise-heading"' 'id="action-world-heading"'
 assert_before public/agent-builders/index.html 'id="action-world-heading"' 'id="dogfood-proof-heading"'
 assert_before public/agent-builders/index.html 'id="dogfood-proof-heading"' 'id="adoption-heading"'
+test "$(grep -c 'data-builder-chapter="[0-9][0-9]"' public/agent-builders/index.html)" -eq 4
+grep -q '<span class="chapter-number">01</span><span>The KFD-libkungfu network</span>' public/agent-builders/index.html
+grep -q '<span class="chapter-number">02</span><span>How libkungfu sees action</span>' public/agent-builders/index.html
+grep -q '<span class="chapter-number">03</span><span>Dogfood · public and auditable</span>' public/agent-builders/index.html
+grep -q '<span class="chapter-number">04</span><span>A bounded starting path</span>' public/agent-builders/index.html
+grep -q 'Builder contract · applies across all four chapters' public/agent-builders/index.html
+assert_before public/agent-builders/index.html 'data-builder-chapter="01"' 'data-builder-chapter="02"'
+assert_before public/agent-builders/index.html 'data-builder-chapter="02"' 'data-builder-chapter="03"'
+assert_before public/agent-builders/index.html 'data-builder-chapter="03"' 'data-builder-chapter="04"'
+assert_before public/agent-builders/index.html 'id="adoption-heading"' 'id="evidence-heading"'
 grep -q 'An action is a loop through reality' public/agent-builders/index.html
 grep -q 'Fact Cut N+1' public/agent-builders/index.html
 grep -q 'ActionBinding' public/agent-builders/index.html

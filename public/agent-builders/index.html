@@ -732,10 +732,70 @@
 
     .dogfood-boundary strong { color: var(--fg); }
 
+    .builder-chapter {
+      --chapter-accent: var(--accent);
+      display: grid;
+      min-width: 0;
+      gap: 22px;
+      padding: clamp(22px, 4vw, 38px);
+      border: 1px solid var(--line);
+      border-top: 5px solid var(--chapter-accent);
+      background: var(--panel);
+      box-shadow: 0 22px 60px rgba(18, 23, 34, 0.10);
+    }
+
+    .chapter-network { --chapter-accent: #8b63d9; }
+    .chapter-action { --chapter-accent: #2784c7; }
+    .chapter-proof { --chapter-accent: #2e9d72; }
+    .chapter-adoption { --chapter-accent: #d69732; }
+
+    .builder-chapter > .chapter-heading {
+      width: 100%;
+      max-width: none;
+      padding-bottom: 18px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .builder-chapter > .section-heading h2,
+    .builder-chapter > .section-heading > p:last-child {
+      max-width: 760px;
+    }
+
+    .chapter-kicker {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      color: var(--chapter-accent);
+    }
+
+    .chapter-number {
+      display: inline-grid;
+      min-width: 36px;
+      height: 30px;
+      padding: 0 7px;
+      place-items: center;
+      border: 1px solid currentColor;
+      background: color-mix(in srgb, var(--chapter-accent) 10%, var(--surface));
+      font: 700 12px/1 "SFMono-Regular", Consolas, monospace;
+    }
+
+    .builder-chapter > .diagram-shell {
+      padding: 0;
+      border: 0;
+      background: transparent;
+      box-shadow: none;
+    }
+
+    .chapter-adoption .evidence-panel {
+      border-left: 4px solid var(--chapter-accent);
+      background: var(--panel-soft);
+    }
+
     @media (max-width: 860px) {
       main { width: min(calc(100% - 28px), 680px); padding: 28px 0 40px; }
       .builder-main { gap: 40px; padding-top: 30px; }
       .builder-hero h1 { font-size: 42px; line-height: 1.02; }
+      .builder-chapter { padding: 18px; }
       .diagram-shell { overflow: hidden; padding: 16px; }
       .promise-ownership, .promise-foundation, .action-loop, .authority-rail,
       .topology-grid, .semantic-gate, .topology-modes, .invariant-strip, .adoption-value,
@@ -799,9 +859,9 @@
         </div>
       </section>
 
-      <section class="architecture" aria-labelledby="hub-network-heading">
-        <div class="section-heading">
-          <p class="eyebrow">01 · The KFD-libkungfu network</p>
+      <section class="builder-chapter chapter-network architecture" data-builder-chapter="01" aria-labelledby="hub-network-heading">
+        <div class="chapter-heading section-heading">
+          <p class="eyebrow chapter-kicker"><span class="chapter-number">01</span><span>The KFD-libkungfu network</span></p>
           <h2 id="hub-network-heading">libkungfu lives inside your Hub. KFD connects its edge.</h2>
           <p>KFD lets independently owned Hubs exchange rooted responsibility without sharing one runtime, database, identity provider, cloud, or customer relationship.</p>
         </div>
@@ -921,7 +981,7 @@
 
       <section class="hub-promise" aria-labelledby="hub-promise-heading">
         <div class="promise-heading">
-          <p class="eyebrow">The adoption promise</p>
+          <p class="eyebrow">Builder contract · applies across all four chapters</p>
           <h2 id="hub-promise-heading">Kungfu does not compete for your Hub.</h2>
           <p>The Hub is the highest-value product layer, and it remains entirely yours. Kungfu exists to make the capability layer beneath it interoperable—not to enter your customer relationship.</p>
         </div>
@@ -947,9 +1007,9 @@
         <p class="promise-lock">Integration is not a channel into your customer relationship.</p>
       </section>
 
-      <section class="architecture" aria-labelledby="action-world-heading">
-        <div class="section-heading">
-          <p class="eyebrow">02 · How libkungfu sees action</p>
+      <section class="builder-chapter chapter-action architecture" data-builder-chapter="02" aria-labelledby="action-world-heading">
+        <div class="chapter-heading section-heading">
+          <p class="eyebrow chapter-kicker"><span class="chapter-number">02</span><span>How libkungfu sees action</span></p>
           <h2 id="action-world-heading">An action is a loop through reality, not a row in a workflow.</h2>
           <p>libkungfu preserves the coordinates needed to act without losing intent, evidence, authority, or continuity.</p>
         </div>
@@ -973,10 +1033,10 @@
         </div>
       </section>
 
-      <section class="dogfood-proof" aria-labelledby="dogfood-proof-heading">
-        <div class="dogfood-proof-head">
+      <section class="builder-chapter chapter-proof dogfood-proof" data-builder-chapter="03" aria-labelledby="dogfood-proof-heading">
+        <div class="chapter-heading dogfood-proof-head">
           <div>
-            <p class="eyebrow">Dogfood · public and auditable</p>
+            <p class="eyebrow chapter-kicker"><span class="chapter-number">03</span><span>Dogfood · public and auditable</span></p>
             <h2 id="dogfood-proof-heading">The mechanism is building Kungfu itself.</h2>
           </div>
           <p>The current rolling 30-day public observation connects repository work to retained Project Cuts, independent review, continuation, and production release.</p>
@@ -1010,9 +1070,9 @@
         })();
       </script>
 
-      <section aria-labelledby="adoption-heading">
-        <div class="section-heading">
-          <p class="eyebrow">A bounded starting path</p>
+      <section class="builder-chapter chapter-adoption" data-builder-chapter="04" aria-labelledby="adoption-heading">
+        <div class="chapter-heading section-heading">
+          <p class="eyebrow chapter-kicker"><span class="chapter-number">04</span><span>A bounded starting path</span></p>
           <h2 id="adoption-heading">Inspect. Integrate. Prove.</h2>
           <p>The current evidence supports a bounded first-party reference path—not certification or broad vendor adoption.</p>
         </div>
@@ -1036,19 +1096,18 @@
             <a href="https://github.com/kungfu-systems/buildchain/pull/1435">Audit the Passport integration</a>
           </article>
         </div>
-      </section>
-
-      <section class="evidence-panel" aria-labelledby="evidence-heading">
-        <h2 id="evidence-heading">Current claim boundary</h2>
-        <div class="evidence-copy">
-          <p><strong>Public status:</strong> first-party reference adopter. The retained evidence is not external vendor adoption, certification, an OpenCode endorsement, or a multi-platform guarantee.</p>
-          <p>Exact source commits, package availability, suite root, platform, qualification result, data boundary, and known limits are bound in the reviewed developer-site projection. Its production machine route remains subject to that site&rsquo;s release approval.</p>
-          <div class="evidence-links">
-            <a href="https://libkungfu.dev/runtime.json">Runtime machine facts</a>
-            <a href="https://kfd.libkungfu.dev">KFD protocol</a>
-            <a href="https://buildchain.libkungfu.dev">Buildchain release evidence</a>
+        <aside class="evidence-panel" aria-labelledby="evidence-heading">
+          <h2 id="evidence-heading">Current claim boundary</h2>
+          <div class="evidence-copy">
+            <p><strong>Public status:</strong> first-party reference adopter. The retained evidence is not external vendor adoption, certification, an OpenCode endorsement, or a multi-platform guarantee.</p>
+            <p>Exact source commits, package availability, suite root, platform, qualification result, data boundary, and known limits are bound in the reviewed developer-site projection. Its production machine route remains subject to that site&rsquo;s release approval.</p>
+            <div class="evidence-links">
+              <a href="https://libkungfu.dev/runtime.json">Runtime machine facts</a>
+              <a href="https://kfd.libkungfu.dev">KFD protocol</a>
+              <a href="https://buildchain.libkungfu.dev">Buildchain release evidence</a>
+            </div>
           </div>
-        </div>
+        </aside>
       </section>
     </div>
 
