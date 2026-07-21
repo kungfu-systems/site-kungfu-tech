@@ -42,6 +42,7 @@ if grep -RInE 'mailto:|[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}' \
 fi
 
 test -f public/index.html
+test -f public/how-tested/continuity/index.html
 test -f public/agent-builders/index.html
 test -f public/why-kungfu/index.html
 test -f public/assets/site.css
@@ -51,7 +52,7 @@ test -f public/services/index.html
 test -f public/trust/index.html
 test -f public/legal/index.html
 test -f site/public-dogfood-proof.json
-for page in public/index.html public/agent-builders/index.html public/why-kungfu/index.html public/about/index.html public/services/index.html public/trust/index.html public/legal/index.html; do
+for page in public/index.html public/how-tested/continuity/index.html public/agent-builders/index.html public/why-kungfu/index.html public/about/index.html public/services/index.html public/trust/index.html public/legal/index.html; do
   grep -q 'href="/assets/site.css"' "$page"
 done
 if grep -RInE '^    \\.(site-header|brand|mark|site-nav|site-footer|nav-menu)\\b' \
@@ -59,18 +60,23 @@ if grep -RInE '^    \\.(site-header|brand|mark|site-nav|site-footer|nav-menu)\\b
   echo "error: shared header/footer CSS must live in public/assets/site.css" >&2
   exit 1
 fi
-grep -q 'See when your agents are making progress, getting stuck, or wasting tokens.' public/index.html
+grep -q "Your agent shouldn't start over when the chat ends." public/index.html
+grep -q 'fresh agent continue the same work' public/index.html
+grep -q 'Same task. New chat. No re-explanation.' public/index.html
+grep -q 'Continuation unsupported' public/index.html
+grep -q 'Continuation oracle passed' public/index.html
+grep -q 'prefers-reduced-motion: reduce' public/index.html
+grep -q 'href="/how-tested/continuity/"' public/index.html
 grep -q 'Never Guess. Facts Unfold.' public/index.html
 grep -q 'href="/why-kungfu/"' public/index.html
+grep -q 'durable work facts between sessions' public/index.html
 grep -q 'href="/agent-builders/"' public/index.html
 grep -q 'Build your Hub. Don&rsquo;t rebuild the runtime.' public/index.html
 grep -q 'Your product' public/index.html
 grep -q '7eeb5bd1b45492f4da27eaacbe63eddfd6245176/examples/opencode-kungfu/quickstart' public/index.html
-grep -q 'local control pane for agent work' public/index.html
 grep -q 'Coming soon' public/index.html
 grep -q 'being prepared' public/index.html
 grep -q 'Follow Kungfu on GitHub' public/index.html
-grep -q 'Developer site' public/index.html
 grep -q 'Cost control' public/index.html
 grep -q 'Responsibility state' public/index.html
 grep -q 'Transparency' public/index.html
@@ -100,6 +106,12 @@ assert_shared_contains footer public/index.html 'class="footer-copy"'
 assert_shared_contains footer public/index.html 'details.nav-menu[open]'
 grep -q 'shared-header:start' public/index.html
 grep -q 'shared-footer:start' public/index.html
+grep -q 'shared-header:start' public/how-tested/continuity/index.html
+grep -q 'shared-footer:start' public/how-tested/continuity/index.html
+grep -q 'deterministic fixture-worker smoke test' public/how-tested/continuity/index.html
+grep -q 'public-projection.json' public/how-tested/continuity/index.html
+grep -q 'raw-evidence-index.json' public/how-tested/continuity/index.html
+grep -q 'animation-pack.json' public/how-tested/continuity/index.html
 grep -q 'shared-header:start' public/why-kungfu/index.html
 grep -q 'shared-footer:start' public/why-kungfu/index.html
 grep -q 'The name did not begin as an acronym.' public/why-kungfu/index.html
@@ -159,6 +171,7 @@ fi
 
 if [ -d dist ]; then
   test -f dist/index.html
+  test -f dist/how-tested/continuity/index.html
   test -f dist/agent-builders/index.html
   test -f dist/why-kungfu/index.html
   test -f dist/assets/site.css
@@ -167,7 +180,8 @@ if [ -d dist ]; then
   test -f dist/services/index.html
   test -f dist/trust/index.html
   test -f dist/legal/index.html
-  grep -q 'See when your agents are making progress, getting stuck, or wasting tokens.' dist/index.html
+  grep -q "Your agent shouldn't start over when the chat ends." dist/index.html
+  grep -q 'How continuity was tested' dist/how-tested/continuity/index.html
   grep -q 'Build your Hub. Don&rsquo;t rebuild the runtime.' dist/agent-builders/index.html
   grep -q 'Never Guess. Facts Unfold.' dist/index.html
   grep -q 'The name did not begin as an acronym.' dist/why-kungfu/index.html

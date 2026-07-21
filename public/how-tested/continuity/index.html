@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>How continuity was tested | Kungfu</title>
+  <meta name="description" content="Method, evidence, and limitations for Kungfu's preparatory continuity pilot.">
+  <link rel="stylesheet" href="/assets/site.css">
+  <style>
+    main { width: min(920px, calc(100% - 40px)); margin: 0 auto; padding: 34px 0 56px; }
+    article { display: grid; gap: 28px; padding-top: 42px; }
+    .eyebrow { margin: 0; color: var(--accent); font-size: 14px; font-weight: 700; text-transform: uppercase; }
+    h1 { max-width: 760px; margin: 0; font-size: clamp(42px, 7vw, 72px); line-height: 1; }
+    .lead { max-width: 720px; margin: 0; color: var(--muted); font-size: 21px; }
+    .method-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+    .method-card { padding: 18px; border: 1px solid var(--line); background: var(--surface); }
+    .method-card h2 { margin: 0 0 8px; font-size: 20px; }
+    .method-card p { margin: 0; color: var(--muted); }
+    .limits { padding: 20px; border-left: 3px solid var(--warn); background: var(--surface); }
+    .limits h2 { margin: 0 0 8px; font-size: 20px; }
+    .limits p { margin: 0; }
+    .evidence-links { display: flex; flex-wrap: wrap; gap: 12px 20px; }
+    @media (max-width: 680px) {
+      main { width: min(100% - 28px, 560px); padding-top: 28px; }
+      article { padding-top: 28px; }
+      .method-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <!-- shared-header:start -->
+    <header class="site-header"></header>
+    <!-- shared-header:end -->
+
+    <article>
+      <p class="eyebrow">Preparatory evidence · one-minute class</p>
+      <h1>How continuity was tested</h1>
+      <p class="lead">One deterministic task fixture was run through a chat-only baseline and a Kungfu continuation path. Both paths used the same task and exact oracle.</p>
+
+      <div class="method-grid">
+        <section class="method-card">
+          <h2>Baseline</h2>
+          <p>The fresh worker received no continuation input. It could not recover the required next action, so the verdict was unsupported.</p>
+        </section>
+        <section class="method-card">
+          <h2>Kungfu path</h2>
+          <p>The fresh worker received one durable fact, recovered the required next action, and matched the fixture's exact continuation oracle.</p>
+        </section>
+        <section class="method-card">
+          <h2>What was retained</h2>
+          <p>The public projection, raw evidence index, path reports, and animation production pack share one run identity and content roots.</p>
+        </section>
+        <section class="method-card">
+          <h2>Versions and method</h2>
+          <p>The retained report binds its source commit, fixture version, contract version, run identity, redaction rules, and static fallback.</p>
+        </section>
+      </div>
+
+      <section class="limits">
+        <h2>Limitations</h2>
+        <p>This is a deterministic fixture-worker smoke test. It is not a native or hosted model-agent comparison, a multi-hour durability result, a user-retention study, or proof that Kungfu outperforms Codex, Claude, or another agent.</p>
+      </section>
+
+      <nav class="evidence-links" aria-label="Continuity evidence links">
+        <a href="https://github.com/kungfu-systems/kungfu/blob/dev/v4/v4.0/docs/qualification/evidence/continuity-pilot/2026-07-21-preparatory-v1/public-projection.json">Public-safe projection</a>
+        <a href="https://github.com/kungfu-systems/kungfu/blob/dev/v4/v4.0/docs/qualification/evidence/continuity-pilot/2026-07-21-preparatory-v1/raw-evidence-index.json">Raw evidence index</a>
+        <a href="https://github.com/kungfu-systems/kungfu/blob/dev/v4/v4.0/docs/qualification/evidence/continuity-pilot/2026-07-21-preparatory-v1/animation-pack.json">Animation production pack</a>
+        <a href="https://github.com/kungfu-systems/kungfu/blob/dev/v4/v4.0/docs/qualification/continuity-pilot.md">Test protocol</a>
+      </nav>
+    </article>
+
+    <!-- shared-footer:start -->
+    <footer class="site-footer"></footer>
+    <!-- shared-footer:end -->
+  </main>
+</body>
+</html>

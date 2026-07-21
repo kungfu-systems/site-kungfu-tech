@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Kungfu</title>
-  <meta name="description" content="Kungfu is preparing a local control pane for long-running agent work: cost, progress, evidence, and next actions.">
+  <meta name="description" content="Kungfu helps fresh agents continue the same work after the chat ends, without asking you to explain it all again.">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%2314171f'/%3E%3Ctext x='32' y='39' text-anchor='middle' font-family='Arial,sans-serif' font-size='22' font-weight='700' fill='white'%3EKF%3C/text%3E%3C/svg%3E">
   <link rel="stylesheet" href="/assets/site.css">
   <style>
@@ -22,6 +22,7 @@
     .hero {
       display: grid;
       gap: 28px;
+      min-width: 0;
       padding-top: 22px;
     }
 
@@ -102,9 +103,165 @@
       color: #ffffff;
     }
 
+    .continuity-demo {
+      display: grid;
+      gap: 0;
+      min-width: 0;
+      border: 1px solid var(--line);
+      background: var(--panel);
+      box-shadow: 0 22px 60px rgba(18, 23, 34, 0.10);
+    }
+
+    .continuity-heading {
+      display: flex;
+      justify-content: space-between;
+      gap: 18px;
+      align-items: flex-end;
+      padding: 18px;
+      border-bottom: 1px solid var(--line);
+      background: var(--panel-soft);
+    }
+
+    .continuity-heading h2,
+    .continuity-heading p {
+      margin: 0;
+    }
+
+    .continuity-heading h2 {
+      font-size: 24px;
+      line-height: 1.15;
+    }
+
+    .continuity-heading p {
+      max-width: 540px;
+      color: var(--muted);
+    }
+
+    .continuity-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 64px minmax(0, 1fr);
+      align-items: stretch;
+    }
+
+    .continuity-path {
+      display: grid;
+      gap: 16px;
+      align-content: start;
+      min-height: 300px;
+      padding: 22px;
+    }
+
+    .continuity-path h3,
+    .continuity-path p {
+      margin: 0;
+    }
+
+    .continuity-path h3 {
+      font-size: 22px;
+      line-height: 1.15;
+    }
+
+    .path-label {
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .handoff-card {
+      display: grid;
+      gap: 8px;
+      padding: 14px;
+      border: 1px solid var(--line);
+      background: var(--surface);
+    }
+
+    .handoff-card strong {
+      color: var(--fg);
+    }
+
+    .handoff-card span {
+      color: var(--muted);
+    }
+
+    .handoff-result {
+      display: flex;
+      gap: 9px;
+      align-items: center;
+      margin-top: auto;
+      font-weight: 700;
+    }
+
+    .handoff-result::before {
+      width: 10px;
+      height: 10px;
+      background: currentColor;
+      content: "";
+    }
+
+    .handoff-result.unsupported { color: var(--danger); }
+    .handoff-result.passed { color: var(--ok); }
+
+    .continuity-transfer {
+      position: relative;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      border-right: 1px solid var(--line);
+      border-left: 1px solid var(--line);
+      color: var(--accent);
+      font-size: 26px;
+    }
+
+    .continuity-transfer::before {
+      position: absolute;
+      inset: 0 auto;
+      width: 3px;
+      background: var(--line);
+      content: "";
+    }
+
+    .continuity-transfer::after {
+      position: absolute;
+      top: 12%;
+      width: 9px;
+      height: 54px;
+      background: var(--accent);
+      content: "";
+      animation: continuity-transfer 3.6s ease-in-out infinite;
+    }
+
+    .continuity-transfer span {
+      z-index: 1;
+      padding: 6px;
+      background: var(--panel);
+    }
+
+    .continuity-foot {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 12px 20px;
+      align-items: center;
+      padding: 14px 18px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .continuity-foot p { margin: 0; }
+
+    @keyframes continuity-transfer {
+      0%, 18% { transform: translateY(-76px); opacity: 0; }
+      36%, 64% { opacity: 1; }
+      82%, 100% { transform: translateY(210px); opacity: 0; }
+    }
+
     .control-pane {
       display: grid;
       gap: 0;
+      min-width: 0;
       border: 1px solid var(--line);
       background: var(--panel);
       box-shadow: 0 22px 60px rgba(18, 23, 34, 0.10);
@@ -409,11 +566,36 @@
       .summary { font-size: 16px; }
       .pane-topbar { align-items: flex-start; flex-direction: column; }
       .health { justify-content: flex-start; }
+      .continuity-heading { align-items: flex-start; flex-direction: column; }
+      .continuity-grid { grid-template-columns: 1fr; }
+      .continuity-path { min-height: 0; }
+      .continuity-transfer {
+        min-height: 56px;
+        border: 0;
+        border-top: 1px solid var(--line);
+        border-bottom: 1px solid var(--line);
+      }
+      .continuity-transfer::before { inset: auto 0; width: auto; height: 3px; }
+      .continuity-transfer::after { top: auto; left: 12%; width: 54px; height: 9px; animation-name: continuity-transfer-mobile; }
       .pane-grid, .triangle { grid-template-columns: 1fr; }
       .lane { min-height: auto; border-right: 0; border-bottom: 1px solid var(--line); }
       .lane:last-child { border-bottom: 0; }
       .builder-entry, .trust { grid-template-columns: 1fr; gap: 16px; }
       .builder-entry { padding: 20px; }
+    }
+
+    @keyframes continuity-transfer-mobile {
+      0%, 18% { transform: translateX(-76px); opacity: 0; }
+      36%, 64% { opacity: 1; }
+      82%, 100% { transform: translateX(420px); opacity: 0; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .continuity-transfer::after { top: 50%; animation: none; opacity: 1; transform: translateY(-50%); }
+    }
+
+    @media (max-width: 820px) and (prefers-reduced-motion: reduce) {
+      .continuity-transfer::after { top: auto; left: 50%; transform: translateX(-50%); }
     }
   </style>
 </head>
@@ -441,26 +623,58 @@
     <!-- shared-header:end -->
 
     <section class="hero" aria-label="Kungfu homepage">
-      <p class="eyebrow">Coming soon · long-running agent work control pane</p>
-      <h1>See when your agents are making progress, getting stuck, or wasting tokens.</h1>
-      <p class="tagline">Kungfu is being prepared as a local control pane for agent work: cost, progress, evidence, and next actions.</p>
+      <p class="eyebrow">Coming soon · continuity for long-running agent work</p>
+      <h1>Your agent shouldn't start over when the chat ends.</h1>
+      <p class="tagline">Kungfu helps a fresh agent continue the same work without asking you to explain it all again.</p>
       <div class="brand-principle" aria-label="Kungfu brand principle">
         <strong>Never Guess. Facts Unfold.</strong>
         <a href="/why-kungfu/">Why Kungfu?</a>
       </div>
-      <p class="summary">Use Codex, Claude, Copilot, or your own execution surface. Kungfu verifies delegated work; it is not another agent.</p>
+      <p class="summary">Use Codex, Claude, Copilot, or your own execution surface. Kungfu keeps durable work facts between sessions; it is not another agent.</p>
       <div class="hero-actions" aria-label="Primary actions">
+        <a href="#continuity-demo">See the handoff</a>
+        <a href="/how-tested/continuity/">How this was tested</a>
         <a href="https://github.com/kungfu-systems/kungfu">Follow Kungfu on GitHub</a>
-        <a href="https://libkungfu.dev">Developer site</a>
-        <a href="#trust-layer">Trust model</a>
       </div>
     </section>
 
-    <section class="control-pane" aria-label="Cost State Proof product preview">
+    <section class="continuity-demo" id="continuity-demo" aria-labelledby="continuity-title">
+      <div class="continuity-heading">
+        <h2 id="continuity-title">Same task. New chat. No re-explanation.</h2>
+        <p>A preparatory one-minute pilot checks whether a fresh worker can recover the next action from durable input.</p>
+      </div>
+      <div class="continuity-grid">
+        <article class="continuity-path">
+          <span class="path-label">Chat-only baseline</span>
+          <h3>The chat ends. The work context ends with it.</h3>
+          <div class="handoff-card">
+            <strong>Fresh worker opens the task</strong>
+            <span>No continuation input is available. It cannot verify the next action.</span>
+          </div>
+          <p class="handoff-result unsupported">Continuation unsupported</p>
+        </article>
+        <div class="continuity-transfer" aria-hidden="true"><span>→</span></div>
+        <article class="continuity-path">
+          <span class="path-label">Kungfu fixture path</span>
+          <h3>The chat ends. One durable fact stays with the work.</h3>
+          <div class="handoff-card">
+            <strong>Fresh worker opens the same task</strong>
+            <span>It reads the recorded next action and produces the expected continuation output.</span>
+          </div>
+          <p class="handoff-result passed">Continuation oracle passed</p>
+        </article>
+      </div>
+      <div class="continuity-foot">
+        <p>Preparatory fixture evidence—not a model comparison or multi-day result.</p>
+        <a href="/how-tested/continuity/">Method, report, and limitations</a>
+      </div>
+    </section>
+
+    <section class="control-pane" aria-label="Cost State Proof explanation">
       <div class="pane-topbar">
         <div class="pane-title">
-          <strong>Product direction preview</strong>
-          <span>Delegated agent work, local evidence, no default upload.</span>
+          <strong>How continuity stays accountable</strong>
+          <span>Cost, state, and proof explain what the continuing work is doing.</span>
         </div>
         <div class="health" aria-label="Workspace summary">
           <span class="pill">coming soon</span>
@@ -477,17 +691,17 @@
           <div class="metrics">
             <div class="metric">
               <strong>Stuck refactor loop</strong>
-              <span>42 minutes, 186k tokens, no file delta in 18 minutes.</span>
+              <span>Detect spend without a corresponding work delta.</span>
               <div class="meter danger" aria-hidden="true"><i style="width: 82%"></i></div>
             </div>
             <div class="metric">
               <strong>Worker dispatch</strong>
-              <span>3 short runs completed under budget.</span>
+              <span>Separate bounded worker runs from the parent task.</span>
               <div class="meter" aria-hidden="true"><i style="width: 38%"></i></div>
             </div>
             <div class="metric">
               <strong>Review queue</strong>
-              <span>Waiting on human value decision, no active spend.</span>
+              <span>Stop active spend while a human decision is required.</span>
               <div class="meter warn" aria-hidden="true"><i style="width: 12%"></i></div>
             </div>
           </div>
