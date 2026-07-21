@@ -2,8 +2,15 @@
 import fs from "node:fs";
 import path from "node:path";
 import {
+  BUILDCHAIN_PACKAGE,
+  BUILDCHAIN_VERSION,
+  buildPublicationCatalogManifest,
   buildWhitepaperManifest,
+  KFD_PACKAGE,
+  KFD_VERSION,
+  loadPublicationCatalog,
   loadWhitepaperSource,
+  PAPER_RELEASES,
   sha256File,
   WHITEPAPER_PACKAGE,
   WHITEPAPER_VERSION,
@@ -12,6 +19,7 @@ import {
 const repoRoot = process.cwd();
 const distRoot = path.join(repoRoot, "dist");
 const source = loadWhitepaperSource(repoRoot);
+const catalog = loadPublicationCatalog(repoRoot);
 
 function assert(condition, message) {
   if (!condition) throw new Error(message);
@@ -49,20 +57,32 @@ function assertLocalLinksResolve(html, pageName) {
 
 const packageJson = JSON.parse(read("package.json"));
 assert(packageJson.packageManager === "pnpm@11.7.0", "site packageManager must match the Buildchain pnpm runtime");
-assert(packageJson.dependencies?.[WHITEPAPER_PACKAGE] === WHITEPAPER_VERSION, "site must pin the exact white paper package version");
+const expectedDependencies = [
+  [KFD_PACKAGE, KFD_VERSION],
+  [BUILDCHAIN_PACKAGE, BUILDCHAIN_VERSION],
+  ...PAPER_RELEASES.map((paper) => [paper.package, paper.version]),
+];
+for (const [packageName, version] of expectedDependencies) {
+  assert(packageJson.dependencies?.[packageName] === version, `site must pin ${packageName}@${version}`);
+}
 
 const pnpmLock = read("pnpm-lock.yaml");
-assert(pnpmLock.includes(`'${WHITEPAPER_PACKAGE}':`), "pnpm lock must include the white paper importer");
-assert(pnpmLock.includes(`${WHITEPAPER_PACKAGE}@${WHITEPAPER_VERSION}`), "pnpm lock must resolve the exact white paper version");
+for (const [packageName, version] of expectedDependencies) {
+  assert(pnpmLock.includes(`'${packageName}':`), `pnpm lock must include ${packageName}`);
+  assert(pnpmLock.includes(`${packageName}@${version}`), `pnpm lock must resolve ${packageName}@${version}`);
+}
 
 const indexHtml = readDist("whitepaper/index.html");
 const readerHtml = readDist("whitepaper/kungfu-white-paper/index.html");
 const llms = readDist("whitepaper/llms.txt");
 const manifest = JSON.parse(readDist("whitepaper/manifest.json"));
+const catalogManifest = JSON.parse(readDist("whitepaper/catalog.json"));
 const expectedManifest = buildWhitepaperManifest(source);
+const expectedCatalogManifest = buildPublicationCatalogManifest(catalog);
 const pdfPath = path.join(distRoot, "whitepaper", "kungfu-white-paper.pdf");
 
 assert(JSON.stringify(manifest) === JSON.stringify(expectedManifest), "generated white paper manifest drifted from the source package");
+assert(JSON.stringify(catalogManifest) === JSON.stringify(expectedCatalogManifest), "generated publication catalog drifted from source packages");
 assert(manifest.evidence.immutableVersionUrl.includes(`/v${WHITEPAPER_VERSION}/`), "machine manifest must expose the immutable publication version URL");
 assert(fs.existsSync(pdfPath), "generated white paper PDF is missing");
 assert(sha256File(pdfPath) === source.pdfArtifact.sha256, "generated white paper PDF digest mismatch");
@@ -79,6 +99,17 @@ for (const [name, html] of [["white paper index", indexHtml], ["white paper read
 
 assert(indexHtml.includes(source.bundle.hero.title), "white paper index must render the upstream title");
 assert(indexHtml.includes(WHITEPAPER_VERSION), "white paper index must render the upstream version");
+for (const paper of catalog.papers) {
+  assert(indexHtml.includes(paper.title), `paper index must render ${paper.packageInfo.name} title`);
+  assert(indexHtml.includes(paper.abstract), `paper index must render ${paper.packageInfo.name} abstract`);
+  assert(indexHtml.includes(paper.packageInfo.version), `paper index must render ${paper.packageInfo.name} version`);
+  assert(llms.includes(`${paper.packageInfo.name}@${paper.packageInfo.version}`), `llms.txt must identify ${paper.packageInfo.name}`);
+  assert(llms.includes(paper.pdfArtifact.sha256), `llms.txt must expose ${paper.packageInfo.name} PDF digest`);
+}
+assert(indexHtml.includes(catalog.kfd.title), "paper index must render KFD package facts");
+assert(indexHtml.includes(catalog.buildchain.title), "paper index must render Buildchain package facts");
+assert(indexHtml.includes(`${KFD_PACKAGE}`) && indexHtml.includes(KFD_VERSION), "paper index must identify the KFD source package");
+assert(indexHtml.includes(`${BUILDCHAIN_PACKAGE}`) && indexHtml.includes(BUILDCHAIN_VERSION), "paper index must identify the Buildchain source package");
 assert(readerHtml.includes(source.bundle.hero.lead), "white paper reader must render the upstream lead");
 assert(readerHtml.includes(`data="${source.routes.pdf}#page=1&amp;view=FitH"`), "white paper reader must preview the package PDF");
 assert(!readerHtml.includes("KFD-1 |"), "structured KFD principles must not render as raw pipe-separated text");

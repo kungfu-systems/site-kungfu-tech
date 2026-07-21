@@ -1,2 +1,7 @@
 minimumReleaseAgeExclude:
+  - '@kungfu-tech/buildchain'
+  - '@kungfu-tech/kfd'
+  - '@kungfu-tech/paper-episodes-to-primitives'
+  - '@kungfu-tech/paper-kfd-foundation-real-world-agent-work'
   - '@kungfu-tech/paper-kungfu-product-white-paper'
+  - '@kungfu-tech/paper-observer-declared-timelines'

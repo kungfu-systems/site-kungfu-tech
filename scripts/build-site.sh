@@ -27,6 +27,7 @@ test -f dist/whitepaper/index.html
 test -f dist/whitepaper/kungfu-white-paper/index.html
 test -f dist/whitepaper/kungfu-white-paper.pdf
 test -f dist/whitepaper/manifest.json
+test -f dist/whitepaper/catalog.json
 test -f dist/whitepaper/llms.txt
 
 echo "site-kungfu-tech built dist/"

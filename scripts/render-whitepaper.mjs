@@ -10,7 +10,9 @@ import {
   renderHeader,
 } from "./site-layout.mjs";
 import {
+  buildPublicationCatalogManifest,
   buildWhitepaperManifest,
+  loadPublicationCatalog,
   loadWhitepaperSource,
   siteHref,
   WHITEPAPER_ORIGIN,
@@ -19,6 +21,7 @@ import {
 const repoRoot = process.cwd();
 const distRoot = path.join(repoRoot, "dist");
 const source = loadWhitepaperSource(repoRoot);
+const catalog = loadPublicationCatalog(repoRoot);
 const layout = readLayout(repoRoot);
 const markdown = new MarkdownIt({ html: false, linkify: true, typographer: false });
 
@@ -128,13 +131,13 @@ ${body.trim().split("\n").map((line) => `          ${line}`).join("\n")}
       </section>`;
 }
 
-function head({ title, description, canonicalUrl }) {
+function head({ title, description, canonicalUrl, manifestHref = "/whitepaper/manifest.json" }) {
   return `  <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>${escapeHtml(title)}</title>
   <meta name="description" content="${escapeAttr(description)}">
   <link rel="canonical" href="${escapeAttr(canonicalUrl)}">
-  <link rel="alternate" type="application/json" title="White paper manifest" href="/whitepaper/manifest.json">
+  <link rel="alternate" type="application/json" title="Publication manifest" href="${escapeAttr(manifestHref)}">
   <link rel="alternate" type="text/plain" title="White paper agent entrypoint" href="/whitepaper/llms.txt">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%2314171f'/%3E%3Ctext x='32' y='39' text-anchor='middle' font-family='Arial,sans-serif' font-size='22' font-weight='700' fill='white'%3EKF%3C/text%3E%3C/svg%3E">
   <link rel="stylesheet" href="/assets/site.css">
@@ -154,14 +157,34 @@ ${renderFooter(layout)}
 }
 
 function renderIndex() {
-  const { bundle, packageInfo, routes } = source;
+  const paperListings = catalog.papers.map((paper) => `      <article class="paper-listing">
+        <div class="paper-listing-copy">
+          <p class="paper-section-role">Publication / ${escapeHtml(paper.packageInfo.version)}</p>
+          <h2><a href="${escapeAttr(paper.routes.reader)}">${escapeHtml(paper.title)}</a></h2>
+          <p>${escapeHtml(paper.abstract)}</p>
+        </div>
+        <dl class="paper-listing-facts">
+          <div><dt>Source</dt><dd><code>${escapeHtml(paper.packageInfo.name)}</code></dd></div>
+          <div><dt>Version</dt><dd><code>${escapeHtml(paper.packageInfo.version)}</code></dd></div>
+          <div><dt>PDF SHA256</dt><dd><code>${escapeHtml(paper.pdfArtifact.sha256.slice(0, 16))}&hellip;</code></dd></div>
+        </dl>
+        <div class="paper-actions">
+          <a class="paper-button primary" href="${escapeAttr(paper.routes.reader)}">Read paper</a>
+          <a class="paper-button" href="${escapeAttr(paper.routes.pdf)}">Open PDF</a>
+          <a class="paper-button" href="${escapeAttr(paper.routes.evidence)}">Inspect evidence</a>
+        </div>
+      </article>`).join("\n");
+  const kfdCommitments = catalog.kfd.commitments
+    .map((commitment) => `<li><strong>${escapeHtml(commitment.id)}</strong> ${escapeHtml(commitment.text)}</li>`)
+    .join("");
   return `<!doctype html>
 <html lang="en">
 <head>
 ${head({
-  title: "White Papers | Kungfu",
-  description: "Kungfu product white papers and their public evidence paths.",
-  canonicalUrl: bundle.routes.indexUrl,
+  title: "Papers | Kungfu",
+  description: "Kungfu papers and their public evidence paths.",
+  canonicalUrl: `${WHITEPAPER_ORIGIN}/whitepaper/`,
+  manifestHref: "/whitepaper/catalog.json",
 })}
 </head>
 <body>
@@ -169,28 +192,34 @@ ${head({
 ${sharedHeader()}
     <section class="paper-index-hero" aria-labelledby="whitepaper-index-title">
       <p class="paper-eyebrow">Kungfu publications</p>
-      <h1 id="whitepaper-index-title">White papers grounded in product evidence.</h1>
-      <p>Read the product thesis here, then follow its package, PDF, source, and Buildchain evidence without leaving the public record.</p>
+      <h1 id="whitepaper-index-title">Papers grounded in product evidence.</h1>
+      <p>Read the product thesis and systems research, then follow every package, PDF, source revision, and Buildchain evidence path.</p>
     </section>
 
     <section class="paper-catalog" aria-label="Published white papers">
-      <article class="paper-listing">
-        <div class="paper-listing-copy">
-          <p class="paper-section-role">${escapeHtml(bundle.hero.eyebrow)} / ${escapeHtml(packageInfo.version)}</p>
-          <h2><a href="${escapeAttr(routes.reader)}">${escapeHtml(bundle.hero.title)}</a></h2>
-          <p>${escapeHtml(bundle.hero.lead)}</p>
-          <p class="paper-stance">${escapeHtml(bundle.hero.stance)}</p>
-        </div>
-        <dl class="paper-listing-facts">
-          <div><dt>Source</dt><dd><code>${escapeHtml(packageInfo.name)}</code></dd></div>
-          <div><dt>Version</dt><dd><code>${escapeHtml(packageInfo.version)}</code></dd></div>
-          <div><dt>Format</dt><dd>HTML + PDF</dd></div>
-        </dl>
-        <div class="paper-actions">
-          <a class="paper-button primary" href="${escapeAttr(routes.reader)}">${escapeHtml(bundle.hero.primaryCta.label)}</a>
-          <a class="paper-button" href="${escapeAttr(routes.pdf)}">Download PDF</a>
-        </div>
-      </article>
+${paperListings}
+    </section>
+
+    <section class="paper-source-catalog" aria-labelledby="paper-source-heading">
+      <div class="paper-source-heading">
+        <p class="paper-eyebrow">Upstream contracts</p>
+        <h2 id="paper-source-heading">Generated from KFD and Buildchain facts.</h2>
+        <p>The catalog is built from exact package-owned site bundles, not a parallel hand-maintained version ledger.</p>
+      </div>
+      <div class="paper-source-grid">
+        <article class="paper-source-card">
+          <p class="paper-section-role">${escapeHtml(catalog.kfd.packageInfo.name)} / ${escapeHtml(catalog.kfd.packageInfo.version)}</p>
+          <h3><a href="${escapeAttr(catalog.kfd.url)}">${escapeHtml(catalog.kfd.title)}</a></h3>
+          <p>${escapeHtml(catalog.kfd.summary)}</p>
+          <ul>${kfdCommitments}</ul>
+        </article>
+        <article class="paper-source-card">
+          <p class="paper-section-role">${escapeHtml(catalog.buildchain.packageInfo.name)} / ${escapeHtml(catalog.buildchain.packageInfo.version)}</p>
+          <h3><a href="${escapeAttr(catalog.buildchain.url)}">${escapeHtml(catalog.buildchain.title)}</a></h3>
+          <p>${escapeHtml(catalog.buildchain.summary)}</p>
+          <p><a href="${escapeAttr(catalog.buildchain.url)}">Inspect the release-passport system</a></p>
+        </article>
+      </div>
     </section>
 ${sharedFooter()}
   </main>
@@ -270,6 +299,7 @@ ${sharedFooter()}
 
 function renderLlms(manifest) {
   const sectionLines = manifest.sections.map((section) => `- ${section.title}: ${section.href}`).join("\n");
+  const paperLines = catalog.papers.map((paper) => `- ${paper.title}: ${paper.packageInfo.name}@${paper.packageInfo.version} | ${paper.routes.reader} | PDF ${paper.pdfArtifact.sha256}`).join("\n");
   return `# ${manifest.title}
 
 > ${manifest.description}
@@ -283,6 +313,13 @@ Source package: ${manifest.source.package}@${manifest.source.version}
 Source commit: ${manifest.source.sourceSha}
 PDF SHA256: ${manifest.artifact.sha256}
 
+## Publication catalog
+
+${paperLines}
+
+KFD source: ${catalog.kfd.packageInfo.name}@${catalog.kfd.packageInfo.version} | ${catalog.kfd.url}
+Buildchain source: ${catalog.buildchain.packageInfo.name}@${catalog.buildchain.packageInfo.version} | ${catalog.buildchain.url}
+
 ## Sections
 
 ${sectionLines}
@@ -290,9 +327,11 @@ ${sectionLines}
 }
 
 const manifest = buildWhitepaperManifest(source);
+const catalogManifest = buildPublicationCatalogManifest(catalog);
 writeText("whitepaper/index.html", renderIndex());
 writeText("whitepaper/kungfu-white-paper/index.html", renderReader());
 writeText("whitepaper/manifest.json", `${JSON.stringify(manifest, null, 2)}\n`);
+writeText("whitepaper/catalog.json", `${JSON.stringify(catalogManifest, null, 2)}\n`);
 writeText("whitepaper/llms.txt", renderLlms(manifest));
 fs.copyFileSync(source.pdfPath, path.join(distRoot, "whitepaper", "kungfu-white-paper.pdf"));
 
