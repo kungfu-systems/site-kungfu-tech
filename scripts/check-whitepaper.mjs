@@ -83,6 +83,8 @@ assert(readerHtml.includes(source.bundle.hero.lead), "white paper reader must re
 assert(readerHtml.includes(`data="${source.routes.pdf}#page=1&amp;view=FitH"`), "white paper reader must preview the package PDF");
 assert(!readerHtml.includes("KFD-1 |"), "structured KFD principles must not render as raw pipe-separated text");
 assert(readerHtml.includes("<table>"), "white paper reader must render structured source rows as an HTML table");
+assert(readerHtml.includes("KFD-13"), "white paper reader must preserve the complete upstream KFD status table");
+assert(readerHtml.includes("Vendor Agent Hub"), "white paper reader must preserve the upstream responsibility matrix");
 assert(!readerHtml.includes("If you are a user |"), "white paper audience guidance must not render as raw pipe-separated text");
 
 for (const section of source.bundle.homepageSections) {

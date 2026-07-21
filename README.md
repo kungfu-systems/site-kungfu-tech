@@ -39,7 +39,7 @@ fixture instead of publishing a parallel version ledger or a staging URL.
 ## White Paper
 
 The white paper pages are generated from the exact npm artifact
-`@kungfu-tech/paper-kungfu-product-white-paper@0.1.0-alpha.1`. The upstream
+`@kungfu-tech/paper-kungfu-product-white-paper@0.1.0-alpha.7`. The upstream
 `site/brand-site.json` bundle owns the title, product claims, selected sections,
 routes, and evidence links. The upstream publication manifest owns the PDF
 digest and source commit. This repository owns only the site layout, navigation,

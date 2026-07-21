@@ -8,7 +8,7 @@
     "check:dogfood": "node scripts/check-dogfood-proof.mjs"
   },
   "dependencies": {
-    "@kungfu-tech/paper-kungfu-product-white-paper": "0.1.0-alpha.2",
+    "@kungfu-tech/paper-kungfu-product-white-paper": "0.1.0-alpha.7",
     "markdown-it": "14.1.0"
   }
 }
