@@ -129,13 +129,22 @@ grep -q 'Privacy posture' public/legal/index.html
 grep -q 'shared-header:start' public/agent-builders/index.html
 grep -q 'shared-footer:start' public/agent-builders/index.html
 grep -q 'Build your Hub. Don&rsquo;t rebuild the runtime.' public/agent-builders/index.html
-grep -q 'Your Agent product' public/agent-builders/index.html
-grep -q 'libkungfu local or worker runtime' public/agent-builders/index.html
-grep -q 'KFD open protocol' public/agent-builders/index.html
-grep -q 'Your Hub' public/agent-builders/index.html
+grep -q 'An action is a loop through reality' public/agent-builders/index.html
+grep -q 'Fact Cut N+1' public/agent-builders/index.html
+grep -q 'ActionBinding' public/agent-builders/index.html
+grep -q 'Append-only journal authority' public/agent-builders/index.html
+grep -q 'KFD responsibility boundary' public/agent-builders/index.html
+grep -q 'Hub A · libkungfu adopter' public/agent-builders/index.html
+grep -q 'Hub B · independent implementation' public/agent-builders/index.html
+grep -q 'Delivery <b>≠</b> Admission' public/agent-builders/index.html
+grep -q 'Occurrence <b>≠</b> Completion' public/agent-builders/index.html
+grep -q 'Authentication <b>≠</b> Authority' public/agent-builders/index.html
+grep -q 'No central KFD authority' public/agent-builders/index.html
 grep -q 'Kungfu Cloud is a future option' public/agent-builders/index.html
 grep -q 'first-party reference adopter' public/agent-builders/index.html
-grep -q 'a99441327038864bb0b05170a11277b81aabf722/src/fixtures/libkungfu-runtime-surface.json' public/agent-builders/index.html
+grep -q 'https://libkungfu.dev/runtime.json' public/agent-builders/index.html
+grep -q 'kungfu/blob/1f3893fae1a7a666d8abe736cd9563128f48549b/docs/architecture/fact-episode-action-runtime.md' public/agent-builders/index.html
+grep -q 'kfd/blob/35915676330696f888c73c154f431c99f37c19ec/protocols/agent-hub/README.md' public/agent-builders/index.html
 grep -q 'github.com/kungfu-systems/kungfu/pull/1171' public/agent-builders/index.html
 grep -q 'github.com/kungfu-systems/buildchain/pull/1435' public/agent-builders/index.html
 
