@@ -7,7 +7,7 @@ import path from "node:path";
 const require = createRequire(import.meta.url);
 
 export const WHITEPAPER_PACKAGE = "@kungfu-tech/paper-kungfu-product-white-paper";
-export const WHITEPAPER_VERSION = "0.1.0-alpha.7";
+export const WHITEPAPER_VERSION = "0.1.0-alpha.8";
 export const WHITEPAPER_CONTRACT = "kungfu-white-paper-brand-site-bundle";
 export const WHITEPAPER_CONSUMER = "kungfu.tech";
 export const WHITEPAPER_ORIGIN = "https://kungfu.tech";
@@ -67,11 +67,11 @@ export function loadWhitepaperSource(repoRoot = process.cwd()) {
   assert(bundle.routes?.canonicalHost === WHITEPAPER_CONSUMER, "brand bundle canonical host mismatch");
   assert(siteHref(bundle.routes.indexUrl) === "/whitepaper/", "brand bundle index route mismatch");
   assert(
-    siteHref(bundle.routes.canonicalUrl) === "/whitepaper/kungfu-real-world-agent-work/",
+    siteHref(bundle.routes.canonicalUrl) === "/whitepaper/kungfu-white-paper/",
     "brand bundle reader route mismatch",
   );
   assert(
-    siteHref(bundle.routes.pdfUrl) === "/whitepaper/kungfu-real-world-agent-work.pdf",
+    siteHref(bundle.routes.pdfUrl) === "/whitepaper/kungfu-white-paper.pdf",
     "brand bundle PDF route mismatch",
   );
   assert(publicationManifest.contract === "kungfu-buildchain-publication-artifact-manifest", "publication manifest contract mismatch");

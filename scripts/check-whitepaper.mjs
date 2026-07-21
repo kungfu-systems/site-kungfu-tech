@@ -56,11 +56,11 @@ assert(pnpmLock.includes(`'${WHITEPAPER_PACKAGE}':`), "pnpm lock must include th
 assert(pnpmLock.includes(`${WHITEPAPER_PACKAGE}@${WHITEPAPER_VERSION}`), "pnpm lock must resolve the exact white paper version");
 
 const indexHtml = readDist("whitepaper/index.html");
-const readerHtml = readDist("whitepaper/kungfu-real-world-agent-work/index.html");
+const readerHtml = readDist("whitepaper/kungfu-white-paper/index.html");
 const llms = readDist("whitepaper/llms.txt");
 const manifest = JSON.parse(readDist("whitepaper/manifest.json"));
 const expectedManifest = buildWhitepaperManifest(source);
-const pdfPath = path.join(distRoot, "whitepaper", "kungfu-real-world-agent-work.pdf");
+const pdfPath = path.join(distRoot, "whitepaper", "kungfu-white-paper.pdf");
 
 assert(JSON.stringify(manifest) === JSON.stringify(expectedManifest), "generated white paper manifest drifted from the source package");
 assert(manifest.evidence.immutableVersionUrl.includes(`/v${WHITEPAPER_VERSION}/`), "machine manifest must expose the immutable publication version URL");
