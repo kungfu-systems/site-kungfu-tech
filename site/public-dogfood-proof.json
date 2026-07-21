@@ -14,7 +14,9 @@
   "upstream": {
     "repository": "https://github.com/kungfu-systems/site-libkungfu-dev",
     "sourceCommit": "5a15649d32d3fd669d9fb143680e19c7733776b5",
-    "evidenceSha256": "3fa6bacc80304f427dcf3737719baaa8e0b97d0179cfdb7fe00a55f2d7501906",
+    "sourceFixturePath": "src/fixtures/dogfood-evidence.json",
+    "sourceFixtureSha256": "3fa6bacc80304f427dcf3737719baaa8e0b97d0179cfdb7fe00a55f2d7501906",
+    "publishedEvidenceSha256": "5893623ebd225d3d90691241014270c2c4c9ffb5f347ae43d402d39c84d0ed2f",
     "humanPage": "https://libkungfu.dev/dogfood/",
     "machineEvidence": "https://libkungfu.dev/dogfood-evidence.json"
   },

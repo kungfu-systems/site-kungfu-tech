@@ -12,7 +12,14 @@ assert.equal(
   "dogfood proof window must span exactly 30 days",
 );
 assert.match(proof.upstream.sourceCommit, /^[0-9a-f]{40}$/);
-assert.match(proof.upstream.evidenceSha256, /^[0-9a-f]{64}$/);
+assert.equal(proof.upstream.sourceFixturePath, "src/fixtures/dogfood-evidence.json");
+assert.match(proof.upstream.sourceFixtureSha256, /^[0-9a-f]{64}$/);
+assert.match(proof.upstream.publishedEvidenceSha256, /^[0-9a-f]{64}$/);
+assert.notEqual(
+  proof.upstream.sourceFixtureSha256,
+  proof.upstream.publishedEvidenceSha256,
+  "source fixture and pretty-printed publication hashes must remain explicitly distinct",
+);
 assert.deepEqual(proof.boundaries, [
   "pull-request-not-feature",
   "author-account-not-agent-actor",
