@@ -35,6 +35,18 @@ assert_shared_lacks() {
   fi
 }
 
+assert_before() {
+  page_path=$1
+  first=$2
+  second=$3
+  first_line=$(grep -n -m 1 -F "$first" "$page_path" | cut -d: -f1)
+  second_line=$(grep -n -m 1 -F "$second" "$page_path" | cut -d: -f1)
+  if [ "$first_line" -ge "$second_line" ]; then
+    echo "error: ${page_path} must place ${first} before ${second}" >&2
+    exit 1
+  fi
+}
+
 if grep -RInE 'mailto:|[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}' \
   README.md docs public site; then
   echo "error: email address or mailto link found" >&2
@@ -153,13 +165,23 @@ grep -q 'Your customer relationship stays yours.' public/agent-builders/index.ht
 grep -q 'KFD requires no central Kungfu cloud.' public/agent-builders/index.html
 grep -q 'not a wedge into your Hub' public/agent-builders/index.html
 grep -q 'Integration is not a channel into your customer relationship.' public/agent-builders/index.html
+grep -q 'libkungfu lives inside your Hub. KFD connects its edge.' public/agent-builders/index.html
+grep -q 'KFD adapter + exchange store' public/agent-builders/index.html
+grep -q 'Hub B · any conforming runtime' public/agent-builders/index.html
+grep -q 'rooted proposal →' public/agent-builders/index.html
+grep -q '← transport receipt' public/agent-builders/index.html
+grep -q '← receiver verdict' public/agent-builders/index.html
+grep -q 'delivery ≠ admission' public/agent-builders/index.html
+grep -q 'Single-vendor cloud' public/agent-builders/index.html
+grep -q 'Multi-organization federation' public/agent-builders/index.html
+grep -q 'Offline device' public/agent-builders/index.html
+assert_before public/agent-builders/index.html 'id="hub-network-heading"' 'id="hub-promise-heading"'
+assert_before public/agent-builders/index.html 'id="hub-promise-heading"' 'id="action-world-heading"'
 grep -q 'An action is a loop through reality' public/agent-builders/index.html
 grep -q 'Fact Cut N+1' public/agent-builders/index.html
 grep -q 'ActionBinding' public/agent-builders/index.html
 grep -q 'Append-only journal authority' public/agent-builders/index.html
-grep -q 'KFD responsibility boundary' public/agent-builders/index.html
 grep -q 'Hub A · libkungfu adopter' public/agent-builders/index.html
-grep -q 'Hub B · independent implementation' public/agent-builders/index.html
 grep -q 'Delivery <b>≠</b> Admission' public/agent-builders/index.html
 grep -q 'Occurrence <b>≠</b> Completion' public/agent-builders/index.html
 grep -q 'Authentication <b>≠</b> Authority' public/agent-builders/index.html
