@@ -43,9 +43,11 @@ either side. The detailed noncompetition commitment follows that architectural
 context: Builders retain their users, accounts, billing, models, UI, Agent,
 cloud, and customer relationship; KFD needs no central Kungfu cloud; and
 libkungfu remains a public local capability layer rather than a route into the
-host product. After the local action model, the route presents the concise
-public dogfood snapshot before the bounded starting path, so Builders can audit
-current evidence before choosing an integration step. Exact runtime, package,
+host product. Four visually consistent numbered chapters separate the network,
+local action model, public dogfood proof, and bounded starting path. The Builder
+contract remains a distinct cross-cutting commitment, while the current claim
+boundary closes the fourth chapter. This lets Builders audit current evidence
+before choosing an integration step. Exact runtime, package,
 qualification, and claim status remain owned by the reviewed `site-libkungfu-dev`
 projection and its source authorities. Until that site's production release is
 approved, this repository links the exact source-bound fixture instead of
