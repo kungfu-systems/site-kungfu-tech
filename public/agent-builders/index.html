@@ -245,8 +245,8 @@
     .action-node.admission { border-top-color: #476dd0; }
 
     .action-node strong,
-    .hub-card h3,
-    .protocol-path > strong,
+    .topology-node strong,
+    .protocol-link > strong,
     .invariant-card strong,
     .reason-card strong {
       color: var(--fg);
@@ -254,8 +254,8 @@
 
     .action-node p,
     .foundation-node p,
-    .hub-card li,
-    .protocol-path li,
+    .topology-node p,
+    .protocol-link p,
     .invariant-card p,
     .reason-card p,
     .diagram-note {
@@ -315,67 +315,187 @@
       border-left-color: var(--muted);
     }
 
-    .hub-network {
+    .network-topology {
       display: grid;
       min-width: 0;
-      grid-template-columns: minmax(0, 1fr) minmax(260px, 0.82fr) minmax(0, 1fr);
-      gap: 16px;
+      gap: 18px;
+    }
+
+    .topology-grid {
+      display: grid;
+      min-width: 0;
+      grid-template-columns: minmax(0, 1fr) minmax(230px, 0.7fr) minmax(0, 1fr);
+      gap: 14px;
       align-items: stretch;
     }
 
-    .hub-card {
+    .hub-boundary {
       display: grid;
       min-width: 0;
       align-content: start;
-      gap: 12px;
+      gap: 14px;
       padding: 20px;
       border: 2px solid var(--fg);
       background: var(--surface);
     }
 
-    .hub-card h3 { margin: 0; font-size: 21px; }
+    .hub-boundary > header {
+      display: grid;
+      gap: 6px;
+    }
 
-    .hub-card ol,
-    .protocol-path ol {
+    .hub-boundary h3 {
+      margin: 0;
+      font-size: 23px;
+    }
+
+    .hub-boundary > header p:last-child {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .hub-stack {
       display: grid;
       gap: 0;
       margin: 0;
       padding: 0;
-      list-style: none;
     }
 
-    .hub-card li {
-      padding: 10px 11px;
+    .topology-node {
+      display: grid;
+      min-width: 0;
+      gap: 7px;
+      padding: 15px;
       border: 1px solid var(--line);
-      border-bottom: 0;
       background: var(--panel-soft);
     }
 
-    .hub-card li:last-child {
-      border-bottom: 1px solid var(--line);
-      color: var(--fg);
-      font-weight: 650;
+    .topology-node.product { border-left: 4px solid #d69732; }
+    .topology-node.runtime { border-left: 4px solid #2e9d72; }
+    .topology-node.edge { border-left: 4px solid #8b63d9; }
+
+    .topology-node .layer-number {
+      font-size: 11px;
     }
 
-    .protocol-path {
+    .stack-link {
+      display: grid;
+      justify-items: center;
+      gap: 3px;
+      min-height: 42px;
+      padding: 5px 8px;
+      color: var(--muted);
+      font: 700 10px/1.2 "SFMono-Regular", Consolas, monospace;
+      text-align: center;
+    }
+
+    .stack-link b {
+      color: var(--accent);
+      font-size: 18px;
+      line-height: 1;
+    }
+
+    .protocol-link {
       display: grid;
       min-width: 0;
       align-content: center;
-      gap: 11px;
+      gap: 14px;
       padding: 16px;
       border: 1px solid #8b63d9;
       background: color-mix(in srgb, #8b63d9 8%, var(--panel-soft));
       text-align: center;
     }
 
-    .protocol-path li {
+    .protocol-link > strong {
+      font-size: 18px;
+    }
+
+    .protocol-flows {
+      display: grid;
+      gap: 8px;
+    }
+
+    .protocol-flow {
+      display: grid;
+      grid-template-columns: 24px minmax(0, 1fr);
+      gap: 7px;
+      align-items: center;
       padding: 9px;
       border: 1px solid var(--line);
-      border-bottom: 0;
+      background: var(--surface);
+      color: var(--fg);
+      font: 700 11px/1.35 "SFMono-Regular", Consolas, monospace;
+      text-align: left;
+    }
+
+    .protocol-flow b {
+      display: grid;
+      width: 24px;
+      height: 24px;
+      place-items: center;
+      border-radius: 50%;
+      background: #8b63d9;
+      color: #fff;
+    }
+
+    .protocol-flow.outbound { border-right: 4px solid #8b63d9; }
+    .protocol-flow.inbound { border-left: 4px solid #2e9d72; }
+
+    .transport-bindings {
+      padding-top: 10px;
+      border-top: 1px dashed #8b63d9;
+    }
+
+    .semantic-gate {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+      gap: 12px;
+      align-items: center;
+      padding: 16px;
+      border: 1px solid var(--line);
       background: var(--surface);
     }
 
-    .protocol-path li:last-child { border-bottom: 1px solid var(--line); }
+    .semantic-gate > div {
+      display: grid;
+      gap: 4px;
+    }
+
+    .semantic-gate strong {
+      font: 700 12px/1.35 "SFMono-Regular", Consolas, monospace;
+    }
+
+    .semantic-gate span {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .gate-divider {
+      padding: 9px 12px;
+      border: 1px dashed var(--accent);
+      color: var(--accent);
+      font: 700 11px/1.3 "SFMono-Regular", Consolas, monospace;
+      text-align: center;
+    }
+
+    .topology-modes {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 8px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .topology-modes li {
+      padding: 10px;
+      border: 1px solid var(--line);
+      background: var(--panel-soft);
+      color: var(--fg);
+      font: 700 11px/1.3 "SFMono-Regular", Consolas, monospace;
+      text-align: center;
+    }
 
     .invariant-strip,
     .reason-grid {
@@ -566,7 +686,7 @@
       .builder-hero h1 { font-size: 42px; line-height: 1.02; }
       .diagram-shell { overflow: hidden; padding: 16px; }
       .promise-ownership, .promise-foundation, .action-loop, .authority-rail,
-      .hub-network, .invariant-strip, .reason-grid,
+      .topology-grid, .semantic-gate, .topology-modes, .invariant-strip, .reason-grid,
       .adoption-grid, .cloud-boundary, .evidence-panel, .dogfood-proof-head,
       .dogfood-metrics {
         grid-template-columns: 1fr;
@@ -574,9 +694,11 @@
 
       .action-node { min-height: auto; overflow-wrap: anywhere; }
 
-      .foundation-node, .hub-card, .protocol-path, .invariant-card, .reason-card {
+      .foundation-node, .hub-boundary, .protocol-link, .invariant-card, .reason-card {
         overflow-wrap: anywhere;
       }
+
+      .gate-divider { width: min(100%, 260px); justify-self: center; }
 
       .action-node:not(:last-child)::after {
         content: "↓";
@@ -624,6 +746,116 @@
         </div>
       </section>
 
+      <section class="architecture" aria-labelledby="hub-network-heading">
+        <div class="section-heading">
+          <p class="eyebrow">01 · The KFD-libkungfu network</p>
+          <h2 id="hub-network-heading">libkungfu lives inside your Hub. KFD connects its edge.</h2>
+          <p>KFD lets independently owned Hubs exchange rooted responsibility without sharing one runtime, database, identity provider, cloud, or customer relationship.</p>
+        </div>
+        <div class="diagram-shell network-topology" aria-label="KFD and libkungfu network topology between two independently owned Agent Hubs">
+          <div class="topology-grid">
+            <article class="hub-boundary">
+              <header>
+                <p class="eyebrow">Builder-owned boundary</p>
+                <h3>Hub A · libkungfu adopter</h3>
+                <p>Everything inside this box remains part of the Builder&rsquo;s product.</p>
+              </header>
+              <div class="hub-stack">
+                <div class="topology-node product">
+                  <span class="layer-number">Product plane</span>
+                  <strong>Your Agent Hub</strong>
+                  <p>Users · UI · models · Agent · accounts · billing · cloud</p>
+                </div>
+                <div class="stack-link"><b>↓</b><span>actions + local outcomes</span></div>
+                <div class="topology-node runtime">
+                  <span class="layer-number">Local runtime</span>
+                  <strong>libkungfu</strong>
+                  <p>Journal · Fact cuts · Episodes · Warrants · recovery</p>
+                </div>
+                <div class="stack-link"><b>↓</b><span>rooted responsibility</span></div>
+                <div class="topology-node edge">
+                  <span class="layer-number">Hub edge</span>
+                  <strong>KFD adapter + exchange store</strong>
+                  <p>Profile roots · capabilities · idempotency · portable records</p>
+                </div>
+              </div>
+            </article>
+
+            <div class="protocol-link" aria-label="Transport-neutral KFD responsibility exchange">
+              <span class="layer-number">Protocol boundary only</span>
+              <strong>KFD Agent Hub profile</strong>
+              <div class="protocol-flows">
+                <div class="protocol-flow"><b>1</b><span>capabilities ↔ capabilities</span></div>
+                <div class="protocol-flow outbound"><b>2</b><span>rooted proposal →</span></div>
+                <div class="protocol-flow inbound"><b>3</b><span>← transport receipt</span></div>
+                <div class="protocol-flow inbound"><b>4</b><span>← receiver verdict</span></div>
+              </div>
+              <p class="transport-bindings">Local call · IPC · file · HTTP · gRPC · message bus · offline bundle</p>
+            </div>
+
+            <article class="hub-boundary">
+              <header>
+                <p class="eyebrow">Independently owned boundary</p>
+                <h3>Hub B · any conforming runtime</h3>
+                <p>The receiver does not need Kungfu and never imports Hub A&rsquo;s trust.</p>
+              </header>
+              <div class="hub-stack">
+                <div class="topology-node product">
+                  <span class="layer-number">Product plane</span>
+                  <strong>Independent Agent Hub</strong>
+                  <p>Its users · UI · models · accounts · workflows · cloud</p>
+                </div>
+                <div class="stack-link"><b>↑</b><span>accepted facts + responsibility</span></div>
+                <div class="topology-node runtime">
+                  <span class="layer-number">Receiver authority</span>
+                  <strong>Local policy + verdict writer</strong>
+                  <p>Identity · Warrant · admission · disclosure · conflict · completion</p>
+                </div>
+                <div class="stack-link"><b>↑</b><span>assess delivered exchange</span></div>
+                <div class="topology-node edge">
+                  <span class="layer-number">Hub edge</span>
+                  <strong>KFD adapter + exchange store</strong>
+                  <p>Original bytes · roots · receipts · idempotency · export</p>
+                </div>
+              </div>
+            </article>
+          </div>
+
+          <div class="semantic-gate" aria-label="KFD separates transport state from semantic admission">
+            <div><strong>Transport state</strong><span>created → offered → delivered</span></div>
+            <div class="gate-divider">delivery ≠ admission</div>
+            <div><strong>Semantic state</strong><span>unassessed → assessing → admitted / rejected / conflicted</span></div>
+          </div>
+
+          <ul class="topology-modes" aria-label="Supported KFD Agent Hub topology classes">
+            <li>Local peer</li>
+            <li>Single-vendor cloud</li>
+            <li>Multi-organization federation</li>
+            <li>Offline device</li>
+          </ul>
+
+          <p class="diagram-note"><strong>No central KFD authority:</strong> no required global identity provider, Hub registry, database, transport, clock, or KFD cloud.</p>
+          <div class="invariant-strip" aria-label="KFD protocol invariants">
+            <article class="invariant-card"><strong>Delivery <b>≠</b> Admission</strong><p>Bytes arrived; the receiver still owns the verdict.</p></article>
+            <article class="invariant-card"><strong>Occurrence <b>≠</b> Completion</strong><p>An Episode happened; success still needs independent assessment.</p></article>
+            <article class="invariant-card"><strong>Authentication <b>≠</b> Authority</strong><p>Identity control does not prove permission, truth, or fact admission.</p></article>
+          </div>
+          <p class="diagram-note"><strong>Protocol source:</strong> <a href="https://github.com/kungfu-systems/kfd/blob/35915676330696f888c73c154f431c99f37c19ec/protocols/agent-hub/README.md">KFD Agent Hub alpha profile</a>.</p>
+        </div>
+        <div class="reason-grid" aria-label="Why KFD supports independent Hub implementations">
+          <article class="reason-card"><strong>Different internals</strong><p>Exact profile coordinates and capability intersection.</p></article>
+          <article class="reason-card"><strong>No shared trust root</strong><p>Receiver-owned admission and non-amplifying Warrants.</p></article>
+          <article class="reason-card"><strong>Retries and offline work</strong><p>Content roots, causal predecessors, and idempotency keys.</p></article>
+          <article class="reason-card"><strong>Divergent state</strong><p>Visible conflicts and append-only successor exchanges.</p></article>
+          <article class="reason-card"><strong>Private context</strong><p>Typed partial, redacted, reference-only, or withheld disclosure.</p></article>
+          <article class="reason-card"><strong>Exit and portability</strong><p>Binding-neutral payload digests and export/import.</p></article>
+        </div>
+        <aside class="cloud-boundary" aria-label="Kungfu Cloud boundary">
+          <strong>Kungfu Cloud is a future option, not a current requirement.</strong>
+          <p>KFD is designed for plural Hubs. A future Kungfu Cloud may implement the same protocol, but adopting libkungfu or KFD does not require it and this page does not announce a cloud product.</p>
+        </aside>
+      </section>
+
       <section class="hub-promise" aria-labelledby="hub-promise-heading">
         <div class="promise-heading">
           <p class="eyebrow">The adoption promise</p>
@@ -654,7 +886,7 @@
 
       <section class="architecture" aria-labelledby="action-world-heading">
         <div class="section-heading">
-          <p class="eyebrow">01 · How libkungfu sees action</p>
+          <p class="eyebrow">02 · How libkungfu sees action</p>
           <h2 id="action-world-heading">An action is a loop through reality, not a row in a workflow.</h2>
           <p>libkungfu preserves the coordinates needed to act without losing intent, evidence, authority, or continuity.</p>
         </div>
@@ -676,52 +908,6 @@
           </div>
           <p class="diagram-note"><strong>Semantic source:</strong> <a href="https://github.com/kungfu-systems/kungfu/blob/1f3893fae1a7a666d8abe736cd9563128f48549b/docs/architecture/fact-episode-action-runtime.md">Fact, Episode, and Action runtime</a>.</p>
         </div>
-      </section>
-
-      <section class="architecture" aria-labelledby="hub-network-heading">
-        <div class="section-heading">
-          <p class="eyebrow">02 · Why KFD can support plural Hubs</p>
-          <h2 id="hub-network-heading">KFD connects Hub boundaries. It does not become the Hub.</h2>
-          <p>Every participant keeps its product, identity, policy, storage, models, and customer relationship. KFD standardizes only the responsibility exchange between them.</p>
-        </div>
-        <div class="diagram-shell">
-          <div class="hub-network" aria-label="Two independently owned Agent Hubs exchanging responsibility through KFD">
-            <article class="hub-card">
-              <p class="eyebrow">Participant-owned control plane</p>
-              <h3>Hub A · libkungfu adopter</h3>
-              <ol><li>Vendor UI, models, accounts, workflows</li><li>Local identity, policy, and admission</li><li>libkungfu Facts, Episodes, and recovery</li><li>KFD adapter, exchange store, verdict writer</li></ol>
-            </article>
-            <div class="protocol-path">
-              <strong>KFD responsibility boundary</strong>
-              <ol><li>Negotiate exact capabilities</li><li>Propose rooted responsibility</li><li>Deliver through any binding</li><li>Assess and verdict locally</li></ol>
-              <p class="diagram-note">Local call · IPC · file · HTTP · gRPC · message bus · offline bundle</p>
-            </div>
-            <article class="hub-card">
-              <p class="eyebrow">Participant-owned control plane</p>
-              <h3>Hub B · independent implementation</h3>
-              <ol><li>Participant UX and workflows</li><li>Local identity, policy, and admission</li><li>Any conforming runtime and evidence store</li><li>KFD adapter, exchange store, verdict writer</li></ol>
-            </article>
-          </div>
-          <p class="diagram-note"><strong>No central KFD authority:</strong> no required global identity provider, Hub registry, database, transport, clock, or KFD cloud.</p>
-          <div class="invariant-strip" aria-label="KFD protocol invariants">
-            <article class="invariant-card"><strong>Delivery <b>≠</b> Admission</strong><p>Bytes arrived; the receiver still owns the verdict.</p></article>
-            <article class="invariant-card"><strong>Occurrence <b>≠</b> Completion</strong><p>An Episode happened; success still needs independent assessment.</p></article>
-            <article class="invariant-card"><strong>Authentication <b>≠</b> Authority</strong><p>Identity control does not prove permission, truth, or fact admission.</p></article>
-          </div>
-          <p class="diagram-note"><strong>Protocol source:</strong> <a href="https://github.com/kungfu-systems/kfd/blob/35915676330696f888c73c154f431c99f37c19ec/protocols/agent-hub/README.md">KFD Agent Hub alpha profile</a>.</p>
-        </div>
-        <div class="reason-grid" aria-label="Why KFD supports independent Hub implementations">
-          <article class="reason-card"><strong>Different internals</strong><p>Exact profile coordinates and capability intersection.</p></article>
-          <article class="reason-card"><strong>No shared trust root</strong><p>Receiver-owned admission and non-amplifying Warrants.</p></article>
-          <article class="reason-card"><strong>Retries and offline work</strong><p>Content roots, causal predecessors, and idempotency keys.</p></article>
-          <article class="reason-card"><strong>Divergent state</strong><p>Visible conflicts and append-only successor exchanges.</p></article>
-          <article class="reason-card"><strong>Private context</strong><p>Typed partial, redacted, reference-only, or withheld disclosure.</p></article>
-          <article class="reason-card"><strong>Exit and portability</strong><p>Binding-neutral payload digests and export/import.</p></article>
-        </div>
-        <aside class="cloud-boundary" aria-label="Kungfu Cloud boundary">
-          <strong>Kungfu Cloud is a future option, not a current requirement.</strong>
-          <p>KFD is designed for plural Hubs. A future Kungfu Cloud may implement the same protocol, but adopting libkungfu or KFD does not require it and this page does not announce a cloud product.</p>
-        </aside>
       </section>
 
       <section aria-labelledby="adoption-heading">
