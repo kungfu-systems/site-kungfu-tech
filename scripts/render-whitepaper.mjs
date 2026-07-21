@@ -32,45 +32,74 @@ function stripSectionTitle(section) {
   const lines = section.markdown.replace(/\r\n/g, "\n").split("\n");
   if (lines[0]?.replace(/^#\s+/, "").trim() === section.title.trim()) lines.shift();
   while (lines[0]?.trim() === "") lines.shift();
+  const renderedPrinciples = new Set(
+    source.bundle.principles.map((principle) => `${principle.id} | ${principle.text}`),
+  );
   const normalized = lines
-    .filter((line) => !/^KFD-[0-9]+\s*\|\s*/.test(line.trim()))
+    .filter((line) => !renderedPrinciples.has(line.trim()))
     .join("\n")
     .replace(/^(#{2,5})(\s+)/gm, "#$1$2")
     .trim();
-  return renderAudienceTable(normalized);
+  return renderStructuredTables(normalized);
 }
 
-function renderAudienceTable(sourceMarkdown) {
+function structuredRow(line) {
+  const trimmed = line.trim();
+  if (!trimmed || trimmed.startsWith("|") || /^[-*+]\s+/.test(trimmed)) return null;
+  const cells = trimmed.split("|").map((cell) => cell.trim());
+  return cells.length >= 2 && cells.every(Boolean) ? cells : null;
+}
+
+function renderStructuredTables(sourceMarkdown) {
   const lines = sourceMarkdown.split("\n");
-  const headingIndex = lines.findIndex((line) => /^###\s+What To Read For\s*$/.test(line));
-  if (headingIndex === -1) return sourceMarkdown;
+  const output = [];
 
-  let cursor = headingIndex + 1;
-  while (lines[cursor]?.trim() === "") cursor += 1;
-  const tableStart = cursor;
-  const rows = [];
-
-  while (cursor < lines.length && !/^#{2,6}\s+/.test(lines[cursor])) {
-    const match = lines[cursor].match(/^(If you are [^|]+)\s*\|\s*(.*)$/);
-    if (!match) {
-      if (rows.length > 0 && lines[cursor].trim() !== "") {
-        rows[rows.length - 1][1] = `${rows[rows.length - 1][1]} ${lines[cursor].trim()}`;
-      }
-      cursor += 1;
+  for (let index = 0; index < lines.length;) {
+    if (!structuredRow(lines[index])) {
+      output.push(lines[index]);
+      index += 1;
       continue;
     }
-    rows.push([match[1].trim(), match[2].trim()]);
-    cursor += 1;
+
+    const rows = [];
+    let cursor = index;
+    while (cursor < lines.length && lines[cursor].trim() !== "" && !/^#{2,6}\s+/.test(lines[cursor])) {
+      const cells = structuredRow(lines[cursor]);
+      if (cells) {
+        rows.push(cells);
+      } else if (rows.length > 0 && !/^[-*+]\s+/.test(lines[cursor].trim())) {
+        const lastCell = rows[rows.length - 1].length - 1;
+        rows[rows.length - 1][lastCell] = `${rows[rows.length - 1][lastCell]} ${lines[cursor].trim()}`;
+      } else {
+        break;
+      }
+      cursor += 1;
+    }
+
+    if (rows.length < 2) {
+      output.push(...lines.slice(index, cursor));
+      index = cursor;
+      continue;
+    }
+
+    const width = Math.max(...rows.map((row) => row.length));
+    const hasSourceHeader = ["Decision", "Surface"].includes(rows[0][0]);
+    const header = hasSourceHeader
+      ? rows.shift()
+      : width === 2
+        ? ["Responsibility", "Meaning"]
+        : ["Item", "Status", "Responsibility"];
+    const escapeCell = (cell = "") => cell.replaceAll("|", "\\|");
+    output.push(
+      `| ${header.map(escapeCell).join(" | ")} |`,
+      `| ${Array.from({ length: width }, () => "---").join(" | ")} |`,
+      ...rows.map((row) => `| ${Array.from({ length: width }, (_, cell) => escapeCell(row[cell])).join(" | ")} |`),
+      "",
+    );
+    index = cursor;
   }
 
-  if (rows.length < 2) return sourceMarkdown;
-  const table = [
-    "| Audience | Read for |",
-    "| --- | --- |",
-    ...rows.map(([audience, purpose]) => `| ${audience} | ${purpose.replaceAll("|", "\\|")} |`),
-  ];
-  lines.splice(tableStart, cursor - tableStart, ...table, "");
-  return lines.join("\n");
+  return output.join("\n");
 }
 
 function localizeRenderedLinks(html) {

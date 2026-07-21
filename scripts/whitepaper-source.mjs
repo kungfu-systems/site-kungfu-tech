@@ -7,7 +7,7 @@ import path from "node:path";
 const require = createRequire(import.meta.url);
 
 export const WHITEPAPER_PACKAGE = "@kungfu-tech/paper-kungfu-product-white-paper";
-export const WHITEPAPER_VERSION = "0.1.0-alpha.2";
+export const WHITEPAPER_VERSION = "0.1.0-alpha.7";
 export const WHITEPAPER_CONTRACT = "kungfu-white-paper-brand-site-bundle";
 export const WHITEPAPER_CONSUMER = "kungfu.tech";
 export const WHITEPAPER_ORIGIN = "https://kungfu.tech";
@@ -45,12 +45,17 @@ export function loadWhitepaperSource(repoRoot = process.cwd()) {
   const packageJsonPath = require.resolve(`${WHITEPAPER_PACKAGE}/package.json`, { paths: [repoRoot] });
   const packageRoot = path.dirname(packageJsonPath);
   const packageInfo = readJson(packageJsonPath);
-  const bundlePath = require.resolve(`${WHITEPAPER_PACKAGE}/site/brand-site.json`, { paths: [repoRoot] });
+  const bundlePath = path.join(packageRoot, "site", "brand-site.json");
   const publicationManifestPath = require.resolve(`${WHITEPAPER_PACKAGE}/publication-artifact.json`, { paths: [repoRoot] });
-  const pdfPath = require.resolve(`${WHITEPAPER_PACKAGE}/pdf`, { paths: [repoRoot] });
-  const pdfPackagePath = path.relative(packageRoot, pdfPath).replaceAll(path.sep, "/");
-  const bundle = readJson(bundlePath);
   const publicationManifest = readJson(publicationManifestPath);
+  const pdfPackagePath = publicationManifest.publication?.primaryArtifact;
+  assertString(pdfPackagePath, "publication manifest primaryArtifact");
+  assert(
+    !path.isAbsolute(pdfPackagePath) && !pdfPackagePath.split(/[\\/]/).includes(".."),
+    "publication manifest primaryArtifact must stay inside the package",
+  );
+  const pdfPath = path.join(packageRoot, pdfPackagePath);
+  const bundle = readJson(bundlePath);
 
   assert(packageInfo.name === WHITEPAPER_PACKAGE, `unexpected white paper package: ${packageInfo.name}`);
   assert(packageInfo.version === WHITEPAPER_VERSION, `expected ${WHITEPAPER_PACKAGE}@${WHITEPAPER_VERSION}`);
