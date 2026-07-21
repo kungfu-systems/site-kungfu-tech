@@ -166,6 +166,9 @@ grep -q 'KFD requires no central Kungfu cloud.' public/agent-builders/index.html
 grep -q 'not a wedge into your Hub' public/agent-builders/index.html
 grep -q 'Integration is not a channel into your customer relationship.' public/agent-builders/index.html
 grep -q 'libkungfu lives inside your Hub. KFD connects its edge.' public/agent-builders/index.html
+grep -q 'Host Runtime API · actions + local outcomes' public/agent-builders/index.html
+grep -q 'works locally without KFD' public/agent-builders/index.html
+grep -q 'Optional Hub edge' public/agent-builders/index.html
 grep -q 'KFD adapter + exchange store' public/agent-builders/index.html
 grep -q 'Hub B · any conforming runtime' public/agent-builders/index.html
 grep -q 'rooted proposal →' public/agent-builders/index.html
@@ -175,7 +178,12 @@ grep -q 'delivery ≠ admission' public/agent-builders/index.html
 grep -q 'Single-vendor cloud' public/agent-builders/index.html
 grep -q 'Multi-organization federation' public/agent-builders/index.html
 grep -q 'Offline device' public/agent-builders/index.html
+grep -q 'Without KFD, your Hub still works. It stays an island.' public/agent-builders/index.html
+grep -q 'Every external Hub connection needs a custom bridge.' public/agent-builders/index.html
+grep -q 'One protocol boundary works across conforming Hubs.' public/agent-builders/index.html
+grep -q 'Each side keeps its runtime, policy, cloud, users, and admission authority.' public/agent-builders/index.html
 assert_before public/agent-builders/index.html 'id="hub-network-heading"' 'id="hub-promise-heading"'
+assert_before public/agent-builders/index.html 'id="adoption-tradeoff-heading"' 'id="hub-promise-heading"'
 assert_before public/agent-builders/index.html 'id="hub-promise-heading"' 'id="action-world-heading"'
 grep -q 'An action is a loop through reality' public/agent-builders/index.html
 grep -q 'Fact Cut N+1' public/agent-builders/index.html
