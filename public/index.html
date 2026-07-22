@@ -348,6 +348,42 @@
 
     .trust p:last-child { margin-bottom: 0; }
 
+    .capital-callout {
+      display: grid;
+      gap: 7px;
+      margin: 22px 0;
+      padding: 20px 22px;
+      border: 1px solid var(--fg);
+      border-left: 5px solid var(--accent);
+      background: var(--fg);
+      color: var(--bg);
+      text-decoration: none;
+    }
+
+    .capital-callout-label {
+      font-size: 13px;
+      font-weight: 750;
+      letter-spacing: 0.06em;
+      opacity: 0.76;
+      text-transform: uppercase;
+    }
+
+    .capital-callout strong {
+      max-width: 720px;
+      font-size: clamp(20px, 2.4vw, 28px);
+      line-height: 1.12;
+    }
+
+    .capital-callout-action {
+      font-size: 15px;
+      font-weight: 700;
+    }
+
+    .capital-callout:focus-visible {
+      outline: 3px solid var(--accent);
+      outline-offset: 3px;
+    }
+
     .trust + .site-footer {
       margin-top: 10px;
     }
@@ -505,6 +541,11 @@
       <div>
         <p>Kungfu is commercially operated by Kungfu Origin Technology Limited. The core project is open source, local-first, journal-first, and being prepared in public.</p>
         <p>Developers can start at <a href="https://libkungfu.dev">libkungfu.dev</a>. Product, trust, service, and legal details live on this site.</p>
+        <a class="capital-callout" href="/capital/">
+          <span class="capital-callout-label">Capital &amp; Stewardship</span>
+          <strong>Capital should expand the ecosystem, not control the standard.</strong>
+          <span class="capital-callout-action">Read the principles that would govern any future relationship with capital <span aria-hidden="true">→</span></span>
+        </a>
         <p><a href="/about/index.html">About</a> · <a href="/services/index.html">Services</a> · <a href="/trust/index.html">Trust</a> · <a href="/legal/index.html">Legal</a></p>
       </div>
     </section>

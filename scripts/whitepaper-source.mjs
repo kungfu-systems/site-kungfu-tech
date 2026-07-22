@@ -24,9 +24,9 @@ export const PAPER_RELEASES = [
     localReader: true,
   },
   {
-    package: "@kungfu-tech/paper-episodes-to-primitives",
-    version: "0.1.0-alpha.2",
-    slug: "episodes-to-primitives",
+    package: "@kungfu-tech/paper-kfd-foundation-real-world-agent-work",
+    version: "0.1.0-alpha.7",
+    slug: "kfd-foundation-real-world-agent-work",
   },
   {
     package: "@kungfu-tech/paper-observer-declared-timelines",
@@ -34,9 +34,9 @@ export const PAPER_RELEASES = [
     slug: "observer-declared-timelines",
   },
   {
-    package: "@kungfu-tech/paper-kfd-foundation-real-world-agent-work",
-    version: "0.1.0-alpha.7",
-    slug: "kfd-foundation-real-world-agent-work",
+    package: "@kungfu-tech/paper-episodes-to-primitives",
+    version: "0.1.0-alpha.2",
+    slug: "episodes-to-primitives",
   },
 ];
 
