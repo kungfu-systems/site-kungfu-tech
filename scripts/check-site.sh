@@ -83,6 +83,9 @@ grep -q 'Never Guess. Facts Unfold.' public/index.html
 grep -q 'href="/why-kungfu/"' public/index.html
 grep -q 'durable work facts between sessions' public/index.html
 grep -q 'class="primary-builder-action" href="/agent-builders/">For Agent Builders</a>' public/index.html
+grep -q 'href="/agent-supply-chain/">Explore the Agent Supply Chain</a>' public/index.html
+grep -q 'KFD-3</span><i aria-hidden="true">→</i>' public/index.html
+grep -q 'Not claimed:</strong> a live multi-Hub market or external vendor adoption' public/index.html
 grep -q 'Build and own your Hub. Kungfu stays beneath it.' public/index.html
 grep -q 'it does not compete for the Hub' public/index.html
 grep -q 'Your Hub stays yours' public/index.html
@@ -105,6 +108,7 @@ assert_shared_contains header public/index.html 'href="/about/index.html"'
 assert_shared_contains header public/index.html 'href="/whitepaper/"'
 assert_shared_contains header public/index.html 'class="nav-menu"'
 assert_shared_contains header public/index.html 'href="/agent-builders/"'
+assert_shared_contains header public/index.html 'href="/agent-supply-chain/"'
 assert_shared_contains header public/index.html 'libkungfu.dev'
 assert_shared_contains header public/index.html 'github.com/kungfu-systems/kungfu'
 assert_shared_lacks header public/index.html 'href="/services/index.html"'
@@ -144,7 +148,7 @@ grep -q 'not generally released yet' public/services/index.html
 grep -q 'Commercial services will build around an open, local-first core.' public/services/index.html
 grep -q 'shared-header:start' public/trust/index.html
 grep -q 'shared-footer:start' public/trust/index.html
-grep -q 'local-first control pane' public/trust/index.html
+grep -q 'local-first control plane' public/trust/index.html
 grep -q 'libkungfu.dev' public/trust/index.html
 grep -q 'github.com/kungfu-systems/kungfu/security' public/.well-known/security.txt
 grep -q 'Buildchain release passport' public/trust/index.html
@@ -172,7 +176,7 @@ grep -q 'Host Runtime API · actions + local outcomes' public/agent-builders/ind
 grep -q 'works locally without KFD' public/agent-builders/index.html
 grep -q 'Optional Hub edge' public/agent-builders/index.html
 grep -q 'KFD adapter + exchange store' public/agent-builders/index.html
-grep -q 'Hub B · any conforming runtime' public/agent-builders/index.html
+grep -q 'Independent conforming implementation · not yet claimed as adopted' public/agent-builders/index.html
 grep -q 'rooted proposal →' public/agent-builders/index.html
 grep -q '← transport receipt' public/agent-builders/index.html
 grep -q '← receiver verdict' public/agent-builders/index.html
@@ -203,7 +207,8 @@ grep -q 'An action is a loop through reality' public/agent-builders/index.html
 grep -q 'Fact Cut N+1' public/agent-builders/index.html
 grep -q 'ActionBinding' public/agent-builders/index.html
 grep -q 'Append-only journal authority' public/agent-builders/index.html
-grep -q 'Hub A · libkungfu adopter' public/agent-builders/index.html
+grep -q 'Qualified first-party reference adopter' public/agent-builders/index.html
+grep -q 'Independent conforming implementation · not yet claimed as adopted' public/agent-builders/index.html
 grep -q 'Delivery <b>≠</b> Admission' public/agent-builders/index.html
 grep -q 'Occurrence <b>≠</b> Completion' public/agent-builders/index.html
 grep -q 'Authentication <b>≠</b> Authority' public/agent-builders/index.html
@@ -227,6 +232,9 @@ if [ -d dist ]; then
   test -f dist/index.html
   test -f dist/how-tested/continuity/index.html
   test -f dist/agent-builders/index.html
+  test -f dist/agent-supply-chain/index.html
+  test -f dist/agent-supply-chain.json
+  test -f dist/llms.txt
   test -f dist/why-kungfu/index.html
   test -f dist/assets/site.css
   test -f dist/.well-known/security.txt
@@ -237,6 +245,16 @@ if [ -d dist ]; then
   grep -q "Your agent shouldn't start over when the chat ends." dist/index.html
   grep -q 'How continuity was tested' dist/how-tested/continuity/index.html
   grep -q 'Kungfu does not compete for your Hub.' dist/agent-builders/index.html
+  grep -q 'Five responsibilities. Independent owners.' dist/agent-supply-chain/index.html
+  grep -q 'kungfu-agent-supply-chain-public-narrative/v1' dist/agent-supply-chain.json
+  grep -q '30-day assessment' dist/agent-supply-chain/index.html
+  grep -q 'external vendor adoption or endorsement' dist/agent-supply-chain/index.html
+  grep -q 'property="og:title" content="Agent Supply Chain | Kungfu"' dist/agent-supply-chain/index.html
+  grep -q 'Maturity claims matrix' dist/agent-supply-chain/index.html
+  grep -q 'Exact evidence' dist/agent-supply-chain/index.html
+  grep -q 'Known limit' dist/agent-supply-chain/index.html
+  grep -q 'two public strategic axes' dist/llms.txt
+  grep -q 'npm:@kungfu-tech/kfd@1.0.0-alpha.41' dist/llms.txt
   grep -q 'Never Guess. Facts Unfold.' dist/index.html
   grep -q 'The name did not begin as an acronym.' dist/why-kungfu/index.html
   grep -q 'being prepared' dist/index.html
