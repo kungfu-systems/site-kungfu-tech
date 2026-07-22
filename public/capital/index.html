@@ -1,0 +1,282 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Capital &amp; Stewardship | Kungfu</title>
+  <meta name="description" content="Kungfu's standing principles for future relationships with capital: expand the product and ecosystem without purchasing control of the public protocol layer.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%2314171f'/%3E%3Ctext x='32' y='39' text-anchor='middle' font-family='Arial,sans-serif' font-size='22' font-weight='700' fill='white'%3EKF%3C/text%3E%3C/svg%3E">
+  <link rel="stylesheet" href="/assets/site.css">
+  <style>
+
+    main {
+      --header-gap: 58px;
+      width: min(1040px, calc(100% - 40px));
+      margin: 0 auto;
+      padding: 34px 0 60px;
+    }
+
+    .eyebrow {
+      margin: 0 0 16px;
+      color: var(--accent);
+      font-size: 14px;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      max-width: 920px;
+      margin: 0;
+      font-size: clamp(44px, 7.6vw, 78px);
+      line-height: 0.98;
+    }
+
+    .notice {
+      max-width: 860px;
+      margin: 26px 0 0;
+      padding: 18px 20px;
+      border-left: 3px solid var(--accent);
+      background: rgba(121, 192, 255, 0.08);
+      color: var(--text);
+      font-size: 18px;
+    }
+
+    .lead {
+      max-width: 780px;
+      margin: 22px 0 46px;
+      color: var(--muted);
+      font-size: 20px;
+    }
+
+    .section-heading {
+      max-width: 780px;
+      margin: 54px 0 20px;
+    }
+
+    .section-heading:first-of-type { margin-top: 0; }
+
+    .section-heading h2 {
+      margin: 0 0 9px;
+      font-size: clamp(30px, 4vw, 44px);
+      line-height: 1.08;
+    }
+
+    .section-heading p { margin: 0; color: var(--muted); }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .grid.two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+
+    .card {
+      min-height: 245px;
+      padding: 24px;
+      border: 1px solid var(--line);
+      background: var(--panel);
+    }
+
+    .card h3 {
+      margin: 0 0 12px;
+      font-size: 21px;
+      line-height: 1.18;
+    }
+
+    .number {
+      display: block;
+      margin-bottom: 22px;
+      color: var(--accent);
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+    }
+
+    .card p, .card li, .statement p { color: var(--muted); }
+    .card p { margin: 0; }
+    .card ul { margin: 0; padding-left: 20px; }
+    .card li + li { margin-top: 10px; }
+
+    .statement {
+      margin-top: 16px;
+      padding: 28px;
+      border: 1px solid rgba(121, 192, 255, 0.42);
+      background: linear-gradient(135deg, rgba(121, 192, 255, 0.09), var(--panel) 58%);
+    }
+
+    .statement h2 {
+      margin: 0 0 12px;
+      font-size: 28px;
+      line-height: 1.12;
+    }
+
+    .statement p { max-width: 860px; margin: 0 0 12px; }
+    .statement p:last-child { margin-bottom: 0; }
+
+    .contact { margin-top: 54px; }
+    .contact a { font-weight: 700; }
+
+    @media (max-width: 860px) {
+      .grid, .grid.two { grid-template-columns: 1fr; }
+      .card { min-height: auto; }
+    }
+
+    @media (max-width: 760px) {
+      main { width: min(100% - 28px, 640px); padding-top: 28px; }
+      .notice { padding: 16px; }
+      .section-heading { margin-top: 42px; }
+      .statement { padding: 22px; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <!-- shared-header:start -->
+    <header class="site-header">
+      <a class="brand" href="/" aria-label="Kungfu">
+        <span class="mark" aria-hidden="true">🧘</span>
+        <span class="brand-copy"><span>Kungfu</span><span class="brand-tagline">Continuity for Agent Work</span></span>
+      </a>
+      <nav class="site-nav" aria-label="Project links">
+        <a href="/agent-builders/">Agent Builders</a>
+        <a href="/whitepaper/">Papers</a>
+        <a href="/about/index.html">About</a>
+        <details class="nav-menu">
+          <summary>Developers</summary>
+          <div class="nav-menu-panel">
+          <a href="https://libkungfu.dev">libkungfu.dev</a>
+          <a href="https://github.com/kungfu-systems/kungfu">GitHub</a>
+          </div>
+        </details>
+      </nav>
+    </header>
+    <!-- shared-header:end -->
+
+    <p class="eyebrow">Capital &amp; Stewardship</p>
+    <h1>Capital should expand the ecosystem, not control the standard.</h1>
+    <p class="notice">Kungfu is not announcing a financing round. This page is a standing statement of the principles that would govern any future relationship with capital; it is not an offer to sell securities or an invitation to subscribe for them.</p>
+    <p class="lead">Product value comes first. The purpose of these principles is to make long-term compatibility legible before urgency, valuation, or transaction mechanics can distort the mission.</p>
+
+    <div class="section-heading">
+      <h2>Three goals, held together</h2>
+      <p>A compatible relationship must strengthen all three. Advancing one by sacrificing another is not alignment.</p>
+    </div>
+    <div class="grid">
+      <section class="card">
+        <span class="number">01</span>
+        <h3>Global credibility for KFD</h3>
+        <p>KFD should earn trust as a public protocol whose technical direction cannot be purchased by one company, investor, government, or platform. This is a goal, not a claim that KFD is already an industry standard or independently adopted.</p>
+      </section>
+      <section class="card">
+        <span class="number">02</span>
+        <h3>A durable Kungfu Origin</h3>
+        <p>Kungfu Origin should have the commercial strength to survive, build, ship, support, and expand valuable products and services around the public layer.</p>
+      </section>
+      <section class="card">
+        <span class="number">03</span>
+        <h3>Long-term freedom of action</h3>
+        <p>The project's author, stewards, and wider system should retain real option value when dealing with capital, governments, and major vendors rather than trade future autonomy for a short-term result.</p>
+      </section>
+    </div>
+
+    <div class="section-heading">
+      <h2>The role capital should play</h2>
+      <p>Capital is compatible when it increases the system's ability to create durable value.</p>
+    </div>
+    <div class="statement">
+      <h2>Returns should come from expanding the ecosystem.</h2>
+      <p>A compatible investor should expect economic value to come from stronger products, wider adoption, better execution, and a healthier ecosystem—not from purchasing control of KFD's technical direction or turning interoperability into a proprietary gate.</p>
+    </div>
+
+    <div class="section-heading">
+      <h2>Non-negotiable boundaries</h2>
+      <p>These are compatibility tests, not transaction terms or statements about current legal rights.</p>
+    </div>
+    <div class="grid two">
+      <section class="card">
+        <h3>Protocol direction is not consideration</h3>
+        <p>A capital relationship cannot depend on control of KFD's technical decisions, conformance meaning, public interfaces, or protocol evolution.</p>
+      </section>
+      <section class="card">
+        <h3>No ecosystem exclusivity</h3>
+        <p>Capital cannot require a private gate that prevents conforming implementations, independently owned Hubs, or other ecosystem participants from competing on top of the public protocol.</p>
+      </section>
+      <section class="card">
+        <h3>No customer capture through integration</h3>
+        <p>The business may create official products and services, but public interoperability cannot become a route to seize an adopter's users, accounts, billing, models, cloud, or customer relationship.</p>
+      </section>
+      <section class="card">
+        <h3>No purchased truth</h3>
+        <p>Investment cannot change what evidence proves, turn a roadmap into a shipped claim, or suppress the independent review needed for trustworthy releases and governance.</p>
+      </section>
+    </div>
+
+    <div class="section-heading">
+      <h2>Capabilities we would welcome</h2>
+      <p>The best partner contributes more than a balance sheet.</p>
+    </div>
+    <div class="grid two">
+      <section class="card">
+        <h3>Institutional credibility</h3>
+        <p>Experience helping public technical ecosystems earn international trust without converting stewardship into private control.</p>
+      </section>
+      <section class="card">
+        <h3>Commercial execution</h3>
+        <p>Product, enterprise, distribution, and operating capability that helps Kungfu Origin serve real users and build a durable business.</p>
+      </section>
+      <section class="card">
+        <h3>Governance and resilience</h3>
+        <p>Security, risk, legal, organizational, and institution-building expertise suitable for infrastructure expected to outlast individual vendors and market cycles.</p>
+      </section>
+      <section class="card">
+        <h3>Patience and strategic reach</h3>
+        <p>Long-horizon judgment and relationships that expand choices across markets, platforms, and jurisdictions rather than narrowing them prematurely.</p>
+      </section>
+    </div>
+
+    <div class="section-heading">
+      <h2>Public protocol, commercial company</h2>
+      <p>KFD's public protocol layer and Kungfu Origin's commercial product layer serve different roles.</p>
+    </div>
+    <div class="statement">
+      <h2>Compatibility depends on preserving the distinction.</h2>
+      <p>The public layer should remain credible to builders who do not buy from Kungfu Origin. Kungfu Origin Technology Limited can build valuable official products and services around that layer and may evaluate ordinary commercial financing without selling protocol governance.</p>
+      <p>These principles do not establish or alter entity structure, intellectual-property ownership, trademark rights, protocol governance, investor rights, or any other legal relationship. Any such arrangement would require separate verification, professional review, approvals, and definitive documents.</p>
+    </div>
+
+    <div class="statement contact">
+      <h2>A place to understand, not transact</h2>
+      <p>Use the <a href="https://github.com/kungfu-systems/kungfu">public Kungfu repository</a> and its <a href="https://github.com/kungfu-systems/kungfu/issues">issue tracker</a> only for public technical or ecosystem questions. They are not channels for financing proposals or transaction instructions.</p>
+      <p>This page states no financing amount, valuation, security type, price, allocation, timetable, subscription process, or transaction terms. If Kungfu ever pursues a transaction, only separate private diligence and definitive documents could govern it.</p>
+    </div>
+
+    <!-- shared-footer:start -->
+    <footer class="site-footer">
+      <nav class="footer-links" aria-label="Footer links">
+        <a href="/services/index.html">Services</a>
+        <a href="/capital/">Capital &amp; Stewardship</a>
+        <a href="/trust/index.html">Trust</a>
+        <a href="/legal/index.html">Legal</a>
+      </nav>
+      <p class="footer-note">Kungfu core software is licensed under the Apache License 2.0.</p>
+      <p class="footer-copy">Copyright 2026 Kungfu Origin Technology Limited. All rights reserved.</p>
+    </footer>
+    <script>
+      document.addEventListener("click", (event) => {
+        document.querySelectorAll("details.nav-menu[open]").forEach((menu) => {
+          if (!menu.contains(event.target)) menu.removeAttribute("open");
+        });
+      });
+      document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape") {
+          document.querySelectorAll("details.nav-menu[open]").forEach((menu) => {
+            menu.removeAttribute("open");
+          });
+        }
+      });
+    </script>
+    <!-- shared-footer:end -->
+  </main>
+</body>
+</html>

@@ -20,6 +20,7 @@ test -f dist/how-tested/continuity/index.html
 test -f dist/agent-builders/index.html
 test -f dist/.well-known/security.txt
 test -f dist/about/index.html
+test -f dist/capital/index.html
 test -f dist/services/index.html
 test -f dist/trust/index.html
 test -f dist/legal/index.html

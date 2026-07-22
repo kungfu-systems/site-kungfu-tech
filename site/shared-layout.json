@@ -4,6 +4,7 @@
     "public/agent-builders/index.html",
     "public/why-kungfu/index.html",
     "public/about/index.html",
+    "public/capital/index.html",
     "public/services/index.html",
     "public/trust/index.html",
     "public/legal/index.html"
@@ -46,6 +47,11 @@
       "role": "link",
       "text": "Services",
       "href": "/services/index.html"
+    },
+    {
+      "role": "link",
+      "text": "Capital & Stewardship",
+      "href": "/capital/"
     },
     {
       "role": "link",
