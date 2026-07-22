@@ -17,6 +17,10 @@
   },
   "navigation": [
     {
+      "label": "Agent Supply Chain",
+      "href": "/agent-supply-chain/"
+    },
+    {
       "label": "Agent Builders",
       "href": "/agent-builders/"
     },

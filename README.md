@@ -5,6 +5,13 @@ Source for the Kungfu product home at `https://kungfu.tech`.
 This repository manages the public site content only. It does not contain AWS
 credentials, private release material, or unpublished product commitments.
 
+The product white-paper package owns the cross-product Agent Supply Chain
+narrative contract. This site owns composition, navigation, and rendering at
+`/agent-supply-chain/`; it does not duplicate KFD decisions, Buildchain release
+mechanics, or Kungfu runtime qualification as local facts. Human and machine
+views are generated together at `/agent-supply-chain/` and
+`/agent-supply-chain.json`.
+
 ## Policy
 
 - Keep the site free of email addresses and direct mail links.
@@ -75,7 +82,7 @@ publishing a parallel version ledger or a staging URL.
 
 The publication catalog is generated from exact npm artifacts:
 
-- `@kungfu-tech/paper-kungfu-product-white-paper@0.1.0-alpha.8`
+- `@kungfu-tech/paper-kungfu-product-white-paper@0.1.0-alpha.10`
 - `@kungfu-tech/paper-episodes-to-primitives@0.1.0-alpha.2`
 - `@kungfu-tech/paper-observer-declared-timelines@0.1.0-alpha.8`
 - `@kungfu-tech/paper-kfd-foundation-real-world-agent-work@0.1.0-alpha.7`
@@ -83,8 +90,8 @@ The publication catalog is generated from exact npm artifacts:
 The product white paper's upstream `site/brand-site.json` bundle owns its
 selected HTML reader content. Every paper's publication manifest owns its title,
 abstract, PDF digest, source commit, canonical route, and evidence links. The
-catalog also renders source-contract facts from `@kungfu-tech/kfd@1.0.0-alpha.40`
-and `@kungfu-tech/buildchain@2.14.8`. This repository owns only site layout,
+catalog also renders source-contract facts from `@kungfu-tech/kfd@1.0.0-alpha.41`
+and `@kungfu-tech/buildchain@2.14.14-alpha.4`. This repository owns only site layout,
 navigation, responsive presentation, and machine entry rendering.
 
 Generated routes:

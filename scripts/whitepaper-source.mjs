@@ -7,11 +7,11 @@ import path from "node:path";
 const require = createRequire(import.meta.url);
 
 export const WHITEPAPER_PACKAGE = "@kungfu-tech/paper-kungfu-product-white-paper";
-export const WHITEPAPER_VERSION = "0.1.0-alpha.8";
+export const WHITEPAPER_VERSION = "0.1.0-alpha.10";
 export const KFD_PACKAGE = "@kungfu-tech/kfd";
-export const KFD_VERSION = "1.0.0-alpha.40";
+export const KFD_VERSION = "1.0.0-alpha.41";
 export const BUILDCHAIN_PACKAGE = "@kungfu-tech/buildchain";
-export const BUILDCHAIN_VERSION = "2.14.8";
+export const BUILDCHAIN_VERSION = "2.14.14-alpha.4";
 export const WHITEPAPER_CONTRACT = "kungfu-white-paper-brand-site-bundle";
 export const WHITEPAPER_CONSUMER = "kungfu.tech";
 export const WHITEPAPER_ORIGIN = "https://kungfu.tech";
@@ -123,6 +123,8 @@ export function loadWhitepaperSource(repoRoot = process.cwd()) {
   assertString(bundle.hero?.lead, "brand bundle hero.lead");
   assert(Array.isArray(bundle.homepageSections) && bundle.homepageSections.length > 0, "brand bundle homepageSections must not be empty");
   assert(Array.isArray(bundle.principles) && bundle.principles.length > 0, "brand bundle principles must not be empty");
+  assert(bundle.agentSupplyChain?.contract === "kungfu-agent-supply-chain-public-narrative/v1", "brand bundle Agent Supply Chain contract mismatch");
+  assert(bundle.agentSupplyChain?.layers?.length === 5, "brand bundle must expose five Agent Supply Chain layers");
 
   const sectionIds = new Set();
   for (const section of bundle.homepageSections) {
