@@ -55,7 +55,10 @@ fi
 
 test -f public/index.html
 test -f public/404.html
-grep -q '<meta name="robots" content="noindex">' public/404.html
+if grep -qi '<meta[^>]*name="robots"[^>]*noindex' public/404.html; then
+  echo "error: public/404.html must remain indexable for production nested-route health checks" >&2
+  exit 1
+fi
 grep -q 'href="/"' public/404.html
 test -f public/how-tested/continuity/index.html
 test -f public/agent-builders/index.html
