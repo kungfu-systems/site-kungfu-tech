@@ -117,6 +117,33 @@
     .contact { margin-top: 54px; }
     .contact a { font-weight: 700; }
 
+    .investor-link {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 24px;
+      margin-top: 18px;
+      padding: 26px 28px;
+      border: 1px solid rgba(121, 192, 255, 0.6);
+      background: linear-gradient(120deg, rgba(121, 192, 255, 0.14), var(--panel) 68%);
+      color: var(--text);
+      text-decoration: none;
+    }
+
+    .investor-link:hover { border-color: var(--accent); }
+    .investor-link span { display: block; }
+    .investor-link .link-label {
+      margin-bottom: 8px;
+      color: var(--accent);
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .investor-link .link-title { font-size: 24px; font-weight: 700; line-height: 1.18; }
+    .investor-link .link-copy { margin-top: 8px; color: var(--muted); }
+    .investor-link .link-arrow { color: var(--accent); font-size: 30px; }
+
     @media (max-width: 860px) {
       .grid, .grid.two { grid-template-columns: 1fr; }
       .card { min-height: auto; }
@@ -127,6 +154,8 @@
       .notice { padding: 16px; }
       .section-heading { margin-top: 42px; }
       .statement { padding: 22px; }
+      .investor-link { grid-template-columns: 1fr; padding: 22px; }
+      .investor-link .link-arrow { display: none; }
     }
   </style>
 </head>
@@ -189,6 +218,14 @@
       <h2>Returns should come from expanding the ecosystem.</h2>
       <p>A compatible investor should expect economic value to come from stronger products, wider adoption, better execution, and a healthier ecosystem—not from purchasing control of KFD's technical direction or turning interoperability into a proprietary gate.</p>
     </div>
+    <a class="investor-link" href="/capital/investor-perspective/">
+      <span>
+        <span class="link-label">Investor Perspective</span>
+        <span class="link-title">Understand the investment thesis—and the risks capital must be able to carry.</span>
+        <span class="link-copy">See how an open protocol can create company value, what evidence would support the thesis, and why cross-border judgment is part of investor fit.</span>
+      </span>
+      <span class="link-arrow" aria-hidden="true">→</span>
+    </a>
 
     <div class="section-heading">
       <h2>Non-negotiable boundaries</h2>

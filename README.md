@@ -36,8 +36,12 @@ and footer.
 
 ## Capital & Stewardship
 
-The `/capital/` route is a stable statement of principles for any future
-relationship with capital. The homepage remains product-first, while its
+The Capital section has two deliberate reading layers. `/capital/` is Kungfu's
+stable statement of principles for any future relationship with capital.
+`/capital/investor-perspective/` is the corresponding investor-side framework:
+what is being underwritten, how a public protocol can support company value,
+which evidence would strengthen that thesis, and which risks and capabilities
+belong in investor fit. The homepage remains product-first, while its
 "Open core. Commercial stewardship." section presents Capital & Stewardship as
 a prominent, explanatory call to action. About and the shared footer provide
 stable secondary discovery. The page is not a financing announcement or
@@ -52,6 +56,25 @@ commercial and institutional capabilities that a compatible capital partner
 could add. Any statement about entity structure, intellectual-property
 ownership, trademarks, protocol governance, investor rights, or a specific
 transaction requires separate verification and professional review.
+
+The Investor Perspective route must keep the value chain conditional: public
+KFD credibility can enable independent adoption and a larger Agent supply-chain
+market, which can create demand that Kungfu Origin may capture through products,
+enterprise delivery, support, execution, and reputation. It must not claim that
+independent Hubs, broad adoption, or resulting demand already exist, and it must
+not present KFD control, exclusivity, or customer lock-in as a source of return.
+
+The route also carries an explicit cross-border disclosure: Kungfu's founder
+and current steward is a citizen of the People's Republic of China, and Kungfu
+Origin Technology Limited is incorporated in Hong Kong. It describes potential
+diligence, regulatory, institutional-policy, and geopolitical friction without
+classifying any transaction as permitted, prohibited, restricted, or notifiable.
+Any real transaction remains subject to current, transaction-specific
+professional legal, regulatory, tax, and national-security review. Public links
+to official U.S. sources provide diligence context only. The page must not offer
+securities or publish financing terms, and it must reject concealment, sham
+relocation, nationality-only conclusions, and geopolitical arguments for taking
+control of the public protocol.
 
 ## Agent Builders
 
