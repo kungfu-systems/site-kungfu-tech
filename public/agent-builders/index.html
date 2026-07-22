@@ -32,7 +32,6 @@
     .builder-hero {
       display: grid;
       gap: 20px;
-      max-width: 920px;
     }
 
     .builder-hero h1 {
@@ -51,14 +50,44 @@
       line-height: 1.35;
     }
 
+    .hero-decision {
+      margin-top: 8px;
+    }
+
+    .reader-path {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 8px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .reader-path li {
+      display: grid;
+      gap: 4px;
+      min-width: 0;
+      padding: 12px 14px;
+      border-top: 2px solid var(--accent);
+      background: var(--panel-soft);
+    }
+
+    .reader-path strong {
+      font: 700 12px/1.2 "SFMono-Regular", Consolas, monospace;
+    }
+
+    .reader-path span {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
     .hub-promise {
       display: grid;
-      gap: 22px;
-      padding: clamp(24px, 4vw, 40px);
-      border: 2px solid var(--fg);
-      border-top: 7px solid var(--accent);
+      gap: 16px;
+      padding: clamp(20px, 3vw, 28px);
+      border: 1px solid var(--fg);
+      border-top: 5px solid var(--accent);
       background: var(--panel);
-      box-shadow: 0 22px 60px rgba(18, 23, 34, 0.10);
     }
 
     .promise-heading {
@@ -69,8 +98,8 @@
 
     .promise-heading h2 {
       margin: 0;
-      font-size: clamp(36px, 5.8vw, 66px);
-      line-height: 0.98;
+      font-size: clamp(30px, 4.2vw, 46px);
+      line-height: 1;
     }
 
     .promise-heading > p:last-child {
@@ -91,7 +120,7 @@
 
     .promise-ownership li {
       min-width: 0;
-      padding: 16px;
+      padding: 12px 14px;
       border: 1px solid var(--line);
       border-left: 4px solid #2e9d72;
       background: var(--surface);
@@ -118,28 +147,18 @@
       display: grid;
       min-width: 0;
       gap: 8px;
-      padding: 18px;
+      padding: 14px 16px;
       border: 1px solid var(--line);
       background: var(--panel-soft);
     }
 
     .promise-foundation strong {
-      font-size: 20px;
+      font-size: 17px;
     }
 
-    .promise-foundation p,
-    .promise-lock {
+    .promise-foundation p {
       margin: 0;
       color: var(--muted);
-    }
-
-    .promise-lock {
-      padding: 16px 18px;
-      border-left: 4px solid var(--fg);
-      background: var(--surface);
-      color: var(--fg);
-      font-size: 17px;
-      font-weight: 700;
     }
 
     .hero-actions,
@@ -204,7 +223,7 @@
 
     .action-loop {
       display: grid;
-      grid-template-columns: repeat(7, minmax(0, 1fr));
+      grid-template-columns: repeat(5, minmax(0, 1fr));
       gap: 20px;
       margin: 0;
       padding: 0;
@@ -217,7 +236,7 @@
       min-width: 0;
       align-content: start;
       gap: 9px;
-      min-height: 196px;
+      min-height: 184px;
       padding: 15px;
       border: 1px solid var(--line);
       border-top: 4px solid var(--muted);
@@ -243,6 +262,61 @@
     .action-node.act { border-top-color: #7b8794; }
     .action-node.episode { border-top-color: #2e9d72; }
     .action-node.admission { border-top-color: #476dd0; }
+
+    .action-example {
+      display: grid;
+      gap: 16px;
+      padding: 22px;
+      border: 1px solid var(--line);
+      border-left: 5px solid #2784c7;
+      background: var(--panel-soft);
+    }
+
+    .action-example header {
+      display: grid;
+      gap: 7px;
+      max-width: 760px;
+    }
+
+    .action-example h3,
+    .action-example p {
+      margin: 0;
+    }
+
+    .action-example h3 {
+      font-size: clamp(24px, 3vw, 34px);
+      line-height: 1.08;
+    }
+
+    .action-example header p:last-child {
+      color: var(--muted);
+    }
+
+    .example-path {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .example-step {
+      display: grid;
+      min-width: 0;
+      gap: 7px;
+      padding: 14px;
+      border: 1px solid var(--line);
+      background: var(--surface);
+    }
+
+    .example-step strong {
+      color: var(--fg);
+      font-size: 14px;
+    }
+
+    .example-step p {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.45;
+    }
 
     .action-node strong,
     .topology-node strong,
@@ -532,7 +606,7 @@
       gap: 7px;
     }
 
-    .adoption-tradeoff h3 {
+    .adoption-tradeoff h2 {
       max-width: 760px;
       margin: 0;
       font-size: clamp(25px, 3.2vw, 38px);
@@ -724,6 +798,12 @@
       font: 700 14px/1.4 "SFMono-Regular", Consolas, monospace;
     }
 
+    .proof-intro {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
     .dogfood-boundary {
       margin: 0;
       color: var(--muted);
@@ -731,6 +811,60 @@
     }
 
     .dogfood-boundary strong { color: var(--fg); }
+
+    .proof-unit {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .proof-step {
+      position: relative;
+      display: grid;
+      min-width: 0;
+      gap: 7px;
+      padding: 15px;
+      border: 1px solid var(--line);
+      border-top: 3px solid #2e9d72;
+      background: var(--surface);
+    }
+
+    .proof-step strong {
+      color: var(--fg);
+    }
+
+    .proof-step p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
+    .final-start {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 22px;
+      align-items: center;
+      padding: 24px;
+      border: 1px solid var(--line);
+      border-left: 5px solid #2e9d72;
+      background: var(--surface);
+    }
+
+    .final-start h3,
+    .final-start p {
+      margin: 0;
+    }
+
+    .final-start h3 {
+      margin-bottom: 6px;
+      font-size: 24px;
+    }
+
+    .final-start p {
+      max-width: 680px;
+      color: var(--muted);
+    }
 
     .builder-chapter {
       --chapter-accent: var(--accent);
@@ -797,10 +931,10 @@
       .builder-hero h1 { font-size: 42px; line-height: 1.02; }
       .builder-chapter { padding: 18px; }
       .diagram-shell { overflow: hidden; padding: 16px; }
-      .promise-ownership, .promise-foundation, .action-loop, .authority-rail,
+      .reader-path, .promise-ownership, .promise-foundation, .action-loop, .authority-rail,
       .topology-grid, .semantic-gate, .topology-modes, .invariant-strip, .adoption-value,
       .adoption-grid, .cloud-boundary, .evidence-panel, .dogfood-proof-head,
-      .dogfood-metrics {
+      .dogfood-metrics, .example-path, .proof-unit, .final-start {
         grid-template-columns: 1fr;
       }
 
@@ -854,6 +988,54 @@
         <p class="eyebrow">For Agent Builders</p>
         <h1 id="builder-title">Build your Hub. Don&rsquo;t rebuild the runtime.</h1>
         <p class="lead">Our ambition is deliberately narrow: make KFD the standard interoperability protocol and libkungfu the local runtime. You build and own the Hub.</p>
+        <section class="adoption-tradeoff hero-decision" aria-labelledby="adoption-tradeoff-heading">
+          <header>
+            <p class="eyebrow">The adoption decision</p>
+            <h2 id="adoption-tradeoff-heading">Without KFD, your Hub still works. It stays an island.</h2>
+            <p>KFD does not make your Hub possible. It replaces a growing set of custom Hub-to-Hub bridges with one responsibility boundary.</p>
+          </header>
+          <div class="adoption-value">
+            <article class="adoption-value-card">
+              <h4>Without KFD</h4>
+              <ul><li>Local operation is unchanged.</li><li>Every external Hub connection needs a custom bridge.</li><li>Handoff, retry, verdict, conflict, and exit semantics remain proprietary.</li></ul>
+            </article>
+            <article class="adoption-value-card with-kfd">
+              <h4>With KFD</h4>
+              <ul><li>One protocol boundary works across conforming Hubs.</li><li>Rooted work, receipts, and verdicts remain portable.</li><li>Each side keeps its runtime, policy, cloud, users, and admission authority.</li></ul>
+            </article>
+          </div>
+        </section>
+
+        <section class="hub-promise" aria-labelledby="hub-promise-heading">
+          <div class="promise-heading">
+            <p class="eyebrow">The Builder contract</p>
+            <h2 id="hub-promise-heading">Kungfu does not compete for your Hub.</h2>
+            <p>The Hub is the highest-value product layer, and it remains entirely yours. Kungfu makes the capability layer beneath it interoperable&mdash;without entering your customer relationship.</p>
+          </div>
+          <ul class="promise-ownership" aria-label="What remains owned by the Agent Builder">
+            <li>Your users stay yours. Your accounts and billing stay yours.</li>
+            <li>Your models, UI, and Agent stay yours. Your product policy stays yours.</li>
+            <li>Your cloud stays yours. Your customer relationship stays yours.</li>
+          </ul>
+          <p class="promise-boundary">Kungfu does not cross this product and customer boundary. Integration is not a channel into your customer relationship.</p>
+          <div class="promise-foundation" aria-label="Kungfu public capability layer">
+            <article>
+              <strong>KFD · open protocol</strong>
+              <p>Portable responsibility and evidence between independent systems. KFD requires no central Kungfu cloud.</p>
+            </article>
+            <article>
+              <strong>libkungfu · local runtime</strong>
+              <p>A public capability layer for durable local facts and action continuity&mdash;not a wedge into your Hub.</p>
+            </article>
+          </div>
+        </section>
+
+        <ol class="reader-path" aria-label="Agent Builder reading path">
+          <li><strong>01 · Boundary</strong><span>See where KFD and libkungfu sit.</span></li>
+          <li><strong>02 · Action</strong><span>See what responsibility must survive.</span></li>
+          <li><strong>03 · Proof</strong><span>Audit one unit before the totals.</span></li>
+          <li><strong>04 · Start</strong><span>Integrate the smallest bounded path.</span></li>
+        </ol>
         <div class="hero-actions">
           <a href="https://github.com/kungfu-systems/kungfu/tree/7eeb5bd1b45492f4da27eaacbe63eddfd6245176/examples/opencode-kungfu/quickstart">Start with the exact reference source</a>
           <a href="https://libkungfu.dev/runtime.json">Inspect machine facts</a>
@@ -863,8 +1045,8 @@
       <section class="builder-chapter chapter-network architecture" data-builder-chapter="01" aria-labelledby="hub-network-heading">
         <div class="chapter-heading section-heading">
           <p class="eyebrow chapter-kicker"><span class="chapter-number">01</span><span>The KFD-libkungfu network</span></p>
-          <h2 id="hub-network-heading">libkungfu lives inside your Hub. KFD connects its edge.</h2>
-          <p>KFD lets independently owned Hubs exchange rooted responsibility without sharing one runtime, database, identity provider, cloud, or customer relationship.</p>
+          <h2 id="hub-network-heading">One protocol boundary. Independently owned Hubs.</h2>
+          <p>libkungfu lives inside an adopting Hub. KFD connects its edge so independently owned Hubs can exchange rooted responsibility without sharing one runtime, database, identity provider, cloud, or customer relationship.</p>
         </div>
         <div class="diagram-shell network-topology" aria-label="KFD and libkungfu network topology between two independently owned Agent Hubs">
           <div class="topology-grid">
@@ -935,24 +1117,6 @@
             </article>
           </div>
 
-          <section class="adoption-tradeoff" aria-labelledby="adoption-tradeoff-heading">
-            <header>
-              <p class="eyebrow">The adoption tradeoff</p>
-              <h3 id="adoption-tradeoff-heading">Without KFD, your Hub still works. It stays an island.</h3>
-              <p>KFD does not make your Hub possible. It makes your Hub interoperable.</p>
-            </header>
-            <div class="adoption-value">
-              <article class="adoption-value-card">
-                <h4>Without KFD</h4>
-                <ul><li>Local operation is unchanged.</li><li>Every external Hub connection needs a custom bridge.</li><li>Handoff, retry, verdict, conflict, and exit semantics remain proprietary.</li></ul>
-              </article>
-              <article class="adoption-value-card with-kfd">
-                <h4>With KFD</h4>
-                <ul><li>One protocol boundary works across conforming Hubs.</li><li>Rooted work, receipts, and verdicts remain portable.</li><li>Each side keeps its runtime, policy, cloud, users, and admission authority.</li></ul>
-              </article>
-            </div>
-          </section>
-
           <div class="semantic-gate" aria-label="KFD separates transport state from semantic admission">
             <div><strong>Transport state</strong><span>created → offered → delivered</span></div>
             <div class="gate-divider">delivery ≠ admission</div>
@@ -980,48 +1144,31 @@
         </aside>
       </section>
 
-      <section class="hub-promise" aria-labelledby="hub-promise-heading">
-        <div class="promise-heading">
-          <p class="eyebrow">Builder contract · applies across all four chapters</p>
-          <h2 id="hub-promise-heading">Kungfu does not compete for your Hub.</h2>
-          <p>The Hub is the highest-value product layer, and it remains entirely yours. Kungfu exists to make the capability layer beneath it interoperable—not to enter your customer relationship.</p>
-        </div>
-        <ul class="promise-ownership" aria-label="What remains owned by the Agent Builder">
-          <li>Your users stay yours.</li>
-          <li>Your accounts and billing stay yours.</li>
-          <li>Your models, UI, and Agent stay yours.</li>
-          <li>Your cloud stays yours.</li>
-          <li>Your product policy stays yours.</li>
-          <li>Your customer relationship stays yours.</li>
-        </ul>
-        <p class="promise-boundary">Kungfu does not cross this product and customer boundary.</p>
-        <div class="promise-foundation" aria-label="Kungfu public capability layer">
-          <article>
-            <strong>KFD · open protocol</strong>
-            <p>Portable responsibility and evidence between independent systems. KFD requires no central Kungfu cloud.</p>
-          </article>
-          <article>
-            <strong>libkungfu · local runtime</strong>
-            <p>A public capability layer for durable local facts and action continuity—not a wedge into your Hub.</p>
-          </article>
-        </div>
-        <p class="promise-lock">Integration is not a channel into your customer relationship.</p>
-      </section>
-
       <section class="builder-chapter chapter-action architecture" data-builder-chapter="02" aria-labelledby="action-world-heading">
         <div class="chapter-heading section-heading">
-          <p class="eyebrow chapter-kicker"><span class="chapter-number">02</span><span>How libkungfu sees action</span></p>
+          <p class="eyebrow chapter-kicker"><span class="chapter-number">02</span><span>Why action semantics are necessary</span></p>
           <h2 id="action-world-heading">An action is a loop through reality, not a row in a workflow.</h2>
-          <p>libkungfu preserves the coordinates needed to act without losing intent, evidence, authority, or continuity.</p>
+          <p>A KFD exchange cannot be only an RPC payload. For another Hub to evaluate and continue the work, responsibility must preserve why the action was pursued, what was known, what was allowed, what happened, and what the receiver accepted. libkungfu preserves those coordinates.</p>
         </div>
+        <aside class="action-example" aria-labelledby="action-example-heading">
+          <header>
+            <p class="eyebrow">One concrete delegated action</p>
+            <h3 id="action-example-heading">Release an exact, reviewed build.</h3>
+            <p>The abstract terms become easier to audit when they follow one action from decision to consequence.</p>
+          </header>
+          <div class="example-path">
+            <article class="example-step"><span class="layer-number">1 · Coordinates</span><strong>Define the release decision.</strong><p>Pursuit names the outcome, Atlas binds the known source and evidence, and Warrant limits the permitted channel and scope.</p></article>
+            <article class="example-step"><span class="layer-number">2 · Binding</span><strong>Freeze the exact inputs.</strong><p>ActionBinding joins the source SHA, target, policy, resources, and expected roots into this action&mdash;not a similar one.</p></article>
+            <article class="example-step"><span class="layer-number">3 · Episode</span><strong>Record what actually happened.</strong><p>Build, review, and release receipts preserve the causal occurrence, artifacts, consequences, failures, and recovery evidence.</p></article>
+            <article class="example-step"><span class="layer-number">4 · Admission</span><strong>Let local authority decide.</strong><p>The receiving side admits, rejects, degrades, or conflicts the consequences before they become the basis for what happens next.</p></article>
+          </div>
+        </aside>
         <div class="diagram-shell" aria-label="libkungfu action world architecture">
           <ol class="action-loop">
             <li class="action-node fact"><span class="layer-number">Fact Cut N</span><strong>What is admitted now?</strong><p>A rooted view of accepted state, not every observed claim.</p></li>
             <li class="action-node geometry"><span class="layer-number">Action Geometry</span><strong>Why, from what view, under whose authority?</strong><ul class="geometry-parts"><li>Pursuit · why</li><li>Atlas · what is known</li><li>Warrant · what is allowed</li></ul></li>
-            <li class="action-node binding"><span class="layer-number">ActionBinding</span><strong>Bind the exact decision inputs.</strong><p>Changing a Fact, intent, view, permission, action, or resource creates a different binding.</p></li>
-            <li class="action-node act"><span class="layer-number">Act</span><strong>Cross into the real world.</strong><p>A tool or RPC success signal does not settle meaning.</p></li>
-            <li class="action-node episode"><span class="layer-number">Episode</span><strong>What actually happened?</strong><p>Causal occurrence, artifacts, receipts, consequences, recovery, and proof.</p></li>
-            <li class="action-node admission"><span class="layer-number">Inspect + admit</span><strong>Which consequences become Facts?</strong><p>Local policy admits, rejects, degrades, or conflicts new claims.</p></li>
+            <li class="action-node binding"><span class="layer-number">ActionBinding → Act</span><strong>Bind the decision, then cross into reality.</strong><p>Changing a Fact, intent, view, permission, action, or resource creates a different binding. Tool success alone does not settle meaning.</p></li>
+            <li class="action-node episode"><span class="layer-number">Episode → Inspect + admit</span><strong>What happened, and what is accepted?</strong><p>Receipts and consequences become evidence; local policy admits, rejects, degrades, or conflicts the resulting claims.</p></li>
             <li class="action-node fact"><span class="layer-number">Fact Cut N+1</span><strong>What may safely happen next?</strong><p>The successor cut starts the next loop without rewriting history.</p></li>
           </ol>
           <div class="loop-back" aria-label="The successor Fact cut begins the next action loop">next action loop</div>
@@ -1040,14 +1187,21 @@
             <p class="eyebrow chapter-kicker"><span class="chapter-number">03</span><span>Dogfood · public and auditable</span></p>
             <h2 id="dogfood-proof-heading">The mechanism is building Kungfu itself.</h2>
           </div>
-          <p>The current rolling 30-day public observation connects repository work to retained Project Cuts, independent review, continuation, and production release.</p>
+          <p>The totals matter only after the unit of proof is clear. Each retained path connects real work to an exact Cut, independent review, and a released result.</p>
+        </div>
+        <p class="dogfood-loop">Public work → exact Cut → independent review → release</p>
+        <p class="proof-intro">Read one proof unit before the rolling 30-day totals.</p>
+        <div class="proof-unit" aria-label="One auditable Kungfu dogfood proof path">
+          <article class="proof-step"><span class="layer-number">Work item</span><strong>A bounded change begins.</strong><p>Purpose, source cut, authority, and acceptance are explicit.</p></article>
+          <article class="proof-step"><span class="layer-number">Exact Cut</span><strong>The result is retained.</strong><p>Source, receipts, and known gaps bind the result being claimed.</p></article>
+          <article class="proof-step"><span class="layer-number">Independent review</span><strong>The claim is assessed.</strong><p>A separate review checks the exact result and evidence.</p></article>
+          <article class="proof-step"><span class="layer-number">Release</span><strong>The accepted result reaches production.</strong><p>Production closes the path without inflating the claim.</p></article>
         </div>
         <div class="dogfood-metrics" aria-label="Kungfu public dogfood snapshot">
           <article class="dogfood-metric"><strong id="dogfood-prs">2,740</strong><span>merged public PRs across the observed window</span></article>
           <article class="dogfood-metric"><strong id="dogfood-repositories">10</strong><span>public repositories with merged work</span></article>
           <article class="dogfood-metric"><strong id="dogfood-cuts">148</strong><span>retained public Project Cuts with valid receipts</span></article>
         </div>
-        <p class="dogfood-loop">Public work → exact Cut → independent review → release</p>
         <p class="dogfood-boundary"><strong>Counting boundary:</strong> A PR is a work item, not a feature count. An account is not an Agent actor. A review-search match is not an approval.</p>
         <div class="evidence-links">
           <a href="https://libkungfu.dev/dogfood/">Audit the complete evidence chain</a>
@@ -1109,6 +1263,15 @@
             </div>
           </div>
         </aside>
+        <div class="final-start">
+          <div>
+            <h3>Start with one bounded adapter.</h3>
+            <p>Inspect the exact reference source first. Nothing in this path requires replacing your Hub, moving your customer relationship, or accepting a claim beyond the retained evidence.</p>
+          </div>
+          <div class="hero-actions">
+            <a href="https://github.com/kungfu-systems/kungfu/tree/7eeb5bd1b45492f4da27eaacbe63eddfd6245176/examples/opencode-kungfu/quickstart">Open the reference path</a>
+          </div>
+        </div>
       </section>
     </div>
 
