@@ -36,12 +36,13 @@ and footer.
 
 ## Capital & Stewardship
 
-The `/capital/` route is a stable, second-level statement of principles for any
-future relationship with capital. It is intentionally discoverable from About
-and the shared footer, while the homepage remains product-first. The page is
-not a financing announcement or securities offer and must not contain an
-amount, valuation, pricing, allocation, timetable, subscription mechanics, or
-transaction terms.
+The `/capital/` route is a stable statement of principles for any future
+relationship with capital. The homepage remains product-first, while its
+"Open core. Commercial stewardship." section presents Capital & Stewardship as
+a prominent, explanatory call to action. About and the shared footer provide
+stable secondary discovery. The page is not a financing announcement or
+securities offer and must not contain an amount, valuation, pricing,
+allocation, timetable, subscription mechanics, or transaction terms.
 
 The page keeps three goals visible together: global credibility for KFD,
 commercial durability and expansion capacity for Kungfu Origin, and long-term
@@ -83,9 +84,15 @@ publishing a parallel version ledger or a staging URL.
 The publication catalog is generated from exact npm artifacts:
 
 - `@kungfu-tech/paper-kungfu-product-white-paper@0.1.0-alpha.10`
-- `@kungfu-tech/paper-episodes-to-primitives@0.1.0-alpha.2`
-- `@kungfu-tech/paper-observer-declared-timelines@0.1.0-alpha.8`
 - `@kungfu-tech/paper-kfd-foundation-real-world-agent-work@0.1.0-alpha.7`
+- `@kungfu-tech/paper-observer-declared-timelines@0.1.0-alpha.8`
+- `@kungfu-tech/paper-episodes-to-primitives@0.1.0-alpha.2`
+
+The catalog preserves this reader order: White Paper, Foundation Model,
+Observer, then Episodes. The White Paper is the product-level thesis and uses
+an explicit label, distinct card treatment, and dedicated primary action; the
+other entries are labeled Research Paper so the catalog cannot be mistaken for
+four equivalent academic papers.
 
 The product white paper's upstream `site/brand-site.json` bundle owns its
 selected HTML reader content. Every paper's publication manifest owns its title,

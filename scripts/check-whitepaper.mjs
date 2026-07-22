@@ -80,6 +80,12 @@ const catalogManifest = JSON.parse(readDist("whitepaper/catalog.json"));
 const expectedManifest = buildWhitepaperManifest(source);
 const expectedCatalogManifest = buildPublicationCatalogManifest(catalog);
 const pdfPath = path.join(distRoot, "whitepaper", "kungfu-white-paper.pdf");
+const expectedDisplayOrder = [
+  WHITEPAPER_PACKAGE,
+  "@kungfu-tech/paper-kfd-foundation-real-world-agent-work",
+  "@kungfu-tech/paper-observer-declared-timelines",
+  "@kungfu-tech/paper-episodes-to-primitives",
+];
 
 assert(JSON.stringify(manifest) === JSON.stringify(expectedManifest), "generated white paper manifest drifted from the source package");
 assert(JSON.stringify(catalogManifest) === JSON.stringify(expectedCatalogManifest), "generated publication catalog drifted from source packages");
@@ -87,6 +93,10 @@ assert(manifest.evidence.immutableVersionUrl.includes(`/v${WHITEPAPER_VERSION}/`
 assert(fs.existsSync(pdfPath), "generated white paper PDF is missing");
 assert(sha256File(pdfPath) === source.pdfArtifact.sha256, "generated white paper PDF digest mismatch");
 assert(fs.statSync(pdfPath).size === source.pdfArtifact.bytes, "generated white paper PDF byte count mismatch");
+assert(
+  catalog.papers.map((paper) => paper.packageInfo.name).join(",") === expectedDisplayOrder.join(","),
+  "publication display order must be White Paper, Foundation Model, Observer, Episodes",
+);
 
 for (const [name, html] of [["white paper index", indexHtml], ["white paper reader", readerHtml]]) {
   assert(html.includes("shared-header:start"), `${name} must use the shared header`);
@@ -99,6 +109,14 @@ for (const [name, html] of [["white paper index", indexHtml], ["white paper read
 
 assert(indexHtml.includes(source.bundle.hero.title), "white paper index must render the upstream title");
 assert(indexHtml.includes(WHITEPAPER_VERSION), "white paper index must render the upstream version");
+assert(indexHtml.includes("Start with the White Paper. Continue into the research."), "publication index must explain the White Paper and research hierarchy");
+assert(indexHtml.includes('class="paper-listing featured-whitepaper"'), "publication index must visually distinguish the White Paper card");
+assert(indexHtml.includes('class="paper-type-badge whitepaper">White Paper</p>'), "White Paper card must carry an explicit type label");
+assert(indexHtml.includes('class="paper-type-badge">Research Paper</p>'), "research cards must carry an explicit type label");
+assert(indexHtml.includes(">Read the White Paper</a>"), "White Paper card must use a distinct primary action");
+const displayPositions = expectedDisplayOrder.map((packageName) => indexHtml.indexOf(`<code>${packageName}</code>`));
+assert(displayPositions.every((position) => position >= 0), "publication index must render every ordered source package");
+assert(displayPositions.every((position, index) => index === 0 || displayPositions[index - 1] < position), "publication index card order must be White Paper, Foundation Model, Observer, Episodes");
 for (const paper of catalog.papers) {
   assert(indexHtml.includes(paper.title), `paper index must render ${paper.packageInfo.name} title`);
   assert(indexHtml.includes(paper.abstract), `paper index must render ${paper.packageInfo.name} abstract`);

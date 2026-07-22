@@ -101,6 +101,10 @@ grep -q 'Kungfu Origin Technology Limited' public/index.html
 grep -q 'Apache License 2.0' public/index.html
 grep -q 'journal-first' public/index.html
 grep -q 'libkungfu.dev' public/index.html
+grep -q 'class="capital-callout" href="/capital/"' public/index.html
+grep -q 'Capital should expand the ecosystem, not control the standard.' public/index.html
+grep -q 'Read the principles that would govern any future relationship with capital' public/index.html
+assert_before public/index.html 'class="capital-callout" href="/capital/"' '<p><a href="/about/index.html">About</a>'
 grep -q 'href="/about/index.html"' public/index.html
 grep -q 'href="/services/index.html"' public/index.html
 grep -q 'href="/trust/index.html"' public/index.html

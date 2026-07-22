@@ -112,6 +112,32 @@
   background: var(--panel);
 }
 
+.paper-listing.featured-whitepaper {
+  border: 2px solid var(--accent);
+  background: linear-gradient(135deg, rgba(11, 111, 104, 0.13), var(--panel) 62%);
+  box-shadow: inset 5px 0 0 var(--accent), 0 18px 48px rgba(18, 23, 34, 0.10);
+}
+
+.paper-type-badge {
+  width: fit-content;
+  margin: 0;
+  padding: 4px 9px;
+  border: 1px solid var(--line);
+  background: var(--panel-soft);
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  line-height: 1.4;
+  text-transform: uppercase;
+}
+
+.paper-type-badge.whitepaper {
+  border-color: var(--accent);
+  background: var(--fg);
+  color: var(--bg);
+}
+
 .paper-listing-copy {
   display: grid;
   gap: 13px;

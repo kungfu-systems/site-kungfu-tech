@@ -15,6 +15,7 @@ import {
   loadPublicationCatalog,
   loadWhitepaperSource,
   siteHref,
+  WHITEPAPER_PACKAGE,
   WHITEPAPER_ORIGIN,
 } from "./whitepaper-source.mjs";
 
@@ -157,9 +158,13 @@ ${renderFooter(layout)}
 }
 
 function renderIndex() {
-  const paperListings = catalog.papers.map((paper) => `      <article class="paper-listing">
+  const paperListings = catalog.papers.map((paper) => {
+    const isWhitePaper = paper.packageInfo.name === WHITEPAPER_PACKAGE;
+    const typeLabel = isWhitePaper ? "White Paper" : "Research Paper";
+    return `      <article class="paper-listing${isWhitePaper ? " featured-whitepaper" : " research-paper"}">
         <div class="paper-listing-copy">
-          <p class="paper-section-role">Publication / ${escapeHtml(paper.packageInfo.version)}</p>
+          <p class="paper-type-badge${isWhitePaper ? " whitepaper" : ""}">${typeLabel}</p>
+          <p class="paper-section-role">${isWhitePaper ? "Product thesis" : "Research publication"} / ${escapeHtml(paper.packageInfo.version)}</p>
           <h2><a href="${escapeAttr(paper.routes.reader)}">${escapeHtml(paper.title)}</a></h2>
           <p>${escapeHtml(paper.abstract)}</p>
         </div>
@@ -169,11 +174,12 @@ function renderIndex() {
           <div><dt>PDF SHA256</dt><dd><code>${escapeHtml(paper.pdfArtifact.sha256.slice(0, 16))}&hellip;</code></dd></div>
         </dl>
         <div class="paper-actions">
-          <a class="paper-button primary" href="${escapeAttr(paper.routes.reader)}">Read paper</a>
+          <a class="paper-button primary" href="${escapeAttr(paper.routes.reader)}">${isWhitePaper ? "Read the White Paper" : "Read paper"}</a>
           <a class="paper-button" href="${escapeAttr(paper.routes.pdf)}">Open PDF</a>
           <a class="paper-button" href="${escapeAttr(paper.routes.evidence)}">Inspect evidence</a>
         </div>
-      </article>`).join("\n");
+      </article>`;
+  }).join("\n");
   const kfdCommitments = catalog.kfd.commitments
     .map((commitment) => `<li><strong>${escapeHtml(commitment.id)}</strong> ${escapeHtml(commitment.text)}</li>`)
     .join("");
@@ -191,9 +197,9 @@ ${head({
   <main class="whitepaper-page whitepaper-index">
 ${sharedHeader()}
     <section class="paper-index-hero" aria-labelledby="whitepaper-index-title">
-      <p class="paper-eyebrow">Kungfu publications</p>
-      <h1 id="whitepaper-index-title">Papers grounded in product evidence.</h1>
-      <p>Read the product thesis and systems research, then follow every package, PDF, source revision, and Buildchain evidence path.</p>
+      <p class="paper-eyebrow">Kungfu publication library</p>
+      <h1 id="whitepaper-index-title">Start with the White Paper. Continue into the research.</h1>
+      <p>The White Paper presents the product thesis. The Foundation Model, Observer, and Episodes papers develop specific systems arguments, each with an exact package, PDF, source revision, and Buildchain evidence path.</p>
     </section>
 
     <section class="paper-catalog" aria-label="Published white papers">
