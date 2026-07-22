@@ -303,15 +303,35 @@ if [ -d dist ]; then
   grep -q "Your agent shouldn't start over when the chat ends." dist/index.html
   grep -q 'How continuity was tested' dist/how-tested/continuity/index.html
   grep -q 'Kungfu does not compete for your Hub.' dist/agent-builders/index.html
+  grep -q 'The next software user is an Agent.' dist/agent-supply-chain/index.html
+  grep -q 'Software distribution is becoming Agent-mediated.' dist/agent-supply-chain/index.html
+  grep -q 'Human sets boundary' dist/agent-supply-chain/index.html
+  grep -q 'Agent-first software can earn distribution through use.' dist/agent-supply-chain/index.html
+  grep -q 'Useful Agent-first software can create its own demand signal.' dist/agent-supply-chain/index.html
+  grep -q 'Enabled, not claimed.' dist/agent-supply-chain/index.html
+  grep -q '04 · The complete mechanism' dist/agent-supply-chain/index.html
   grep -q 'Five responsibilities. Independent owners.' dist/agent-supply-chain/index.html
+  assert_before dist/agent-supply-chain/index.html 'Software distribution is becoming Agent-mediated.' 'Five responsibilities. Independent owners.'
+  assert_before dist/agent-supply-chain/index.html 'Agent-first software can earn distribution through use.' 'Five responsibilities. Independent owners.'
+  assert_before dist/agent-supply-chain/index.html 'Useful Agent-first software can create its own demand signal.' 'Five responsibilities. Independent owners.'
   grep -q 'kungfu-agent-supply-chain-public-narrative/v1' dist/agent-supply-chain.json
+  grep -q 'kungfu-agent-supply-chain-reader-progression/v1' dist/agent-supply-chain.json
+  grep -q '"label": "KFD-3"' dist/agent-supply-chain.json
+  grep -q '"label": "KFD-2"' dist/agent-supply-chain.json
   grep -q '30-day assessment' dist/agent-supply-chain/index.html
   grep -q 'external vendor adoption or endorsement' dist/agent-supply-chain/index.html
   grep -q 'property="og:title" content="Agent Supply Chain | Kungfu"' dist/agent-supply-chain/index.html
   grep -q 'Maturity claims matrix' dist/agent-supply-chain/index.html
   grep -q 'Exact evidence' dist/agent-supply-chain/index.html
   grep -q 'Known limit' dist/agent-supply-chain/index.html
+  if sed -E 's#<code>[^<]*</code>##g; s#href="[^"]*"##g' dist/agent-supply-chain/index.html | grep -Eq '\bkfd-[0-9]'; then
+    echo "error: Agent Supply Chain reader contains lowercase KFD prose" >&2
+    exit 1
+  fi
   grep -q 'two public strategic axes' dist/llms.txt
+  grep -q 'The next software user is an Agent.' dist/llms.txt
+  grep -q 'KFD-3 \[proved-now\]' dist/llms.txt
+  grep -q 'KFD-2 \[proved-now\]' dist/llms.txt
   grep -q 'npm:@kungfu-tech/kfd@1.0.0-alpha.41' dist/llms.txt
   grep -q 'Never Guess. Facts Unfold.' dist/index.html
   grep -q 'The name did not begin as an acronym.' dist/why-kungfu/index.html
