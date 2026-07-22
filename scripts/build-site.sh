@@ -17,6 +17,7 @@ node scripts/render-whitepaper.mjs
 node scripts/render-agent-supply-chain.mjs
 
 test -f dist/index.html
+test -f dist/404.html
 test -f dist/how-tested/continuity/index.html
 test -f dist/agent-builders/index.html
 test -f dist/agent-supply-chain/index.html
