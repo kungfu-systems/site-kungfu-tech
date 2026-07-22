@@ -92,27 +92,29 @@ control of the public protocol.
 
 The `/agent-builders/` route is a primary path from the homepage header and
 hero. The homepage keeps the continuity-first message concise and leaves the
-adoption architecture to that dedicated route. The Builder route first shows
-the concrete KFD-libkungfu network topology: libkungfu stays inside an adopting
-Hub, KFD adapters sit at independently owned Hub edges, and the receiver owns
-semantic admission after transport delivery. It then states the adoption
-tradeoff directly: a Hub still works locally without KFD, but every external
-Hub connection needs a custom bridge and the handoff semantics remain
-proprietary. With KFD, one responsibility boundary works across conforming
-Hubs without taking runtime, policy, cloud, user, or admission ownership from
-either side. The detailed noncompetition commitment follows that architectural
-context: Builders retain their users, accounts, billing, models, UI, Agent,
-cloud, and customer relationship; KFD needs no central Kungfu cloud; and
+adoption architecture to that dedicated route. The Builder route establishes
+the decision before asking readers to decode the architecture: a Hub still
+works locally without KFD, but each external Hub otherwise needs a custom
+bridge; with KFD, one responsibility boundary can work across conforming Hubs.
+The compact Builder contract then makes the ownership boundary explicit:
+Builders retain their users, accounts, billing, models, UI, Agent, cloud,
+policy, and customer relationship; KFD needs no central Kungfu cloud; and
 libkungfu remains a public local capability layer rather than a route into the
-host product. Four visually consistent numbered chapters separate the network,
-local action model, public dogfood proof, and bounded starting path. The Builder
-contract remains a distinct cross-cutting commitment, while the current claim
-boundary closes the fourth chapter. This lets Builders audit current evidence
-before choosing an integration step. Exact runtime, package,
-qualification, and claim status remain owned by the reviewed `site-libkungfu-dev`
-projection and its source authorities. Until that site's production release is
-approved, this repository links the exact source-bound fixture instead of
-publishing a parallel version ledger or a staging URL.
+host product.
+
+Four numbered chapters continue that causal path. Chapter 01 shows where
+libkungfu and KFD sit between independently owned Hubs. Chapter 02 explains why
+interoperability must preserve responsibility rather than merely move an RPC
+payload, walks one release action from coordinates through admission, and only
+then exposes the full local action model. Chapter 03 shows one auditable work
+unit before aggregate dogfood metrics. Chapter 04 keeps the current claim
+boundary visible and ends with one bounded reference action. This progression
+is a site-owned reader contract; it must remain value → ownership → topology →
+responsibility → concrete action → evidence → bounded adoption. Exact runtime,
+package, qualification, and claim status remain owned by the reviewed
+`site-libkungfu-dev` projection and its source authorities. Until that site's
+production release is approved, this repository links the exact source-bound
+fixture instead of publishing a parallel version ledger or a staging URL.
 
 ## Papers
 

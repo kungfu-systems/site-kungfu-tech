@@ -227,7 +227,7 @@ grep -q 'Your customer relationship stays yours.' public/agent-builders/index.ht
 grep -q 'KFD requires no central Kungfu cloud.' public/agent-builders/index.html
 grep -q 'not a wedge into your Hub' public/agent-builders/index.html
 grep -q 'Integration is not a channel into your customer relationship.' public/agent-builders/index.html
-grep -q 'libkungfu lives inside your Hub. KFD connects its edge.' public/agent-builders/index.html
+grep -q 'libkungfu lives inside an adopting Hub. KFD connects its edge' public/agent-builders/index.html
 grep -q 'Host Runtime API · actions + local outcomes' public/agent-builders/index.html
 grep -q 'works locally without KFD' public/agent-builders/index.html
 grep -q 'Optional Hub edge' public/agent-builders/index.html
@@ -244,20 +244,31 @@ grep -q 'Without KFD, your Hub still works. It stays an island.' public/agent-bu
 grep -q 'Every external Hub connection needs a custom bridge.' public/agent-builders/index.html
 grep -q 'One protocol boundary works across conforming Hubs.' public/agent-builders/index.html
 grep -q 'Each side keeps its runtime, policy, cloud, users, and admission authority.' public/agent-builders/index.html
-assert_before public/agent-builders/index.html 'id="hub-network-heading"' 'id="hub-promise-heading"'
 assert_before public/agent-builders/index.html 'id="adoption-tradeoff-heading"' 'id="hub-promise-heading"'
-assert_before public/agent-builders/index.html 'id="hub-promise-heading"' 'id="action-world-heading"'
+assert_before public/agent-builders/index.html 'id="hub-promise-heading"' 'id="hub-network-heading"'
+assert_before public/agent-builders/index.html 'id="hub-network-heading"' 'id="action-world-heading"'
 assert_before public/agent-builders/index.html 'id="action-world-heading"' 'id="dogfood-proof-heading"'
 assert_before public/agent-builders/index.html 'id="dogfood-proof-heading"' 'id="adoption-heading"'
 test "$(grep -c 'data-builder-chapter="[0-9][0-9]"' public/agent-builders/index.html)" -eq 4
 grep -q '<span class="chapter-number">01</span><span>The KFD-libkungfu network</span>' public/agent-builders/index.html
-grep -q '<span class="chapter-number">02</span><span>How libkungfu sees action</span>' public/agent-builders/index.html
+grep -q '<span class="chapter-number">02</span><span>Why action semantics are necessary</span>' public/agent-builders/index.html
 grep -q '<span class="chapter-number">03</span><span>Dogfood · public and auditable</span>' public/agent-builders/index.html
 grep -q '<span class="chapter-number">04</span><span>A bounded starting path</span>' public/agent-builders/index.html
-grep -q 'Builder contract · applies across all four chapters' public/agent-builders/index.html
+grep -q '<p class="eyebrow">The Builder contract</p>' public/agent-builders/index.html
+grep -q 'One protocol boundary. Independently owned Hubs.' public/agent-builders/index.html
+grep -q 'A KFD exchange cannot be only an RPC payload.' public/agent-builders/index.html
+grep -q 'One concrete delegated action' public/agent-builders/index.html
+grep -q 'Release an exact, reviewed build.' public/agent-builders/index.html
+grep -q 'ActionBinding → Act' public/agent-builders/index.html
+grep -q 'Episode → Inspect + admit' public/agent-builders/index.html
+grep -q 'Read one proof unit before the rolling 30-day totals.' public/agent-builders/index.html
+grep -q 'Start with one bounded adapter.' public/agent-builders/index.html
 assert_before public/agent-builders/index.html 'data-builder-chapter="01"' 'data-builder-chapter="02"'
 assert_before public/agent-builders/index.html 'data-builder-chapter="02"' 'data-builder-chapter="03"'
 assert_before public/agent-builders/index.html 'data-builder-chapter="03"' 'data-builder-chapter="04"'
+assert_before public/agent-builders/index.html 'One concrete delegated action' 'ActionBinding → Act'
+assert_before public/agent-builders/index.html 'Read one proof unit before the rolling 30-day totals.' 'id="dogfood-prs"'
+assert_before public/agent-builders/index.html 'id="evidence-heading"' 'Start with one bounded adapter.'
 assert_before public/agent-builders/index.html 'id="adoption-heading"' 'id="evidence-heading"'
 grep -q 'An action is a loop through reality' public/agent-builders/index.html
 grep -q 'Fact Cut N+1' public/agent-builders/index.html
