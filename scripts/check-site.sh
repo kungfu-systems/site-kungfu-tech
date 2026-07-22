@@ -60,15 +60,16 @@ test -f public/why-kungfu/index.html
 test -f public/assets/site.css
 test -f public/.well-known/security.txt
 test -f public/about/index.html
+test -f public/capital/index.html
 test -f public/services/index.html
 test -f public/trust/index.html
 test -f public/legal/index.html
 test -f site/public-dogfood-proof.json
-for page in public/index.html public/how-tested/continuity/index.html public/agent-builders/index.html public/why-kungfu/index.html public/about/index.html public/services/index.html public/trust/index.html public/legal/index.html; do
+for page in public/index.html public/how-tested/continuity/index.html public/agent-builders/index.html public/why-kungfu/index.html public/about/index.html public/capital/index.html public/services/index.html public/trust/index.html public/legal/index.html; do
   grep -q 'href="/assets/site.css"' "$page"
 done
 if grep -RInE '^    \\.(site-header|brand|mark|site-nav|site-footer|nav-menu)\\b' \
-  public/index.html public/about/index.html public/services/index.html public/trust/index.html public/legal/index.html; then
+  public/index.html public/about/index.html public/capital/index.html public/services/index.html public/trust/index.html public/legal/index.html; then
   echo "error: shared header/footer CSS must live in public/assets/site.css" >&2
   exit 1
 fi
@@ -112,9 +113,11 @@ assert_shared_contains header public/index.html 'href="/agent-supply-chain/"'
 assert_shared_contains header public/index.html 'libkungfu.dev'
 assert_shared_contains header public/index.html 'github.com/kungfu-systems/kungfu'
 assert_shared_lacks header public/index.html 'href="/services/index.html"'
+assert_shared_lacks header public/index.html 'href="/capital/"'
 assert_shared_lacks header public/index.html 'href="/trust/index.html"'
 assert_shared_lacks header public/index.html 'href="/legal/index.html"'
 assert_shared_contains footer public/index.html 'href="/services/index.html"'
+assert_shared_contains footer public/index.html 'href="/capital/"'
 assert_shared_contains footer public/index.html 'href="/trust/index.html"'
 assert_shared_contains footer public/index.html 'href="/legal/index.html"'
 assert_shared_contains footer public/index.html 'class="footer-links"'
@@ -142,6 +145,23 @@ grep -q 'Continuity for Agent Work' public/about/index.html
 grep -q 'KFD is the open protocol' public/about/index.html
 grep -q 'libkungfu.dev' public/about/index.html
 grep -q 'Kungfu does not compete for the Hub' public/about/index.html
+grep -q 'href="/capital/"' public/about/index.html
+grep -q 'shared-header:start' public/capital/index.html
+grep -q 'shared-footer:start' public/capital/index.html
+grep -q 'Capital should expand the ecosystem, not control the standard.' public/capital/index.html
+grep -q 'Kungfu is not announcing a financing round.' public/capital/index.html
+grep -q 'it is not an offer to sell securities or an invitation to subscribe for them.' public/capital/index.html
+grep -q 'Global credibility for KFD' public/capital/index.html
+grep -q 'A durable Kungfu Origin' public/capital/index.html
+grep -q 'Long-term freedom of action' public/capital/index.html
+grep -q 'This is a goal, not a claim that KFD is already an industry standard or independently adopted.' public/capital/index.html
+grep -q 'Returns should come from expanding the ecosystem.' public/capital/index.html
+grep -q 'Non-negotiable boundaries' public/capital/index.html
+grep -q 'Capabilities we would welcome' public/capital/index.html
+grep -q 'Public protocol, commercial company' public/capital/index.html
+grep -q 'These principles do not establish or alter entity structure' public/capital/index.html
+grep -q 'They are not channels for financing proposals or transaction instructions.' public/capital/index.html
+grep -q 'This page states no financing amount, valuation, security type, price, allocation, timetable, subscription process, or transaction terms.' public/capital/index.html
 grep -q 'shared-header:start' public/services/index.html
 grep -q 'shared-footer:start' public/services/index.html
 grep -q 'not generally released yet' public/services/index.html
@@ -239,6 +259,7 @@ if [ -d dist ]; then
   test -f dist/assets/site.css
   test -f dist/.well-known/security.txt
   test -f dist/about/index.html
+  test -f dist/capital/index.html
   test -f dist/services/index.html
   test -f dist/trust/index.html
   test -f dist/legal/index.html

@@ -34,6 +34,24 @@ Header and footer content is generated from `site/shared-layout.json`. Update
 that file first, then run the build so every page receives the same navigation
 and footer.
 
+## Capital & Stewardship
+
+The `/capital/` route is a stable, second-level statement of principles for any
+future relationship with capital. It is intentionally discoverable from About
+and the shared footer, while the homepage remains product-first. The page is
+not a financing announcement or securities offer and must not contain an
+amount, valuation, pricing, allocation, timetable, subscription mechanics, or
+transaction terms.
+
+The page keeps three goals visible together: global credibility for KFD,
+commercial durability and expansion capacity for Kungfu Origin, and long-term
+freedom of action for the project's author, stewards, and wider system. It must
+continue to distinguish non-negotiable public-protocol boundaries from the
+commercial and institutional capabilities that a compatible capital partner
+could add. Any statement about entity structure, intellectual-property
+ownership, trademarks, protocol governance, investor rights, or a specific
+transaction requires separate verification and professional review.
+
 ## Agent Builders
 
 The `/agent-builders/` route is a primary path from the homepage header and
