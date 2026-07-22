@@ -28,6 +28,9 @@ noindex = false
 
 [deploy.preview]
 adapter = "aws-s3-cloudfront"
+cache_control_default = "public,max-age=300"
+cache_control_mutable = "public,max-age=60,must-revalidate"
+cache_control_immutable = "public,max-age=31536000,immutable"
 bucket = "kungfu-tech-preview-727884401362-us-east-1"
 cloudfront_distribution = "E1EHEH8NYQ85N3"
 directory_index_rewrite = "external"
@@ -38,6 +41,9 @@ secret_refs = ["AWS_ROLE_ARN"]
 
 [deploy.staging]
 adapter = "aws-s3-cloudfront"
+cache_control_default = "public,max-age=3600"
+cache_control_mutable = "public,max-age=300,must-revalidate"
+cache_control_immutable = "public,max-age=31536000,immutable"
 bucket = "kungfu-tech-staging-727884401362-us-east-1"
 prefix = ""
 cloudfront_distribution = "EV2PK94F6BHSQ"
@@ -47,6 +53,9 @@ secret_refs = ["AWS_ROLE_ARN"]
 
 [deploy.production]
 adapter = "aws-s3-cloudfront"
+cache_control_default = "public,max-age=86400"
+cache_control_mutable = "public,max-age=300,must-revalidate"
+cache_control_immutable = "public,max-age=31536000,immutable"
 bucket = "kungfu-tech-site-727884401362-us-east-1"
 prefix = ""
 cloudfront_distribution = "E204MRW1P4Z1G9"
