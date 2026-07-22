@@ -54,6 +54,9 @@ if grep -RInE 'mailto:|[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}' \
 fi
 
 test -f public/index.html
+test -f public/404.html
+grep -q '<meta name="robots" content="noindex">' public/404.html
+grep -q 'href="/"' public/404.html
 test -f public/how-tested/continuity/index.html
 test -f public/agent-builders/index.html
 test -f public/why-kungfu/index.html
