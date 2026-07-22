@@ -12,6 +12,18 @@ mechanics, or Kungfu runtime qualification as local facts. Human and machine
 views are generated together at `/agent-supply-chain/` and
 `/agent-supply-chain.json`.
 
+The route deliberately establishes the reader's mental model before revealing
+the complete five-layer mechanism. It first explains the shift from human-led
+tool operation to Agent-mediated tool selection inside explicit human and Hub
+authority; then the selection advantage of Agent-first software; then the
+conditional Kungfu and Buildchain distribution flywheel. Only after those
+premises are established does it render the upstream-owned KFD-3, Buildchain,
+KFD-2, libkungfu, and Agent Hub portability layers. The site owns this reading
+progression and its visual composition. The white-paper package continues to
+own the cross-product layer facts, evidence coordinates, maturity classes,
+known limits, and adoption boundaries. Human-facing KFD names are always
+rendered in uppercase; lowercase layer IDs remain stable machine identifiers.
+
 ## Policy
 
 - Keep the site free of email addresses and direct mail links.

@@ -21,10 +21,39 @@ if (
 }
 
 const layout = readLayout(repoRoot);
+const displayLayerName = (id) => ({
+  "kfd-3": "KFD-3",
+  buildchain: "Buildchain",
+  "kfd-2": "KFD-2",
+  libkungfu: "libkungfu",
+  "agent-hub-portability": "Agent Hub portability",
+})[id] || id;
+const readerProgression = {
+  contract: "kungfu-agent-supply-chain-reader-progression/v1",
+  premise: {
+    title: "The next software user is an Agent.",
+    statement: "Software use is shifting from humans directly choosing and operating every tool to Agents discovering, evaluating, selecting, and invoking tools within delegated authority.",
+  },
+  authorityBoundary: "Humans and Hubs continue to set goals, permissions, budgets, policy, admission, and revocation. Agents increasingly perform day-to-day tool selection inside those boundaries.",
+  distributionAdvantage: "Agent-first software can be discovered, evaluated, invoked, and continued with less bespoke interpretation, creating a new selection and distribution advantage.",
+  flywheel: [
+    "Useful software presents an inspectable KFD-3 collaboration surface.",
+    "Agents can evaluate and use it with less bespoke integration.",
+    "Successful Agent-mediated use can increase demand for KFD-3-compatible software.",
+    "Buildchain binds KFD-3 declarations and KFD-2 evidence to an exact release.",
+    "More developers can ship Agent-ready software with assessable provenance.",
+  ],
+  flywheelBoundary: "This is an adoption mechanism enabled by the stack, not evidence that a broad network effect, external adoption, or a multi-Hub market already exists.",
+};
+const machineNarrative = {
+  ...narrative,
+  readerProgression,
+  layers: narrative.layers.map((layer) => ({ ...layer, label: displayLayerName(layer.id) })),
+};
 const layerCards = narrative.layers.map((layer) => `
         <article class="layer-card">
           <p class="layer-order">${String(layer.order).padStart(2, "0")} · ${escapeHtml(layer.statusClass)} · ${escapeHtml(layer.owner)}</p>
-          <h2>${escapeHtml(layer.id)}</h2>
+          <h3>${escapeHtml(displayLayerName(layer.id))}</h3>
           <p>${escapeHtml(layer.statement)}</p>
           <dl><dt>Input</dt><dd>${escapeHtml(layer.input)}</dd><dt>Output</dt><dd>${escapeHtml(layer.output)}</dd></dl>
           <p class="evidence"><strong>Exact evidence</strong><code>${escapeHtml(layer.evidenceCoordinates[0])}</code></p>
@@ -41,10 +70,10 @@ const html = `<!doctype html>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Agent Supply Chain | Kungfu</title>
-  <meta name="description" content="The open five-layer Agent Supply Chain: discovery, exact-artifact evidence, purpose-bound trust, durable work facts, and independent Hub portability.">
+  <meta name="description" content="As Agents gain delegated tool choice, Agent-first software gains a new distribution advantage. See how Kungfu connects discovery, exact-release evidence, trust, continuity, and portability.">
   <meta property="og:type" content="website">
   <meta property="og:title" content="Agent Supply Chain | Kungfu">
-  <meta property="og:description" content="Five independently owned layers from discovery to evidence-bound Agent portability.">
+  <meta property="og:description" content="The software user is changing. Kungfu is an open supply chain for Agent-mediated discovery, trust, use, continuity, and portability.">
   <meta property="og:url" content="https://kungfu.tech/agent-supply-chain/">
   <meta name="twitter:card" content="summary">
   <link rel="canonical" href="https://kungfu.tech/agent-supply-chain/">
@@ -53,17 +82,39 @@ const html = `<!doctype html>
   <link rel="stylesheet" href="/assets/site.css">
   <style>
     main { width: min(1180px, calc(100% - 40px)); margin: 0 auto; padding: 34px 0 64px; }
-    .hero { display: grid; gap: 20px; padding: 32px 0 42px; }
+    .hero { display: grid; gap: 20px; min-height: 540px; align-content: center; padding: 64px 0 76px; }
     .eyebrow, .layer-order { margin: 0; color: var(--accent); font-size: 13px; font-weight: 700; text-transform: uppercase; }
-    h1 { max-width: 1050px; margin: 0; font-size: clamp(44px, 7vw, 84px); line-height: .98; }
+    h1 { max-width: 980px; margin: 0; font-size: clamp(48px, 8vw, 92px); line-height: .96; }
     .lead { max-width: 900px; margin: 0; color: var(--muted); font-size: 20px; }
     .claim-boundary { padding: 18px; border-left: 4px solid var(--accent); background: var(--panel-soft); color: var(--fg); }
-    .section-heading { margin: 10px 0 18px; }
+    .authority-note { max-width: 920px; margin: 4px 0 0; padding: 16px 18px; border-left: 3px solid var(--accent); background: var(--panel-soft); }
+    .chapter { padding: 74px 0; border-top: 1px solid var(--line); }
+    .section-heading { max-width: 900px; margin: 0 0 28px; }
     .section-heading h2 { margin: 0; font-size: clamp(28px, 4vw, 46px); }
+    .section-heading p { max-width: 760px; margin: 14px 0 0; color: var(--muted); font-size: 18px; }
+    .era-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+    .era-card { padding: 26px; border: 1px solid var(--line); background: var(--surface); }
+    .era-card h3 { margin: 6px 0 14px; font-size: 24px; }
+    .era-card p { margin: 0; color: var(--muted); }
+    .era-card.agent-era { border-color: var(--accent); background: var(--panel); }
+    .flow { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 20px; font-size: 14px; font-weight: 650; }
+    .flow span { padding: 7px 9px; border: 1px solid var(--line); background: var(--panel-soft); }
+    .flow i { color: var(--accent); font-style: normal; }
+    .advantage-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+    .advantage-card { padding: 22px; border-top: 3px solid var(--accent); background: var(--panel); }
+    .advantage-card h3 { margin: 0 0 8px; font-size: 20px; }
+    .advantage-card p { margin: 0; color: var(--muted); }
+    .flywheel-intro { max-width: 880px; margin: 0 0 28px; padding: 24px; border: 1px solid var(--line); background: var(--panel); font-size: 18px; }
+    .flywheel-intro strong { color: var(--accent); }
+    .flywheel { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin: 0; padding: 0; list-style: none; counter-reset: flywheel; }
+    .flywheel li { position: relative; min-height: 174px; padding: 22px 18px; border: 1px solid var(--line); background: var(--surface); counter-increment: flywheel; }
+    .flywheel li::before { content: "0" counter(flywheel); display: block; margin-bottom: 14px; color: var(--accent); font-size: 13px; font-weight: 800; }
+    .flywheel li:not(:last-child)::after { content: "→"; position: absolute; z-index: 2; top: 50%; right: -17px; width: 24px; color: var(--accent); font-size: 20px; font-weight: 800; text-align: center; }
+    .flywheel-boundary { margin: 18px 0 0; padding: 16px 18px; border-left: 3px solid var(--warn); background: var(--panel-soft); color: var(--muted); }
     .layer-grid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px; }
     .layer-card { display: grid; gap: 12px; align-content: start; min-height: 270px; padding: 20px; border: 1px solid var(--line); background: var(--panel); overflow: hidden; }
-    .layer-card h2, .layer-card p { margin: 0; }
-    .layer-card h2 { font-size: 22px; }
+    .layer-card h3, .layer-card p { margin: 0; }
+    .layer-card h3 { font-size: 22px; }
     .layer-card > p:not(.layer-order) { color: var(--muted); }
     .layer-card dl { display: grid; gap: 5px; margin: 0; }
     .layer-card dt { color: var(--accent); font-size: 12px; font-weight: 700; text-transform: uppercase; }
@@ -78,8 +129,8 @@ const html = `<!doctype html>
     .decision-card h2 { margin-top: 0; }
     .decision-card p, .decision-card li { color: var(--muted); }
     .action { display: inline-flex; padding: 10px 14px; border: 1px solid var(--accent); background: var(--accent); color: white; text-decoration: none; font-weight: 700; }
-    @media (max-width: 980px) { .layer-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-    @media (max-width: 640px) { main { width: min(100% - 28px, 640px); } .layer-grid, .maturity-grid, .decision-grid { grid-template-columns: 1fr; } .layer-card { min-height: 0; } }
+    @media (max-width: 980px) { .advantage-grid { grid-template-columns: repeat(2, 1fr); } .flywheel { grid-template-columns: repeat(2, 1fr); } .flywheel li:not(:last-child)::after { display: none; } .layer-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+    @media (max-width: 640px) { main { width: min(100% - 28px, 640px); } .hero { min-height: 0; padding: 50px 0 62px; } .chapter { padding: 56px 0; } .era-grid, .advantage-grid, .flywheel, .layer-grid, .maturity-grid, .decision-grid { grid-template-columns: 1fr; } .layer-card, .flywheel li { min-height: 0; } }
   </style>
 </head>
 <body>
@@ -88,17 +139,68 @@ const html = `<!doctype html>
 ${renderHeader(layout)}
     <!-- shared-header:end -->
     <section class="hero">
-      <p class="eyebrow">Agent Supply Chain · public narrative contract</p>
-      <h1>Agent products should compete above an open responsibility boundary.</h1>
-      <p class="lead">${escapeHtml(narrative.categoryStatement)}</p>
-      <p class="claim-boundary"><strong>Current boundary:</strong> ${escapeHtml(narrative.claimBoundary)}</p>
+      <p class="eyebrow">Agent Supply Chain</p>
+      <h1>${escapeHtml(readerProgression.premise.title)}</h1>
+      <p class="lead">${escapeHtml(readerProgression.premise.statement)}</p>
+      <p class="authority-note"><strong>Human authority remains explicit.</strong> ${escapeHtml(readerProgression.authorityBoundary)}</p>
     </section>
-    <div class="section-heading"><h2>Five responsibilities. Independent owners. One inspectable path.</h2></div>
-    <section class="layer-grid" aria-label="Five Agent Supply Chain layers">${layerCards}
+    <section class="chapter" aria-labelledby="era-heading">
+      <div class="section-heading">
+        <p class="eyebrow">01 · The transition</p>
+        <h2 id="era-heading">Software distribution is becoming Agent-mediated.</h2>
+        <p>The important shift is not that Agents remove human authority. It is that more tool choice happens after a human or Hub defines the operating boundary.</p>
+      </div>
+      <div class="era-grid">
+        <article class="era-card">
+          <p class="eyebrow">Human-led software use</p>
+          <h3>Attention comes before operation.</h3>
+          <p>Software must first reach a person, who then evaluates it, learns it, and operates it directly.</p>
+          <div class="flow" aria-label="Human-led software flow"><span>Marketing</span><i>→</i><span>Human awareness</span><i>→</i><span>Install</span><i>→</i><span>Learn</span><i>→</i><span>Use</span></div>
+        </article>
+        <article class="era-card agent-era">
+          <p class="eyebrow">Agent-mediated software use</p>
+          <h3>Authority comes before selection.</h3>
+          <p>A person or Hub sets the boundary; the Agent can then inspect and select tools while work is underway.</p>
+          <div class="flow" aria-label="Agent-mediated software flow"><span>Human sets boundary</span><i>→</i><span>Agent discovers</span><i>→</i><span>Evaluates</span><i>→</i><span>Selects</span><i>→</i><span>Invokes</span><i>→</i><span>Records</span></div>
+        </article>
+      </div>
+    </section>
+    <section class="chapter" aria-labelledby="advantage-heading">
+      <div class="section-heading">
+        <p class="eyebrow">02 · The selection advantage</p>
+        <h2 id="advantage-heading">Agent-first software can earn distribution through use.</h2>
+        <p>${escapeHtml(readerProgression.distributionAdvantage)} An Agent cannot choose what it cannot understand.</p>
+      </div>
+      <div class="advantage-grid">
+        <article class="advantage-card"><h3>Discoverable</h3><p>Value, constraints, choices, commands, Exit, and records are inspectable rather than hidden in marketing pages or prompts.</p></article>
+        <article class="advantage-card"><h3>Evaluable</h3><p>The Agent can compare a tool with the current goal, permissions, policy, and evidence before use.</p></article>
+        <article class="advantage-card"><h3>Invocable</h3><p>Documented machine interfaces reduce bespoke interpretation between product discovery and action.</p></article>
+        <article class="advantage-card"><h3>Continuable</h3><p>Durable work facts let a later Agent continue useful work without reconstructing it from chat history.</p></article>
+      </div>
+      <p class="claim-boundary"><strong>KFD-3 is the collaboration surface.</strong> It makes product-owned value, constraints, choices, commands, Exit, and record declarations inspectable to humans and Agents. It does not manufacture product value or force adoption.</p>
+    </section>
+    <section class="chapter" aria-labelledby="flywheel-heading">
+      <div class="section-heading">
+        <p class="eyebrow">03 · The conditional flywheel</p>
+        <h2 id="flywheel-heading">Useful Agent-first software can create its own demand signal.</h2>
+        <p>Kungfu starts with concrete utility: continuity for durable Agent work. KFD-3 makes that utility legible to an Agent. If the tool improves outcomes inside delegated boundaries, Agent-mediated use can grow faster than human-led awareness alone.</p>
+      </div>
+      <p class="flywheel-intro"><strong>The strategic consequence:</strong> demand can move from one useful product, to a shared Agent-first interface, to an exact-release supply chain that other developers can adopt without rebuilding the underlying trust machinery.</p>
+      <ol class="flywheel" aria-label="Conditional Agent Supply Chain flywheel">${readerProgression.flywheel.map((step) => `<li>${escapeHtml(step)}</li>`).join("")}</ol>
+      <p class="flywheel-boundary"><strong>Enabled, not claimed.</strong> ${escapeHtml(readerProgression.flywheelBoundary)}</p>
+    </section>
+    <section class="chapter" aria-labelledby="mechanism-heading">
+      <div class="section-heading">
+        <p class="eyebrow">04 · The complete mechanism</p>
+        <h2 id="mechanism-heading">Five responsibilities. Independent owners. One inspectable path.</h2>
+        <p>${escapeHtml(narrative.categoryStatement)}</p>
+      </div>
+      <section class="layer-grid" aria-label="Five Agent Supply Chain layers">${layerCards}
+      </section>
     </section>
     <section class="maturity-grid" aria-label="Maturity claims matrix">
-      <article class="decision-card"><p class="eyebrow">Proved now</p><h2>${provedNow.length} exact layers</h2><p>${escapeHtml(provedNow.map((layer) => layer.id).join(" · "))}</p></article>
-      <article class="decision-card"><p class="eyebrow">Enabled by protocol</p><h2>${enabledByProtocol.length} bounded layer</h2><p>${escapeHtml(enabledByProtocol.map((layer) => layer.id).join(" · "))}</p></article>
+      <article class="decision-card"><p class="eyebrow">Proved now</p><h2>${provedNow.length} exact layers</h2><p>${escapeHtml(provedNow.map((layer) => displayLayerName(layer.id)).join(" · "))}</p></article>
+      <article class="decision-card"><p class="eyebrow">Enabled by protocol</p><h2>${enabledByProtocol.length} bounded layer</h2><p>${escapeHtml(enabledByProtocol.map((layer) => displayLayerName(layer.id)).join(" · "))}</p></article>
       <article class="decision-card"><p class="eyebrow">Not claimed</p><h2>${narrative.notClaimed.length} explicit boundaries</h2><p>Capability, conformance, adoption, and endorsement remain separate claims.</p></article>
     </section>
     <section class="decision-grid">
@@ -126,6 +228,20 @@ const llms = `# Kungfu
 
 Kungfu has two public strategic axes: continuity for durable Agent work, and an open Agent Supply Chain for product discovery, exact-artifact evidence, purpose-bound trust, durable work facts, and portability across independently owned Hubs.
 
+## The shift in software use
+
+${readerProgression.premise.title}
+
+${readerProgression.premise.statement}
+
+Authority boundary: ${readerProgression.authorityBoundary}
+
+## The conditional distribution flywheel
+
+${readerProgression.flywheel.map((step, index) => `${index + 1}. ${step}`).join("\n")}
+
+Boundary: ${readerProgression.flywheelBoundary}
+
 Agent Supply Chain: https://kungfu.tech/agent-supply-chain/
 Machine contract: https://kungfu.tech/agent-supply-chain.json
 Builder evaluation: https://kungfu.tech/agent-builders/
@@ -133,7 +249,7 @@ Evidence surface: https://libkungfu.dev/
 
 ## Five layers
 
-${narrative.layers.map((layer) => `${layer.order}. ${layer.id} [${layer.statusClass}] — owner: ${layer.owner}; input: ${layer.input}; output: ${layer.output}; evidence: ${layer.evidenceCoordinates[0]}; known limit: ${layer.knownLimits[0]}`).join("\n")}
+${narrative.layers.map((layer) => `${layer.order}. ${displayLayerName(layer.id)} [${layer.statusClass}] — owner: ${layer.owner}; input: ${layer.input}; output: ${layer.output}; evidence: ${layer.evidenceCoordinates[0]}; known limit: ${layer.knownLimits[0]}`).join("\n")}
 
 ## Claim boundary
 
@@ -147,6 +263,6 @@ Next action: ${narrative.vendorNextAction}
 const outputDir = path.join(repoRoot, "dist", "agent-supply-chain");
 fs.mkdirSync(outputDir, { recursive: true });
 fs.writeFileSync(path.join(outputDir, "index.html"), html);
-fs.writeFileSync(path.join(repoRoot, "dist", "agent-supply-chain.json"), `${JSON.stringify(narrative, null, 2)}\n`);
+fs.writeFileSync(path.join(repoRoot, "dist", "agent-supply-chain.json"), `${JSON.stringify(machineNarrative, null, 2)}\n`);
 fs.writeFileSync(path.join(repoRoot, "dist", "llms.txt"), llms);
 console.log("rendered Agent Supply Chain route and machine contract");
