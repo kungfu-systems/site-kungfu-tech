@@ -61,15 +61,16 @@ test -f public/assets/site.css
 test -f public/.well-known/security.txt
 test -f public/about/index.html
 test -f public/capital/index.html
+test -f public/capital/investor-perspective/index.html
 test -f public/services/index.html
 test -f public/trust/index.html
 test -f public/legal/index.html
 test -f site/public-dogfood-proof.json
-for page in public/index.html public/how-tested/continuity/index.html public/agent-builders/index.html public/why-kungfu/index.html public/about/index.html public/capital/index.html public/services/index.html public/trust/index.html public/legal/index.html; do
+for page in public/index.html public/how-tested/continuity/index.html public/agent-builders/index.html public/why-kungfu/index.html public/about/index.html public/capital/index.html public/capital/investor-perspective/index.html public/services/index.html public/trust/index.html public/legal/index.html; do
   grep -q 'href="/assets/site.css"' "$page"
 done
 if grep -RInE '^    \\.(site-header|brand|mark|site-nav|site-footer|nav-menu)\\b' \
-  public/index.html public/about/index.html public/capital/index.html public/services/index.html public/trust/index.html public/legal/index.html; then
+  public/index.html public/about/index.html public/capital/index.html public/capital/investor-perspective/index.html public/services/index.html public/trust/index.html public/legal/index.html; then
   echo "error: shared header/footer CSS must live in public/assets/site.css" >&2
   exit 1
 fi
@@ -163,9 +164,34 @@ grep -q 'Returns should come from expanding the ecosystem.' public/capital/index
 grep -q 'Non-negotiable boundaries' public/capital/index.html
 grep -q 'Capabilities we would welcome' public/capital/index.html
 grep -q 'Public protocol, commercial company' public/capital/index.html
+grep -q 'class="investor-link" href="/capital/investor-perspective/"' public/capital/index.html
+grep -q 'Understand the investment thesis—and the risks capital must be able to carry.' public/capital/index.html
 grep -q 'These principles do not establish or alter entity structure' public/capital/index.html
 grep -q 'They are not channels for financing proposals or transaction instructions.' public/capital/index.html
 grep -q 'This page states no financing amount, valuation, security type, price, allocation, timetable, subscription process, or transaction terms.' public/capital/index.html
+grep -q 'shared-header:start' public/capital/investor-perspective/index.html
+grep -q 'shared-footer:start' public/capital/investor-perspective/index.html
+grep -q 'How an open protocol can create commercial value.' public/capital/investor-perspective/index.html
+grep -q 'The protocol stays open. The company wins by making the ecosystem useful.' public/capital/investor-perspective/index.html
+grep -q 'It is not a claim that independent Hubs, broad adoption, or resulting demand already exist.' public/capital/investor-perspective/index.html
+grep -q 'Ecosystem scale × Kungfu Origin' public/capital/investor-perspective/index.html
+grep -q "Kungfu's founder and current steward is a citizen of the People's Republic of China." public/capital/investor-perspective/index.html
+grep -q 'Kungfu Origin Technology Limited is incorporated in Hong Kong.' public/capital/investor-perspective/index.html
+grep -q 'These facts do not, by themselves, establish that any particular investment' public/capital/investor-perspective/index.html
+grep -q 'transaction-specific professional legal, regulatory, tax, and national-security review' public/capital/investor-perspective/index.html
+grep -q 'It does not remove the jurisdictional risks of the founder, company, commercial activity, counterparties, or a specific transaction.' public/capital/investor-perspective/index.html
+grep -q 'The right investor must contribute coordination capacity, not only money.' public/capital/investor-perspective/index.html
+grep -q 'No investor can coordinate U.S.-China relations.' public/capital/investor-perspective/index.html
+grep -q 'No concealment or misrepresentation' public/capital/investor-perspective/index.html
+grep -q 'No sham relocation' public/capital/investor-perspective/index.html
+grep -q 'No geopolitical protocol capture' public/capital/investor-perspective/index.html
+grep -q 'No identity-only conclusions' public/capital/investor-perspective/index.html
+grep -q 'Outbound Investment Security Program' public/capital/investor-perspective/index.html
+grep -q 'Hong Kong export controls' public/capital/investor-perspective/index.html
+grep -q 'CFIUS laws and guidance' public/capital/investor-perspective/index.html
+grep -q 'not an offer to sell securities' public/capital/investor-perspective/index.html
+grep -q 'contains no financing terms' public/capital/investor-perspective/index.html
+grep -q 'href="/capital/"' public/capital/investor-perspective/index.html
 grep -q 'shared-header:start' public/services/index.html
 grep -q 'shared-footer:start' public/services/index.html
 grep -q 'not generally released yet' public/services/index.html
@@ -264,6 +290,7 @@ if [ -d dist ]; then
   test -f dist/.well-known/security.txt
   test -f dist/about/index.html
   test -f dist/capital/index.html
+  test -f dist/capital/investor-perspective/index.html
   test -f dist/services/index.html
   test -f dist/trust/index.html
   test -f dist/legal/index.html
@@ -285,6 +312,8 @@ if [ -d dist ]; then
   grep -q 'being prepared' dist/index.html
   grep -q 'Kungfu Origin Technology Limited' dist/index.html
   grep -q 'libkungfu.dev' dist/about/index.html
+  grep -q 'How an open protocol can create commercial value.' dist/capital/investor-perspective/index.html
+  grep -q 'Kungfu Origin Technology Limited is incorporated in Hong Kong.' dist/capital/investor-perspective/index.html
   grep -q 'Buildchain release passport' dist/trust/index.html
   grep -q 'Privacy posture' dist/legal/index.html
 fi

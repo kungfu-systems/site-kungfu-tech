@@ -1,0 +1,413 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Investor Perspective | Kungfu</title>
+  <meta name="description" content="A framework for evaluating how Kungfu Origin can create commercial value around an open Agent supply-chain protocol, including the evidence, risks, and cross-border capabilities required.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%2314171f'/%3E%3Ctext x='32' y='39' text-anchor='middle' font-family='Arial,sans-serif' font-size='22' font-weight='700' fill='white'%3EKF%3C/text%3E%3C/svg%3E">
+  <link rel="stylesheet" href="/assets/site.css">
+  <style>
+    main {
+      --header-gap: 58px;
+      width: min(1100px, calc(100% - 40px));
+      margin: 0 auto;
+      padding: 34px 0 60px;
+    }
+
+    .eyebrow, .kicker {
+      color: var(--accent);
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+    }
+
+    .eyebrow { margin: 0 0 16px; }
+
+    h1 {
+      max-width: 940px;
+      margin: 0;
+      font-size: clamp(44px, 7.4vw, 78px);
+      line-height: 0.98;
+    }
+
+    .hero-line {
+      max-width: 900px;
+      margin: 28px 0 0;
+      color: var(--text);
+      font-size: clamp(24px, 3.1vw, 36px);
+      font-weight: 700;
+      line-height: 1.16;
+    }
+
+    .lead {
+      max-width: 810px;
+      margin: 18px 0 0;
+      color: var(--muted);
+      font-size: 20px;
+    }
+
+    .notice {
+      max-width: 920px;
+      margin: 28px 0 0;
+      padding: 17px 20px;
+      border-left: 3px solid var(--accent);
+      background: rgba(121, 192, 255, 0.08);
+      color: var(--text);
+    }
+
+    .section-heading {
+      max-width: 830px;
+      margin: 64px 0 22px;
+    }
+
+    .section-heading h2 {
+      margin: 5px 0 10px;
+      font-size: clamp(30px, 4vw, 44px);
+      line-height: 1.08;
+    }
+
+    .section-heading p { margin: 0; color: var(--muted); }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .grid.two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+
+    .card {
+      padding: 24px;
+      border: 1px solid var(--line);
+      background: var(--panel);
+    }
+
+    .card h3 {
+      margin: 0 0 11px;
+      font-size: 21px;
+      line-height: 1.2;
+    }
+
+    .card p, .card li { color: var(--muted); }
+    .card p { margin: 0; }
+    .card ul { margin: 0; padding-left: 20px; }
+    .card li + li { margin-top: 9px; }
+
+    .chain {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 9px;
+      margin-top: 26px;
+    }
+
+    .chain-step {
+      position: relative;
+      min-height: 170px;
+      padding: 20px;
+      border: 1px solid rgba(121, 192, 255, 0.34);
+      background: linear-gradient(145deg, rgba(121, 192, 255, 0.09), var(--panel) 65%);
+    }
+
+    .chain-step:not(:last-child)::after {
+      position: absolute;
+      z-index: 1;
+      top: 50%;
+      right: -14px;
+      width: 18px;
+      color: var(--accent);
+      content: "→";
+      font-weight: 700;
+      text-align: center;
+      transform: translateY(-50%);
+    }
+
+    .chain-step span {
+      display: block;
+      margin-bottom: 18px;
+      color: var(--accent);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+    }
+
+    .chain-step p { margin: 0; font-size: 15px; line-height: 1.45; }
+
+    .equation, .risk, .closing {
+      margin-top: 18px;
+      padding: 28px;
+      border: 1px solid rgba(121, 192, 255, 0.42);
+      background: linear-gradient(135deg, rgba(121, 192, 255, 0.09), var(--panel) 60%);
+    }
+
+    .equation strong {
+      display: block;
+      max-width: 900px;
+      font-size: clamp(23px, 3vw, 32px);
+      line-height: 1.2;
+    }
+
+    .equation p, .risk p, .closing p { max-width: 920px; margin: 12px 0 0; color: var(--muted); }
+
+    .risk {
+      border-color: rgba(255, 184, 108, 0.55);
+      background: linear-gradient(135deg, rgba(255, 184, 108, 0.10), var(--panel) 60%);
+    }
+
+    .risk .kicker { color: #ffb86c; }
+    .risk h2, .closing h2 { margin: 7px 0 0; font-size: 30px; line-height: 1.14; }
+
+    .source-list { margin: 18px 0 0; padding-left: 20px; }
+    .source-list li + li { margin-top: 10px; }
+    .source-list a { font-weight: 700; }
+
+    .boundary {
+      margin-top: 18px;
+      padding: 18px 20px;
+      border: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 15px;
+    }
+
+    .closing { margin-top: 64px; }
+    .closing a { font-weight: 700; }
+
+    @media (max-width: 980px) {
+      .chain { grid-template-columns: 1fr 1fr; }
+      .chain-step { min-height: auto; }
+      .chain-step:not(:last-child)::after { display: none; }
+      .chain-step:last-child { grid-column: 1 / -1; }
+    }
+
+    @media (max-width: 820px) {
+      .grid, .grid.two { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 760px) {
+      main { width: min(100% - 28px, 640px); padding-top: 28px; }
+      .section-heading { margin-top: 48px; }
+      .chain { grid-template-columns: 1fr; }
+      .chain-step:last-child { grid-column: auto; }
+      .equation, .risk, .closing { padding: 22px; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <!-- shared-header:start -->
+    <header class="site-header">
+      <a class="brand" href="/" aria-label="Kungfu">
+        <span class="mark" aria-hidden="true">🧘</span>
+        <span class="brand-copy"><span>Kungfu</span><span class="brand-tagline">Continuity for Agent Work</span></span>
+      </a>
+      <nav class="site-nav" aria-label="Project links">
+        <a href="/agent-supply-chain/">Agent Supply Chain</a>
+        <a href="/agent-builders/">Agent Builders</a>
+        <a href="/whitepaper/">Papers</a>
+        <a href="/about/index.html">About</a>
+        <details class="nav-menu">
+          <summary>Developers</summary>
+          <div class="nav-menu-panel">
+          <a href="https://libkungfu.dev">libkungfu.dev</a>
+          <a href="https://github.com/kungfu-systems/kungfu">GitHub</a>
+          </div>
+        </details>
+      </nav>
+    </header>
+    <!-- shared-header:end -->
+
+    <p class="eyebrow">Investor Perspective</p>
+    <h1>How an open protocol can create commercial value.</h1>
+    <p class="hero-line">The protocol stays open. The company wins by making the ecosystem useful.</p>
+    <p class="lead">An investor is not underwriting the right to close KFD. The investable thesis is that Kungfu Origin can help form a new Agent supply-chain category, build trusted products and services around it, and capture value through execution rather than protocol control.</p>
+    <p class="notice">Kungfu is not announcing a financing round. This page is an evaluation framework, not an offer to sell securities, an invitation to subscribe, investment advice, or transaction documentation. It contains no financing terms.</p>
+
+    <div class="section-heading">
+      <span class="kicker">The underwriting question</span>
+      <h2>What would an investor actually be backing?</h2>
+      <p>Three linked capabilities—not ownership of a public standard.</p>
+    </div>
+    <div class="grid">
+      <section class="card">
+        <h3>Category formation</h3>
+        <p>Make Agent software discovery, trust, use, work continuity, and cross-platform movement legible as one public supply-chain problem.</p>
+      </section>
+      <section class="card">
+        <h3>Commercial leadership</h3>
+        <p>Turn protocol credibility into excellent official products, enterprise delivery, support, tools, and services that customers choose to buy.</p>
+      </section>
+      <section class="card">
+        <h3>Institutional durability</h3>
+        <p>Build a company and stewardship model able to survive long technical cycles, jurisdictional friction, and competition among independent Hubs.</p>
+      </section>
+    </div>
+
+    <div class="section-heading">
+      <span class="kicker">The causal chain</span>
+      <h2>Company value begins with public credibility.</h2>
+      <p>This is the commercial thesis to test. It is not a claim that independent Hubs, broad adoption, or resulting demand already exist.</p>
+    </div>
+    <div class="chain" aria-label="Open protocol to company value causal chain">
+      <div class="chain-step"><span>01 · CREDIBILITY</span><p>KFD remains public, inspectable, and difficult for one actor to capture.</p></div>
+      <div class="chain-step"><span>02 · ADOPTION</span><p>Vendors and independently owned Hubs can adopt without surrendering their customer relationships.</p></div>
+      <div class="chain-step"><span>03 · MARKET</span><p>A larger, interoperable Agent supply-chain market can emerge.</p></div>
+      <div class="chain-step"><span>04 · DEMAND</span><p>Demand can grow for reliable products, integrations, enterprise delivery, and support.</p></div>
+      <div class="chain-step"><span>05 · VALUE</span><p>Kungfu Origin can earn company value through execution, reputation, and ecosystem knowledge.</p></div>
+    </div>
+
+    <div class="section-heading">
+      <span class="kicker">Value capture</span>
+      <h2>Open does not mean commercially indifferent.</h2>
+      <p>It changes where durable advantage must come from.</p>
+    </div>
+    <div class="equation">
+      <strong>Ecosystem scale × Kungfu Origin's ability to create and capture value—not protocol control × customer lock-in.</strong>
+      <p>Potential company advantages include shipping the best official implementations, making difficult integrations dependable, accumulating operational knowledge, supporting enterprises, convening a trusted ecosystem, and repeatedly turning new protocol capability into useful products.</p>
+    </div>
+    <div class="grid two" style="margin-top:16px">
+      <section class="card">
+        <h3>Where returns may come from</h3>
+        <ul>
+          <li>Official products and managed capabilities</li>
+          <li>Enterprise integration, delivery, and support</li>
+          <li>Reliability, security, and operational expertise</li>
+          <li>Distribution, reputation, and ecosystem coordination</li>
+        </ul>
+      </section>
+      <section class="card">
+        <h3>Where returns must not come from</h3>
+        <ul>
+          <li>Purchasing KFD's technical direction</li>
+          <li>Blocking conforming implementations or independent Hubs</li>
+          <li>Forcing adopters into Kungfu accounts, billing, cloud, or models</li>
+          <li>Converting interoperability into an exclusive gate</li>
+        </ul>
+      </section>
+    </div>
+
+    <div class="section-heading">
+      <span class="kicker">Evidence before narrative</span>
+      <h2>The thesis must earn its way from proof to demand.</h2>
+      <p>An investor should raise confidence only as independently inspectable evidence advances.</p>
+    </div>
+    <div class="grid">
+      <section class="card">
+        <h3>Prove the artifact</h3>
+        <p>Buildchain can show whether public declarations match the software and evidence actually released.</p>
+      </section>
+      <section class="card">
+        <h3>Prove adoption</h3>
+        <p>First-party dogfood is a starting point. Third-party implementations, independent Hubs, and repeatable integrations would be materially stronger evidence.</p>
+      </section>
+      <section class="card">
+        <h3>Prove capture</h3>
+        <p>Paid demand, repeat enterprise delivery, retention, and operating leverage must show that ecosystem value can become durable company value.</p>
+      </section>
+    </div>
+
+    <div class="risk">
+      <span class="kicker">Cross-border reality</span>
+      <h2>Jurisdiction is part of the investment case, not a footnote.</h2>
+      <p>Kungfu's founder and current steward is a citizen of the People's Republic of China. Kungfu Origin Technology Limited is incorporated in Hong Kong. Kungfu intends to serve a global technical ecosystem.</p>
+      <p>That combination may create enhanced diligence, regulatory review, institutional-policy constraints, or political friction for investment, access to technology, partnerships, customers, governance, and future entity structures—especially where U.S.-China relations are relevant.</p>
+      <p>These facts do not, by themselves, establish that any particular investment, product, partnership, or structure is prohibited, notifiable, restricted, or permitted. The result depends on the parties, rights, control, activities, technologies, jurisdictions, and rules applicable at the time. Any real transaction would require transaction-specific professional legal, regulatory, tax, and national-security review.</p>
+      <p>Keeping KFD public can reduce the ecosystem's dependence on one company or jurisdiction. It does not remove the jurisdictional risks of the founder, company, commercial activity, counterparties, or a specific transaction.</p>
+    </div>
+
+    <div class="section-heading">
+      <span class="kicker">Compatible capital</span>
+      <h2>The right investor must contribute coordination capacity, not only money.</h2>
+      <p>No investor can coordinate U.S.-China relations. A capable partner can help recognize, explain, and reduce how geopolitical tension propagates into capital, technology, customers, and governance.</p>
+    </div>
+    <div class="grid two">
+      <section class="card">
+        <h3>Cross-jurisdiction judgment</h3>
+        <p>Coordinate credible legal, regulatory, tax, and national-security advice across the jurisdictions actually implicated by a transaction or operating plan.</p>
+      </section>
+      <section class="card">
+        <h3>Structural discipline</h3>
+        <p>Help distinguish company economics, board and information rights, protocol governance, data access, intellectual property, and trademarks instead of collapsing them into one control question.</p>
+      </section>
+      <section class="card">
+        <h3>Institutional credibility</h3>
+        <p>Explain the facts accurately to global vendors, customers, co-investors, and institutions without concealment, exaggeration, or nationality-based shortcuts.</p>
+      </section>
+      <section class="card">
+        <h3>Resilient access</h3>
+        <p>Develop lawful alternative paths for capital, technology, markets, and partnerships if a particular channel narrows, while preserving the public protocol boundary.</p>
+      </section>
+    </div>
+
+    <div class="section-heading">
+      <span class="kicker">Incompatibility tests</span>
+      <h2>Some apparent solutions would make the system weaker.</h2>
+    </div>
+    <div class="grid two">
+      <section class="card">
+        <h3>No concealment or misrepresentation</h3>
+        <p>Do not hide or inaccurately describe citizenship, incorporation, ownership, control, activities, technology, data access, or counterparties.</p>
+      </section>
+      <section class="card">
+        <h3>No sham relocation</h3>
+        <p>Do not treat a paper move, nominee arrangement, or regulatory label as a substitute for real substance and transaction-specific analysis.</p>
+      </section>
+      <section class="card">
+        <h3>No geopolitical protocol capture</h3>
+        <p>Do not use cross-border risk as a reason to purchase KFD governance, ecosystem exclusivity, or control over conforming implementations.</p>
+      </section>
+      <section class="card">
+        <h3>No identity-only conclusions</h3>
+        <p>Citizenship and incorporation are material facts, but not substitutes for analyzing actual rights, control, activities, technology, and applicable law.</p>
+      </section>
+    </div>
+
+    <div class="section-heading">
+      <span class="kicker">Public diligence context</span>
+      <h2>Start with primary sources. Finish with case-specific advice.</h2>
+      <p>These official resources illustrate why parties, technology, rights, and transaction structure matter. They are provided for diligence context, not as a legal classification of Kungfu or any future transaction.</p>
+    </div>
+    <ul class="source-list">
+      <li><a href="https://home.treasury.gov/policy-issues/international/outbound-investment-program">U.S. Treasury — Outbound Investment Security Program</a></li>
+      <li><a href="https://home.treasury.gov/system/files/206/Outbound-Investment-Security-Program-FAQs.pdf">U.S. Treasury — Outbound Investment Security Program FAQs</a></li>
+      <li><a href="https://www.bis.gov/licensing/country-guidance/hong-kong-export-controls">U.S. Bureau of Industry and Security — Hong Kong export controls</a></li>
+      <li><a href="https://home.treasury.gov/policy-issues/international/the-committee-on-foreign-investment-in-the-united-states-cfius/cfius-laws-and-guidance">U.S. Treasury — CFIUS laws and guidance</a></li>
+    </ul>
+    <p class="boundary">Rules and institutional policies can change. A source list cannot determine whether a future transaction is covered, prohibited, restricted, notifiable, or advisable.</p>
+
+    <div class="closing">
+      <span class="kicker">The decision lens</span>
+      <h2>Invest in the company's capacity to expand a public ecosystem—not in the right to own it.</h2>
+      <p>Read <a href="/capital/">Capital &amp; Stewardship</a> for Kungfu's standing principles and protocol boundaries. This page explains the corresponding investor-side thesis, proof burden, and risk capacity.</p>
+      <p>The public Kungfu repository and issue tracker are for public technical and ecosystem questions, not financing proposals or transaction instructions. Any future financing would require separate private diligence, approvals, and definitive documents.</p>
+    </div>
+
+    <!-- shared-footer:start -->
+    <footer class="site-footer">
+      <nav class="footer-links" aria-label="Footer links">
+        <a href="/services/index.html">Services</a>
+        <a href="/capital/">Capital &amp; Stewardship</a>
+        <a href="/trust/index.html">Trust</a>
+        <a href="/legal/index.html">Legal</a>
+      </nav>
+      <p class="footer-note">Kungfu core software is licensed under the Apache License 2.0.</p>
+      <p class="footer-copy">Copyright 2026 Kungfu Origin Technology Limited. All rights reserved.</p>
+    </footer>
+    <script>
+      document.addEventListener("click", (event) => {
+        document.querySelectorAll("details.nav-menu[open]").forEach((menu) => {
+          if (!menu.contains(event.target)) menu.removeAttribute("open");
+        });
+      });
+      document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape") {
+          document.querySelectorAll("details.nav-menu[open]").forEach((menu) => {
+            menu.removeAttribute("open");
+          });
+        }
+      });
+    </script>
+    <!-- shared-footer:end -->
+  </main>
+</body>
+</html>
