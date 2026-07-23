@@ -320,15 +320,24 @@ if [ -d dist ]; then
   grep -q 'Software distribution is becoming Agent-mediated.' dist/agent-supply-chain/index.html
   grep -q 'Human sets boundary' dist/agent-supply-chain/index.html
   grep -q 'Agent-first software can earn distribution through use.' dist/agent-supply-chain/index.html
+  grep -q '03 · The bootstrap' dist/agent-supply-chain/index.html
+  grep -q 'Kungfu gives the first Agent a way to understand the stack.' dist/agent-supply-chain/index.html
+  grep -q 'The envelope points. The Agent inspects.' dist/agent-supply-chain/index.html
+  grep -q 'One seed, not two miracles.' dist/agent-supply-chain/index.html
+  grep -q 'The envelope does not create demand or assume prior KFD knowledge' dist/agent-supply-chain/index.html
   grep -q 'Useful Agent-first software can create its own demand signal.' dist/agent-supply-chain/index.html
   grep -q 'Enabled, not claimed.' dist/agent-supply-chain/index.html
-  grep -q '04 · The complete mechanism' dist/agent-supply-chain/index.html
+  grep -q '05 · The complete mechanism' dist/agent-supply-chain/index.html
   grep -q 'Five responsibilities. Independent owners.' dist/agent-supply-chain/index.html
+  assert_before dist/agent-supply-chain/index.html 'Agent-first software can earn distribution through use.' 'Kungfu gives the first Agent a way to understand the stack.'
+  assert_before dist/agent-supply-chain/index.html 'Kungfu gives the first Agent a way to understand the stack.' 'Useful Agent-first software can create its own demand signal.'
+  assert_before dist/agent-supply-chain/index.html 'Useful Agent-first software can create its own demand signal.' 'Five responsibilities. Independent owners.'
   assert_before dist/agent-supply-chain/index.html 'Software distribution is becoming Agent-mediated.' 'Five responsibilities. Independent owners.'
   assert_before dist/agent-supply-chain/index.html 'Agent-first software can earn distribution through use.' 'Five responsibilities. Independent owners.'
-  assert_before dist/agent-supply-chain/index.html 'Useful Agent-first software can create its own demand signal.' 'Five responsibilities. Independent owners.'
   grep -q 'kungfu-agent-supply-chain-public-narrative/v1' dist/agent-supply-chain.json
   grep -q 'kungfu-agent-supply-chain-reader-progression/v1' dist/agent-supply-chain.json
+  grep -q '"title": "Kungfu gives the first Agent a way to understand the stack."' dist/agent-supply-chain.json
+  grep -q '"discovery": "When Kungfu launches an Agent' dist/agent-supply-chain.json
   grep -q '"label": "KFD-3"' dist/agent-supply-chain.json
   grep -q '"label": "KFD-2"' dist/agent-supply-chain.json
   grep -q '30-day assessment' dist/agent-supply-chain/index.html
@@ -343,6 +352,8 @@ if [ -d dist ]; then
   fi
   grep -q 'two public strategic axes' dist/llms.txt
   grep -q 'The next software user is an Agent.' dist/llms.txt
+  grep -q 'How the first Agent understands the stack' dist/llms.txt
+  grep -q 'compact, versioned Skill envelope' dist/llms.txt
   grep -q 'KFD-3 \[proved-now\]' dist/llms.txt
   grep -q 'KFD-2 \[proved-now\]' dist/llms.txt
   grep -q 'npm:@kungfu-tech/kfd@1.0.0-alpha.41' dist/llms.txt
