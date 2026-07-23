@@ -65,6 +65,7 @@ export function renderFooter(config) {
     .map((item) => `        <a href="${escapeAttr(item.href)}">${escapeHtml(item.text)}</a>`)
     .join("\n");
   const license = config.footer.find((item) => item.role === "license");
+  const trademark = config.footer.find((item) => item.role === "trademark");
   const copyright = config.footer.find((item) => item.role === "copyright");
 
   return [
@@ -73,6 +74,7 @@ export function renderFooter(config) {
     links,
     "      </nav>",
     license ? `      <p class="footer-note">${escapeHtml(license.text)}</p>` : "",
+    trademark ? `      <p class="footer-trademark">${escapeHtml(trademark.text)}</p>` : "",
     copyright ? `      <p class="footer-copy">${escapeHtml(copyright.text)}</p>` : "",
     "    </footer>",
     "    <script>",

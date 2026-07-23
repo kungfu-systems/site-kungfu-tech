@@ -8,6 +8,8 @@ node scripts/check-infra-outputs.mjs
 node scripts/render-shared-layout.mjs --check
 node scripts/check-whitepaper.mjs
 node scripts/check-dogfood-proof.mjs
+node scripts/check-trademark-use.mjs
+node scripts/check-trademark-use.mjs --self-test
 
 shared_block() {
   block_name=$1
@@ -147,7 +149,7 @@ grep -q 'shared-header:start' public/why-kungfu/index.html
 grep -q 'shared-footer:start' public/why-kungfu/index.html
 grep -q 'The name did not begin as an acronym.' public/why-kungfu/index.html
 grep -q 'KUNGFU = KUNGFU UNGFU: Never Guess. Facts Unfold.' public/why-kungfu/index.html
-grep -q 'This is not a second product or runtime.' public/why-kungfu/index.html
+grep -q 'UNGFU is not a second product or runtime.' public/why-kungfu/index.html
 grep -q 'docs/concepts/why-kungfu.md' public/why-kungfu/index.html
 grep -q 'shared-header:start' public/about/index.html
 grep -q 'shared-footer:start' public/about/index.html
