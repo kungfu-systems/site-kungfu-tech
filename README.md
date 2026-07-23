@@ -96,11 +96,13 @@ control of the public protocol.
 
 The `/agent-builders/` route is a primary path from the homepage header and
 hero. The homepage keeps the continuity-first message concise and leaves the
-adoption architecture to that dedicated route. The Builder route establishes
-the decision before asking readers to decode the architecture: a Hub still
-works locally without KFD, but each external Hub otherwise needs a custom
-bridge; with KFD, one responsibility boundary can work across conforming Hubs.
-The compact Builder contract then makes the ownership boundary explicit:
+adoption architecture to that dedicated route. The Builder route first gives
+KFD a one-sentence, site-owned reader definition and links the canonical KFD
+overview and KFD-3 implementation guidance. It then establishes the adoption
+decision before asking readers to decode the architecture: a Hub still works
+locally without KFD, but each external Hub otherwise needs a custom bridge; with
+KFD, one responsibility boundary can work across conforming Hubs. The compact
+Builder contract then makes the ownership boundary explicit:
 Builders retain their users, accounts, billing, models, UI, Agent, cloud,
 policy, and customer relationship; KFD needs no central Kungfu cloud; and
 libkungfu remains a public local capability layer rather than a route into the
@@ -113,12 +115,15 @@ payload, walks one release action from coordinates through admission, and only
 then exposes the full local action model. Chapter 03 shows one auditable work
 unit before aggregate dogfood metrics. Chapter 04 keeps the current claim
 boundary visible and ends with one bounded reference action. This progression
-is a site-owned reader contract; it must remain value → ownership → topology →
-responsibility → concrete action → evidence → bounded adoption. Exact runtime,
-package, qualification, and claim status remain owned by the reviewed
-`site-libkungfu-dev` projection and its source authorities. Until that site's
-production release is approved, this repository links the exact source-bound
-fixture instead of publishing a parallel version ledger or a staging URL.
+is a site-owned reader contract; it must remain protocol definition → adoption
+decision → ownership → topology → responsibility → concrete action → evidence
+→ bounded adoption. The canonical KFD protocol authority remains
+`kfd.libkungfu.dev`; this site supplies only the product-context primer and
+reading paths. Exact runtime, package, qualification, and claim status remain
+owned by the reviewed `site-libkungfu-dev` projection and its source
+authorities. Until that site's production release is approved, this repository
+links the exact source-bound fixture instead of publishing a parallel version
+ledger or a staging URL.
 
 ## Papers
 
