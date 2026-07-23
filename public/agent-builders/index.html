@@ -769,6 +769,65 @@
       gap: 10px;
     }
 
+    .dogfood-history-controls {
+      display: grid;
+      grid-template-columns: minmax(260px, 1fr) auto;
+      gap: 12px 18px;
+      align-items: end;
+      padding: 16px;
+      border: 1px solid var(--line);
+      background: var(--panel-soft);
+    }
+
+    .dogfood-history-controls label {
+      display: grid;
+      gap: 7px;
+      color: var(--fg);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .dogfood-history-controls select,
+    .dogfood-history-nav button {
+      min-height: 44px;
+      border: 1px solid var(--line);
+      border-radius: 0;
+      background: var(--surface);
+      color: var(--fg);
+      font: inherit;
+    }
+
+    .dogfood-history-controls select {
+      width: 100%;
+      padding: 9px 34px 9px 11px;
+    }
+
+    .dogfood-history-nav {
+      display: flex;
+      gap: 8px;
+    }
+
+    .dogfood-history-nav button {
+      padding: 9px 13px;
+      cursor: pointer;
+      font-weight: 700;
+    }
+
+    .dogfood-history-nav button:disabled {
+      cursor: not-allowed;
+      opacity: 0.45;
+    }
+
+    .dogfood-history-status,
+    .dogfood-comparison {
+      grid-column: 1 / -1;
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .dogfood-comparison strong { color: var(--fg); }
+
     .dogfood-metric {
       display: grid;
       min-width: 0;
@@ -934,7 +993,7 @@
       .reader-path, .promise-ownership, .promise-foundation, .action-loop, .authority-rail,
       .topology-grid, .semantic-gate, .topology-modes, .invariant-strip, .adoption-value,
       .adoption-grid, .cloud-boundary, .evidence-panel, .dogfood-proof-head,
-      .dogfood-metrics, .example-path, .proof-unit, .final-start {
+      .dogfood-history-controls, .dogfood-metrics, .example-path, .proof-unit, .final-start {
         grid-template-columns: 1fr;
       }
 
@@ -1197,31 +1256,210 @@
           <article class="proof-step"><span class="layer-number">Independent review</span><strong>The claim is assessed.</strong><p>A separate review checks the exact result and evidence.</p></article>
           <article class="proof-step"><span class="layer-number">Release</span><strong>The accepted result reaches production.</strong><p>Production closes the path without inflating the claim.</p></article>
         </div>
+        <div class="dogfood-history-controls">
+          <label for="dogfood-snapshot-select">Observation period
+            <select id="dogfood-snapshot-select" name="snapshot" disabled>
+              <option value="">Loading verified history…</option>
+            </select>
+          </label>
+          <div class="dogfood-history-nav" aria-label="Adjacent dogfood observations">
+            <button type="button" id="dogfood-previous" disabled>Previous</button>
+            <button type="button" id="dogfood-next" disabled>Next</button>
+          </div>
+          <p class="dogfood-history-status" id="dogfood-history-status" role="status" aria-live="polite">Loading the append-only observation chain from libkungfu.dev…</p>
+          <p class="dogfood-comparison" id="dogfood-comparison">Adjacent observations compare overlapping rolling P30D windows; they do not count work newly created in one week.</p>
+        </div>
         <div class="dogfood-metrics" aria-label="Kungfu public dogfood snapshot">
           <article class="dogfood-metric"><strong id="dogfood-prs">2,740</strong><span>merged public PRs across the observed window</span></article>
           <article class="dogfood-metric"><strong id="dogfood-repositories">10</strong><span>public repositories with merged work</span></article>
           <article class="dogfood-metric"><strong id="dogfood-cuts">148</strong><span>retained public Project Cuts with valid receipts</span></article>
         </div>
+        <p class="dogfood-boundary" id="dogfood-period-window"><strong>Retained fallback:</strong> Live verified history is loading.</p>
         <p class="dogfood-boundary"><strong>Counting boundary:</strong> A PR is a work item, not a feature count. An account is not an Agent actor. A review-search match is not an approval.</p>
         <div class="evidence-links">
-          <a href="https://libkungfu.dev/dogfood/">Audit the complete evidence chain</a>
-          <a href="https://libkungfu.dev/dogfood-evidence.json">Open the machine-readable snapshot</a>
+          <a id="dogfood-audit-link" href="https://libkungfu.dev/dogfood/">Audit the complete evidence chain</a>
+          <a id="dogfood-machine-link" href="https://libkungfu.dev/dogfood-evidence.json">Open the machine-readable snapshot</a>
         </div>
       </section>
 
+      <iframe id="dogfood-projection-bridge" data-src="https://libkungfu.dev/dogfood/?projection=kungfu-tech" title="Verified Kungfu dogfood evidence bridge" hidden></iframe>
       <script>
         (() => {
           const format = new Intl.NumberFormat("en-US");
           const set = (id, value) => { const node = document.getElementById(id); if (node) node.textContent = format.format(value); };
-          fetch("https://libkungfu.dev/dogfood-evidence.json", { cache: "no-store" })
-            .then((response) => { if (!response.ok) throw new Error("upstream evidence unavailable"); return response.json(); })
-            .then((evidence) => {
-              document.documentElement.dataset.dogfoodSnapshot = evidence.snapshotId;
-              set("dogfood-prs", evidence.metrics.mergedPublicPullRequests.value);
-              set("dogfood-repositories", evidence.metrics.repositoriesWithMergedPullRequests.value);
-              set("dogfood-cuts", evidence.metrics.retainedPublicProjectCuts.value);
-            })
-            .catch(() => { document.documentElement.dataset.dogfoodSnapshot = "retained-fallback"; });
+          const bridge = document.getElementById("dogfood-projection-bridge");
+          const selector = document.getElementById("dogfood-snapshot-select");
+          const previousButton = document.getElementById("dogfood-previous");
+          const nextButton = document.getElementById("dogfood-next");
+          const status = (value) => { const node = document.getElementById("dogfood-history-status"); if (node) node.textContent = value; };
+          const snapshotCache = new Map();
+          const pending = new Map();
+          let timeline = [];
+          let timelineInitialized = false;
+          let requestSequence = 0;
+          const validate = (evidence, expectedId) => {
+            if (!evidence || !["kungfu.public-dogfood-evidence/v1", "kungfu.public-dogfood-evidence/v2"].includes(evidence.schema)) throw new Error("unsupported evidence schema");
+            if (!evidence.snapshotId || !evidence.observation?.window || !evidence.metrics) throw new Error("incomplete evidence snapshot");
+            if (expectedId && evidence.snapshotId !== expectedId) throw new Error("snapshot id mismatch");
+            if (!Number.isFinite(Date.parse(evidence.observation.window.startInclusive)) || !Number.isFinite(Date.parse(evidence.observation.window.endInclusive))) throw new Error("invalid observation window");
+            for (const key of ["mergedPublicPullRequests", "repositoriesWithMergedPullRequests", "retainedPublicProjectCuts"]) {
+              if (!Number.isSafeInteger(evidence.metrics[key]?.value)) throw new Error("invalid metric value");
+            }
+            return evidence;
+          };
+          const validTimelineEntry = (entry) => {
+            if (!entry || !/^kungfu-systems-\d{4}-\d{2}-\d{2}T/.test(entry.snapshotId || "")) return false;
+            if (!Number.isFinite(Date.parse(entry.observedAt))) return false;
+            try {
+              const url = new URL(entry.url, "https://libkungfu.dev");
+              return url.origin === "https://libkungfu.dev" && url.pathname.startsWith("/dogfood-evidence");
+            } catch {
+              return false;
+            }
+          };
+          const signed = (value) => value > 0 ? "+" + format.format(value) : format.format(value);
+          const requestSnapshot = (entry) => {
+            if (snapshotCache.has(entry.snapshotId)) return Promise.resolve(snapshotCache.get(entry.snapshotId));
+            return new Promise((resolve, reject) => {
+              const requestId = "dogfood-" + (++requestSequence);
+              const timeout = window.setTimeout(() => {
+                pending.delete(requestId);
+                reject(new Error("snapshot request timed out"));
+              }, 8000);
+              pending.set(requestId, { resolve, reject, timeout, entry });
+              bridge.contentWindow.postMessage({
+                type: "kungfu.dogfood.snapshot.request/v1",
+                requestId,
+                snapshotId: entry.snapshotId,
+              }, "https://libkungfu.dev");
+            });
+          };
+          const render = (evidence, entry, previous) => {
+            const index = timeline.indexOf(entry);
+            document.documentElement.dataset.dogfoodSnapshot = evidence.snapshotId;
+            document.body.dataset.dogfoodTimelineIndex = String(index);
+            set("dogfood-prs", evidence.metrics.mergedPublicPullRequests.value);
+            set("dogfood-repositories", evidence.metrics.repositoriesWithMergedPullRequests.value);
+            set("dogfood-cuts", evidence.metrics.retainedPublicProjectCuts.value);
+            selector.value = entry.snapshotId;
+            previousButton.disabled = index === 0;
+            nextButton.disabled = index === timeline.length - 1;
+            const start = evidence.observation.window.startInclusive.slice(0, 10);
+            const end = evidence.observation.window.endInclusive.slice(0, 10);
+            const periodWindow = document.getElementById("dogfood-period-window");
+            const periodLabel = document.createElement("strong");
+            periodLabel.textContent = "Selected rolling P30D window:";
+            periodWindow.replaceChildren(periodLabel, " " + start + " → " + end + ".");
+            const auditLink = document.getElementById("dogfood-audit-link");
+            const machineLink = document.getElementById("dogfood-machine-link");
+            auditLink.href = entry.current ? "https://libkungfu.dev/dogfood/" : "https://libkungfu.dev/dogfood/?snapshot=" + encodeURIComponent(entry.snapshotId);
+            machineLink.href = entry.url;
+            if (previous) {
+              const prDelta = evidence.metrics.mergedPublicPullRequests.value - previous.metrics.mergedPublicPullRequests.value;
+              const repositoryDelta = evidence.metrics.repositoriesWithMergedPullRequests.value - previous.metrics.repositoriesWithMergedPullRequests.value;
+              const cutDelta = evidence.metrics.retainedPublicProjectCuts.value - previous.metrics.retainedPublicProjectCuts.value;
+              const comparison = document.getElementById("dogfood-comparison");
+              const comparisonLabel = document.createElement("strong");
+              comparisonLabel.textContent = "Change from the adjacent prior observation:";
+              comparison.replaceChildren(comparisonLabel, " merged PR search matches " + signed(prDelta) + "; repositories " + signed(repositoryDelta) + "; retained Project Cuts " + signed(cutDelta) + ". Overlapping P30D windows—not new work in a week.");
+            } else {
+              const comparison = document.getElementById("dogfood-comparison");
+              const comparisonLabel = document.createElement("strong");
+              comparisonLabel.textContent = "First retained observation point.";
+              comparison.replaceChildren(comparisonLabel, " No earlier snapshot exists for an adjacent comparison.");
+            }
+            status((entry.current ? "Showing latest observation: " : "Showing archived observation: ") + entry.observedAt + ".");
+          };
+          const selectSnapshot = async (snapshotId, updateUrl, fallbackStatus) => {
+            let entry = timeline.find((candidate) => candidate.snapshotId === snapshotId);
+            if (!entry) {
+              entry = timeline.at(-1);
+              fallbackStatus = "Unknown snapshot id; showing the latest verified observation.";
+            }
+            const index = timeline.indexOf(entry);
+            status("Loading and verifying " + entry.observedAt + "…");
+            try {
+              const [evidence, previous] = await Promise.all([
+                requestSnapshot(entry),
+                index > 0 ? requestSnapshot(timeline[index - 1]) : Promise.resolve(null),
+              ]);
+              render(evidence, entry, previous);
+              if (fallbackStatus) status(fallbackStatus);
+              if (updateUrl) {
+                const url = new URL(window.location.href);
+                if (entry.current) url.searchParams.delete("snapshot"); else url.searchParams.set("snapshot", entry.snapshotId);
+                window.history.pushState({ snapshotId: entry.snapshotId }, "", url);
+              }
+            } catch {
+              status("The requested snapshot could not be verified; the last verified observation remains visible.");
+            }
+          };
+          const move = (offset) => {
+            const index = Number(document.body.dataset.dogfoodTimelineIndex || timeline.length - 1);
+            const entry = timeline[index + offset];
+            if (entry) selectSnapshot(entry.snapshotId, true);
+          };
+          document.documentElement.dataset.dogfoodSnapshot = "retained-fallback";
+          bridge.addEventListener("load", () => {
+            bridge.contentWindow.postMessage({ type: "kungfu.dogfood.timeline.request/v1" }, "https://libkungfu.dev");
+          });
+          window.addEventListener("message", async (event) => {
+            if (event.origin !== "https://libkungfu.dev" || event.source !== bridge.contentWindow) return;
+            const message = event.data;
+            if (message?.type === "kungfu.dogfood.timeline/v1") {
+              if (timelineInitialized) return;
+              try {
+                const latest = validate(message.evidence);
+                if (!Array.isArray(message.timeline)) throw new Error("timeline missing");
+                timeline = message.timeline.filter(validTimelineEntry)
+                  .sort((left, right) => Date.parse(left.observedAt) - Date.parse(right.observedAt));
+                const latestEntry = timeline.find((entry) => entry.snapshotId === latest.snapshotId);
+                if (!latestEntry || !latestEntry.current) throw new Error("latest timeline entry missing");
+                timelineInitialized = true;
+                snapshotCache.set(latest.snapshotId, latest);
+                selector.replaceChildren(...timeline.map((entry) => {
+                  const option = document.createElement("option");
+                  option.value = entry.snapshotId;
+                  option.textContent = entry.observedAt.slice(0, 10) + " · " + (entry.current ? "latest" : entry.generationKind) + (entry.offCadence ? " · off cadence" : "");
+                  return option;
+                }));
+                selector.addEventListener("change", () => selectSnapshot(selector.value, true), { once: false });
+                previousButton.addEventListener("click", () => move(-1), { once: false });
+                nextButton.addEventListener("click", () => move(1), { once: false });
+                const requested = new URL(window.location.href).searchParams.get("snapshot");
+                const initialSnapshotId = timeline.some((entry) => entry.snapshotId === requested) ? requested : latest.snapshotId;
+                selector.value = initialSnapshotId;
+                await selectSnapshot(initialSnapshotId, false, requested && requested !== initialSnapshotId ? "Unknown snapshot id; showing the latest verified observation." : "");
+                selector.disabled = false;
+              } catch {
+                status("The upstream timeline failed schema validation; the retained fallback remains visible.");
+              }
+              return;
+            }
+            if (message?.type === "kungfu.dogfood.snapshot.response/v1") {
+              const request = pending.get(String(message.requestId || ""));
+              if (!request) return;
+              window.clearTimeout(request.timeout);
+              pending.delete(message.requestId);
+              if (message.error) {
+                request.reject(new Error(message.error));
+                return;
+              }
+              try {
+                const evidence = validate(message.evidence, request.entry.snapshotId);
+                snapshotCache.set(evidence.snapshotId, evidence);
+                request.resolve(evidence);
+              } catch (error) {
+                request.reject(error);
+              }
+            }
+          });
+          window.addEventListener("popstate", () => {
+            if (!timeline.length) return;
+            const requested = new URL(window.location.href).searchParams.get("snapshot");
+            selectSnapshot(requested || timeline.at(-1).snapshotId, false);
+          });
+          bridge.src = bridge.dataset.src;
         })();
       </script>
 
