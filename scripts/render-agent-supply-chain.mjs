@@ -36,9 +36,22 @@ const readerProgression = {
   },
   authorityBoundary: "Humans and Hubs continue to set goals, permissions, budgets, policy, admission, and revocation. Agents increasingly perform day-to-day tool selection inside those boundaries.",
   distributionAdvantage: "Agent-first software can be discovered, evaluated, invoked, and continued with less bespoke interpretation, creating a new selection and distribution advantage.",
+  bootstrap: {
+    title: "Kungfu gives the first Agent a way to understand the stack.",
+    seed: "A user first chooses Kungfu for concrete utility: continuity across long-running Agent work.",
+    discovery: "When Kungfu launches an Agent, a compact, versioned Skill envelope points to the exact installed context, capability catalog, and KFD-3 collaboration interface. From those local entrypoints the Agent can inspect the KFD-2 evidence and Buildchain-bound release provenance available for that artifact.",
+    boundary: "Kungfu must still solve a real problem well enough to earn the first adoption. The envelope does not create demand or assume prior KFD knowledge; it turns one initial product proof into a repeatable learning and distribution loop.",
+    steps: [
+      "User chooses Kungfu for durable Agent work",
+      "Kungfu manages the Agent",
+      "Skill envelope points to local discovery",
+      "Agent inspects the exact installed facts",
+      "Informed use can reinforce demand",
+    ],
+  },
   flywheel: [
-    "Useful software presents an inspectable KFD-3 collaboration surface.",
-    "Agents can evaluate and use it with less bespoke integration.",
+    "A user chooses Kungfu because continuity for durable Agent work solves a concrete problem.",
+    "A Kungfu-managed Agent receives a compact Skill envelope and discovers the exact installed collaboration surface and evidence.",
     "Successful Agent-mediated use can increase demand for KFD-3-compatible software.",
     "Buildchain binds KFD-3 declarations and KFD-2 evidence to an exact release.",
     "More developers can ship Agent-ready software with assessable provenance.",
@@ -104,6 +117,15 @@ const html = `<!doctype html>
     .advantage-card { padding: 22px; border-top: 3px solid var(--accent); background: var(--panel); }
     .advantage-card h3 { margin: 0 0 8px; font-size: 20px; }
     .advantage-card p { margin: 0; color: var(--muted); }
+    .bootstrap-grid { display: grid; grid-template-columns: 1fr 1.45fr; gap: 18px; }
+    .bootstrap-card { padding: 26px; border: 1px solid var(--line); background: var(--surface); }
+    .bootstrap-card.discovery { border-color: var(--accent); background: var(--panel); }
+    .bootstrap-card h3 { margin: 6px 0 12px; font-size: 24px; }
+    .bootstrap-card p { margin: 0; color: var(--muted); }
+    .bootstrap-flow { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px; margin-top: 18px; padding: 18px; border: 1px solid var(--line); background: var(--panel-soft); font-size: 14px; font-weight: 650; }
+    .bootstrap-flow span { position: relative; display: grid; place-items: center; min-height: 58px; padding: 8px 10px; border: 1px solid var(--line); background: var(--surface); text-align: center; }
+    .bootstrap-flow span:not(:last-child)::after { content: "→"; position: absolute; z-index: 2; top: 50%; right: -19px; width: 24px; color: var(--accent); transform: translateY(-50%); }
+    .bootstrap-boundary { margin: 18px 0 0; padding: 16px 18px; border-left: 3px solid var(--warn); background: var(--panel-soft); color: var(--muted); }
     .flywheel-intro { max-width: 880px; margin: 0 0 28px; padding: 24px; border: 1px solid var(--line); background: var(--panel); font-size: 18px; }
     .flywheel-intro strong { color: var(--accent); }
     .flywheel { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin: 0; padding: 0; list-style: none; counter-reset: flywheel; }
@@ -130,7 +152,7 @@ const html = `<!doctype html>
     .decision-card p, .decision-card li { color: var(--muted); }
     .action { display: inline-flex; padding: 10px 14px; border: 1px solid var(--accent); background: var(--accent); color: white; text-decoration: none; font-weight: 700; }
     @media (max-width: 980px) { .advantage-grid { grid-template-columns: repeat(2, 1fr); } .flywheel { grid-template-columns: repeat(2, 1fr); } .flywheel li:not(:last-child)::after { display: none; } .layer-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-    @media (max-width: 640px) { main { width: min(100% - 28px, 640px); } .hero { min-height: 0; padding: 50px 0 62px; } .chapter { padding: 56px 0; } .era-grid, .advantage-grid, .flywheel, .layer-grid, .maturity-grid, .decision-grid { grid-template-columns: 1fr; } .layer-card, .flywheel li { min-height: 0; } }
+    @media (max-width: 640px) { main { width: min(100% - 28px, 640px); } .hero { min-height: 0; padding: 50px 0 62px; } .chapter { padding: 56px 0; } .era-grid, .advantage-grid, .bootstrap-grid, .bootstrap-flow, .flywheel, .layer-grid, .maturity-grid, .decision-grid { grid-template-columns: 1fr; } .bootstrap-flow { gap: 18px; } .bootstrap-flow span:not(:last-child)::after { content: "↓"; top: auto; right: 50%; bottom: -22px; transform: translateX(50%); } .layer-card, .flywheel li { min-height: 0; } }
   </style>
 </head>
 <body>
@@ -179,11 +201,32 @@ ${renderHeader(layout)}
       </div>
       <p class="claim-boundary"><strong>KFD-3 is the collaboration surface.</strong> It makes product-owned value, constraints, choices, commands, Exit, and record declarations inspectable to humans and Agents. It does not manufacture product value or force adoption.</p>
     </section>
+    <section class="chapter" aria-labelledby="bootstrap-heading">
+      <div class="section-heading">
+        <p class="eyebrow">03 · The bootstrap</p>
+        <h2 id="bootstrap-heading">${escapeHtml(readerProgression.bootstrap.title)}</h2>
+        <p>Agent-first distribution does not require the first Agent to arrive with prior knowledge of KFD or Buildchain. It requires one useful product to provide a trustworthy way in.</p>
+      </div>
+      <div class="bootstrap-grid">
+        <article class="bootstrap-card">
+          <p class="eyebrow">First adoption</p>
+          <h3>One real problem starts the loop.</h3>
+          <p>${escapeHtml(readerProgression.bootstrap.seed)}</p>
+        </article>
+        <article class="bootstrap-card discovery">
+          <p class="eyebrow">Managed discovery</p>
+          <h3>The envelope points. The Agent inspects.</h3>
+          <p>${escapeHtml(readerProgression.bootstrap.discovery)}</p>
+        </article>
+      </div>
+      <div class="bootstrap-flow" aria-label="Kungfu Agent understanding bootstrap">${readerProgression.bootstrap.steps.map((step) => `<span>${escapeHtml(step)}</span>`).join("")}</div>
+      <p class="bootstrap-boundary"><strong>One seed, not two miracles.</strong> ${escapeHtml(readerProgression.bootstrap.boundary)}</p>
+    </section>
     <section class="chapter" aria-labelledby="flywheel-heading">
       <div class="section-heading">
-        <p class="eyebrow">03 · The conditional flywheel</p>
+        <p class="eyebrow">04 · The conditional flywheel</p>
         <h2 id="flywheel-heading">Useful Agent-first software can create its own demand signal.</h2>
-        <p>Kungfu starts with concrete utility: continuity for durable Agent work. KFD-3 makes that utility legible to an Agent. If the tool improves outcomes inside delegated boundaries, Agent-mediated use can grow faster than human-led awareness alone.</p>
+        <p>The inner loop turns concrete utility into informed Agent use. The outer loop turns successful use into demand for a shared collaboration interface and a repeatable release supply chain.</p>
       </div>
       <p class="flywheel-intro"><strong>The strategic consequence:</strong> demand can move from one useful product, to a shared Agent-first interface, to an exact-release supply chain that other developers can adopt without rebuilding the underlying trust machinery.</p>
       <ol class="flywheel" aria-label="Conditional Agent Supply Chain flywheel">${readerProgression.flywheel.map((step) => `<li>${escapeHtml(step)}</li>`).join("")}</ol>
@@ -191,7 +234,7 @@ ${renderHeader(layout)}
     </section>
     <section class="chapter" aria-labelledby="mechanism-heading">
       <div class="section-heading">
-        <p class="eyebrow">04 · The complete mechanism</p>
+        <p class="eyebrow">05 · The complete mechanism</p>
         <h2 id="mechanism-heading">Five responsibilities. Independent owners. One inspectable path.</h2>
         <p>${escapeHtml(narrative.categoryStatement)}</p>
       </div>
@@ -235,6 +278,14 @@ ${readerProgression.premise.title}
 ${readerProgression.premise.statement}
 
 Authority boundary: ${readerProgression.authorityBoundary}
+
+## How the first Agent understands the stack
+
+${readerProgression.bootstrap.seed}
+
+${readerProgression.bootstrap.discovery}
+
+Boundary: ${readerProgression.bootstrap.boundary}
 
 ## The conditional distribution flywheel
 

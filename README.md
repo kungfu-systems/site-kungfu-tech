@@ -16,13 +16,17 @@ The route deliberately establishes the reader's mental model before revealing
 the complete five-layer mechanism. It first explains the shift from human-led
 tool operation to Agent-mediated tool selection inside explicit human and Hub
 authority; then the selection advantage of Agent-first software; then the
-conditional Kungfu and Buildchain distribution flywheel. Only after those
+bootstrap by which a Kungfu-managed Agent discovers the exact installed
+collaboration surface and release evidence from a compact Skill envelope; then
+the conditional Kungfu and Buildchain distribution flywheel. Only after those
 premises are established does it render the upstream-owned KFD-3, Buildchain,
-KFD-2, libkungfu, and Agent Hub portability layers. The site owns this reading
-progression and its visual composition. The white-paper package continues to
-own the cross-product layer facts, evidence coordinates, maturity classes,
-known limits, and adoption boundaries. Human-facing KFD names are always
-rendered in uppercase; lowercase layer IDs remain stable machine identifiers.
+KFD-2, libkungfu, and Agent Hub portability layers. The bootstrap must preserve
+the cold-start boundary: Kungfu still has to earn the first adoption by solving
+a concrete problem in durable Agent work. The site owns this reading progression
+and its visual composition. The white-paper package continues to own the
+cross-product layer facts, evidence coordinates, maturity classes, known limits,
+and adoption boundaries. Human-facing KFD names are always rendered in
+uppercase; lowercase layer IDs remain stable machine identifiers.
 
 ## Policy
 
