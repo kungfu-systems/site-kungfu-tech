@@ -1,9 +1,16 @@
 {
-  "schema": "kungfu.tech/public-dogfood-proof/v2",
+  "schema": "kungfu.tech/public-dogfood-proof/v3",
   "projection": {
-    "mode": "client-latest",
+    "mode": "verified-parent-bridge",
     "fallback": "retained-copy",
-    "claim": "kungfu.tech projects the current upstream observation and does not independently collect or pin its metrics."
+    "claim": "kungfu.tech selects from the upstream append-only observation chain and does not independently collect or pin its metrics.",
+    "bridge": {
+      "page": "https://libkungfu.dev/dogfood/?projection=kungfu-tech",
+      "timelineMessage": "kungfu.dogfood.timeline/v1",
+      "timelineRequestMessage": "kungfu.dogfood.timeline.request/v1",
+      "requestMessage": "kungfu.dogfood.snapshot.request/v1",
+      "responseMessage": "kungfu.dogfood.snapshot.response/v1"
+    }
   },
   "upstream": {
     "repository": "https://github.com/kungfu-systems/site-libkungfu-dev",
