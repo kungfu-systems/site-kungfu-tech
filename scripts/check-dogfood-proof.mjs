@@ -27,6 +27,11 @@ for (const bridgeContract of [
 ]) {
   assert.ok(page.includes(bridgeContract), `page must enforce dogfood projection bridge contract: ${bridgeContract}`);
 }
+assert.match(
+  page,
+  /\.dogfood-history-controls, \.dogfood-metrics,[\s\S]{0,160}\.kfd-primer \{\n        grid-template-columns: 1fr;/,
+  "mobile layout must preserve both dogfood history controls and the KFD primer after mainline integration",
+);
 for (const requiredText of [
   "The mechanism is building Kungfu itself.",
   "Public work → exact Cut → independent review → release",
