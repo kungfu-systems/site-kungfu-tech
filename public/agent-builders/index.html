@@ -54,6 +54,65 @@
       margin-top: 8px;
     }
 
+    .kfd-primer {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 18px 28px;
+      align-items: center;
+      padding: 18px 20px;
+      border: 1px solid var(--line);
+      border-left: 5px solid #8b63d9;
+      background: var(--panel-soft);
+    }
+
+    .kfd-primer-copy {
+      display: grid;
+      gap: 7px;
+      max-width: 800px;
+    }
+
+    .kfd-primer h2,
+    .kfd-primer p {
+      margin: 0;
+    }
+
+    .kfd-primer h2 {
+      font-size: 21px;
+      line-height: 1.15;
+    }
+
+    .kfd-primer p {
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.5;
+    }
+
+    .kfd-primer-actions,
+    .protocol-reading {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 14px;
+      align-items: center;
+    }
+
+    .kfd-primer-actions a {
+      display: inline-flex;
+      align-items: center;
+      min-height: 38px;
+      padding: 8px 12px;
+      border: 1px solid var(--line);
+      background: var(--surface);
+      color: var(--fg);
+      font-weight: 650;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .kfd-primer-actions a:first-child {
+      border-color: #8b63d9;
+      color: #6f48c6;
+    }
+
     .reader-path {
       display: grid;
       grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -154,6 +213,11 @@
 
     .promise-foundation strong {
       font-size: 17px;
+    }
+
+    .promise-foundation strong a {
+      color: inherit;
+      text-underline-offset: 3px;
     }
 
     .promise-foundation p {
@@ -733,6 +797,20 @@
       font-weight: 650;
     }
 
+    .protocol-reading {
+      padding-top: 2px;
+      font-size: 13px;
+    }
+
+    .protocol-reading strong {
+      color: var(--fg);
+    }
+
+    .protocol-reading a {
+      font-weight: 650;
+      text-underline-offset: 3px;
+    }
+
     .dogfood-proof {
       display: grid;
       gap: 18px;
@@ -993,7 +1071,8 @@
       .reader-path, .promise-ownership, .promise-foundation, .action-loop, .authority-rail,
       .topology-grid, .semantic-gate, .topology-modes, .invariant-strip, .adoption-value,
       .adoption-grid, .cloud-boundary, .evidence-panel, .dogfood-proof-head,
-      .dogfood-history-controls, .dogfood-metrics, .example-path, .proof-unit, .final-start {
+      .dogfood-history-controls, .dogfood-metrics, .example-path, .proof-unit, .final-start,
+      .kfd-primer {
         grid-template-columns: 1fr;
       }
 
@@ -1034,6 +1113,7 @@
         <details class="nav-menu">
           <summary>Developers</summary>
           <div class="nav-menu-panel">
+          <a href="https://kfd.libkungfu.dev/">KFD protocol</a>
           <a href="https://libkungfu.dev">libkungfu.dev</a>
           <a href="https://github.com/kungfu-systems/kungfu">GitHub</a>
           </div>
@@ -1047,6 +1127,16 @@
         <p class="eyebrow">For Agent Builders</p>
         <h1 id="builder-title">Build your Hub. Don&rsquo;t rebuild the runtime.</h1>
         <p class="lead">Our ambition is deliberately narrow: make KFD the standard interoperability protocol and libkungfu the local runtime. You build and own the Hub.</p>
+        <aside class="kfd-primer" aria-labelledby="kfd-primer-heading">
+          <div class="kfd-primer-copy">
+            <h2 id="kfd-primer-heading">KFD in one sentence</h2>
+            <p>KFD&mdash;Kung Fu Decisions&mdash;is an open engineering standard for preserving facts, trust, boundaries, and responsibility when independent humans, Agents, and products cooperate without sharing one control plane.</p>
+          </div>
+          <div class="kfd-primer-actions" aria-label="KFD reading paths">
+            <a href="https://kfd.libkungfu.dev/">Understand KFD</a>
+            <a href="https://kfd.libkungfu.dev/3/usage/">Implement KFD-3</a>
+          </div>
+        </aside>
         <section class="adoption-tradeoff hero-decision" aria-labelledby="adoption-tradeoff-heading">
           <header>
             <p class="eyebrow">The adoption decision</p>
@@ -1079,7 +1169,7 @@
           <p class="promise-boundary">Kungfu does not cross this product and customer boundary. Integration is not a channel into your customer relationship.</p>
           <div class="promise-foundation" aria-label="Kungfu public capability layer">
             <article>
-              <strong>KFD · open protocol</strong>
+              <strong><a href="https://kfd.libkungfu.dev/">KFD · open protocol</a></strong>
               <p>Portable responsibility and evidence between independent systems. KFD requires no central Kungfu cloud.</p>
             </article>
             <article>
@@ -1195,7 +1285,12 @@
             <article class="invariant-card"><strong>Occurrence <b>≠</b> Completion</strong><p>An Episode happened; success still needs independent assessment.</p></article>
             <article class="invariant-card"><strong>Authentication <b>≠</b> Authority</strong><p>Identity control does not prove permission, truth, or fact admission.</p></article>
           </div>
-          <p class="diagram-note"><strong>Protocol source:</strong> <a href="https://github.com/kungfu-systems/kfd/blob/35915676330696f888c73c154f431c99f37c19ec/protocols/agent-hub/README.md">KFD Agent Hub alpha profile</a>.</p>
+          <div class="protocol-reading" aria-label="KFD protocol reading paths">
+            <strong>Read the protocol:</strong>
+            <a href="https://kfd.libkungfu.dev/">Understand KFD</a>
+            <a href="https://kfd.libkungfu.dev/3/usage/">Implement KFD-3</a>
+            <a href="https://github.com/kungfu-systems/kfd/blob/35915676330696f888c73c154f431c99f37c19ec/protocols/agent-hub/README.md">Audit the exact Agent Hub alpha profile</a>
+          </div>
         </div>
         <aside class="cloud-boundary" aria-label="Kungfu Cloud boundary">
           <strong>Kungfu Cloud is a future option, not a current requirement.</strong>

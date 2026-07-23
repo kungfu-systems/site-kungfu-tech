@@ -37,6 +37,10 @@
       "label": "Developers",
       "items": [
         {
+          "label": "KFD protocol",
+          "href": "https://kfd.libkungfu.dev/"
+        },
+        {
           "label": "libkungfu.dev",
           "href": "https://libkungfu.dev"
         },
