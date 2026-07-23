@@ -8,6 +8,8 @@ node scripts/check-infra-outputs.mjs
 node scripts/render-shared-layout.mjs --check
 node scripts/check-whitepaper.mjs
 node scripts/check-dogfood-proof.mjs
+node scripts/check-trademark-use.mjs
+node scripts/check-trademark-use.mjs --self-test
 
 shared_block() {
   block_name=$1
