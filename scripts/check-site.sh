@@ -6,6 +6,8 @@ cd "$repo_root"
 
 node scripts/check-infra-outputs.mjs
 node scripts/render-shared-layout.mjs --check
+grep -q '"label": "Verify Agent Hub"' site/shared-layout.json
+grep -q '"href": "/agent-hub/"' site/shared-layout.json
 node scripts/check-whitepaper.mjs
 node scripts/check-dogfood-proof.mjs
 node scripts/check-trademark-use.mjs
@@ -96,6 +98,8 @@ grep -q 'href="/why-kungfu/"' public/index.html
 grep -q 'durable work facts between sessions' public/index.html
 grep -q 'class="primary-builder-action" href="/agent-builders/">For Agent Builders</a>' public/index.html
 grep -q 'href="/agent-supply-chain/">Explore the Agent Supply Chain</a>' public/index.html
+grep -q 'href="/agent-hub/">Run the installed Agent Hub proof</a>' public/index.html
+grep -q 'href="/agent-hub/">Verify Kungfu' public/index.html
 grep -q 'KFD-3</span><i aria-hidden="true">→</i>' public/index.html
 grep -q 'Not claimed:</strong> a live multi-Hub market or external vendor adoption' public/index.html
 grep -q 'Build and own your Hub. Kungfu stays beneath it.' public/index.html
@@ -290,6 +294,8 @@ grep -q 'ActionBinding → Act' public/agent-builders/index.html
 grep -q 'Episode → Inspect + admit' public/agent-builders/index.html
 grep -q 'Read one proof unit before the rolling 30-day totals.' public/agent-builders/index.html
 grep -q 'Start with one bounded adapter.' public/agent-builders/index.html
+grep -q 'Ask the installed product first.' public/agent-builders/index.html
+grep -q 'href="/agent-hub/">Open the executable proof path</a>' public/agent-builders/index.html
 assert_before public/agent-builders/index.html 'data-builder-chapter="01"' 'data-builder-chapter="02"'
 assert_before public/agent-builders/index.html 'data-builder-chapter="02"' 'data-builder-chapter="03"'
 assert_before public/agent-builders/index.html 'data-builder-chapter="03"' 'data-builder-chapter="04"'
@@ -329,6 +335,8 @@ if [ -d dist ]; then
   test -f dist/agent-builders/index.html
   test -f dist/agent-supply-chain/index.html
   test -f dist/agent-supply-chain.json
+  test -f dist/agent-hub/index.html
+  test -f dist/agent-hub.json
   test -f dist/llms.txt
   test -f dist/why-kungfu/index.html
   test -f dist/assets/site.css
@@ -368,6 +376,12 @@ if [ -d dist ]; then
   grep -q '"label": "KFD-2"' dist/agent-supply-chain.json
   grep -q '30-day assessment' dist/agent-supply-chain/index.html
   grep -q 'external vendor adoption or endorsement' dist/agent-supply-chain/index.html
+  grep -q "Ask Kungfu to prove its Agent Hub capability." dist/agent-hub/index.html
+  grep -q 'kungfu agent hub qualify --output-dir ./kungfu-agent-hub-check' dist/agent-hub/index.html
+  grep -q 'What does it not mean?' dist/agent-hub/index.html
+  grep -q 'kungfu-agent-hub-public-entry/v1' dist/agent-hub.json
+  grep -q '"run": "kungfu agent hub qualify --output-dir <new-directory>"' dist/agent-hub.json
+  grep -q 'Machine route: https://kungfu.tech/agent-hub.json' dist/llms.txt
   grep -q 'property="og:title" content="Agent Supply Chain | Kungfu"' dist/agent-supply-chain/index.html
   grep -q 'Maturity claims matrix' dist/agent-supply-chain/index.html
   grep -q 'Exact evidence' dist/agent-supply-chain/index.html
