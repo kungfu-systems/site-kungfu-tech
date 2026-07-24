@@ -25,6 +25,7 @@ test -f dist/agent-supply-chain.json
 test -f dist/llms.txt
 test -f dist/.well-known/security.txt
 test -f dist/about/index.html
+test -f dist/about/bootstrapping/index.html
 test -f dist/capital/index.html
 test -f dist/capital/investor-perspective/index.html
 test -f dist/services/index.html

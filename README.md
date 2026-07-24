@@ -38,6 +38,22 @@ uppercase; lowercase layer IDs remain stable machine identifiers.
 - Record production object versions and CloudFront invalidation IDs in release
   notes or deployment records.
 
+## About And Bootstrapping
+
+The concise `/about/` route owns the public product, protocol, commercial, and
+stewardship boundary. `/about/bootstrapping/` is the deeper interpretive route:
+it explains the Session-to-Work shift, constrained agent authority, the
+self-bootstrap, and Kungfu's structural debt to Douglas Engelbart without
+turning that tribute into an endorsement or a claim of direct succession.
+
+The essay must remain safe for public reading. It may cite public Kungfu, KFD,
+Buildchain, and Engelbart sources, but it must not expose private coordination
+systems, internal paths, private work records, or unpublished operating detail.
+It must also preserve the maturity ladder: design intent, merged mechanisms,
+qualified evidence, released products, and independent adoption are distinct.
+The reader prompt asks an agent to explain and challenge the argument, not to
+accept it.
+
 ## Local Check
 
 ```bash

@@ -68,13 +68,14 @@ test -f public/why-kungfu/index.html
 test -f public/assets/site.css
 test -f public/.well-known/security.txt
 test -f public/about/index.html
+test -f public/about/bootstrapping/index.html
 test -f public/capital/index.html
 test -f public/capital/investor-perspective/index.html
 test -f public/services/index.html
 test -f public/trust/index.html
 test -f public/legal/index.html
 test -f site/public-dogfood-proof.json
-for page in public/index.html public/how-tested/continuity/index.html public/agent-builders/index.html public/why-kungfu/index.html public/about/index.html public/capital/index.html public/capital/investor-perspective/index.html public/services/index.html public/trust/index.html public/legal/index.html; do
+for page in public/index.html public/how-tested/continuity/index.html public/agent-builders/index.html public/why-kungfu/index.html public/about/index.html public/about/bootstrapping/index.html public/capital/index.html public/capital/investor-perspective/index.html public/services/index.html public/trust/index.html public/legal/index.html; do
   grep -q 'href="/assets/site.css"' "$page"
 done
 if grep -RInE '^    \\.(site-header|brand|mark|site-nav|site-footer|nav-menu)\\b' \
@@ -159,7 +160,17 @@ grep -q 'Continuity for Agent Work' public/about/index.html
 grep -q 'KFD is the open protocol' public/about/index.html
 grep -q 'libkungfu.dev' public/about/index.html
 grep -q 'Kungfu does not compete for the Hub' public/about/index.html
+grep -q 'href="/about/bootstrapping/"' public/about/index.html
 grep -q 'href="/capital/"' public/about/index.html
+grep -q 'shared-header:start' public/about/bootstrapping/index.html
+grep -q 'shared-footer:start' public/about/bootstrapping/index.html
+grep -q 'Kungfu as a bootstrapping system.' public/about/bootstrapping/index.html
+grep -q 'Read this with your agent' public/about/bootstrapping/index.html
+grep -q 'Separate current evidence, strategic hypotheses, and long-term aspirations.' public/about/bootstrapping/index.html
+grep -q 'With gratitude to Douglas Engelbart' public/about/bootstrapping/index.html
+grep -q 'A Session lets an agent continue talking. Work infrastructure lets the work continue to exist.' public/about/bootstrapping/index.html
+grep -q 'Kungfu v4 is coming soon.' public/about/bootstrapping/index.html
+grep -q 'docs/concepts/bootstrapping-agent-work.md' public/about/bootstrapping/index.html
 grep -q 'shared-header:start' public/capital/index.html
 grep -q 'shared-footer:start' public/capital/index.html
 grep -q 'Capital should expand the ecosystem, not control the standard.' public/capital/index.html
