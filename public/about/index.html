@@ -60,6 +60,11 @@
       background: linear-gradient(135deg, rgba(121, 192, 255, 0.09), var(--panel) 58%);
     }
 
+    .deeper {
+      grid-column: 1 / -1;
+      min-height: 0;
+    }
+
     h2 {
       margin: 0 0 12px;
       font-size: 22px;
@@ -75,7 +80,7 @@
     @media (max-width: 760px) {
       main { width: min(100% - 28px, 640px); padding-top: 28px; }
       .grid { grid-template-columns: 1fr; }
-      .boundary { grid-column: auto; }
+      .boundary, .deeper { grid-column: auto; }
       section { min-height: auto; }
     }
   </style>
@@ -126,6 +131,12 @@
         <h2>Kungfu does not compete for the Hub</h2>
         <p>Builders keep their users, accounts, billing, models, UI, Agent, cloud, and customer relationship. Kungfu does not use integration as a route into that relationship.</p>
         <p>KFD standardizes the boundary between Hubs; libkungfu remains a public capability layer inside the host. The highest-value Hub layer stays the Builder&rsquo;s domain.</p>
+      </section>
+
+      <section class="deeper">
+        <h2>How Kungfu bootstraps</h2>
+        <p>Kungfu is building infrastructure for durable agent work while using agents to build more of that infrastructure. The deeper essay examines that recursive loop, its debt to Douglas Engelbart&rsquo;s bootstrapping strategy, and what remains unproved.</p>
+        <p><a href="/about/bootstrapping/">Read Kungfu as a bootstrapping system</a>.</p>
       </section>
 
       <section>
