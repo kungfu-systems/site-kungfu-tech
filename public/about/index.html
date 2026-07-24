@@ -65,6 +65,34 @@
       min-height: 0;
     }
 
+    .public-commitment {
+      grid-column: 1 / -1;
+      min-height: 0;
+    }
+
+    .public-commitment-copy {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 24px;
+    }
+
+    .public-commitment-copy p {
+      margin: 0;
+    }
+
+    .capital-stewardship {
+      display: flex;
+      flex-direction: column;
+      border-color: rgba(121, 192, 255, 0.28);
+      background: linear-gradient(135deg, rgba(121, 192, 255, 0.04), var(--panel) 65%);
+    }
+
+    .capital-stewardship .card-action {
+      margin-top: auto;
+      padding-top: 20px;
+      font-weight: 600;
+    }
+
     h2 {
       margin: 0 0 12px;
       font-size: 22px;
@@ -80,7 +108,8 @@
     @media (max-width: 760px) {
       main { width: min(100% - 28px, 640px); padding-top: 28px; }
       .grid { grid-template-columns: 1fr; }
-      .boundary, .deeper { grid-column: auto; }
+      .boundary, .deeper, .public-commitment { grid-column: auto; }
+      .public-commitment-copy { grid-template-columns: 1fr; gap: 12px; }
       section { min-height: auto; }
     }
   </style>
@@ -141,10 +170,12 @@
         <p><a href="/about/bootstrapping/">Read Kungfu as a bootstrapping system</a>.</p>
       </section>
 
-      <section>
+      <section class="public-commitment">
         <h2>Public and auditable</h2>
-        <p>Kungfu is built and dogfooded in the open through public artifacts, bounded claims, and evidence-linked releases.</p>
-        <p>This site describes direction and current evidence, not a claim that every shown capability is already generally available. Follow the open-source core and public issues on <a href="https://github.com/kungfu-systems/kungfu">GitHub</a>.</p>
+        <div class="public-commitment-copy">
+          <p>Kungfu is built and dogfooded in the open through public artifacts, bounded claims, and evidence-linked releases.</p>
+          <p>This site describes direction and current evidence, not a claim that every shown capability is already generally available. Follow the open-source core and public issues on <a href="https://github.com/kungfu-systems/kungfu">GitHub</a>.</p>
+        </div>
       </section>
 
       <section>
@@ -153,10 +184,10 @@
         <p>The business can grow through official artifacts, optional services, support, governance, and future team or cloud capabilities without making interoperability depend on private code or customer capture.</p>
       </section>
 
-      <section>
+      <section class="capital-stewardship">
         <h2>Capital &amp; stewardship</h2>
         <p>Kungfu has published standing principles for how any future relationship with capital should strengthen the product and ecosystem without purchasing control of the public protocol layer.</p>
-        <p><a href="/capital/">Read the capital compatibility principles</a>.</p>
+        <p class="card-action"><a href="/capital/">Explore the capital principles&nbsp;&rarr;</a></p>
       </section>
     </div>
 

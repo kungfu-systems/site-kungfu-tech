@@ -168,6 +168,11 @@ grep -q 'libkungfu.dev' public/about/index.html
 grep -q 'Kungfu does not compete for the Hub' public/about/index.html
 grep -q 'href="/about/bootstrapping/"' public/about/index.html
 grep -q 'href="/capital/"' public/about/index.html
+grep -q 'class="public-commitment"' public/about/index.html
+grep -q 'class="public-commitment-copy"' public/about/index.html
+grep -q 'class="capital-stewardship"' public/about/index.html
+assert_before public/about/index.html '<h2>Public and auditable</h2>' '<h2>Commercial stewardship</h2>'
+assert_before public/about/index.html '<h2>Commercial stewardship</h2>' '<h2>Capital &amp; stewardship</h2>'
 grep -q 'shared-header:start' public/about/bootstrapping/index.html
 grep -q 'shared-footer:start' public/about/bootstrapping/index.html
 grep -q 'Kungfu as a bootstrapping system.' public/about/bootstrapping/index.html
