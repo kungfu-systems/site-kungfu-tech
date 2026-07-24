@@ -4,6 +4,7 @@ set -eu
 repo_root=$(cd "$(dirname "$0")/.." && pwd)
 cd "$repo_root"
 
+node --test scripts/import-bootstrap-publication.test.mjs
 node scripts/check-infra-outputs.mjs
 node scripts/render-shared-layout.mjs --check
 node scripts/check-whitepaper.mjs
