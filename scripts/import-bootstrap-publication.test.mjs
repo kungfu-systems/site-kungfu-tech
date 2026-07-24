@@ -123,6 +123,8 @@ function fixture(root, { sourceCharacter = "a", version = "4.0.0-alpha.1" } = {}
     channel: "alpha",
     sourceCommit,
     channelUrl: "https://kungfu.tech/.well-known/kungfu/alpha.json",
+    channelSnapshotUrl:
+      `https://kungfu.tech/channels/alpha/${channel.payloadRoot.slice(7)}/index.json`,
     channelPayloadRoot: channel.payloadRoot,
     channelFileDigest: sha256(channelBytes),
     releasePassport: channel.releasePassport,

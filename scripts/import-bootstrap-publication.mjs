@@ -213,6 +213,16 @@ function verifyPublication(publication, sourceRoot, channel, channelBytes) {
   if (publicUrl(publication.channelUrl, "channelUrl").href !== expectedChannelUrl) {
     throw new Error(`channelUrl must be ${expectedChannelUrl}`);
   }
+  const expectedSnapshotUrl =
+    `${CANONICAL_ORIGIN}/channels/alpha/${channel.payloadRoot.slice(7)}/index.json`;
+  if (
+    publicUrl(
+      publication.channelSnapshotUrl,
+      "channelSnapshotUrl",
+    ).href !== expectedSnapshotUrl
+  ) {
+    throw new Error(`channelSnapshotUrl must be ${expectedSnapshotUrl}`);
+  }
   const immutablePath = safeRelative(
     publication.immutablePath,
     "installer immutablePath",
@@ -420,6 +430,7 @@ function renderInstallerPage({
       <section class="wide">
         <h2>Inspect and pin before execution</h2>
         <p>Channel: <a href="/.well-known/kungfu/alpha.json"><code>/.well-known/kungfu/alpha.json</code></a> · <code>${escapeHtml(publication.channelFileDigest)}</code></p>
+        <p>Immutable channel: <a href="${escapeHtml(new URL(publication.channelSnapshotUrl).pathname)}"><code>${escapeHtml(new URL(publication.channelSnapshotUrl).pathname)}</code></a></p>
         <p>Release Passport: <code>${escapeHtml(publication.releasePassport.ref)}</code> · <code>${escapeHtml(publication.releasePassport.root)}</code></p>
         <p>Qualified targets: <code>${escapeHtml(platforms.join(", "))}</code></p>${assets}
       </section>
