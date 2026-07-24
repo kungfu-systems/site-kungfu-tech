@@ -141,6 +141,14 @@ authorities. Until that site's production release is approved, this repository
 links the exact source-bound fixture instead of publishing a parallel version
 ledger or a staging URL.
 
+The upstream KFD site bundle also generates `/agent-hub/` and
+`/agent-hub.json`. These routes expose the direct installed-product command,
+offline recheck command, fixed suite count, ownership boundary, and exact
+non-certifying claim boundary. The human route answers the four immediate
+questions; the JSON route and `/llms.txt` tell an Agent when to invoke the
+command and require it to preserve the emitted meaning and non-claims. This
+repository does not duplicate the suite or qualification verdict.
+
 ## Papers
 
 The publication catalog is generated from exact npm artifacts:
@@ -159,7 +167,7 @@ four equivalent academic papers.
 The product white paper's upstream `site/brand-site.json` bundle owns its
 selected HTML reader content. Every paper's publication manifest owns its title,
 abstract, PDF digest, source commit, canonical route, and evidence links. The
-catalog also renders source-contract facts from `@kungfu-tech/kfd@1.0.0-alpha.41`
+catalog also renders source-contract facts from `@kungfu-tech/kfd@1.0.0-alpha.47`
 and `@kungfu-tech/buildchain@2.14.14-alpha.4`. This repository owns only site layout,
 navigation, responsive presentation, and machine entry rendering.
 
@@ -171,6 +179,9 @@ Generated routes:
 - `/whitepaper/manifest.json`
 - `/whitepaper/catalog.json`
 - `/whitepaper/llms.txt`
+- `/agent-hub/`
+- `/agent-hub.json`
+- `/llms.txt`
 
 The product white paper keeps its `kungfu.tech` reader on the active preview,
 staging, or production origin. Research papers retain their canonical

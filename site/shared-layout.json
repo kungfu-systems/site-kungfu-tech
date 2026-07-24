@@ -38,6 +38,10 @@
       "label": "Developers",
       "items": [
         {
+          "label": "Verify Agent Hub",
+          "href": "/agent-hub/"
+        },
+        {
           "label": "Install CLI",
           "href": "/install/"
         },

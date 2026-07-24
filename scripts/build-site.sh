@@ -15,6 +15,7 @@ cp -R public/. dist/
 
 node scripts/render-whitepaper.mjs
 node scripts/render-agent-supply-chain.mjs
+node scripts/render-agent-hub.mjs
 
 test -f dist/index.html
 test -f dist/404.html
@@ -22,6 +23,8 @@ test -f dist/how-tested/continuity/index.html
 test -f dist/agent-builders/index.html
 test -f dist/agent-supply-chain/index.html
 test -f dist/agent-supply-chain.json
+test -f dist/agent-hub/index.html
+test -f dist/agent-hub.json
 test -f dist/llms.txt
 test -f dist/.well-known/security.txt
 test -f dist/about/index.html
