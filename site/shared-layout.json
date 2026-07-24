@@ -8,7 +8,8 @@
     "public/capital/investor-perspective/index.html",
     "public/services/index.html",
     "public/trust/index.html",
-    "public/legal/index.html"
+    "public/legal/index.html",
+    "public/install/index.html"
   ],
   "brand": {
     "label": "Kungfu",
@@ -36,6 +37,10 @@
     {
       "label": "Developers",
       "items": [
+        {
+          "label": "Install CLI",
+          "href": "/install/"
+        },
         {
           "label": "libkungfu.dev",
           "href": "https://libkungfu.dev"
