@@ -99,6 +99,7 @@
     <h1>One command, one signed release authority.</h1>
     <p class="lead">The standalone Kungfu CLI installer is a thin, auditable projection of the signed Buildchain release channel. It does not invent a second latest pointer or silently change release channels.</p>
 
+    <!-- bootstrap-publication:start -->
     <div class="state">
       <strong>Public installer not released yet.</strong>
       <p>The source contract is undergoing protected review and native-platform qualification. Until a signed Alpha publication and public read-back complete, <code>/install.sh</code> and <code>/install.ps1</code> intentionally remain unavailable. A 404 is safer than an unqualified bootstrap.</p>
@@ -123,6 +124,7 @@
         <h2>Inspect and pin before execution</h2>
         <p>The released page will publish immutable installer URLs, exact byte sizes, SHA-256 digests, signed-channel and artifact roots, source SHA, platform matrix, and Release Passport coordinates. Higher-assurance and CI use should download the immutable file, compare the published digest, inspect it locally, then execute with an explicit channel or version.</p>
       </section>
+    <!-- bootstrap-publication:end -->
 
       <section>
         <h2>No silent machine mutation</h2>

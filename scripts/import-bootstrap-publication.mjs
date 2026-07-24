@@ -222,15 +222,26 @@ function verifyPublication(publication, sourceRoot, channel, channelBytes) {
   if (immutablePath !== expectedInstallerPath) {
     throw new Error(`installer immutablePath must be ${expectedInstallerPath}`);
   }
+  const identities = new Set();
+  const versions = new Set();
   if (
     !Array.isArray(publication.entries)
     || publication.entries.length === 0
     || publication.entries.some(
-      (entry) =>
-        entry.sourceCommit !== publication.sourceCommit
-        || !entry.artifactSignature
-        || !/^sha256:[a-f0-9]{64}$/.test(entry.artifactDigest || ""),
+      (entry) => {
+        const identity = `${entry.platform}/${entry.architecture}`;
+        const duplicate = identities.has(identity);
+        identities.add(identity);
+        versions.add(entry.version);
+        return (
+          duplicate
+          || entry.sourceCommit !== publication.sourceCommit
+          || !entry.artifactSignature
+          || !/^sha256:[a-f0-9]{64}$/.test(entry.artifactDigest || "")
+        );
+      },
     )
+    || versions.size !== 1
   ) {
     throw new Error("installer platform evidence is incomplete");
   }
@@ -269,7 +280,12 @@ function verifyPublication(publication, sourceRoot, channel, channelBytes) {
   if (expectedNames.size !== 0) {
     throw new Error("installer publication must contain install.sh and install.ps1");
   }
-  return { immutablePath, assets };
+  return {
+    immutablePath,
+    assets,
+    version: [...versions][0],
+    platforms: [...identities].sort(),
+  };
 }
 
 function appendVersion(manifest, publicationId, version) {
@@ -345,6 +361,74 @@ function atomicWrite(destination, bytes) {
   fs.renameSync(temporary, destination);
 }
 
+function escapeHtml(value) {
+  return String(value)
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;");
+}
+
+function renderInstallerPage({
+  outputRoot,
+  publication,
+  version,
+  platforms,
+}) {
+  const pagePath = path.join(outputRoot, "install", "index.html");
+  const page = fs.readFileSync(pagePath, "utf8");
+  const start = "    <!-- bootstrap-publication:start -->";
+  const end = "    <!-- bootstrap-publication:end -->";
+  const startIndex = page.indexOf(start);
+  const endIndex = page.indexOf(end);
+  if (
+    startIndex < 0
+    || endIndex < 0
+    || endIndex <= startIndex
+    || page.indexOf(start, startIndex + start.length) >= 0
+    || page.indexOf(end, endIndex + end.length) >= 0
+  ) {
+    throw new Error("installer page has no unique publication projection block");
+  }
+  const assets = publication.assets
+    .map(
+      (asset) => `
+        <p><a href="${escapeHtml(new URL(asset.immutableUrl).pathname)}"><code>${escapeHtml(asset.name)}</code></a> · ${asset.size} bytes · <code>${escapeHtml(asset.digest)}</code></p>`,
+    )
+    .join("");
+  const live = `${start}
+    <div class="state">
+      <strong>Signed Alpha ${escapeHtml(version)} is publicly available.</strong>
+      <p>The canonical channel, immutable installers, release artifacts, and public read-back bind source <code>${escapeHtml(publication.sourceCommit)}</code> and channel root <code>${escapeHtml(publication.channelPayloadRoot)}</code>.</p>
+    </div>
+
+    <div class="grid">
+      <section>
+        <h2>macOS and Linux</h2>
+        <p>Convenience install from the revalidated canonical route:</p>
+        <code class="command">curl --fail --proto '=https' --tlsv1.2 https://kungfu.tech/install.sh | sh</code>
+        <p>For higher assurance, download the immutable script below, compare its digest, inspect it, then execute it.</p>
+      </section>
+
+      <section>
+        <h2>Windows PowerShell</h2>
+        <p>Convenience install from the revalidated canonical route:</p>
+        <code class="command">irm https://kungfu.tech/install.ps1 | iex</code>
+        <p>The selected Windows archive is also required to carry valid Authenticode trust evidence.</p>
+      </section>
+
+      <section class="wide">
+        <h2>Inspect and pin before execution</h2>
+        <p>Channel: <a href="/.well-known/kungfu/alpha.json"><code>/.well-known/kungfu/alpha.json</code></a> · <code>${escapeHtml(publication.channelFileDigest)}</code></p>
+        <p>Release Passport: <code>${escapeHtml(publication.releasePassport.ref)}</code> · <code>${escapeHtml(publication.releasePassport.root)}</code></p>
+        <p>Qualified targets: <code>${escapeHtml(platforms.join(", "))}</code></p>${assets}
+      </section>
+    ${end}`;
+  return Buffer.from(
+    `${page.slice(0, startIndex)}${live}${page.slice(endIndex + end.length)}`,
+  );
+}
+
 export function importBootstrapPublication({
   publicationRoot,
   channelIndexPath,
@@ -373,6 +457,12 @@ export function importBootstrapPublication({
     publication,
     verified.immutablePath,
   );
+  const installerPage = renderInstallerPage({
+    outputRoot: destinationRoot,
+    publication,
+    version: verified.version,
+    platforms: verified.platforms,
+  });
   const writes = [
     ...verified.assets.flatMap((asset) => [
       {
@@ -401,6 +491,11 @@ export function importBootstrapPublication({
       immutable: false,
       path: "manifest.json",
       bytes: Buffer.from(`${JSON.stringify(manifest, null, 2)}\n`),
+    },
+    {
+      immutable: false,
+      path: "install/index.html",
+      bytes: installerPage,
     },
   ];
   for (const item of writes.filter((item) => item.immutable)) {

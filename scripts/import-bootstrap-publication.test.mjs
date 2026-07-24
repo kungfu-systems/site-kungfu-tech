@@ -162,11 +162,27 @@ function fixture(root, { sourceCharacter = "a", version = "4.0.0-alpha.1" } = {}
   };
 }
 
+function prepareOutput(outputRoot) {
+  fs.mkdirSync(path.join(outputRoot, "install"), { recursive: true });
+  fs.writeFileSync(
+    path.join(outputRoot, "install", "index.html"),
+    [
+      "<main>",
+      "    <!-- bootstrap-publication:start -->",
+      "    <p>Public installer not released yet.</p>",
+      "    <!-- bootstrap-publication:end -->",
+      "</main>",
+      "",
+    ].join("\n"),
+  );
+}
+
 test("imports signed channel and installers into mutable and immutable routes", () => {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), "kungfu-site-import-"));
   try {
     const input = fixture(root);
     const outputRoot = path.join(root, "public");
+    prepareOutput(outputRoot);
     const result = importBootstrapPublication({ ...input, outputRoot });
     assert.equal(result.channelPayloadRoot, input.channel.payloadRoot);
     assert.deepEqual(result.files, [...result.files].sort());
@@ -180,6 +196,13 @@ test("imports signed channel and installers into mutable and immutable routes", 
         ),
       ),
     );
+    const page = fs.readFileSync(
+      path.join(outputRoot, "install", "index.html"),
+      "utf8",
+    );
+    assert.match(page, /Signed Alpha 4\.0\.0-alpha\.1 is publicly available/);
+    assert.match(page, /installers\/v1\/alpha\//);
+    assert.doesNotMatch(page, /Public installer not released yet/);
     assert.deepEqual(
       fs.readFileSync(
         path.join(outputRoot, ".well-known/kungfu/alpha.json"),
@@ -217,6 +240,7 @@ test("preserves prior immutable versions and rejects replacement", () => {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), "kungfu-site-history-"));
   try {
     const outputRoot = path.join(root, "public");
+    prepareOutput(outputRoot);
     const first = fixture(root, {
       sourceCharacter: "a",
       version: "4.0.0-alpha.1",
