@@ -4,6 +4,7 @@ set -eu
 repo_root=$(cd "$(dirname "$0")/.." && pwd)
 cd "$repo_root"
 
+node --test scripts/import-bootstrap-publication.test.mjs
 node scripts/check-infra-outputs.mjs
 node scripts/render-shared-layout.mjs --check
 node scripts/check-whitepaper.mjs
@@ -230,10 +231,21 @@ grep -q 'shared-footer:start' public/legal/index.html
 grep -q 'github.com/kungfu-systems/kungfu/blob/dev/v4/v4.0/TRADEMARK.md' public/trust/index.html
 grep -q 'github.com/kungfu-systems/kungfu/blob/dev/v4/v4.0/TRADEMARK.md' public/legal/index.html
 grep -q 'Privacy posture' public/legal/index.html
-grep -q 'Public installer not released yet.' public/install/index.html
 grep -q 'https://kungfu.tech/install.sh' public/install/index.html
 grep -q 'https://kungfu.tech/install.ps1' public/install/index.html
-grep -q 'A 404 is safer than an unqualified bootstrap.' public/install/index.html
+grep -q 'bootstrap-publication:start' public/install/index.html
+grep -q 'bootstrap-publication:end' public/install/index.html
+if [ -f public/installer-publication.json ]; then
+  grep -q 'is publicly available.' public/install/index.html
+  grep -q 'Qualified targets:' public/install/index.html
+  test -f public/.well-known/kungfu/alpha.json
+  test -f public/manifest.json
+  test -f public/install.sh
+  test -f public/install.ps1
+else
+  grep -q 'Public installer not released yet.' public/install/index.html
+  grep -q 'A 404 is safer than an unqualified bootstrap.' public/install/index.html
+fi
 grep -q 'shared-header:start' public/install/index.html
 grep -q 'shared-footer:start' public/install/index.html
 grep -q 'shared-header:start' public/agent-builders/index.html
