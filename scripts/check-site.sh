@@ -74,8 +74,9 @@ test -f public/capital/investor-perspective/index.html
 test -f public/services/index.html
 test -f public/trust/index.html
 test -f public/legal/index.html
+test -f public/install/index.html
 test -f site/public-dogfood-proof.json
-for page in public/index.html public/how-tested/continuity/index.html public/agent-builders/index.html public/why-kungfu/index.html public/about/index.html public/about/bootstrapping/index.html public/capital/index.html public/capital/investor-perspective/index.html public/services/index.html public/trust/index.html public/legal/index.html; do
+for page in public/index.html public/how-tested/continuity/index.html public/agent-builders/index.html public/why-kungfu/index.html public/about/index.html public/about/bootstrapping/index.html public/capital/index.html public/capital/investor-perspective/index.html public/services/index.html public/trust/index.html public/legal/index.html public/install/index.html; do
   grep -q 'href="/assets/site.css"' "$page"
 done
 if grep -RInE '^    \\.(site-header|brand|mark|site-nav|site-footer|nav-menu)\\b' \
@@ -229,6 +230,12 @@ grep -q 'shared-footer:start' public/legal/index.html
 grep -q 'github.com/kungfu-systems/kungfu/blob/dev/v4/v4.0/TRADEMARK.md' public/trust/index.html
 grep -q 'github.com/kungfu-systems/kungfu/blob/dev/v4/v4.0/TRADEMARK.md' public/legal/index.html
 grep -q 'Privacy posture' public/legal/index.html
+grep -q 'Public installer not released yet.' public/install/index.html
+grep -q 'https://kungfu.tech/install.sh' public/install/index.html
+grep -q 'https://kungfu.tech/install.ps1' public/install/index.html
+grep -q 'A 404 is safer than an unqualified bootstrap.' public/install/index.html
+grep -q 'shared-header:start' public/install/index.html
+grep -q 'shared-footer:start' public/install/index.html
 grep -q 'shared-header:start' public/agent-builders/index.html
 grep -q 'shared-footer:start' public/agent-builders/index.html
 grep -q 'Build your Hub. Don&rsquo;t rebuild the runtime.' public/agent-builders/index.html

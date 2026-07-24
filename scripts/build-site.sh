@@ -31,6 +31,7 @@ test -f dist/capital/investor-perspective/index.html
 test -f dist/services/index.html
 test -f dist/trust/index.html
 test -f dist/legal/index.html
+test -f dist/install/index.html
 test -f dist/whitepaper/index.html
 test -f dist/whitepaper/kungfu-white-paper/index.html
 test -f dist/whitepaper/kungfu-white-paper.pdf
