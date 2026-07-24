@@ -68,6 +68,7 @@ test -f public/why-kungfu/index.html
 test -f public/assets/site.css
 test -f public/.well-known/security.txt
 test -f public/about/index.html
+test -f public/about/bootstrapping/index.html
 test -f public/capital/index.html
 test -f public/capital/investor-perspective/index.html
 test -f public/services/index.html
@@ -75,7 +76,7 @@ test -f public/trust/index.html
 test -f public/legal/index.html
 test -f public/install/index.html
 test -f site/public-dogfood-proof.json
-for page in public/index.html public/how-tested/continuity/index.html public/agent-builders/index.html public/why-kungfu/index.html public/about/index.html public/capital/index.html public/capital/investor-perspective/index.html public/services/index.html public/trust/index.html public/legal/index.html public/install/index.html; do
+for page in public/index.html public/how-tested/continuity/index.html public/agent-builders/index.html public/why-kungfu/index.html public/about/index.html public/about/bootstrapping/index.html public/capital/index.html public/capital/investor-perspective/index.html public/services/index.html public/trust/index.html public/legal/index.html public/install/index.html; do
   grep -q 'href="/assets/site.css"' "$page"
 done
 if grep -RInE '^    \\.(site-header|brand|mark|site-nav|site-footer|nav-menu)\\b' \
@@ -124,6 +125,7 @@ assert_shared_contains header public/index.html 'href="/whitepaper/"'
 assert_shared_contains header public/index.html 'class="nav-menu"'
 assert_shared_contains header public/index.html 'href="/agent-builders/"'
 assert_shared_contains header public/index.html 'href="/agent-supply-chain/"'
+assert_shared_contains header public/index.html 'href="https://kfd.libkungfu.dev/"'
 assert_shared_contains header public/index.html 'libkungfu.dev'
 assert_shared_contains header public/index.html 'github.com/kungfu-systems/kungfu'
 assert_shared_lacks header public/index.html 'href="/services/index.html"'
@@ -159,7 +161,17 @@ grep -q 'Continuity for Agent Work' public/about/index.html
 grep -q 'KFD is the open protocol' public/about/index.html
 grep -q 'libkungfu.dev' public/about/index.html
 grep -q 'Kungfu does not compete for the Hub' public/about/index.html
+grep -q 'href="/about/bootstrapping/"' public/about/index.html
 grep -q 'href="/capital/"' public/about/index.html
+grep -q 'shared-header:start' public/about/bootstrapping/index.html
+grep -q 'shared-footer:start' public/about/bootstrapping/index.html
+grep -q 'Kungfu as a bootstrapping system.' public/about/bootstrapping/index.html
+grep -q 'Read this with your agent' public/about/bootstrapping/index.html
+grep -q 'Separate current evidence, strategic hypotheses, and long-term aspirations.' public/about/bootstrapping/index.html
+grep -q 'With gratitude to Douglas Engelbart' public/about/bootstrapping/index.html
+grep -q 'A Session lets an agent continue talking. Work infrastructure lets the work continue to exist.' public/about/bootstrapping/index.html
+grep -q 'Kungfu v4 is coming soon.' public/about/bootstrapping/index.html
+grep -q 'docs/concepts/bootstrapping-agent-work.md' public/about/bootstrapping/index.html
 grep -q 'shared-header:start' public/capital/index.html
 grep -q 'shared-footer:start' public/capital/index.html
 grep -q 'Capital should expand the ecosystem, not control the standard.' public/capital/index.html
@@ -227,6 +239,10 @@ grep -q 'shared-footer:start' public/install/index.html
 grep -q 'shared-header:start' public/agent-builders/index.html
 grep -q 'shared-footer:start' public/agent-builders/index.html
 grep -q 'Build your Hub. Don&rsquo;t rebuild the runtime.' public/agent-builders/index.html
+grep -q 'KFD in one sentence' public/agent-builders/index.html
+grep -q 'KFD&mdash;Kung Fu Decisions&mdash;is an open engineering standard' public/agent-builders/index.html
+grep -q 'href="https://kfd.libkungfu.dev/">Understand KFD</a>' public/agent-builders/index.html
+grep -q 'href="https://kfd.libkungfu.dev/3/usage/">Implement KFD-3</a>' public/agent-builders/index.html
 grep -q 'Kungfu does not compete for your Hub.' public/agent-builders/index.html
 grep -q 'Your users stay yours.' public/agent-builders/index.html
 grep -q 'Your accounts and billing stay yours.' public/agent-builders/index.html
@@ -234,6 +250,7 @@ grep -q 'Your models, UI, and Agent stay yours.' public/agent-builders/index.htm
 grep -q 'Your cloud stays yours.' public/agent-builders/index.html
 grep -q 'Your customer relationship stays yours.' public/agent-builders/index.html
 grep -q 'KFD requires no central Kungfu cloud.' public/agent-builders/index.html
+grep -q '<strong><a href="https://kfd.libkungfu.dev/">KFD · open protocol</a></strong>' public/agent-builders/index.html
 grep -q 'not a wedge into your Hub' public/agent-builders/index.html
 grep -q 'Integration is not a channel into your customer relationship.' public/agent-builders/index.html
 grep -q 'libkungfu lives inside an adopting Hub. KFD connects its edge' public/agent-builders/index.html
@@ -253,6 +270,7 @@ grep -q 'Without KFD, your Hub still works. It stays an island.' public/agent-bu
 grep -q 'Every external Hub connection needs a custom bridge.' public/agent-builders/index.html
 grep -q 'One protocol boundary works across conforming Hubs.' public/agent-builders/index.html
 grep -q 'Each side keeps its runtime, policy, cloud, users, and admission authority.' public/agent-builders/index.html
+assert_before public/agent-builders/index.html 'id="kfd-primer-heading"' 'id="adoption-tradeoff-heading"'
 assert_before public/agent-builders/index.html 'id="adoption-tradeoff-heading"' 'id="hub-promise-heading"'
 assert_before public/agent-builders/index.html 'id="hub-promise-heading"' 'id="hub-network-heading"'
 assert_before public/agent-builders/index.html 'id="hub-network-heading"' 'id="action-world-heading"'
@@ -294,6 +312,7 @@ grep -q 'first-party reference adopter' public/agent-builders/index.html
 grep -q 'https://libkungfu.dev/runtime.json' public/agent-builders/index.html
 grep -q 'kungfu/blob/1f3893fae1a7a666d8abe736cd9563128f48549b/docs/architecture/fact-episode-action-runtime.md' public/agent-builders/index.html
 grep -q 'kfd/blob/35915676330696f888c73c154f431c99f37c19ec/protocols/agent-hub/README.md' public/agent-builders/index.html
+grep -q 'Audit the exact Agent Hub alpha profile' public/agent-builders/index.html
 grep -q 'github.com/kungfu-systems/kungfu/pull/1171' public/agent-builders/index.html
 grep -q 'github.com/kungfu-systems/buildchain/pull/1435' public/agent-builders/index.html
 grep -q 'https://libkungfu.dev/dogfood/' public/agent-builders/index.html

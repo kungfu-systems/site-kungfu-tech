@@ -1,0 +1,335 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>How Kungfu Bootstraps | Kungfu</title>
+  <meta name="description" content="A deeper explanation of Kungfu as a bootstrapping system for durable agent work, and a tribute to Douglas Engelbart's strategy for augmenting collective intelligence.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%2314171f'/%3E%3Ctext x='32' y='39' text-anchor='middle' font-family='Arial,sans-serif' font-size='22' font-weight='700' fill='white'%3EKF%3C/text%3E%3C/svg%3E">
+  <link rel="stylesheet" href="/assets/site.css">
+  <style>
+    main {
+      width: min(960px, calc(100% - 40px));
+      margin: 0 auto;
+      padding: 34px 0 68px;
+    }
+
+    .article-header {
+      max-width: 850px;
+      padding: 34px 0 50px;
+    }
+
+    .eyebrow {
+      margin: 0 0 16px;
+      color: var(--accent);
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(42px, 7vw, 76px);
+      line-height: 1;
+      letter-spacing: 0;
+    }
+
+    .lead {
+      max-width: 760px;
+      margin: 24px 0 0;
+      color: var(--muted);
+      font-size: 21px;
+      line-height: 1.55;
+    }
+
+    article {
+      max-width: 780px;
+    }
+
+    article section {
+      padding: 34px 0;
+      border-top: 1px solid var(--line);
+    }
+
+    article h2 {
+      margin: 0 0 18px;
+      font-size: clamp(28px, 4vw, 40px);
+      line-height: 1.12;
+      letter-spacing: 0;
+    }
+
+    article h3 {
+      margin: 28px 0 10px;
+      font-size: 20px;
+      letter-spacing: 0;
+    }
+
+    article p,
+    article li {
+      color: var(--muted);
+      font-size: 17px;
+      line-height: 1.72;
+    }
+
+    article p { margin: 0 0 16px; }
+    article ul, article ol { margin: 14px 0 0; padding-left: 24px; }
+    article li + li { margin-top: 8px; }
+
+    .reader-note,
+    .status-note {
+      margin: 0 0 36px;
+      padding: 22px 24px;
+      border-left: 3px solid var(--accent);
+      background: var(--panel);
+    }
+
+    .reader-note h2,
+    .status-note h2 {
+      margin: 0 0 10px;
+      font-size: 21px;
+    }
+
+    .reader-note p,
+    .status-note p {
+      margin-bottom: 10px;
+      font-size: 16px;
+    }
+
+    .prompt {
+      margin: 16px 0 0;
+      padding: 18px;
+      overflow-x: auto;
+      border: 1px solid var(--line);
+      background: #0f1219;
+      color: #eef3f8;
+      font: 14px/1.58 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      white-space: pre-wrap;
+    }
+
+    .principle {
+      margin: 24px 0;
+      padding: 4px 0 4px 22px;
+      border-left: 3px solid rgba(121, 192, 255, 0.7);
+      color: var(--text);
+      font-size: 22px;
+      font-weight: 650;
+      line-height: 1.42;
+    }
+
+    .loop {
+      margin: 22px 0;
+      padding: 22px;
+      border: 1px solid var(--line);
+      background: var(--panel);
+      color: var(--text);
+      font: 15px/1.7 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      white-space: pre-wrap;
+    }
+
+    .layers {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1px;
+      margin-top: 22px;
+      border: 1px solid var(--line);
+      background: var(--line);
+    }
+
+    .layer {
+      padding: 20px;
+      background: var(--panel);
+    }
+
+    .layer strong {
+      display: block;
+      margin-bottom: 7px;
+      color: var(--text);
+      font-size: 17px;
+    }
+
+    .layer p { margin: 0; font-size: 15px; }
+
+    .closing {
+      color: var(--text);
+      font-size: 21px;
+      line-height: 1.55;
+    }
+
+    @media (max-width: 700px) {
+      main { width: min(100% - 28px, 640px); padding-top: 28px; }
+      .article-header { padding-top: 26px; }
+      .layers { grid-template-columns: 1fr; }
+      .reader-note, .status-note { padding: 18px; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <!-- shared-header:start -->
+    <header class="site-header">
+      <a class="brand" href="/" aria-label="Kungfu">
+        <span class="mark" aria-hidden="true">🧘</span>
+        <span class="brand-copy"><span>Kungfu</span><span class="brand-tagline">Continuity for Agent Work</span></span>
+      </a>
+      <nav class="site-nav" aria-label="Project links">
+        <a href="/agent-supply-chain/">Agent Supply Chain</a>
+        <a href="/agent-builders/">Agent Builders</a>
+        <a href="/whitepaper/">Papers</a>
+        <a href="/about/index.html">About</a>
+        <details class="nav-menu">
+          <summary>Developers</summary>
+          <div class="nav-menu-panel">
+          <a href="https://libkungfu.dev">libkungfu.dev</a>
+          <a href="https://github.com/kungfu-systems/kungfu">GitHub</a>
+          </div>
+        </details>
+      </nav>
+    </header>
+    <!-- shared-header:end -->
+
+    <header class="article-header">
+      <p class="eyebrow">A deeper reading</p>
+      <h1>Kungfu as a bootstrapping system.</h1>
+      <p class="lead">Kungfu is building infrastructure for durable agent work while using agents to build more of that infrastructure. This is an examination of that loop, its limits, and the human responsibility that remains.</p>
+    </header>
+
+    <article>
+      <aside class="reader-note" aria-labelledby="read-with-agent-title">
+        <h2 id="read-with-agent-title">Read this with your agent</h2>
+        <p>This is an argument, not a product tutorial. If the logic feels dense, ask your agent to interpret it with you. Do not ask it merely to summarize or agree; ask it to separate evidence from hypothesis and to challenge the reasoning.</p>
+        <pre class="prompt">Read this page as an argument, not as marketing.
+
+1. Explain its central claim in plain language.
+2. Separate current evidence, strategic hypotheses, and long-term aspirations.
+3. Explain Session continuity versus Work continuity using an example from my own work.
+4. Map Fact, Claim, Proof, Decision, and Admission onto that example.
+5. Give the strongest counterargument and say what evidence would falsify the thesis.</pre>
+      </aside>
+
+      <aside class="status-note" aria-labelledby="claim-boundary-title">
+        <h2 id="claim-boundary-title">Claim boundary</h2>
+        <p>Kungfu v4 is coming soon. The public repositories contain source-built capabilities, merged mechanisms, and qualification slices, but they are not all one generally available product yet. This page distinguishes the system Kungfu is trying to build from what a released artifact can prove today.</p>
+      </aside>
+
+      <section>
+        <h2>The hidden runtime is still human</h2>
+        <p>Today&rsquo;s agents can write code, search, call tools, and carry out long chains of action. But a person usually remains continuously present behind the work.</p>
+        <p>The person remembers the real goal, notices when context is missing, decides which sources are credible, limits authority, catches duplicated side effects, reconciles several agents, and decides whether the result is actually complete.</p>
+        <p>That person is doing more than supervising a model. The person is acting as an invisible Work Runtime: fact ledger, direction keeper, authority issuer, exception handler, causal historian, and final settlement layer.</p>
+        <p>If agents remain assistants, that arrangement can work. If agents are to carry most executable, recordable, and verifiable work while people retain direction, risk boundaries, exceptions, and final acceptance, those hidden functions must become infrastructure.</p>
+      </section>
+
+      <section>
+        <h2>A Session is not the Work</h2>
+        <p>A Session is a useful container for conversation, model context, tool calls, a process, or a billing interval. It does not, by itself, establish what remains the same work after the Session ends.</p>
+        <p>It cannot naturally decide which statements became Facts, whether a successful command completed the real objective, whether another agent inherits authority, whether a retry will repeat an external effect, or who may admit the final result.</p>
+        <p class="principle">A Session lets an agent continue talking. Work infrastructure lets the work continue to exist.</p>
+        <p>Longer context, summaries, memory, checkpoints, workflows, and supervisors are all useful. But they can keep improving the execution container without creating a durable Work identity with its own facts, direction, authority, history, assessment, and admission.</p>
+      </section>
+
+      <section>
+        <h2>Freedom needs an authority boundary</h2>
+        <p>Kungfu does not begin from the promise that agents will stop making mistakes. A sufficiently capable agent will still work with incomplete information, uncertain models, changing external systems, and fallible tools.</p>
+        <p>The more practical question is whether an error can silently acquire authority: become a Fact without admission, expand a Warrant, repeat a real-world effect, or promote itself into completed work.</p>
+        <p class="principle">Let agents freely produce candidates. Do not let them freely produce authoritative reality.</p>
+        <p>This is not a way to weaken agents. It is what can make delegation larger. When facts cannot drift silently, authority cannot expand silently, and completion cannot be self-certified by the executor, people can allow agents to work longer and across more consequential systems.</p>
+      </section>
+
+      <section>
+        <h2>The bootstrapping problem</h2>
+        <p>Reliable long-running agent work needs a durable Work layer. Building that layer is itself long-running, cross-session, multi-agent work. The system is needed before the system can be built.</p>
+        <p>Kungfu starts with a deliberately smaller loop:</p>
+        <pre class="loop">current agents + concentrated human judgment
+→ a minimal durable fact and responsibility layer
+→ more reliable agent work
+→ less human reconstruction and micro-supervision
+→ a larger share of the system built by agents
+→ a stronger durable work layer</pre>
+        <p>Human judgment does not disappear. It moves away from continuous clerical reconstruction and toward fewer, higher-weight sovereignty points: direction, authorization, exception adjudication, and admission.</p>
+      </section>
+
+      <section>
+        <h2>With gratitude to Douglas Engelbart</h2>
+        <p>Douglas Engelbart was a pioneer who made bootstrapping collective intelligence a deliberate system strategy. A team improving the tools and practices of collective work should use its own emerging results to improve its ability to make the next results. The improvement process should improve itself.</p>
+        <p>That strategy was broader than software dogfood. Engelbart connected tools with language, methods, roles, organizational structures, and an evolving shared knowledge environment. His goal was not to automate people out of the loop, but to increase the capability of people working together on complex and urgent problems.</p>
+        <p>Kungfu is not presented as an official continuation of Engelbart&rsquo;s work. It is a project in a different era, facing a new responsibility boundary. But the intellectual debt and structural kinship are clear: use the system under construction to improve the collective capability constructing it.</p>
+        <p>Read the Doug Engelbart Institute&rsquo;s introductions to <a href="https://www.dougengelbart.org/content/view/226/269/">bootstrapping</a> and <a href="https://dougengelbart.org/content/view/225/">Collective IQ</a>.</p>
+      </section>
+
+      <section>
+        <h2>The public system boundary</h2>
+        <p>Kungfu&rsquo;s public architecture separates several responsibilities so the bootstrap does not turn one implementation into universal authority.</p>
+        <div class="layers">
+          <div class="layer">
+            <strong>libkungfu and yijinjing</strong>
+            <p>The local-first, journal-first runtime substrate for durable Facts, causal Episodes, replay, export, and recovery within declared limits.</p>
+          </div>
+          <div class="layer">
+            <strong>Kungfu</strong>
+            <p>The product and reference runtime that make durable agent work usable by agents and understandable to the people who retain authority.</p>
+          </div>
+          <div class="layer">
+            <strong>KFD</strong>
+            <p>An open, topology-neutral protocol for carrying bounded responsibility between independently owned systems. Its normative meaning is not owned by a private Hub.</p>
+          </div>
+          <div class="layer">
+            <strong>Buildchain</strong>
+            <p>The public release-responsibility layer that binds claims to exact source, artifacts, evidence, known limits, and approval.</p>
+          </div>
+        </div>
+        <p>These layers are related, but they do not prove one another by association. A design can be coherent before it is implemented. Code can merge before it is qualified. A qualified slice can exist before a released product. A released reference implementation can exist before independent adoption.</p>
+      </section>
+
+      <section>
+        <h2>What the bootstrap proves, and what it does not</h2>
+        <p>Using Kungfu&rsquo;s own ideas while building Kungfu can prove that the loop is possible and useful to its builders. Public source, bounded claims, retained evidence, and evidence-linked releases make that claim inspectable.</p>
+        <p>It cannot prove universality. A private loop can become an elaborate cognitive exoskeleton for one founding context. The stronger test requires unfamiliar teams, different domains, independent implementations, external corrections, and authority that can move beyond the original author.</p>
+        <p>A self-bootstrapping design should also remain replaceable in parts. Every piece of complexity should answer a real failure mode, expose a negative test or counterexample, allow independent verification, and admit a simpler successor when one can carry the same responsibility.</p>
+      </section>
+
+      <section>
+        <h2>How this thesis can fail</h2>
+        <p>The thesis does not succeed because its vocabulary is internally consistent. It succeeds only if people and agents outside the founding context can receive practical value without first learning the entire model.</p>
+        <p>The first test is intentionally ordinary: a chat or agent Session ends; the Work remains; a fresh agent knows what happened and what remains; the person does not reconstruct the task from memory.</p>
+        <p>Beyond that, Kungfu must show that independent readers can inspect what it claims, independent builders can implement or integrate the boundary, and users can leave with their facts and meaning intact. If it cannot do those things, the bootstrap has not become public infrastructure.</p>
+      </section>
+
+      <section>
+        <h2>Why build this way?</h2>
+        <p class="closing">Kungfu is trying to build a system in which agents can carry more of the work without asking people to surrender understanding or authority. It is using agents to build more of that system, while making the resulting claims answerable to public facts.</p>
+        <p class="closing">That recursive loop is not evidence that the destination has been reached. It is the method by which the project intends to find out whether the destination is reachable.</p>
+        <p>Continue with <a href="https://github.com/kungfu-systems/kungfu/blob/dev/v4/v4.0/docs/concepts/bootstrapping-agent-work.md">the repository version of this essay</a>, <a href="/about/index.html">About Kungfu</a>, or <a href="/how-tested/continuity/">the current continuity evidence and its limits</a>.</p>
+      </section>
+    </article>
+
+    <!-- shared-footer:start -->
+    <footer class="site-footer">
+      <nav class="footer-links" aria-label="Footer links">
+        <a href="/services/index.html">Services</a>
+        <a href="/capital/">Capital &amp; Stewardship</a>
+        <a href="/trust/index.html">Trust</a>
+        <a href="/legal/index.html">Legal</a>
+      </nav>
+      <p class="footer-note">Kungfu core software is licensed under the Apache License 2.0.</p>
+      <p class="footer-trademark">Kungfu UNGFU™ is a trademark of Kungfu Origin Technology Limited.</p>
+      <p class="footer-copy">Copyright 2026 Kungfu Origin Technology Limited. All rights reserved.</p>
+    </footer>
+    <script>
+      document.addEventListener("click", (event) => {
+        document.querySelectorAll("details.nav-menu[open]").forEach((menu) => {
+          if (!menu.contains(event.target)) menu.removeAttribute("open");
+        });
+      });
+      document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape") {
+          document.querySelectorAll("details.nav-menu[open]").forEach((menu) => {
+            menu.removeAttribute("open");
+          });
+        }
+      });
+    </script>
+    <!-- shared-footer:end -->
+  </main>
+</body>
+</html>
