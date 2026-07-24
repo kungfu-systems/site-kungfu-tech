@@ -227,8 +227,18 @@ function verifyPublication(publication, sourceRoot, channel, channelBytes) {
     publication.immutablePath,
     "installer immutablePath",
   );
+  const productVersions = new Set(
+    (publication.entries || []).map((entry) => entry.version),
+  );
+  if (
+    productVersions.size !== 1
+    || !/^[0-9A-Za-z][0-9A-Za-z.+-]*$/.test([...productVersions][0] || "")
+  ) {
+    throw new Error("installer publication must bind one safe product version");
+  }
+  const productVersion = [...productVersions][0];
   const expectedInstallerPath =
-    `installers/v1/alpha/${channel.payloadRoot.slice(7, 23)}`;
+    `installers/v1/alpha/${productVersion}/${channel.payloadRoot.slice(7)}`;
   if (immutablePath !== expectedInstallerPath) {
     throw new Error(`installer immutablePath must be ${expectedInstallerPath}`);
   }
@@ -318,7 +328,12 @@ function appendVersion(manifest, publicationId, version) {
   );
 }
 
-function publicationManifest(outputRoot, publication, immutablePath) {
+function publicationManifest(
+  outputRoot,
+  publication,
+  immutablePath,
+  productVersion,
+) {
   const manifestPath = path.join(outputRoot, "manifest.json");
   const manifest = fs.existsSync(manifestPath)
     ? readJson(manifestPath, "existing publication archive manifest")
@@ -343,11 +358,13 @@ function publicationManifest(outputRoot, publication, immutablePath) {
   }
   const channelPath = `channels/alpha/${publication.channelPayloadRoot.slice(7)}`;
   appendVersion(manifest, "kungfu-bootstrap-installer-alpha", {
-    version: publication.channelPayloadRoot,
+    version: productVersion,
+    payloadRoot: publication.channelPayloadRoot,
     immutablePath: `/${immutablePath}/`,
   });
   appendVersion(manifest, "kungfu-release-channel-alpha", {
-    version: publication.channelPayloadRoot,
+    version: productVersion,
+    payloadRoot: publication.channelPayloadRoot,
     immutablePath: `/${channelPath}/`,
   });
   manifest.publications.sort((left, right) => left.id.localeCompare(right.id));
@@ -467,6 +484,7 @@ export function importBootstrapPublication({
     destinationRoot,
     publication,
     verified.immutablePath,
+    verified.version,
   );
   const installerPage = renderInstallerPage({
     outputRoot: destinationRoot,

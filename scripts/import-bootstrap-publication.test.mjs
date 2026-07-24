@@ -106,7 +106,7 @@ function fixture(root, { sourceCharacter = "a", version = "4.0.0-alpha.1" } = {}
     digest: sha256(bytes),
   }));
   const immutablePath =
-    `installers/v1/alpha/${channel.payloadRoot.slice(7, 23)}`;
+    `installers/v1/alpha/${version}/${channel.payloadRoot.slice(7)}`;
   for (const asset of assets) {
     fs.mkdirSync(path.join(publicationRoot, immutablePath), {
       recursive: true,
@@ -203,7 +203,12 @@ test("imports signed channel and installers into mutable and immutable routes", 
       "utf8",
     );
     assert.match(page, /Signed Alpha 4\.0\.0-alpha\.1 is publicly available/);
-    assert.match(page, /installers\/v1\/alpha\//);
+    assert.match(
+      page,
+      new RegExp(
+        `/installers/v1/alpha/4\\.0\\.0-alpha\\.1/${input.channel.payloadRoot.slice(7)}/`,
+      ),
+    );
     assert.doesNotMatch(page, /Public installer not released yet/);
     assert.deepEqual(
       fs.readFileSync(
@@ -258,6 +263,14 @@ test("preserves prior immutable versions and rejects replacement", () => {
     );
     for (const publication of manifest.publications) {
       assert.equal(publication.versions.length, 2);
+      assert.deepEqual(
+        publication.versions.map((item) => item.version),
+        ["4.0.0-alpha.1", "4.0.0-alpha.2"],
+      );
+      assert.match(
+        publication.versions[0].payloadRoot,
+        /^sha256:[a-f0-9]{64}$/,
+      );
     }
     const immutable = path.join(
       outputRoot,
