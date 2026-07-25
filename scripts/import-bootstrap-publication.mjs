@@ -14,6 +14,9 @@ const INSTALLER_SCHEMA = "kungfu.bootstrap-installer-publication/v1";
 const ARCHIVE_POLICY = "kungfu-buildchain-publication-archive-policy";
 const SITE_MANIFEST = "kungfu-bootstrap-installer-web-surface/v1";
 const CANONICAL_ORIGIN = "https://kungfu.tech";
+const EXACT_MARK = "Kungfu UNGFU™";
+const SOFTWARE_DESCRIPTION =
+  "Downloadable software for durable AI-agent work, inspection, and development workflows.";
 
 function canonical(value) {
   if (Array.isArray(value)) return value.map(canonical);
@@ -367,8 +370,99 @@ function publicationManifest(
     payloadRoot: publication.channelPayloadRoot,
     immutablePath: `/${channelPath}/`,
   });
+  appendVersion(manifest, "kungfu-ungfu-acquisition-evidence", {
+    version: productVersion,
+    payloadRoot: publication.channelPayloadRoot,
+    immutablePath:
+      `/evidence/ungfu/alpha/${productVersion}/${publication.channelPayloadRoot.slice(7)}/`,
+  });
+  manifest.ungfuAcquisitionEvidence =
+    ".well-known/kungfu/ungfu-release-acquisition.json";
   manifest.publications.sort((left, right) => left.id.localeCompare(right.id));
   return { manifest, channelPath };
+}
+
+function acquisitionEvidence(publication, version) {
+  const root = publication.channelPayloadRoot.slice(7);
+  const immutablePath = `evidence/ungfu/alpha/${version}/${root}`;
+  const acquisitionUrl = `${CANONICAL_ORIGIN}/install.sh`;
+  const publicUrl = `${CANONICAL_ORIGIN}/install/`;
+  const renderedEvidence = `${CANONICAL_ORIGIN}/${immutablePath}/acquisition.html`;
+  const evidenceIndex = `${CANONICAL_ORIGIN}/${immutablePath}/index.json`;
+  const artifactRoots = [
+    ...(publication.entries || []).map((entry) => ({
+      name: `${entry.platform}/${entry.architecture}`,
+      sha256: entry.artifactDigest,
+      manifestRoot: entry.manifestRoot,
+      artifactRoot: entry.artifactRoot,
+    })),
+    ...(publication.assets || []).map((asset) => ({
+      name: asset.name,
+      sha256: asset.digest,
+    })),
+  ];
+  const index = {
+    schemaVersion: 1,
+    contract: "kungfu-site-ungfu-acquisition-evidence",
+    id: "ungfu-public-acquisition",
+    state: "released-publication",
+    release: {
+      sourceSha: publication.sourceCommit,
+      tag: `v${version}`,
+      channel: publication.channel,
+      version,
+      deploymentCoordinate:
+        `github-release:kungfu-systems/kungfu@v${version}`,
+      channelPayloadRoot: publication.channelPayloadRoot,
+      channelFileDigest: publication.channelFileDigest,
+      releasePassport: publication.releasePassport,
+      artifactRoots,
+    },
+    acquisition: {
+      id: "install-page",
+      kind: "public-release-download",
+      exactMark: EXACT_MARK,
+      softwareDescription: SOFTWARE_DESCRIPTION,
+      publicUrl,
+      acquisitionUrl,
+      renderedEvidence,
+      evidenceIndex,
+    },
+    legalBoundary: {
+      firstUseDateClaim: null,
+      legalConclusion: "not-made",
+      registrationStatusClaim: "none",
+      counselReviewRequired: true,
+    },
+  };
+  const rendered = `<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Kungfu Alpha ${escapeHtml(version)} acquisition evidence</title>
+</head>
+<body>
+  <main>
+    <section data-ungfu-release-acquisition data-version="${escapeHtml(version)}" data-channel="${escapeHtml(publication.channel)}">
+      <h1>${EXACT_MARK}</h1>
+      <p>${SOFTWARE_DESCRIPTION}</p>
+      <p>Version <strong>${escapeHtml(version)}</strong> · Channel <strong>${escapeHtml(publication.channel)}</strong></p>
+      <p><a href="${acquisitionUrl}">Install the signed Kungfu CLI</a></p>
+      <p>Source <code>${escapeHtml(publication.sourceCommit)}</code></p>
+      <p>Channel root <code>${escapeHtml(publication.channelPayloadRoot)}</code></p>
+      <p>Release Passport <code>${escapeHtml(publication.releasePassport.ref)}</code> · <code>${escapeHtml(publication.releasePassport.root)}</code></p>
+      <p><a href="${evidenceIndex}">Machine-readable evidence index</a></p>
+    </section>
+  </main>
+</body>
+</html>
+`;
+  return {
+    immutablePath,
+    index,
+    rendered: Buffer.from(rendered),
+  };
 }
 
 function assertImmutable(destination, bytes) {
@@ -401,6 +495,7 @@ function renderInstallerPage({
   publication,
   version,
   platforms,
+  acquisition,
 }) {
   const pagePath = path.join(outputRoot, "install", "index.html");
   const page = fs.readFileSync(pagePath, "utf8");
@@ -430,6 +525,14 @@ function renderInstallerPage({
     </div>
 
     <div class="grid">
+      <section class="wide release-acquisition" data-ungfu-release-acquisition data-version="${escapeHtml(version)}" data-channel="${escapeHtml(publication.channel)}">
+        <h2>${EXACT_MARK}</h2>
+        <p>${SOFTWARE_DESCRIPTION}</p>
+        <p>Version <strong>${escapeHtml(version)}</strong> · Channel <strong>${escapeHtml(publication.channel)}</strong></p>
+        <p><a href="https://kungfu.tech/install.sh"><code>https://kungfu.tech/install.sh</code></a> installs the signed Alpha after local channel and artifact verification.</p>
+        <p><a href="/${escapeHtml(acquisition.immutablePath)}/acquisition.html">Rendered acquisition evidence</a> · <a href="/${escapeHtml(acquisition.immutablePath)}/index.json">machine-readable index</a></p>
+      </section>
+
       <section>
         <h2>macOS and Linux</h2>
         <p>Convenience install from the revalidated canonical route:</p>
@@ -486,11 +589,13 @@ export function importBootstrapPublication({
     verified.immutablePath,
     verified.version,
   );
+  const acquisition = acquisitionEvidence(publication, verified.version);
   const installerPage = renderInstallerPage({
     outputRoot: destinationRoot,
     publication,
     version: verified.version,
     platforms: verified.platforms,
+    acquisition,
   });
   const writes = [
     ...verified.assets.flatMap((asset) => [
@@ -526,6 +631,21 @@ export function importBootstrapPublication({
       path: "install/index.html",
       bytes: installerPage,
     },
+    {
+      immutable: true,
+      path: `${acquisition.immutablePath}/index.json`,
+      bytes: Buffer.from(`${JSON.stringify(acquisition.index, null, 2)}\n`),
+    },
+    {
+      immutable: true,
+      path: `${acquisition.immutablePath}/acquisition.html`,
+      bytes: acquisition.rendered,
+    },
+    {
+      immutable: false,
+      path: ".well-known/kungfu/ungfu-release-acquisition.json",
+      bytes: Buffer.from(`${JSON.stringify(acquisition.index, null, 2)}\n`),
+    },
   ];
   for (const item of writes.filter((item) => item.immutable)) {
     assertImmutable(path.join(destinationRoot, item.path), item.bytes);
@@ -541,6 +661,7 @@ export function importBootstrapPublication({
     channelFileDigest: publication.channelFileDigest,
     installerImmutablePath: verified.immutablePath,
     channelImmutablePath: channelPath,
+    acquisitionEvidencePath: acquisition.immutablePath,
     files: writes.map((item) => item.path).sort(),
   };
 }

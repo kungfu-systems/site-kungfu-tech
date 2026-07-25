@@ -246,14 +246,23 @@ grep -q 'bootstrap-publication:start' public/install/index.html
 grep -q 'bootstrap-publication:end' public/install/index.html
 if [ -f public/installer-publication.json ]; then
   grep -q 'is publicly available.' public/install/index.html
+  grep -q 'data-ungfu-release-acquisition' public/install/index.html
+  grep -q 'Kungfu UNGFU™' public/install/index.html
+  grep -q 'Downloadable software for durable AI-agent work, inspection, and development workflows.' public/install/index.html
+  grep -q 'href="https://kungfu.tech/install.sh"' public/install/index.html
   grep -q 'Qualified targets:' public/install/index.html
   test -f public/.well-known/kungfu/alpha.json
   test -f public/manifest.json
   test -f public/install.sh
   test -f public/install.ps1
+  test -f public/.well-known/kungfu/ungfu-release-acquisition.json
 else
   grep -q 'Public installer not released yet.' public/install/index.html
   grep -q 'A 404 is safer than an unqualified bootstrap.' public/install/index.html
+  if grep -q 'data-ungfu-release-acquisition' public/install/index.html; then
+    echo "error: pre-release install page must not project released acquisition evidence" >&2
+    exit 1
+  fi
 fi
 grep -q 'shared-header:start' public/install/index.html
 grep -q 'shared-footer:start' public/install/index.html
