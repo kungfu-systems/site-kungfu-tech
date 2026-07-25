@@ -103,7 +103,7 @@
     <!-- bootstrap-publication:start -->
     <div class="state">
       <strong>Public installer not released yet.</strong>
-      <p>The source contract is undergoing protected review and native-platform qualification. Until a signed Alpha publication and public read-back complete, <code>/install.sh</code> and <code>/install.ps1</code> intentionally remain unavailable. A 404 is safer than an unqualified bootstrap.</p>
+      <p>The source contract is undergoing protected review and native-platform qualification. Until a signed Alpha publication and public read-back complete, <code>/install.sh</code> and <code>/install.ps1</code> return a machine-readable <code>unavailable</code> result and fail without changing the machine.</p>
     </div>
 
     <div class="grid">
@@ -111,14 +111,14 @@
         <h2>macOS and Linux</h2>
         <p>After the page names an available signed channel, the convenience form will be:</p>
         <code class="command">curl --fail --proto '=https' --tlsv1.2 https://kungfu.tech/install.sh | sh</code>
-        <p>Do not substitute a source fixture for the unavailable public route.</p>
+        <p>The current route exits nonzero without downloading or installing anything. Do not substitute a source fixture for it.</p>
       </section>
 
       <section>
         <h2>Windows PowerShell</h2>
         <p>After the page names an available signed channel, the convenience form will be:</p>
         <code class="command">irm https://kungfu.tech/install.ps1 | iex</code>
-        <p>The qualified Windows archive must also carry valid Authenticode trust evidence.</p>
+        <p>The current route throws an unavailable error without downloading or installing anything. The future qualified Windows archive must also carry valid Authenticode trust evidence.</p>
       </section>
 
       <section class="wide">
