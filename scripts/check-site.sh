@@ -258,7 +258,17 @@ if [ -f public/installer-publication.json ]; then
   test -f public/.well-known/kungfu/ungfu-release-acquisition.json
 else
   grep -q 'Public installer not released yet.' public/install/index.html
-  grep -q 'A 404 is safer than an unqualified bootstrap.' public/install/index.html
+  grep -q 'machine-readable <code>unavailable</code> result' public/install/index.html
+  test -f public/install.sh
+  test -f public/install.ps1
+  unavailable_json='{"schema":"kungfu.bootstrap-installer-availability/v1","status":"unavailable","reason":"no-qualified-cli-publication","documentationUrl":"https://kungfu.tech/install/"}'
+  shell_output=$(sh public/install.sh 2>&1) && {
+    echo "error: unavailable POSIX installer must exit nonzero" >&2
+    exit 1
+  }
+  test "$shell_output" = "$unavailable_json"
+  grep -Fxq "[Console]::Out.WriteLine('${unavailable_json}')" public/install.ps1
+  grep -Fq "throw 'Kungfu CLI bootstrap installer is unavailable" public/install.ps1
   if grep -q 'data-ungfu-release-acquisition' public/install/index.html; then
     echo "error: pre-release install page must not project released acquisition evidence" >&2
     exit 1

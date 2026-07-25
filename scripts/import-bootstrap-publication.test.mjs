@@ -364,8 +364,26 @@ test("the committed page remains truthful before a signed publication", () => {
     "utf8",
   );
   assert.match(page, /Public installer not released yet\./);
+  assert.match(page, /machine-readable <code>unavailable<\/code> result/);
   assert.doesNotMatch(page, /data-ungfu-release-acquisition/);
-  assert.equal(fs.existsSync("public/install.sh"), false);
+  const unavailable = {
+    schema: "kungfu.bootstrap-installer-availability/v1",
+    status: "unavailable",
+    reason: "no-qualified-cli-publication",
+    documentationUrl: "https://kungfu.tech/install/",
+  };
+  assert.equal(
+    fs.readFileSync("public/install.sh", "utf8").includes(
+      JSON.stringify(unavailable),
+    ),
+    true,
+  );
+  assert.equal(
+    fs.readFileSync("public/install.ps1", "utf8").includes(
+      JSON.stringify(unavailable),
+    ),
+    true,
+  );
   assert.equal(
     fs.existsSync("public/.well-known/kungfu/ungfu-release-acquisition.json"),
     false,
