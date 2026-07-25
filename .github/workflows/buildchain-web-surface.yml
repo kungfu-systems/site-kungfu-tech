@@ -172,7 +172,7 @@ jobs:
           needs.github-governance-receipt.result == 'skipped'
         )
       }}
-    uses: kungfu-systems/buildchain/.github/workflows/.web-surface.yml@420784a128cab230f840a11e82225c255cf58500
+    uses: kungfu-systems/buildchain/.github/workflows/.web-surface.yml@2826967b674febd5db869c1a43007505f5b0fd9f
     with:
       buildchain-contract-lock-path: ${{ (((github.event_name == 'workflow_dispatch' && inputs.production_approved) || (github.event_name == 'push' && github.ref == 'refs/heads/main') || (github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true && contains(github.event.pull_request.labels.*.name, 'buildchain-release')))) && '.buildchain/contract-lock.json' || '.buildchain/alpha-contract-lock.json' }}
       buildchain-contract-compatibility-policy: major-compatible
