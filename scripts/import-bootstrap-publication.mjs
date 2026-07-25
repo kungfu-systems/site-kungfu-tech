@@ -465,9 +465,7 @@ function acquisitionEvidence(publication, version) {
   };
 }
 
-function releaseStatus(publication, version, acquisition) {
-  const siteSourceSha =
-    process.env.BUILDCHAIN_SITE_SOURCE_SHA || publication.sourceCommit;
+function releaseStatus(publication, version, acquisition, siteSourceSha) {
   if (!/^[0-9a-f]{40}$/.test(siteSourceSha)) {
     throw new Error("BUILDCHAIN_SITE_SOURCE_SHA must be an exact site commit");
   }
@@ -598,6 +596,8 @@ export function importBootstrapPublication({
   channelIndexPath,
   trustedKeysPath,
   outputRoot,
+  siteSourceSha =
+    process.env.BUILDCHAIN_SITE_SOURCE_SHA || undefined,
 }) {
   const sourceRoot = path.resolve(publicationRoot);
   const destinationRoot = path.resolve(outputRoot);
@@ -623,7 +623,12 @@ export function importBootstrapPublication({
     verified.version,
   );
   const acquisition = acquisitionEvidence(publication, verified.version);
-  const status = releaseStatus(publication, verified.version, acquisition);
+  const status = releaseStatus(
+    publication,
+    verified.version,
+    acquisition,
+    siteSourceSha || publication.sourceCommit,
+  );
   const installerPage = renderInstallerPage({
     outputRoot: destinationRoot,
     publication,
