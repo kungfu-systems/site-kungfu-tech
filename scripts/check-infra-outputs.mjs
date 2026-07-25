@@ -87,14 +87,26 @@ if (!workflow.includes("staging-apply: true")) {
   );
 }
 const manualProductionGate = "github.event_name == 'workflow_dispatch' && inputs.production_approved";
+const mainPushProductionGate =
+  "github.event_name == 'push' && github.ref == 'refs/heads/main'";
 if (
   !workflow.includes(manualProductionGate) ||
+  !workflow.includes(mainPushProductionGate) ||
   !workflow.includes("production-apply: true") ||
   !workflow.includes("production-release-on-main: true") ||
   !workflow.includes("production-release-label: buildchain-release") ||
   !workflow.includes("production-release-head-prefix: feature/release-")
 ) {
   throw new Error("Buildchain web-surface workflow must gate production apply on Buildchain release PR merge semantics");
+}
+const governanceJob = workflow.slice(
+  workflow.indexOf("  github-governance-receipt:"),
+  workflow.indexOf("  web-surface:"),
+);
+if (!governanceJob.includes(mainPushProductionGate)) {
+  throw new Error(
+    "Buildchain web-surface workflow must mint a fresh governance receipt on main pushes",
+  );
 }
 if (!workflow.includes(`production-approved: \${{ ${manualProductionGate} }}`)) {
   throw new Error("Buildchain web-surface workflow must keep manual production approval explicit");
