@@ -48,29 +48,27 @@ jobs:
       contents: read
     outputs:
       receipt-json: ${{ steps.receipt.outputs.receipt-json }}
+      runtime-sha: ${{ steps.runtime.outputs.sha }}
     steps:
-      - name: Checkout caller repository
+      - name: Checkout floating Buildchain governance verifier
         uses: actions/checkout@v7.0.0
+        with:
+          repository: kungfu-systems/buildchain
+          ref: v2
+          path: .buildchain/governance-runtime
+          persist-credentials: false
 
-      - name: Resolve exact Buildchain governance verifier
+      - name: Resolve exact floating v2 verifier
         id: runtime
         shell: bash
         run: |
           set -euo pipefail
-          runtime_sha="$(jq -r '.buildchain.resolvedSha // empty' .buildchain/contract-lock.json)"
+          runtime_sha="$(git -C .buildchain/governance-runtime rev-parse HEAD)"
           if [[ ! "$runtime_sha" =~ ^[0-9a-f]{40}$ ]]; then
-            echo "::error::stable Buildchain contract lock has no exact runtime SHA"
+            echo "::error::floating v2 checkout did not resolve to an exact runtime SHA"
             exit 1
           fi
           echo "sha=$runtime_sha" >> "$GITHUB_OUTPUT"
-
-      - name: Checkout exact Buildchain governance verifier
-        uses: actions/checkout@v7.0.0
-        with:
-          repository: kungfu-systems/buildchain
-          ref: ${{ steps.runtime.outputs.sha }}
-          path: .buildchain/governance-runtime
-          persist-credentials: false
 
       - name: Mint bounded governance auditor token
         id: auditor
@@ -119,7 +117,7 @@ jobs:
       }}
     uses: kungfu-systems/buildchain/.github/workflows/.web-surface.yml@v2
     with:
-      buildchain-ref: ${{ github.event_name == 'workflow_dispatch' && inputs.buildchain_ref || ((((github.event_name == 'workflow_dispatch' && inputs.production_approved) || (github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true && contains(github.event.pull_request.labels.*.name, 'buildchain-release')))) && 'v2' || 'v2-alpha') }}
+      buildchain-ref: ${{ needs.github-governance-receipt.outputs.runtime-sha || (github.event_name == 'workflow_dispatch' && inputs.buildchain_ref) || ((((github.event_name == 'workflow_dispatch' && inputs.production_approved) || (github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true && contains(github.event.pull_request.labels.*.name, 'buildchain-release')))) && 'v2' || 'v2-alpha') }}
       buildchain-contract-lock-path: ${{ (((github.event_name == 'workflow_dispatch' && inputs.buildchain_ref == 'v2') || (github.event_name == 'workflow_dispatch' && inputs.production_approved) || (github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true && contains(github.event.pull_request.labels.*.name, 'buildchain-release')))) && '.buildchain/contract-lock.json' || '.buildchain/alpha-contract-lock.json' }}
       buildchain-contract-compatibility-policy: major-compatible
       buildchain-contract-drift-issue-mode: compatible-and-breaking
