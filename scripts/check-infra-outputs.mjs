@@ -109,7 +109,7 @@ for (const governanceBinding of [
   "scripts/audit-github-governance.mjs",
   "--target-ref main",
   "--require-qualifying",
-  "buildchain-ref: ${{ needs.github-governance-receipt.outputs.runtime-sha ||",
+  "buildchain-ref: ${{ (needs.github-governance-receipt.outputs.runtime-sha && 'v2') ||",
   "github-governance-receipt-json: ${{ needs.github-governance-receipt.outputs.receipt-json || '' }}",
 ]) {
   if (!workflow.includes(governanceBinding)) {
