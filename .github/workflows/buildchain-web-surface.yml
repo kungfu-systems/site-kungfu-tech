@@ -12,16 +12,29 @@ on:
       - main
   workflow_dispatch:
     inputs:
-      buildchain_ref:
-        description: "Optional trusted Buildchain runtime ref for manual validation"
-        type: string
-        required: false
-        default: ""
       production_approved:
         description: "Apply the gated production channel for trusted manual dispatch"
         type: boolean
         required: false
         default: false
+      activation_source_sha:
+        description: "Exact reviewed site commit selected by the upstream activation transaction"
+        type: string
+        required: false
+        default: ""
+      activation_environment:
+        description: "Activation target; production is required when production_approved is true"
+        type: choice
+        required: false
+        default: "shadow"
+        options:
+          - shadow
+          - production
+      activation_transaction_root:
+        description: "sha256 root of the upstream Buildchain activation transaction"
+        type: string
+        required: false
+        default: ""
 
 permissions:
   actions: read
@@ -32,16 +45,55 @@ permissions:
   pull-requests: write
 
 jobs:
+  activation-input-gate:
+    if: ${{ github.event_name == 'workflow_dispatch' }}
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Validate exact activation coordinates
+        env:
+          PRODUCTION_APPROVED: ${{ inputs.production_approved }}
+          ACTIVATION_SOURCE_SHA: ${{ inputs.activation_source_sha }}
+          ACTIVATION_ENVIRONMENT: ${{ inputs.activation_environment }}
+          ACTIVATION_TRANSACTION_ROOT: ${{ inputs.activation_transaction_root }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ "$PRODUCTION_APPROVED" = "true" ]; then
+            [[ "$ACTIVATION_SOURCE_SHA" =~ ^[0-9a-f]{40}$ ]] || {
+              echo "::error::production activation requires an exact reviewed activation_source_sha"
+              exit 1
+            }
+            [ "$ACTIVATION_ENVIRONMENT" = "production" ] || {
+              echo "::error::production approval requires activation_environment=production"
+              exit 1
+            }
+            [[ "$ACTIVATION_TRANSACTION_ROOT" =~ ^sha256:[0-9a-f]{64}$ ]] || {
+              echo "::error::production activation requires activation_transaction_root"
+              exit 1
+            }
+          elif [ -n "$ACTIVATION_SOURCE_SHA" ] || [ -n "$ACTIVATION_TRANSACTION_ROOT" ]; then
+            [ "$ACTIVATION_ENVIRONMENT" = "shadow" ] || {
+              echo "::error::non-production activation coordinates must remain shadow"
+              exit 1
+            }
+          fi
+
   github-governance-receipt:
+    needs:
+      - activation-input-gate
     if: >-
       ${{
-        (github.event_name == 'workflow_dispatch' && inputs.production_approved) ||
-        (github.event_name == 'push' && github.ref == 'refs/heads/main') ||
+        always() &&
+        (needs.activation-input-gate.result == 'success' || needs.activation-input-gate.result == 'skipped') &&
         (
-          github.event_name == 'pull_request' &&
-          github.event.action == 'closed' &&
-          github.event.pull_request.merged == true &&
-          contains(github.event.pull_request.labels.*.name, 'buildchain-release')
+          (github.event_name == 'workflow_dispatch' && inputs.production_approved) ||
+          (github.event_name == 'push' && github.ref == 'refs/heads/main') ||
+          (
+            github.event_name == 'pull_request' &&
+            github.event.action == 'closed' &&
+            github.event.pull_request.merged == true &&
+            contains(github.event.pull_request.labels.*.name, 'buildchain-release')
+          )
         )
       }}
     runs-on: ubuntu-24.04
@@ -106,19 +158,24 @@ jobs:
 
   web-surface:
     needs:
+      - activation-input-gate
       - github-governance-receipt
     if: >-
       ${{
         always() &&
         (
+          needs.activation-input-gate.result == 'success' ||
+          needs.activation-input-gate.result == 'skipped'
+        ) &&
+        (
           needs.github-governance-receipt.result == 'success' ||
           needs.github-governance-receipt.result == 'skipped'
         )
       }}
-    uses: kungfu-systems/buildchain/.github/workflows/.web-surface.yml@v2
+    uses: kungfu-systems/buildchain/.github/workflows/.web-surface.yml@420784a128cab230f840a11e82225c255cf58500
     with:
-      buildchain-ref: ${{ github.event_name == 'workflow_dispatch' && inputs.buildchain_ref || ((((github.event_name == 'workflow_dispatch' && inputs.production_approved) || (github.event_name == 'push' && github.ref == 'refs/heads/main') || (github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true && contains(github.event.pull_request.labels.*.name, 'buildchain-release')))) && 'v2' || 'v2-alpha') }}
-      buildchain-contract-lock-path: ${{ (((github.event_name == 'workflow_dispatch' && inputs.buildchain_ref == 'v2') || (github.event_name == 'workflow_dispatch' && inputs.production_approved) || (github.event_name == 'push' && github.ref == 'refs/heads/main') || (github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true && contains(github.event.pull_request.labels.*.name, 'buildchain-release')))) && '.buildchain/contract-lock.json' || '.buildchain/alpha-contract-lock.json' }}
+      buildchain-ref: 420784a128cab230f840a11e82225c255cf58500
+      buildchain-contract-lock-path: ${{ (((github.event_name == 'workflow_dispatch' && inputs.production_approved) || (github.event_name == 'push' && github.ref == 'refs/heads/main') || (github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true && contains(github.event.pull_request.labels.*.name, 'buildchain-release')))) && '.buildchain/contract-lock.json' || '.buildchain/alpha-contract-lock.json' }}
       buildchain-contract-compatibility-policy: major-compatible
       buildchain-contract-drift-issue-mode: compatible-and-breaking
       node-version: "24"
@@ -132,6 +189,7 @@ jobs:
       staging-aws-role-arn: arn:aws:iam::727884401362:role/site-kungfu-tech-staging-github-actions
       production-apply: true
       production-approved: ${{ github.event_name == 'workflow_dispatch' && inputs.production_approved }}
+      production-source-sha: ${{ github.event_name == 'workflow_dispatch' && inputs.production_approved && inputs.activation_source_sha || '' }}
       production-release-on-main: true
       production-release-app-client-id: ${{ vars.KUNGFU_RELEASE_APP_CLIENT_ID }}
       production-release-label: buildchain-release

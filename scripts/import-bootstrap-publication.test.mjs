@@ -286,6 +286,20 @@ test("imports signed channel and installers into mutable and immutable routes", 
       ),
       fs.readFileSync(path.join(evidenceRoot, "index.json")),
     );
+    const status = JSON.parse(
+      fs.readFileSync(
+        path.join(outputRoot, ".well-known/kungfu-release-status.json"),
+        "utf8",
+      ),
+    );
+    assert.equal(status.schema, "kungfu.release-status/v1");
+    assert.equal(status.status, "current-release");
+    assert.equal(status.releasedUseClaim, true);
+    assert.equal(status.release.sourceSha, input.publication.sourceCommit);
+    assert.equal(status.release.siteSourceSha, input.publication.sourceCommit);
+    assert.equal(status.release.releasePassport.root, input.publication.releasePassport.root);
+    assert.match(status.acquisitionEvidence.url, /ungfu-release-acquisition\.json$/);
+    assert.match(status.acquisitionEvidence.root, /^sha256:[0-9a-f]{64}$/);
   } finally {
     fs.rmSync(root, { recursive: true, force: true });
   }
@@ -388,4 +402,15 @@ test("the committed page remains truthful before a signed publication", () => {
     fs.existsSync("public/.well-known/kungfu/ungfu-release-acquisition.json"),
     false,
   );
+  const status = JSON.parse(
+    fs.readFileSync(
+      "public/.well-known/kungfu-release-status.json",
+      "utf8",
+    ),
+  );
+  assert.equal(status.schema, "kungfu.release-status/v1");
+  assert.equal(status.status, "unavailable");
+  assert.equal(status.releasedUseClaim, false);
+  assert.equal(status.release, null);
+  assert.equal(status.acquisitionEvidence, null);
 });
