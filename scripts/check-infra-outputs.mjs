@@ -101,7 +101,6 @@ if (!workflow.includes(`production-approved: \${{ ${manualProductionGate} }}`)) 
 }
 for (const governanceBinding of [
   "github-governance-receipt:",
-  "runtime-sha: ${{ steps.runtime.outputs.sha }}",
   "ref: v2",
   "git -C .buildchain/governance-runtime rev-parse HEAD",
   "KUNGFU_GOVERNANCE_AUDITOR_APP_ID",
@@ -109,7 +108,6 @@ for (const governanceBinding of [
   "scripts/audit-github-governance.mjs",
   "--target-ref main",
   "--require-qualifying",
-  "buildchain-ref: ${{ needs.github-governance-receipt.outputs.runtime-sha ||",
   "github-governance-receipt-json: ${{ needs.github-governance-receipt.outputs.receipt-json || '' }}",
 ]) {
   if (!workflow.includes(governanceBinding)) {
@@ -117,6 +115,15 @@ for (const governanceBinding of [
       `Buildchain web-surface workflow is missing live governance binding ${governanceBinding}`,
     );
   }
+}
+if (
+  workflow.includes(
+    "buildchain-ref: ${{ needs.github-governance-receipt.outputs.runtime-sha",
+  )
+) {
+  throw new Error(
+    "Buildchain web-surface workflow must keep production on the official v2 channel instead of using a PR-event SHA override",
+  );
 }
 
 const config = parseTomlSections(buildchainToml);
