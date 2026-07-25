@@ -66,6 +66,18 @@ Header and footer content is generated from `site/shared-layout.json`. Update
 that file first, then run the build so every page receives the same navigation
 and footer.
 
+The committed `/install/` page remains a truthful Coming Soon surface and does
+not expose installer files or released acquisition evidence. After
+`scripts/import-bootstrap-publication.mjs` verifies and imports a signed Alpha
+publication, it replaces only the bounded publication block with an adjacent
+**Kungfu UNGFU™** mark, plain downloadable-software description, exact
+version/channel, and working installer action. The same import writes immutable
+acquisition HTML and JSON under
+`/evidence/ungfu/alpha/<version>/<channel-root>/` plus a mutable discovery
+pointer under `/.well-known/kungfu/`. These public records preserve source,
+channel, artifact, and Release Passport roots but make no first-use or legal
+conclusion.
+
 ## Capital & Stewardship
 
 The Capital section has two deliberate reading layers. `/capital/` is Kungfu's
@@ -197,6 +209,8 @@ is owned by Buildchain release PR semantics: a pull request labeled
 `buildchain-release` from a `feature/release-*` branch becomes the production
 approval when it is merged into `main`. Manual workflow dispatch with
 `production_approved=true` remains available as an explicit operator fallback.
+Fork pull requests still build and plan, but skip AWS-backed preview apply
+because GitHub intentionally withholds OIDC identity from fork events.
 
 Staging is protected by managed network access, not by a Buildchain-managed
 Basic Auth secret.

@@ -203,6 +203,18 @@ test("imports signed channel and installers into mutable and immutable routes", 
       "utf8",
     );
     assert.match(page, /Signed Alpha 4\.0\.0-alpha\.1 is publicly available/);
+    assert.match(page, /data-ungfu-release-acquisition/);
+    assert.match(page, /Kungfu UNGFU™/);
+    assert.match(
+      page,
+      /Downloadable software for durable AI-agent work, inspection, and development workflows\./,
+    );
+    assert.match(page, /Version <strong>4\.0\.0-alpha\.1<\/strong>/);
+    assert.match(page, /Channel <strong>alpha<\/strong>/);
+    assert.match(
+      page,
+      /href="https:\/\/kungfu\.tech\/install\.sh"/,
+    );
     assert.match(
       page,
       new RegExp(
@@ -231,12 +243,48 @@ test("imports signed channel and installers into mutable and immutable routes", 
       manifest.archivePolicy.contract,
       "kungfu-buildchain-publication-archive-policy",
     );
+    assert.equal(
+      manifest.ungfuAcquisitionEvidence,
+      ".well-known/kungfu/ungfu-release-acquisition.json",
+    );
     assert.deepEqual(
       manifest.publications.map((publication) => publication.id),
       [
         "kungfu-bootstrap-installer-alpha",
         "kungfu-release-channel-alpha",
+        "kungfu-ungfu-acquisition-evidence",
       ],
+    );
+    const evidenceRoot = path.join(
+      outputRoot,
+      result.acquisitionEvidencePath,
+    );
+    const evidence = JSON.parse(
+      fs.readFileSync(path.join(evidenceRoot, "index.json"), "utf8"),
+    );
+    assert.equal(
+      evidence.contract,
+      "kungfu-site-ungfu-acquisition-evidence",
+    );
+    assert.equal(evidence.release.sourceSha, input.publication.sourceCommit);
+    assert.equal(evidence.release.version, "4.0.0-alpha.1");
+    assert.equal(evidence.release.channel, "alpha");
+    assert.equal(evidence.acquisition.exactMark, "Kungfu UNGFU™");
+    assert.equal(evidence.acquisition.acquisitionUrl, "https://kungfu.tech/install.sh");
+    assert.equal(evidence.legalBoundary.firstUseDateClaim, null);
+    assert.equal(evidence.legalBoundary.legalConclusion, "not-made");
+    assert.match(
+      fs.readFileSync(path.join(evidenceRoot, "acquisition.html"), "utf8"),
+      /data-ungfu-release-acquisition/,
+    );
+    assert.deepEqual(
+      fs.readFileSync(
+        path.join(
+          outputRoot,
+          ".well-known/kungfu/ungfu-release-acquisition.json",
+        ),
+      ),
+      fs.readFileSync(path.join(evidenceRoot, "index.json")),
     );
   } finally {
     fs.rmSync(root, { recursive: true, force: true });
@@ -308,4 +356,18 @@ test("fails before projection when channel bytes or signature drift", () => {
   } finally {
     fs.rmSync(root, { recursive: true, force: true });
   }
+});
+
+test("the committed page remains truthful before a signed publication", () => {
+  const page = fs.readFileSync(
+    path.resolve("public/install/index.html"),
+    "utf8",
+  );
+  assert.match(page, /Public installer not released yet\./);
+  assert.doesNotMatch(page, /data-ungfu-release-acquisition/);
+  assert.equal(fs.existsSync("public/install.sh"), false);
+  assert.equal(
+    fs.existsSync("public/.well-known/kungfu/ungfu-release-acquisition.json"),
+    false,
+  );
 });
