@@ -32,7 +32,91 @@ permissions:
   pull-requests: write
 
 jobs:
+  github-governance-receipt:
+    if: >-
+      ${{
+        (github.event_name == 'workflow_dispatch' && inputs.production_approved) ||
+        (
+          github.event_name == 'pull_request' &&
+          github.event.action == 'closed' &&
+          github.event.pull_request.merged == true &&
+          contains(github.event.pull_request.labels.*.name, 'buildchain-release')
+        )
+      }}
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+    outputs:
+      receipt-json: ${{ steps.receipt.outputs.receipt-json }}
+    steps:
+      - name: Checkout caller repository
+        uses: actions/checkout@v7.0.0
+
+      - name: Resolve exact Buildchain governance verifier
+        id: runtime
+        shell: bash
+        run: |
+          set -euo pipefail
+          runtime_sha="$(jq -r '.buildchain.resolvedSha // empty' .buildchain/contract-lock.json)"
+          if [[ ! "$runtime_sha" =~ ^[0-9a-f]{40}$ ]]; then
+            echo "::error::stable Buildchain contract lock has no exact runtime SHA"
+            exit 1
+          fi
+          echo "sha=$runtime_sha" >> "$GITHUB_OUTPUT"
+
+      - name: Checkout exact Buildchain governance verifier
+        uses: actions/checkout@v7.0.0
+        with:
+          repository: kungfu-systems/buildchain
+          ref: ${{ steps.runtime.outputs.sha }}
+          path: .buildchain/governance-runtime
+          persist-credentials: false
+
+      - name: Mint bounded governance auditor token
+        id: auditor
+        uses: actions/create-github-app-token@v3
+        with:
+          app-id: ${{ vars.KUNGFU_GOVERNANCE_AUDITOR_APP_ID }}
+          private-key: ${{ secrets.KUNGFU_GOVERNANCE_AUDITOR_APP_PRIVATE_KEY }}
+          owner: ${{ github.repository_owner }}
+
+      - name: Collect exact live governance receipt
+        env:
+          GH_TOKEN: ${{ steps.auditor.outputs.token }}
+          BUILDCHAIN_RUNTIME_SHA: ${{ steps.runtime.outputs.sha }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          node .buildchain/governance-runtime/scripts/audit-github-governance.mjs \
+            --repository "$GITHUB_REPOSITORY" \
+            --target-ref main \
+            --source-revision "$BUILDCHAIN_RUNTIME_SHA" \
+            --output .buildchain/github-governance-audit.json \
+            --require-qualifying
+
+      - name: Export one fresh qualifying receipt
+        id: receipt
+        shell: bash
+        run: |
+          set -euo pipefail
+          receipt_count="$(jq '.receipts | length' .buildchain/github-governance-audit.json)"
+          if [[ "$receipt_count" != "1" ]]; then
+            echo "::error::expected exactly one GitHub governance receipt, found $receipt_count"
+            exit 1
+          fi
+          echo "receipt-json=$(jq -c '.receipts[0]' .buildchain/github-governance-audit.json)" >> "$GITHUB_OUTPUT"
+
   web-surface:
+    needs:
+      - github-governance-receipt
+    if: >-
+      ${{
+        always() &&
+        (
+          needs.github-governance-receipt.result == 'success' ||
+          needs.github-governance-receipt.result == 'skipped'
+        )
+      }}
     uses: kungfu-systems/buildchain/.github/workflows/.web-surface.yml@v2
     with:
       buildchain-ref: ${{ github.event_name == 'workflow_dispatch' && inputs.buildchain_ref || ((((github.event_name == 'workflow_dispatch' && inputs.production_approved) || (github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true && contains(github.event.pull_request.labels.*.name, 'buildchain-release')))) && 'v2' || 'v2-alpha') }}
@@ -56,5 +140,6 @@ jobs:
       production-release-head-prefix: feature/release-
       production-aws-role-arn: arn:aws:iam::727884401362:role/site-kungfu-tech-production-github-actions
       production-environment: production
+      github-governance-receipt-json: ${{ needs.github-governance-receipt.outputs.receipt-json || '' }}
     secrets:
       production-release-app-private-key: ${{ secrets.KUNGFU_RELEASE_APP_PRIVATE_KEY }}

@@ -99,6 +99,21 @@ if (
 if (!workflow.includes(`production-approved: \${{ ${manualProductionGate} }}`)) {
   throw new Error("Buildchain web-surface workflow must keep manual production approval explicit");
 }
+for (const governanceBinding of [
+  "github-governance-receipt:",
+  "KUNGFU_GOVERNANCE_AUDITOR_APP_ID",
+  "KUNGFU_GOVERNANCE_AUDITOR_APP_PRIVATE_KEY",
+  "scripts/audit-github-governance.mjs",
+  "--target-ref main",
+  "--require-qualifying",
+  "github-governance-receipt-json: ${{ needs.github-governance-receipt.outputs.receipt-json || '' }}",
+]) {
+  if (!workflow.includes(governanceBinding)) {
+    throw new Error(
+      `Buildchain web-surface workflow is missing live governance binding ${governanceBinding}`,
+    );
+  }
+}
 
 const config = parseTomlSections(buildchainToml);
 for (const channel of ["preview", "staging", "production"]) {
