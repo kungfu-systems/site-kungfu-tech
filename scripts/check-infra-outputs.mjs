@@ -72,10 +72,19 @@ for (const lockInput of [
     throw new Error(`Buildchain web-surface workflow is missing ${lockInput}`);
   }
 }
-for (const applySwitch of ["preview-apply", "preview-cleanup-apply", "staging-apply"]) {
-  if (!workflow.includes(`${applySwitch}: true`)) {
-    throw new Error(`Buildchain web-surface workflow must enable ${applySwitch} for the standard release flow`);
+const trustedPreviewGate =
+  "github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository";
+for (const applySwitch of ["preview-apply", "preview-cleanup-apply"]) {
+  if (!workflow.includes(`${applySwitch}: \${{ ${trustedPreviewGate} }}`)) {
+    throw new Error(
+      `Buildchain web-surface workflow must gate ${applySwitch} to same-repository pull requests`,
+    );
   }
+}
+if (!workflow.includes("staging-apply: true")) {
+  throw new Error(
+    "Buildchain web-surface workflow must enable staging-apply for the standard release flow",
+  );
 }
 const manualProductionGate = "github.event_name == 'workflow_dispatch' && inputs.production_approved";
 if (

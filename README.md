@@ -209,6 +209,8 @@ is owned by Buildchain release PR semantics: a pull request labeled
 `buildchain-release` from a `feature/release-*` branch becomes the production
 approval when it is merged into `main`. Manual workflow dispatch with
 `production_approved=true` remains available as an explicit operator fallback.
+Fork pull requests still build and plan, but skip AWS-backed preview apply
+because GitHub intentionally withholds OIDC identity from fork events.
 
 Staging is protected by managed network access, not by a Buildchain-managed
 Basic Auth secret.
