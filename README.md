@@ -67,9 +67,22 @@ that file first, then run the build so every page receives the same navigation
 and footer.
 
 The committed `/install/` page remains a truthful Coming Soon surface and does
-not expose installer files or released acquisition evidence. After
-`scripts/import-bootstrap-publication.mjs` verifies and imports a signed Alpha
-publication, it replaces only the bounded publication block with an adjacent
+not expose installer files or released acquisition evidence. The site-owned
+`site/installer-publication-source.json` is the only publication pin consumed by
+the build. It currently declares `unavailable`, so local and deployment builds
+must preserve the honest non-installing scripts.
+
+A future, separately reviewed site PR may change that pin to `available` only
+with an exact Kungfu GitHub Release manifest digest/root and a complete
+Buildchain read-back seal. `scripts/consume-installer-publication-bundle.mjs`
+then downloads the closed-world package bundle, rejects unsafe paths, duplicate
+entries, byte/MIME/cache drift, missing seal coverage, or authority mismatch,
+and passes the verified local bundle to
+`scripts/import-bootstrap-publication.mjs`. Kungfu's publication workflow does
+not check out, mutate, commit, push, or deploy this repository.
+
+After the site-owned consumer verifies and imports a signed Alpha publication,
+it replaces only the bounded publication block with an adjacent
 **Kungfu UNGFU™** mark, plain downloadable-software description, exact
 version/channel, and working installer action. The same import writes immutable
 acquisition HTML and JSON under

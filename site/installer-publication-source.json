@@ -1,0 +1,9 @@
+{
+  "schema": "kungfu-site-installer-publication-source/v1",
+  "status": "unavailable",
+  "reason": "no-site-owned-qualified-bundle-pin",
+  "manifestUrl": null,
+  "bundleRoot": null,
+  "manifestDigest": null,
+  "buildchainSeal": null
+}

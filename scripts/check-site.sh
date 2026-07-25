@@ -5,6 +5,10 @@ repo_root=$(cd "$(dirname "$0")/.." && pwd)
 cd "$repo_root"
 
 node --test scripts/import-bootstrap-publication.test.mjs
+node --test scripts/consume-installer-publication-bundle.test.mjs
+node scripts/consume-installer-publication-bundle.mjs \
+  --source site/installer-publication-source.json \
+  --output-root public
 node scripts/check-infra-outputs.mjs
 node scripts/render-shared-layout.mjs --check
 grep -q '"label": "Verify Agent Hub"' site/shared-layout.json
