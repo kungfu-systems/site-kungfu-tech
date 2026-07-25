@@ -185,7 +185,11 @@ test("imports signed channel and installers into mutable and immutable routes", 
     const input = fixture(root);
     const outputRoot = path.join(root, "public");
     prepareOutput(outputRoot);
-    const result = importBootstrapPublication({ ...input, outputRoot });
+    const result = importBootstrapPublication({
+      ...input,
+      outputRoot,
+      siteSourceSha: input.publication.sourceCommit,
+    });
     assert.equal(result.channelPayloadRoot, input.channel.payloadRoot);
     assert.deepEqual(result.files, [...result.files].sort());
     assert.deepEqual(
