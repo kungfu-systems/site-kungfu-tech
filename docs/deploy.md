@@ -90,9 +90,10 @@ The repository uses the canonical Buildchain `.buildchain/` layout:
 - `.buildchain/buildchain.toml` is the web-surface configuration.
 - `.buildchain/contract-lock.json` and `.buildchain/alpha-contract-lock.json`
   retain the accepted v2 compatibility contracts.
-- The caller workflow pins both the reusable workflow shell and
-  `buildchain-ref` to one exact reviewed Buildchain commit. Updating that commit
-  is a reviewed activation change, not a floating production mutation.
+- The caller workflow pins the reusable workflow shell to one exact reviewed
+  Buildchain commit and leaves `buildchain-ref` unset so the runtime resolves
+  from that same shell without invoking the manual-override path. Updating the
+  shell is a reviewed activation change, not a floating production mutation.
 
 Root-level `buildchain.toml` and `buildchain.contract-lock.json` are legacy
 layout files and should not be reintroduced.

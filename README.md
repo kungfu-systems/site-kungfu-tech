@@ -259,9 +259,10 @@ Buildchain release PR semantics.
 
 Buildchain is managed through the canonical `.buildchain/` layout. The
 repository commits stable and Alpha contract locks to retain compatibility
-expectations, while the reusable workflow shell and runtime checkout are pinned
-to the same exact reviewed Buildchain commit. A runtime change therefore
-requires an explicit site review before build, deploy planning, or apply.
+expectations, while the reusable workflow shell is pinned to one exact reviewed
+Buildchain commit and the runtime resolves from that shell. A runtime change
+therefore requires an explicit site review before build, deploy planning, or
+apply.
 
 ```bash
 BUILDCHAIN_DIR=/path/to/buildchain

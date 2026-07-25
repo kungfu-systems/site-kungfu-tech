@@ -64,8 +64,10 @@ if (!workflow.includes(expectedBuildchainShell)) {
     `Buildchain web-surface workflow must use exact activation shell ${expectedBuildchainShellRef}`,
   );
 }
-if (!workflow.includes(`buildchain-ref: ${expectedBuildchainShellRef}`)) {
-  throw new Error("Buildchain runtime checkout must match the exact reusable workflow shell");
+if (workflow.includes("buildchain-ref:")) {
+  throw new Error(
+    "Buildchain runtime must resolve from the exact reusable workflow shell, not an event-scoped override",
+  );
 }
 for (const lockInput of [
   "buildchain-contract-lock-path: ${{",
