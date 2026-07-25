@@ -27,7 +27,10 @@ Default automation:
   merging the release PR is the production approval event.
 - Release PR merges into `main` run production planning and apply.
 - Manual `workflow_dispatch` with `production_approved=true` remains available
-  as an explicit operator fallback.
+  as an explicit operator fallback. Production fallback dispatches must also
+  provide the exact reviewed `activation_source_sha`, select the `production`
+  environment, and provide the activation transaction root. Partial or
+  shadow-labeled production coordinates fail before Buildchain is invoked.
 
 The build installs the exact KFD, Buildchain, and paper packages from
 `pnpm-lock.yaml`. It renders the publication catalog from package-owned facts
@@ -67,8 +70,16 @@ Manual fallback:
 gh workflow run buildchain-web-surface.yml \
   --repo kungfu-systems/site-kungfu-tech \
   --ref main \
-  -f production_approved=true
+  -f production_approved=true \
+  -f activation_source_sha=<exact-reviewed-40-character-sha> \
+  -f activation_environment=production \
+  -f activation_transaction_root=sha256:<activation-transaction-root>
 ```
+
+The reusable Buildchain workflow checks out the exact reviewed source SHA for
+production apply; it does not redeploy a moving branch ref. After deploy and
+public read-back, `/.well-known/kungfu-release-status.json` is the canonical
+truthful status record and can be checked with `kungfu release status`.
 
 Do not store AWS access keys or session tokens in this repository.
 
@@ -77,11 +88,11 @@ Do not store AWS access keys or session tokens in this repository.
 The repository uses the canonical Buildchain `.buildchain/` layout:
 
 - `.buildchain/buildchain.toml` is the web-surface configuration.
-- `.buildchain/contract-lock.json` records the accepted floating `v2-alpha` runtime
-  contract.
-- The caller workflow uses
-  `kungfu-systems/buildchain/.github/workflows/.web-surface.yml@v2-alpha` plus
-  `buildchain-contract-lock-path: .buildchain/contract-lock.json`.
+- `.buildchain/contract-lock.json` and `.buildchain/alpha-contract-lock.json`
+  retain the accepted v2 compatibility contracts.
+- The caller workflow pins both the reusable workflow shell and
+  `buildchain-ref` to one exact reviewed Buildchain commit. Updating that commit
+  is a reviewed activation change, not a floating production mutation.
 
 Root-level `buildchain.toml` and `buildchain.contract-lock.json` are legacy
 layout files and should not be reintroduced.

@@ -30,6 +30,7 @@ test -f dist/agent-hub/index.html
 test -f dist/agent-hub.json
 test -f dist/llms.txt
 test -f dist/.well-known/security.txt
+test -f dist/.well-known/kungfu-release-status.json
 test -f dist/about/index.html
 test -f dist/about/bootstrapping/index.html
 test -f dist/capital/index.html

@@ -1,0 +1,14 @@
+{
+  "schema": "kungfu.release-status/v1",
+  "status": "unavailable",
+  "releasedUseClaim": false,
+  "reason": "no-site-owned-qualified-bundle-pin",
+  "documentationUrl": "https://kungfu.tech/install/",
+  "release": null,
+  "acquisitionEvidence": null,
+  "legalBoundary": {
+    "firstUseDateClaim": null,
+    "legalConclusion": "not-made",
+    "registrationStatusClaim": "none"
+  }
+}

@@ -465,6 +465,39 @@ function acquisitionEvidence(publication, version) {
   };
 }
 
+function releaseStatus(publication, version, acquisition) {
+  const siteSourceSha =
+    process.env.BUILDCHAIN_SITE_SOURCE_SHA || publication.sourceCommit;
+  if (!/^[0-9a-f]{40}$/.test(siteSourceSha)) {
+    throw new Error("BUILDCHAIN_SITE_SOURCE_SHA must be an exact site commit");
+  }
+  return {
+    schema: "kungfu.release-status/v1",
+    status: "current-release",
+    releasedUseClaim: true,
+    reason: "signed-publication-and-readback-qualified",
+    documentationUrl: `${CANONICAL_ORIGIN}/install/`,
+    release: {
+      sourceSha: publication.sourceCommit,
+      siteSourceSha,
+      tag: `v${version}`,
+      channel: publication.channel,
+      version,
+      channelPayloadRoot: publication.channelPayloadRoot,
+      releasePassport: publication.releasePassport,
+    },
+    acquisitionEvidence: {
+      url: `${CANONICAL_ORIGIN}/.well-known/kungfu/ungfu-release-acquisition.json`,
+      root: contentRoot(acquisition.index),
+    },
+    legalBoundary: {
+      firstUseDateClaim: null,
+      legalConclusion: "not-made",
+      registrationStatusClaim: "none",
+    },
+  };
+}
+
 function assertImmutable(destination, bytes) {
   if (!fs.existsSync(destination)) return;
   if (!fs.lstatSync(destination).isFile()) {
@@ -590,6 +623,7 @@ export function importBootstrapPublication({
     verified.version,
   );
   const acquisition = acquisitionEvidence(publication, verified.version);
+  const status = releaseStatus(publication, verified.version, acquisition);
   const installerPage = renderInstallerPage({
     outputRoot: destinationRoot,
     publication,
@@ -645,6 +679,11 @@ export function importBootstrapPublication({
       immutable: false,
       path: ".well-known/kungfu/ungfu-release-acquisition.json",
       bytes: Buffer.from(`${JSON.stringify(acquisition.index, null, 2)}\n`),
+    },
+    {
+      immutable: false,
+      path: ".well-known/kungfu-release-status.json",
+      bytes: Buffer.from(`${JSON.stringify(status, null, 2)}\n`),
     },
   ];
   for (const item of writes.filter((item) => item.immutable)) {

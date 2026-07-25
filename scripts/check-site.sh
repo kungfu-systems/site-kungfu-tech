@@ -74,6 +74,8 @@ test -f public/agent-builders/index.html
 test -f public/why-kungfu/index.html
 test -f public/assets/site.css
 test -f public/.well-known/security.txt
+test -f public/.well-known/kungfu-release-status.json
+node -e 'const fs=require("fs"); const s=JSON.parse(fs.readFileSync("public/.well-known/kungfu-release-status.json","utf8")); if(s.schema!=="kungfu.release-status/v1" || s.status!=="unavailable" || s.releasedUseClaim!==false || s.release!==null || s.acquisitionEvidence!==null) throw new Error("pre-release status endpoint is not truthful")'
 test -f public/about/index.html
 test -f public/about/bootstrapping/index.html
 test -f public/capital/index.html

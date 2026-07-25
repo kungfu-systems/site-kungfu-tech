@@ -72,6 +72,22 @@ not expose installer files or released acquisition evidence. The site-owned
 the build. It currently declares `unavailable`, so local and deployment builds
 must preserve the honest non-installing scripts.
 
+The machine-readable release truth is always available at
+`/.well-known/kungfu-release-status.json`. An installed Kungfu can explain that
+record directly:
+
+```sh
+kungfu release status
+kungfu release explain
+```
+
+The first command tells a human or Agent whether a current release has actually
+passed publication, site read-back, and installed-product qualification. The
+second names the boundary: this evidence does not make a trademark registration,
+legal conclusion, or first-use-date claim. Before Alpha activation, the endpoint
+must truthfully return `unavailable`; it must never infer a release from source
+files or a candidate manifest.
+
 A future, separately reviewed site PR may change that pin to `available` only
 with an exact Kungfu GitHub Release manifest digest/root and a complete
 Buildchain read-back seal. `scripts/consume-installer-publication-bundle.mjs`
@@ -87,8 +103,9 @@ it replaces only the bounded publication block with an adjacent
 version/channel, and working installer action. The same import writes immutable
 acquisition HTML and JSON under
 `/evidence/ungfu/alpha/<version>/<channel-root>/` plus a mutable discovery
-pointer under `/.well-known/kungfu/`. These public records preserve source,
-channel, artifact, and Release Passport roots but make no first-use or legal
+pointer and the current release-status record under `/.well-known/kungfu/`.
+These public records preserve exact product and site source SHAs, channel,
+artifact, Release Passport, and acquisition roots but make no first-use or legal
 conclusion.
 
 ## Capital & Stewardship
@@ -215,7 +232,7 @@ staging, or production origin. Research papers retain their canonical
 ## Buildchain
 
 This site is a Buildchain `web-surface` project. Pull requests and pushes use
-the shared Buildchain v2 web-surface workflow for the standard release flow:
+an exact reviewed Buildchain v2 web-surface commit for the standard release flow:
 feature PRs publish preview, normal merges publish staging, and release PR
 pages show the staging review URL before production approval. Production apply
 is owned by Buildchain release PR semantics: a pull request labeled
@@ -241,9 +258,10 @@ shared Buildchain workflow, and that production apply remains bound to
 Buildchain release PR semantics.
 
 Buildchain is managed through the canonical `.buildchain/` layout. The
-repository commits `.buildchain/contract-lock.json` so the floating `@v2-alpha`
-workflow can detect compatible or breaking Buildchain runtime drift before
-build, deploy planning, or apply.
+repository commits stable and Alpha contract locks to retain compatibility
+expectations, while the reusable workflow shell and runtime checkout are pinned
+to the same exact reviewed Buildchain commit. A runtime change therefore
+requires an explicit site review before build, deploy planning, or apply.
 
 ```bash
 BUILDCHAIN_DIR=/path/to/buildchain

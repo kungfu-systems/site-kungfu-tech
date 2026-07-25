@@ -1,0 +1,129 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://kungfu.tech/schemas/kungfu-release-status.schema.json",
+  "title": "Kungfu public release status",
+  "type": "object",
+  "required": [
+    "schema",
+    "status",
+    "releasedUseClaim",
+    "reason",
+    "documentationUrl",
+    "release",
+    "acquisitionEvidence",
+    "legalBoundary"
+  ],
+  "properties": {
+    "schema": { "const": "kungfu.release-status/v1" },
+    "status": {
+      "enum": ["preparation", "unavailable", "current-release"]
+    },
+    "releasedUseClaim": { "type": "boolean" },
+    "reason": { "type": "string", "minLength": 1 },
+    "documentationUrl": { "const": "https://kungfu.tech/install/" },
+    "release": {
+      "oneOf": [
+        { "type": "null" },
+        {
+          "type": "object",
+          "required": [
+            "sourceSha",
+            "siteSourceSha",
+            "tag",
+            "channel",
+            "version",
+            "channelPayloadRoot",
+            "releasePassport"
+          ],
+          "properties": {
+            "sourceSha": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{40}$"
+            },
+            "siteSourceSha": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{40}$"
+            },
+            "tag": { "type": "string", "pattern": "^v.+" },
+            "channel": { "enum": ["alpha", "release"] },
+            "version": { "type": "string", "minLength": 1 },
+            "channelPayloadRoot": {
+              "type": "string",
+              "pattern": "^sha256:[0-9a-f]{64}$"
+            },
+            "releasePassport": {
+              "type": "object",
+              "required": ["ref", "root"],
+              "properties": {
+                "ref": { "type": "string", "minLength": 1 },
+                "root": {
+                  "type": "string",
+                  "pattern": "^sha256:[0-9a-f]{64}$"
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "additionalProperties": false
+        }
+      ]
+    },
+    "acquisitionEvidence": {
+      "oneOf": [
+        { "type": "null" },
+        {
+          "type": "object",
+          "required": ["url", "root"],
+          "properties": {
+            "url": {
+              "type": "string",
+              "pattern": "^https://kungfu\\.tech/"
+            },
+            "root": {
+              "type": "string",
+              "pattern": "^sha256:[0-9a-f]{64}$"
+            }
+          },
+          "additionalProperties": false
+        }
+      ]
+    },
+    "legalBoundary": {
+      "type": "object",
+      "required": [
+        "firstUseDateClaim",
+        "legalConclusion",
+        "registrationStatusClaim"
+      ],
+      "properties": {
+        "firstUseDateClaim": { "type": "null" },
+        "legalConclusion": { "const": "not-made" },
+        "registrationStatusClaim": { "const": "none" }
+      },
+      "additionalProperties": false
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": { "status": { "const": "current-release" } },
+        "required": ["status"]
+      },
+      "then": {
+        "properties": {
+          "releasedUseClaim": { "const": true },
+          "release": { "type": "object" },
+          "acquisitionEvidence": { "type": "object" }
+        }
+      },
+      "else": {
+        "properties": {
+          "releasedUseClaim": { "const": false },
+          "release": { "type": "null" },
+          "acquisitionEvidence": { "type": "null" }
+        }
+      }
+    }
+  ],
+  "additionalProperties": false
+}

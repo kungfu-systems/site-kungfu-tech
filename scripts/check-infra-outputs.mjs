@@ -4,7 +4,8 @@ import fs from "node:fs";
 const outputs = JSON.parse(fs.readFileSync("infra/outputs.json", "utf8"));
 const buildchainToml = fs.readFileSync(".buildchain/buildchain.toml", "utf8");
 const workflow = fs.readFileSync(".github/workflows/buildchain-web-surface.yml", "utf8");
-const expectedBuildchainShellRef = "v2";
+const expectedBuildchainShellRef =
+  "420784a128cab230f840a11e82225c255cf58500";
 const expectedBuildchainShell = `kungfu-systems/buildchain/.github/workflows/.web-surface.yml@${expectedBuildchainShellRef}`;
 
 function parseTomlSections(text) {
@@ -59,7 +60,12 @@ for (const [channel, lockPath, expectedRef] of [
   }
 }
 if (!workflow.includes(expectedBuildchainShell)) {
-  throw new Error(`Buildchain web-surface workflow must use stable ${expectedBuildchainShellRef} shell`);
+  throw new Error(
+    `Buildchain web-surface workflow must use exact activation shell ${expectedBuildchainShellRef}`,
+  );
+}
+if (!workflow.includes(`buildchain-ref: ${expectedBuildchainShellRef}`)) {
+  throw new Error("Buildchain runtime checkout must match the exact reusable workflow shell");
 }
 for (const lockInput of [
   "buildchain-contract-lock-path: ${{",
@@ -110,6 +116,19 @@ if (!governanceJob.includes(mainPushProductionGate)) {
 }
 if (!workflow.includes(`production-approved: \${{ ${manualProductionGate} }}`)) {
   throw new Error("Buildchain web-surface workflow must keep manual production approval explicit");
+}
+for (const activationBinding of [
+  "activation_source_sha:",
+  "activation_environment:",
+  "activation_transaction_root:",
+  "production-source-sha: ${{ github.event_name == 'workflow_dispatch' && inputs.production_approved && inputs.activation_source_sha || '' }}",
+  "production activation requires an exact reviewed activation_source_sha",
+  "production approval requires activation_environment=production",
+  "production activation requires activation_transaction_root",
+]) {
+  if (!workflow.includes(activationBinding)) {
+    throw new Error(`Buildchain web-surface workflow is missing exact activation binding ${activationBinding}`);
+  }
 }
 for (const governanceBinding of [
   "github-governance-receipt:",
