@@ -13,6 +13,9 @@ rm -rf dist
 mkdir -p dist
 cp -R public/. dist/
 
+node scripts/consume-installer-publication-bundle.mjs \
+  --source site/installer-publication-source.json \
+  --output-root dist
 node scripts/render-whitepaper.mjs
 node scripts/render-agent-supply-chain.mjs
 node scripts/render-agent-hub.mjs
