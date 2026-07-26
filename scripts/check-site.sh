@@ -15,6 +15,10 @@ node scripts/check-infra-outputs.mjs
 node scripts/render-shared-layout.mjs --check
 grep -q '"label": "Verify Agent Hub"' site/shared-layout.json
 grep -q '"href": "/agent-hub/"' site/shared-layout.json
+grep -q '"label": "Get Kungfu"' site/shared-layout.json
+grep -q '"class": "nav-cta"' site/shared-layout.json
+grep -q '"public/about/bootstrapping/index.html"' site/shared-layout.json
+grep -q '.site-nav > \*:not(:first-child):not(.nav-cta)::before' public/assets/site.css
 node scripts/check-whitepaper.mjs
 node scripts/check-dogfood-proof.mjs
 node scripts/check-trademark-use.mjs
@@ -149,11 +153,17 @@ grep -q 'href="/legal/index.html"' public/index.html
 assert_shared_contains header public/index.html 'href="/about/index.html"'
 assert_shared_contains header public/index.html 'href="/whitepaper/"'
 assert_shared_contains header public/index.html 'class="nav-menu"'
+assert_shared_contains header public/index.html 'class="nav-cta" href="/install/">Get Kungfu</a>'
 assert_shared_contains header public/index.html 'href="/agent-builders/"'
 assert_shared_contains header public/index.html 'href="/agent-supply-chain/"'
 assert_shared_contains header public/index.html 'href="https://kfd.libkungfu.dev/"'
-assert_shared_contains header public/index.html 'libkungfu.dev'
+assert_shared_contains header public/index.html '>Developer Platform</a>'
 assert_shared_contains header public/index.html 'github.com/kungfu-systems/kungfu'
+assert_shared_lacks header public/index.html '>Install CLI</a>'
+assert_before public/index.html '<a href="/agent-builders/">Agent Builders</a>' '<summary>Developers</summary>'
+assert_before public/index.html '<summary>Developers</summary>' '<a href="/whitepaper/">Papers</a>'
+assert_before public/index.html '<a href="/whitepaper/">Papers</a>' '<a href="/about/index.html">About</a>'
+assert_before public/index.html '<a href="/about/index.html">About</a>' '<a class="nav-cta" href="/install/">Get Kungfu</a>'
 assert_shared_lacks header public/index.html 'href="/services/index.html"'
 assert_shared_lacks header public/index.html 'href="/capital/"'
 assert_shared_lacks header public/index.html 'href="/trust/index.html"'
@@ -188,6 +198,8 @@ grep -q 'KFD is the open protocol' public/about/index.html
 grep -q 'libkungfu.dev' public/about/index.html
 grep -q 'Kungfu does not compete for the Hub' public/about/index.html
 grep -q 'href="/about/bootstrapping/"' public/about/index.html
+grep -q 'minimal human sovereign core' public/about/index.html
+grep -q 'Participation should scale only after those capabilities exist as machine-readable Work infrastructure.' public/about/index.html
 grep -q 'href="/capital/"' public/about/index.html
 grep -q 'class="public-commitment"' public/about/index.html
 grep -q 'class="public-commitment-copy"' public/about/index.html
@@ -196,9 +208,20 @@ assert_before public/about/index.html '<h2>Public and auditable</h2>' '<h2>Comme
 assert_before public/about/index.html '<h2>Commercial stewardship</h2>' '<h2>Capital &amp; stewardship</h2>'
 grep -q 'shared-header:start' public/about/bootstrapping/index.html
 grep -q 'shared-footer:start' public/about/bootstrapping/index.html
-grep -q 'Kungfu as a bootstrapping system.' public/about/bootstrapping/index.html
+grep -q 'A larger human team would have hidden the problem.' public/about/bootstrapping/index.html
 grep -q 'Read this with your agent' public/about/bootstrapping/index.html
 grep -q 'Separate current evidence, strategic hypotheses, and long-term aspirations.' public/about/bootstrapping/index.html
+grep -q 'This is not ordinary dogfood' public/about/bootstrapping/index.html
+grep -q 'The human organization is the hidden Work Runtime' public/about/bootstrapping/index.html
+grep -q 'Begin with a minimal sovereign core' public/about/bootstrapping/index.html
+grep -q 'Externalize capability before scaling participation.' public/about/bootstrapping/index.html
+grep -q 'Why could this begin here?' public/about/bootstrapping/index.html
+grep -q 'Scale after the runtime exists' public/about/bootstrapping/index.html
+if grep -Fq 'building infrastructure for durable agent work while using agents to build more of that infrastructure' \
+  public/about/index.html public/about/bootstrapping/index.html; then
+  echo "error: bootstrap entry points must not collapse the thesis into ordinary dogfood" >&2
+  exit 1
+fi
 grep -q 'With gratitude to Douglas Engelbart' public/about/bootstrapping/index.html
 grep -q 'A Session lets an agent continue talking. Work infrastructure lets the work continue to exist.' public/about/bootstrapping/index.html
 grep -q 'Kungfu v4 is coming soon.' public/about/bootstrapping/index.html
@@ -263,6 +286,17 @@ grep -q 'github.com/kungfu-systems/kungfu/blob/dev/v4/v4.0/TRADEMARK.md' public/
 grep -q 'Privacy posture' public/legal/index.html
 grep -q 'https://kungfu.tech/install.sh' public/install/index.html
 grep -q 'https://kungfu.tech/install.ps1' public/install/index.html
+grep -q '<title>Get Kungfu | Kungfu UNGFU™</title>' public/install/index.html
+grep -q '<h1>Get Kungfu.</h1>' public/install/index.html
+grep -q '<h2>Desktop GUI</h2>' public/install/index.html
+grep -q 'Agent Work Management' public/install/index.html
+if grep -qi 'Mission Control\\|Agent Qualification Lab\\|Work graph' public/install/index.html; then
+  echo "Get Kungfu must describe stable user value without internal product-route names" >&2
+  exit 1
+fi
+grep -q 'No public GUI download is released today.' public/install/index.html
+grep -q '<h2>Command Line</h2>' public/install/index.html
+grep -q 'id="command-line"' public/install/index.html
 grep -q 'bootstrap-publication:start' public/install/index.html
 grep -q 'bootstrap-publication:end' public/install/index.html
 if [ -f public/installer-publication.json ]; then
@@ -387,6 +421,7 @@ if grep -RIn 'Kungfu v4\\|Developer substrate\\|substrate view\\|developer subst
 fi
 
 if [ -d dist ]; then
+  node scripts/fingerprint-site-assets.mjs --root dist --check
   test -f dist/index.html
   test -f dist/how-tested/continuity/index.html
   test -f dist/how-tested/auditable-demo/index.html
@@ -442,7 +477,12 @@ if [ -d dist ]; then
   grep -q 'kungfu-agent-hub-public-entry/v1' dist/agent-hub.json
   grep -q '"run": "kungfu agent hub qualify --output-dir <new-directory>"' dist/agent-hub.json
   grep -q 'Machine route: https://kungfu.tech/agent-hub.json' dist/llms.txt
-  grep -q 'property="og:title" content="Agent Supply Chain | Kungfu"' dist/agent-supply-chain/index.html
+  grep -q 'property="og:title" content="Agent Supply Chain | Kungfu UNGFU™"' dist/agent-supply-chain/index.html
+  grep -q '<title>Kungfu UNGFU™ — Continuity for Agent Work</title>' dist/index.html
+  grep -q 'aria-label="Kungfu UNGFU™"' dist/index.html
+  grep -q '^# Kungfu UNGFU™$' dist/llms.txt
+  grep -q '"signature": "Kungfu UNGFU™"' dist/agent-hub.json
+  grep -q 'Authenticode is not a qualification requirement for this Alpha.' dist/install/index.html
   grep -q 'Maturity claims matrix' dist/agent-supply-chain/index.html
   grep -q 'Exact evidence' dist/agent-supply-chain/index.html
   grep -q 'Known limit' dist/agent-supply-chain/index.html

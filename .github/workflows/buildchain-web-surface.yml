@@ -53,6 +53,7 @@ jobs:
         env:
           PRODUCTION_APPROVED: ${{ inputs.production_approved }}
           ACTIVATION_SOURCE_SHA: ${{ inputs.activation_source_sha }}
+          GITHUB_SHA: ${{ github.sha }}
           ACTIVATION_ENVIRONMENT: ${{ inputs.activation_environment }}
           ACTIVATION_TRANSACTION_ROOT: ${{ inputs.activation_transaction_root }}
         shell: bash
@@ -61,6 +62,10 @@ jobs:
           if [ "$PRODUCTION_APPROVED" = "true" ]; then
             [[ "$ACTIVATION_SOURCE_SHA" =~ ^[0-9a-f]{40}$ ]] || {
               echo "::error::production activation requires an exact reviewed activation_source_sha"
+              exit 1
+            }
+            [ "$ACTIVATION_SOURCE_SHA" = "$GITHUB_SHA" ] || {
+              echo "::error::production activation requires activation_source_sha to equal github.sha"
               exit 1
             }
             [ "$ACTIVATION_ENVIRONMENT" = "production" ] || {
@@ -106,18 +111,18 @@ jobs:
         uses: actions/checkout@v7.0.0
         with:
           repository: kungfu-systems/buildchain
-          ref: v2
+          ref: v3
           path: .buildchain/governance-runtime
           persist-credentials: false
 
-      - name: Resolve exact floating v2 verifier
+      - name: Resolve exact floating v3 verifier
         id: runtime
         shell: bash
         run: |
           set -euo pipefail
           runtime_sha="$(git -C .buildchain/governance-runtime rev-parse HEAD)"
           if [[ ! "$runtime_sha" =~ ^[0-9a-f]{40}$ ]]; then
-            echo "::error::floating v2 checkout did not resolve to an exact runtime SHA"
+            echo "::error::floating v3 checkout did not resolve to an exact runtime SHA"
             exit 1
           fi
           echo "sha=$runtime_sha" >> "$GITHUB_OUTPUT"
@@ -172,7 +177,7 @@ jobs:
           needs.github-governance-receipt.result == 'skipped'
         )
       }}
-    uses: kungfu-systems/buildchain/.github/workflows/.web-surface.yml@2826967b674febd5db869c1a43007505f5b0fd9f
+    uses: kungfu-systems/buildchain/.github/workflows/.web-surface.yml@9e904de2c85dbea7c799780ee166510b3336d812
     with:
       buildchain-contract-lock-path: ${{ (((github.event_name == 'workflow_dispatch' && inputs.production_approved) || (github.event_name == 'push' && github.ref == 'refs/heads/main') || (github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true && contains(github.event.pull_request.labels.*.name, 'buildchain-release')))) && '.buildchain/contract-lock.json' || '.buildchain/alpha-contract-lock.json' }}
       buildchain-contract-compatibility-policy: major-compatible
@@ -188,7 +193,6 @@ jobs:
       staging-aws-role-arn: arn:aws:iam::727884401362:role/site-kungfu-tech-staging-github-actions
       production-apply: true
       production-approved: ${{ github.event_name == 'workflow_dispatch' && inputs.production_approved }}
-      production-source-sha: ${{ github.event_name == 'workflow_dispatch' && inputs.production_approved && inputs.activation_source_sha || '' }}
       production-release-on-main: true
       production-release-app-client-id: ${{ vars.KUNGFU_RELEASE_APP_CLIENT_ID }}
       production-release-label: buildchain-release

@@ -5,6 +5,7 @@
     "public/agent-builders/index.html",
     "public/why-kungfu/index.html",
     "public/about/index.html",
+    "public/about/bootstrapping/index.html",
     "public/capital/index.html",
     "public/capital/investor-perspective/index.html",
     "public/services/index.html",
@@ -13,7 +14,7 @@
     "public/install/index.html"
   ],
   "brand": {
-    "label": "Kungfu",
+    "label": "Kungfu UNGFU™",
     "mark": "🧘",
     "tagline": "Continuity for Agent Work",
     "href": "/"
@@ -28,6 +29,27 @@
       "href": "/agent-builders/"
     },
     {
+      "label": "Developers",
+      "items": [
+        {
+          "label": "KFD Protocol",
+          "href": "https://kfd.libkungfu.dev/"
+        },
+        {
+          "label": "Developer Platform",
+          "href": "https://libkungfu.dev"
+        },
+        {
+          "label": "Verify Agent Hub",
+          "href": "/agent-hub/"
+        },
+        {
+          "label": "GitHub",
+          "href": "https://github.com/kungfu-systems/kungfu"
+        }
+      ]
+    },
+    {
       "label": "Papers",
       "href": "/whitepaper/"
     },
@@ -36,29 +58,9 @@
       "href": "/about/index.html"
     },
     {
-      "label": "Developers",
-      "items": [
-        {
-          "label": "Verify Agent Hub",
-          "href": "/agent-hub/"
-        },
-        {
-          "label": "Install CLI",
-          "href": "/install/"
-        },
-        {
-          "label": "KFD protocol",
-          "href": "https://kfd.libkungfu.dev/"
-        },
-        {
-          "label": "libkungfu.dev",
-          "href": "https://libkungfu.dev"
-        },
-        {
-          "label": "GitHub",
-          "href": "https://github.com/kungfu-systems/kungfu"
-        }
-      ]
+      "label": "Get Kungfu",
+      "href": "/install/",
+      "class": "nav-cta"
     }
   ],
   "footer": [

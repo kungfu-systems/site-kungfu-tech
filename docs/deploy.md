@@ -14,7 +14,7 @@ resource lifecycle decisions belong in the infra repository.
 
 Default automation:
 
-- Pull requests run Buildchain v2 web-surface planning, verification, and
+- Pull requests run Buildchain v3 web-surface planning, verification, and
   preview apply for `pr-N.preview.kungfu.tech`.
 - Preview uses the existing `site-kungfu-tech-preview-prefix` CloudFront
   Function as an external directory-index and alias-prefix router. Do not
@@ -76,8 +76,9 @@ gh workflow run buildchain-web-surface.yml \
   -f activation_transaction_root=sha256:<activation-transaction-root>
 ```
 
-The reusable Buildchain workflow checks out the exact reviewed source SHA for
-production apply; it does not redeploy a moving branch ref. After deploy and
+The caller requires `activation_source_sha` to equal the dispatch context's
+immutable `github.sha`; Buildchain v3 derives its production checkout from that
+same context rather than accepting a separate source override. After deploy and
 public read-back, `/.well-known/kungfu-release-status.json` is the canonical
 truthful status record and can be checked with `kungfu release status`.
 
@@ -89,7 +90,7 @@ The repository uses the canonical Buildchain `.buildchain/` layout:
 
 - `.buildchain/buildchain.toml` is the web-surface configuration.
 - `.buildchain/contract-lock.json` and `.buildchain/alpha-contract-lock.json`
-  retain the accepted v2 compatibility contracts.
+  retain the accepted v3 compatibility contracts.
 - The caller workflow pins the reusable workflow shell to one exact reviewed
   Buildchain commit and leaves `buildchain-ref` unset so the runtime resolves
   from that same shell without invoking the manual-override path. Updating the

@@ -42,9 +42,14 @@ uppercase; lowercase layer IDs remain stable machine identifiers.
 
 The concise `/about/` route owns the public product, protocol, commercial, and
 stewardship boundary. `/about/bootstrapping/` is the deeper interpretive route:
-it explains the Session-to-Work shift, constrained agent authority, the
-self-bootstrap, and Kungfu's structural debt to Douglas Engelbart without
-turning that tribute into an endorsement or a claim of direct succession.
+it argues that a minimal human sovereign core must first force the hidden
+organizational runtime—memory, coordination, facts, permissions, and
+acceptance—into machine-readable Work infrastructure before participation can
+scale. The route distinguishes that forcing function from ordinary software
+dogfood, explains why relative isolation matters, preserves the Session-to-Work
+and constrained-authority boundaries, and records Kungfu's structural debt to
+Douglas Engelbart without turning that tribute into an endorsement or a claim
+of direct succession.
 
 The essay must remain safe for public reading. It may cite public Kungfu, KFD,
 Buildchain, and Engelbart sources, but it must not expose private coordination
@@ -210,7 +215,7 @@ The product white paper's upstream `site/brand-site.json` bundle owns its
 selected HTML reader content. Every paper's publication manifest owns its title,
 abstract, PDF digest, source commit, canonical route, and evidence links. The
 catalog also renders source-contract facts from `@kungfu-tech/kfd@1.0.0-alpha.47`
-and `@kungfu-tech/buildchain@2.14.14-alpha.4`. This repository owns only site layout,
+and `@kungfu-tech/buildchain@3.0.1-alpha.2`. This repository owns only site layout,
 navigation, responsive presentation, and machine entry rendering.
 
 Generated routes:
@@ -232,7 +237,7 @@ staging, or production origin. Research papers retain their canonical
 ## Buildchain
 
 This site is a Buildchain `web-surface` project. Pull requests and pushes use
-an exact reviewed Buildchain v2 web-surface commit for the standard release flow:
+an exact reviewed Buildchain v3 web-surface commit for the standard release flow:
 feature PRs publish preview, normal merges publish staging, and release PR
 pages show the staging review URL before production approval. Production apply
 is owned by Buildchain release PR semantics: a pull request labeled

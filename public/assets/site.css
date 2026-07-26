@@ -106,10 +106,68 @@ a {
 .site-nav {
   display: flex;
   flex-wrap: wrap;
-  gap: 18px 28px;
+  gap: 18px 14px;
   align-items: center;
   color: var(--muted);
   font-size: 14px;
+}
+
+.site-nav > a:not(.nav-cta),
+.nav-menu summary {
+  display: inline-flex;
+  align-items: center;
+  min-height: 38px;
+  color: var(--fg);
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.site-nav > a:not(.nav-cta):hover,
+.site-nav > a:not(.nav-cta):focus-visible,
+.nav-menu summary:hover,
+.nav-menu summary:focus-visible,
+.nav-menu[open] summary {
+  color: var(--accent);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
+}
+
+.site-nav > .nav-cta {
+  display: inline-flex;
+  align-items: center;
+  min-height: 38px;
+  padding: 7px 12px;
+  border: 1px solid var(--accent);
+  background: var(--accent);
+  color: #ffffff;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.site-nav > .nav-cta:hover,
+.site-nav > .nav-cta:focus-visible {
+  border-color: var(--fg);
+  background: var(--fg);
+  color: var(--bg);
+}
+
+@media (min-width: 821px) {
+  .site-nav > *:not(:first-child):not(.nav-cta) {
+    position: relative;
+  }
+
+  .site-nav > *:not(:first-child):not(.nav-cta)::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: -8px;
+    width: 1px;
+    height: 16px;
+    background: var(--line);
+    pointer-events: none;
+    transform: translateY(-50%);
+  }
 }
 
 .nav-menu {
@@ -118,8 +176,6 @@ a {
 
 .nav-menu summary {
   cursor: pointer;
-  color: var(--fg);
-  font-weight: 500;
   list-style: none;
 }
 
@@ -131,8 +187,8 @@ a {
   width: 6px;
   height: 6px;
   margin-left: 6px;
-  border-right: 1px solid var(--muted);
-  border-bottom: 1px solid var(--muted);
+  border-right: 1px solid currentColor;
+  border-bottom: 1px solid currentColor;
   transform: rotate(45deg) translateY(-2px);
 }
 
@@ -194,12 +250,14 @@ a {
   border: 0;
 }
 
-@media (max-width: 820px) {
+@media (max-width: 1100px) {
   .site-header {
     align-items: flex-start;
     flex-direction: column;
   }
+}
 
+@media (max-width: 820px) {
   .brand-tagline::before {
     content: "";
     margin-right: 0;
@@ -207,7 +265,7 @@ a {
 
   .site-nav {
     display: grid;
-    gap: 12px;
+    gap: 4px;
   }
 
   .nav-menu-panel {
