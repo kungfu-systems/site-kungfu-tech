@@ -82,10 +82,11 @@ const html = `<!doctype html>
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Agent Supply Chain | Kungfu</title>
+  <title>Agent Supply Chain | Kungfu UNGFU™</title>
   <meta name="description" content="As Agents gain delegated tool choice, Agent-first software gains a new distribution advantage. See how Kungfu connects discovery, exact-release evidence, trust, continuity, and portability.">
   <meta property="og:type" content="website">
-  <meta property="og:title" content="Agent Supply Chain | Kungfu">
+  <meta property="og:site_name" content="Kungfu UNGFU™">
+  <meta property="og:title" content="Agent Supply Chain | Kungfu UNGFU™">
   <meta property="og:description" content="The software user is changing. Kungfu is an open supply chain for Agent-mediated discovery, trust, use, continuity, and portability.">
   <meta property="og:url" content="https://kungfu.tech/agent-supply-chain/">
   <meta name="twitter:card" content="summary">
@@ -267,9 +268,11 @@ ${renderFooter(layout)}
 </html>
 `;
 
-const llms = `# Kungfu
+const llms = `# Kungfu UNGFU™
 
 Kungfu has two public strategic axes: continuity for durable Agent work, and an open Agent Supply Chain for product discovery, exact-artifact evidence, purpose-bound trust, durable work facts, and portability across independently owned Hubs.
+
+Brand boundary: Kungfu is the product name. Kungfu UNGFU™ is its source-identifying signature; UNGFU is not a second product or runtime, and ™ makes no registration-status claim.
 
 ## The shift in software use
 

@@ -575,7 +575,7 @@ function renderInstallerPage({
         <h2>Windows PowerShell</h2>
         <p>Convenience install from the revalidated canonical route:</p>
         <code class="command">irm https://kungfu.tech/install.ps1 | iex</code>
-        <p>The selected Windows archive is also required to carry valid Authenticode trust evidence.</p>
+        <p>The qualified Windows Alpha archive may be unsigned: trust comes from signed release-channel evidence, an immutable URL, and a published SHA-256 digest. Authenticode is not a qualification requirement for this Alpha.</p>
       </section>
 
       <section class="wide">

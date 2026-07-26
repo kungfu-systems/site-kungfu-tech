@@ -21,7 +21,7 @@ export function validateTrademarkUse({ layout, pages }) {
   const legal = pages["public/legal/index.html"] || "";
   const trademarkItem = layout.footer?.find((item) => item.role === "trademark");
 
-  if (layout.brand?.label !== "Kungfu") issues.push("primary product name must remain Kungfu");
+  if (layout.brand?.label !== EXACT_MARK) issues.push("shared header must use the exact brand signature");
   if (trademarkItem?.text !== OWNER_NOTICE) issues.push("shared trademark attribution is not exact");
   if (!homePrinciple.includes(EXACT_MARK) || !homePrinciple.includes(PRINCIPLE)) {
     issues.push("homepage must pair the exact mark with the brand principle");
@@ -66,7 +66,7 @@ function selfTest() {
 
   const renamed = structuredClone(base);
   renamed.layout.brand.label = "UNGFU";
-  assert.ok(validateTrademarkUse(renamed).includes("primary product name must remain Kungfu"));
+  assert.ok(validateTrademarkUse(renamed).includes("shared header must use the exact brand signature"));
 
   const missingSurface = structuredClone(base);
   missingSurface.pages["public/index.html"] = missingSurface.pages["public/index.html"].replace(

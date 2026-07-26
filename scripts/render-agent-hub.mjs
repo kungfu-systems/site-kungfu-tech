@@ -32,6 +32,11 @@ const machine = {
     siteBundleRoute: page.url,
   },
   product: "Kungfu",
+  brand: {
+    signature: "Kungfu UNGFU™",
+    productName: "Kungfu",
+    boundary: "UNGFU is not a second product or runtime. The trademark symbol makes no registration-status claim.",
+  },
   status: page.status,
   normative: page.normative,
   run: projection.run,
@@ -54,9 +59,10 @@ const html = `<!doctype html>
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Verify Kungfu's KFD Agent Hub | Kungfu</title>
+  <title>Verify Kungfu's KFD Agent Hub | Kungfu UNGFU™</title>
   <meta name="description" content="Ask the installed Kungfu product to run the fixed KFD Agent Hub 20 suite, explain what passed, retain rooted evidence, and state what the result does not prove.">
-  <meta property="og:title" content="Verify Kungfu's KFD Agent Hub | Kungfu">
+  <meta property="og:site_name" content="Kungfu UNGFU™">
+  <meta property="og:title" content="Verify Kungfu's KFD Agent Hub | Kungfu UNGFU™">
   <meta property="og:description" content="One installed-product command. Twenty fixed local Hub scenarios. Human explanation and machine JSON from the same evidence.">
   <meta property="og:url" content="https://kungfu.tech/agent-hub/">
   <link rel="canonical" href="https://kungfu.tech/agent-hub/">
