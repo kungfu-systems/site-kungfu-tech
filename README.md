@@ -42,9 +42,14 @@ uppercase; lowercase layer IDs remain stable machine identifiers.
 
 The concise `/about/` route owns the public product, protocol, commercial, and
 stewardship boundary. `/about/bootstrapping/` is the deeper interpretive route:
-it explains the Session-to-Work shift, constrained agent authority, the
-self-bootstrap, and Kungfu's structural debt to Douglas Engelbart without
-turning that tribute into an endorsement or a claim of direct succession.
+it argues that a minimal human sovereign core must first force the hidden
+organizational runtime—memory, coordination, facts, permissions, and
+acceptance—into machine-readable Work infrastructure before participation can
+scale. The route distinguishes that forcing function from ordinary software
+dogfood, explains why relative isolation matters, preserves the Session-to-Work
+and constrained-authority boundaries, and records Kungfu's structural debt to
+Douglas Engelbart without turning that tribute into an endorsement or a claim
+of direct succession.
 
 The essay must remain safe for public reading. It may cite public Kungfu, KFD,
 Buildchain, and Engelbart sources, but it must not expose private coordination
