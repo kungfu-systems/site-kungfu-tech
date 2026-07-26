@@ -259,6 +259,11 @@ grep -q 'https://kungfu.tech/install.ps1' public/install/index.html
 grep -q '<title>Get Kungfu | Kungfu UNGFU™</title>' public/install/index.html
 grep -q '<h1>Get Kungfu.</h1>' public/install/index.html
 grep -q '<h2>Desktop GUI</h2>' public/install/index.html
+grep -q 'Agent Work Management' public/install/index.html
+if grep -qi 'Mission Control\\|Agent Qualification Lab\\|Work graph' public/install/index.html; then
+  echo "Get Kungfu must describe stable user value without internal product-route names" >&2
+  exit 1
+fi
 grep -q 'No public GUI download is released today.' public/install/index.html
 grep -q '<h2>Command Line</h2>' public/install/index.html
 grep -q 'id="command-line"' public/install/index.html
