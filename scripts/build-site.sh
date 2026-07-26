@@ -19,6 +19,7 @@ node scripts/consume-installer-publication-bundle.mjs \
 node scripts/render-whitepaper.mjs
 node scripts/render-agent-supply-chain.mjs
 node scripts/render-agent-hub.mjs
+node scripts/fingerprint-site-assets.mjs --root dist
 
 test -f dist/index.html
 test -f dist/404.html

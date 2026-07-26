@@ -391,6 +391,7 @@ if grep -RIn 'Kungfu v4\\|Developer substrate\\|substrate view\\|developer subst
 fi
 
 if [ -d dist ]; then
+  node scripts/fingerprint-site-assets.mjs --root dist --check
   test -f dist/index.html
   test -f dist/how-tested/continuity/index.html
   test -f dist/agent-builders/index.html
