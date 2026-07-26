@@ -200,7 +200,14 @@ grep -q 'This is not ordinary dogfood' public/about/bootstrapping/index.html
 grep -q 'The human organization is the hidden Work Runtime' public/about/bootstrapping/index.html
 grep -q 'Begin with a minimal sovereign core' public/about/bootstrapping/index.html
 grep -q 'Externalize capability before scaling participation.' public/about/bootstrapping/index.html
+grep -q 'What is Kungfu trying to make real?' public/about/bootstrapping/index.html
+grep -q 'One ordinary piece of Work' public/about/bootstrapping/index.html
+grep -q 'When the runtime stays human' public/about/bootstrapping/index.html
+grep -q 'When responsibility is externalized' public/about/bootstrapping/index.html
+grep -q 'site pull request #163' public/about/bootstrapping/index.html
+grep -q 'partial bootstrap evidence—not proof that the finished Kungfu Work Runtime already exists.' public/about/bootstrapping/index.html
 grep -q 'Why could this begin here?' public/about/bootstrapping/index.html
+grep -q 'The strongest objection' public/about/bootstrapping/index.html
 grep -q 'Scale after the runtime exists' public/about/bootstrapping/index.html
 if grep -Fq 'building infrastructure for durable agent work while using agents to build more of that infrastructure' \
   public/about/index.html public/about/bootstrapping/index.html; then
@@ -208,9 +215,12 @@ if grep -Fq 'building infrastructure for durable agent work while using agents t
   exit 1
 fi
 grep -q 'With gratitude to Douglas Engelbart' public/about/bootstrapping/index.html
-grep -q 'A Session lets an agent continue talking. Work infrastructure lets the work continue to exist.' public/about/bootstrapping/index.html
+grep -q 'The product is not a smarter Session. It is a machine-readable common reality that survives Sessions.' public/about/bootstrapping/index.html
 grep -q 'Kungfu v4 is coming soon.' public/about/bootstrapping/index.html
-grep -q 'docs/concepts/bootstrapping-agent-work.md' public/about/bootstrapping/index.html
+if grep -q 'docs/concepts/bootstrapping-agent-work.md' public/about/bootstrapping/index.html; then
+  echo "error: preview thesis must not point readers to the unsynchronized repository essay" >&2
+  exit 1
+fi
 grep -q 'shared-header:start' public/capital/index.html
 grep -q 'shared-footer:start' public/capital/index.html
 grep -q 'Capital should expand the ecosystem, not control the standard.' public/capital/index.html
