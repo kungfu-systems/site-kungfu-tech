@@ -5,7 +5,7 @@ const outputs = JSON.parse(fs.readFileSync("infra/outputs.json", "utf8"));
 const buildchainToml = fs.readFileSync(".buildchain/buildchain.toml", "utf8");
 const workflow = fs.readFileSync(".github/workflows/buildchain-web-surface.yml", "utf8");
 const expectedBuildchainShellRef =
-  "2826967b674febd5db869c1a43007505f5b0fd9f";
+  "9e904de2c85dbea7c799780ee166510b3336d812";
 const expectedBuildchainShell = `kungfu-systems/buildchain/.github/workflows/.web-surface.yml@${expectedBuildchainShellRef}`;
 
 function parseTomlSections(text) {
@@ -42,15 +42,15 @@ if (fs.existsSync("buildchain.toml") || fs.existsSync("buildchain.contract-lock.
   throw new Error("legacy Buildchain root layout files are not allowed");
 }
 for (const [channel, lockPath, expectedRef] of [
-  ["stable", ".buildchain/contract-lock.json", "v2"],
-  ["alpha", ".buildchain/alpha-contract-lock.json", "v2-alpha"],
+  ["stable", ".buildchain/contract-lock.json", "v3"],
+  ["alpha", ".buildchain/alpha-contract-lock.json", "v3-alpha"],
 ]) {
   if (!fs.existsSync(lockPath)) throw new Error(`missing Buildchain ${channel} contract lock: ${lockPath}`);
   const lock = JSON.parse(fs.readFileSync(lockPath, "utf8"));
   if (
     lock.contract !== "kungfu-buildchain-contract-lock" ||
     lock.buildchain?.ref !== expectedRef ||
-    lock.buildchain?.majorLine !== "v2" ||
+    lock.buildchain?.majorLine !== "v3" ||
     lock.buildchain?.compatibilityPolicy !== "major-compatible" ||
     !lock.buildchain?.resolvedSha ||
     !lock.buildchain?.contractDigest ||
@@ -123,8 +123,9 @@ for (const activationBinding of [
   "activation_source_sha:",
   "activation_environment:",
   "activation_transaction_root:",
-  "production-source-sha: ${{ github.event_name == 'workflow_dispatch' && inputs.production_approved && inputs.activation_source_sha || '' }}",
+  "GITHUB_SHA: ${{ github.sha }}",
   "production activation requires an exact reviewed activation_source_sha",
+  "production activation requires activation_source_sha to equal github.sha",
   "production approval requires activation_environment=production",
   "production activation requires activation_transaction_root",
 ]) {
@@ -134,7 +135,7 @@ for (const activationBinding of [
 }
 for (const governanceBinding of [
   "github-governance-receipt:",
-  "ref: v2",
+  "ref: v3",
   "git -C .buildchain/governance-runtime rev-parse HEAD",
   "KUNGFU_GOVERNANCE_AUDITOR_APP_ID",
   "KUNGFU_GOVERNANCE_AUDITOR_APP_PRIVATE_KEY",
@@ -155,7 +156,7 @@ if (
   )
 ) {
   throw new Error(
-    "Buildchain web-surface workflow must keep production on the official v2 channel instead of using a PR-event SHA override",
+    "Buildchain web-surface workflow must keep production on the official v3 channel instead of using a PR-event SHA override",
   );
 }
 

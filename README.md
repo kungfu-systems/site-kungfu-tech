@@ -210,7 +210,7 @@ The product white paper's upstream `site/brand-site.json` bundle owns its
 selected HTML reader content. Every paper's publication manifest owns its title,
 abstract, PDF digest, source commit, canonical route, and evidence links. The
 catalog also renders source-contract facts from `@kungfu-tech/kfd@1.0.0-alpha.47`
-and `@kungfu-tech/buildchain@2.14.14-alpha.4`. This repository owns only site layout,
+and `@kungfu-tech/buildchain@3.0.1-alpha.2`. This repository owns only site layout,
 navigation, responsive presentation, and machine entry rendering.
 
 Generated routes:
@@ -232,7 +232,7 @@ staging, or production origin. Research papers retain their canonical
 ## Buildchain
 
 This site is a Buildchain `web-surface` project. Pull requests and pushes use
-an exact reviewed Buildchain v2 web-surface commit for the standard release flow:
+an exact reviewed Buildchain v3 web-surface commit for the standard release flow:
 feature PRs publish preview, normal merges publish staging, and release PR
 pages show the staging review URL before production approval. Production apply
 is owned by Buildchain release PR semantics: a pull request labeled
