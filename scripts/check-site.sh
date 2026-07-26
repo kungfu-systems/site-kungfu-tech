@@ -13,6 +13,8 @@ node scripts/check-infra-outputs.mjs
 node scripts/render-shared-layout.mjs --check
 grep -q '"label": "Verify Agent Hub"' site/shared-layout.json
 grep -q '"href": "/agent-hub/"' site/shared-layout.json
+grep -q '"label": "Get Kungfu"' site/shared-layout.json
+grep -q '"class": "nav-cta"' site/shared-layout.json
 node scripts/check-whitepaper.mjs
 node scripts/check-dogfood-proof.mjs
 node scripts/check-trademark-use.mjs
@@ -134,11 +136,17 @@ grep -q 'href="/legal/index.html"' public/index.html
 assert_shared_contains header public/index.html 'href="/about/index.html"'
 assert_shared_contains header public/index.html 'href="/whitepaper/"'
 assert_shared_contains header public/index.html 'class="nav-menu"'
+assert_shared_contains header public/index.html 'class="nav-cta" href="/install/">Get Kungfu</a>'
 assert_shared_contains header public/index.html 'href="/agent-builders/"'
 assert_shared_contains header public/index.html 'href="/agent-supply-chain/"'
 assert_shared_contains header public/index.html 'href="https://kfd.libkungfu.dev/"'
-assert_shared_contains header public/index.html 'libkungfu.dev'
+assert_shared_contains header public/index.html '>Developer Platform</a>'
 assert_shared_contains header public/index.html 'github.com/kungfu-systems/kungfu'
+assert_shared_lacks header public/index.html '>Install CLI</a>'
+assert_before public/index.html '<a href="/agent-builders/">Agent Builders</a>' '<summary>Developers</summary>'
+assert_before public/index.html '<summary>Developers</summary>' '<a href="/whitepaper/">Papers</a>'
+assert_before public/index.html '<a href="/whitepaper/">Papers</a>' '<a href="/about/index.html">About</a>'
+assert_before public/index.html '<a href="/about/index.html">About</a>' '<a class="nav-cta" href="/install/">Get Kungfu</a>'
 assert_shared_lacks header public/index.html 'href="/services/index.html"'
 assert_shared_lacks header public/index.html 'href="/capital/"'
 assert_shared_lacks header public/index.html 'href="/trust/index.html"'
@@ -248,6 +256,12 @@ grep -q 'github.com/kungfu-systems/kungfu/blob/dev/v4/v4.0/TRADEMARK.md' public/
 grep -q 'Privacy posture' public/legal/index.html
 grep -q 'https://kungfu.tech/install.sh' public/install/index.html
 grep -q 'https://kungfu.tech/install.ps1' public/install/index.html
+grep -q '<title>Get Kungfu | Kungfu UNGFU™</title>' public/install/index.html
+grep -q '<h1>Get Kungfu.</h1>' public/install/index.html
+grep -q '<h2>Desktop GUI</h2>' public/install/index.html
+grep -q 'No public GUI download is released today.' public/install/index.html
+grep -q '<h2>Command Line</h2>' public/install/index.html
+grep -q 'id="command-line"' public/install/index.html
 grep -q 'bootstrap-publication:start' public/install/index.html
 grep -q 'bootstrap-publication:end' public/install/index.html
 if [ -f public/installer-publication.json ]; then

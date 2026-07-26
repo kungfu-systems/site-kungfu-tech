@@ -550,7 +550,7 @@ function renderInstallerPage({
     )
     .join("");
   const live = `${start}
-    <div class="state">
+    <div class="state" id="command-line">
       <strong>Signed Alpha ${escapeHtml(version)} is publicly available.</strong>
       <p>The canonical channel, immutable installers, release artifacts, and public read-back bind source <code>${escapeHtml(publication.sourceCommit)}</code> and channel root <code>${escapeHtml(publication.channelPayloadRoot)}</code>.</p>
     </div>

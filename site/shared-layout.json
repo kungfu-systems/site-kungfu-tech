@@ -27,6 +27,27 @@
       "href": "/agent-builders/"
     },
     {
+      "label": "Developers",
+      "items": [
+        {
+          "label": "KFD Protocol",
+          "href": "https://kfd.libkungfu.dev/"
+        },
+        {
+          "label": "Developer Platform",
+          "href": "https://libkungfu.dev"
+        },
+        {
+          "label": "Verify Agent Hub",
+          "href": "/agent-hub/"
+        },
+        {
+          "label": "GitHub",
+          "href": "https://github.com/kungfu-systems/kungfu"
+        }
+      ]
+    },
+    {
       "label": "Papers",
       "href": "/whitepaper/"
     },
@@ -35,29 +56,9 @@
       "href": "/about/index.html"
     },
     {
-      "label": "Developers",
-      "items": [
-        {
-          "label": "Verify Agent Hub",
-          "href": "/agent-hub/"
-        },
-        {
-          "label": "Install CLI",
-          "href": "/install/"
-        },
-        {
-          "label": "KFD protocol",
-          "href": "https://kfd.libkungfu.dev/"
-        },
-        {
-          "label": "libkungfu.dev",
-          "href": "https://libkungfu.dev"
-        },
-        {
-          "label": "GitHub",
-          "href": "https://github.com/kungfu-systems/kungfu"
-        }
-      ]
+      "label": "Get Kungfu",
+      "href": "/install/",
+      "class": "nav-cta"
     }
   ],
   "footer": [
