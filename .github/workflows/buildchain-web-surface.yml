@@ -53,6 +53,7 @@ jobs:
         env:
           PRODUCTION_APPROVED: ${{ inputs.production_approved }}
           ACTIVATION_SOURCE_SHA: ${{ inputs.activation_source_sha }}
+          GITHUB_SHA: ${{ github.sha }}
           ACTIVATION_ENVIRONMENT: ${{ inputs.activation_environment }}
           ACTIVATION_TRANSACTION_ROOT: ${{ inputs.activation_transaction_root }}
         shell: bash
@@ -61,6 +62,10 @@ jobs:
           if [ "$PRODUCTION_APPROVED" = "true" ]; then
             [[ "$ACTIVATION_SOURCE_SHA" =~ ^[0-9a-f]{40}$ ]] || {
               echo "::error::production activation requires an exact reviewed activation_source_sha"
+              exit 1
+            }
+            [ "$ACTIVATION_SOURCE_SHA" = "$GITHUB_SHA" ] || {
+              echo "::error::production activation requires activation_source_sha to equal github.sha"
               exit 1
             }
             [ "$ACTIVATION_ENVIRONMENT" = "production" ] || {
@@ -188,7 +193,6 @@ jobs:
       staging-aws-role-arn: arn:aws:iam::727884401362:role/site-kungfu-tech-staging-github-actions
       production-apply: true
       production-approved: ${{ github.event_name == 'workflow_dispatch' && inputs.production_approved }}
-      production-source-sha: ${{ github.event_name == 'workflow_dispatch' && inputs.production_approved && inputs.activation_source_sha || '' }}
       production-release-on-main: true
       production-release-app-client-id: ${{ vars.KUNGFU_RELEASE_APP_CLIENT_ID }}
       production-release-label: buildchain-release

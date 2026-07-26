@@ -123,8 +123,9 @@ for (const activationBinding of [
   "activation_source_sha:",
   "activation_environment:",
   "activation_transaction_root:",
-  "production-source-sha: ${{ github.event_name == 'workflow_dispatch' && inputs.production_approved && inputs.activation_source_sha || '' }}",
+  "GITHUB_SHA: ${{ github.sha }}",
   "production activation requires an exact reviewed activation_source_sha",
+  "production activation requires activation_source_sha to equal github.sha",
   "production approval requires activation_environment=production",
   "production activation requires activation_transaction_root",
 ]) {

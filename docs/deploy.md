@@ -76,8 +76,9 @@ gh workflow run buildchain-web-surface.yml \
   -f activation_transaction_root=sha256:<activation-transaction-root>
 ```
 
-The reusable Buildchain workflow checks out the exact reviewed source SHA for
-production apply; it does not redeploy a moving branch ref. After deploy and
+The caller requires `activation_source_sha` to equal the dispatch context's
+immutable `github.sha`; Buildchain v3 derives its production checkout from that
+same context rather than accepting a separate source override. After deploy and
 public read-back, `/.well-known/kungfu-release-status.json` is the canonical
 truthful status record and can be checked with `kungfu release status`.
 
