@@ -15,6 +15,8 @@ grep -q '"label": "Verify Agent Hub"' site/shared-layout.json
 grep -q '"href": "/agent-hub/"' site/shared-layout.json
 grep -q '"label": "Get Kungfu"' site/shared-layout.json
 grep -q '"class": "nav-cta"' site/shared-layout.json
+grep -q '"public/about/bootstrapping/index.html"' site/shared-layout.json
+grep -q '.site-nav > \*:not(:first-child):not(.nav-cta)::before' public/assets/site.css
 node scripts/check-whitepaper.mjs
 node scripts/check-dogfood-proof.mjs
 node scripts/check-trademark-use.mjs
@@ -181,6 +183,8 @@ grep -q 'KFD is the open protocol' public/about/index.html
 grep -q 'libkungfu.dev' public/about/index.html
 grep -q 'Kungfu does not compete for the Hub' public/about/index.html
 grep -q 'href="/about/bootstrapping/"' public/about/index.html
+grep -q 'minimal human sovereign core' public/about/index.html
+grep -q 'Participation should scale only after those capabilities exist as machine-readable Work infrastructure.' public/about/index.html
 grep -q 'href="/capital/"' public/about/index.html
 grep -q 'class="public-commitment"' public/about/index.html
 grep -q 'class="public-commitment-copy"' public/about/index.html
@@ -189,9 +193,20 @@ assert_before public/about/index.html '<h2>Public and auditable</h2>' '<h2>Comme
 assert_before public/about/index.html '<h2>Commercial stewardship</h2>' '<h2>Capital &amp; stewardship</h2>'
 grep -q 'shared-header:start' public/about/bootstrapping/index.html
 grep -q 'shared-footer:start' public/about/bootstrapping/index.html
-grep -q 'Kungfu as a bootstrapping system.' public/about/bootstrapping/index.html
+grep -q 'A larger human team would have hidden the problem.' public/about/bootstrapping/index.html
 grep -q 'Read this with your agent' public/about/bootstrapping/index.html
 grep -q 'Separate current evidence, strategic hypotheses, and long-term aspirations.' public/about/bootstrapping/index.html
+grep -q 'This is not ordinary dogfood' public/about/bootstrapping/index.html
+grep -q 'The human organization is the hidden Work Runtime' public/about/bootstrapping/index.html
+grep -q 'Begin with a minimal sovereign core' public/about/bootstrapping/index.html
+grep -q 'Externalize capability before scaling participation.' public/about/bootstrapping/index.html
+grep -q 'Why could this begin here?' public/about/bootstrapping/index.html
+grep -q 'Scale after the runtime exists' public/about/bootstrapping/index.html
+if grep -Fq 'building infrastructure for durable agent work while using agents to build more of that infrastructure' \
+  public/about/index.html public/about/bootstrapping/index.html; then
+  echo "error: bootstrap entry points must not collapse the thesis into ordinary dogfood" >&2
+  exit 1
+fi
 grep -q 'With gratitude to Douglas Engelbart' public/about/bootstrapping/index.html
 grep -q 'A Session lets an agent continue talking. Work infrastructure lets the work continue to exist.' public/about/bootstrapping/index.html
 grep -q 'Kungfu v4 is coming soon.' public/about/bootstrapping/index.html

@@ -152,6 +152,24 @@ a {
   color: var(--bg);
 }
 
+@media (min-width: 821px) {
+  .site-nav > *:not(:first-child):not(.nav-cta) {
+    position: relative;
+  }
+
+  .site-nav > *:not(:first-child):not(.nav-cta)::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: -8px;
+    width: 1px;
+    height: 16px;
+    background: var(--line);
+    pointer-events: none;
+    transform: translateY(-50%);
+  }
+}
+
 .nav-menu {
   position: relative;
 }
