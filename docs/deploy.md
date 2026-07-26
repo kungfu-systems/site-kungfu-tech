@@ -14,7 +14,7 @@ resource lifecycle decisions belong in the infra repository.
 
 Default automation:
 
-- Pull requests run Buildchain v2 web-surface planning, verification, and
+- Pull requests run Buildchain v3 web-surface planning, verification, and
   preview apply for `pr-N.preview.kungfu.tech`.
 - Preview uses the existing `site-kungfu-tech-preview-prefix` CloudFront
   Function as an external directory-index and alias-prefix router. Do not
@@ -89,7 +89,7 @@ The repository uses the canonical Buildchain `.buildchain/` layout:
 
 - `.buildchain/buildchain.toml` is the web-surface configuration.
 - `.buildchain/contract-lock.json` and `.buildchain/alpha-contract-lock.json`
-  retain the accepted v2 compatibility contracts.
+  retain the accepted v3 compatibility contracts.
 - The caller workflow pins the reusable workflow shell to one exact reviewed
   Buildchain commit and leaves `buildchain-ref` unset so the runtime resolves
   from that same shell without invoking the manual-override path. Updating the
