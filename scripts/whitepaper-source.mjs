@@ -11,7 +11,7 @@ export const WHITEPAPER_VERSION = "0.1.0-alpha.10";
 export const KFD_PACKAGE = "@kungfu-tech/kfd";
 export const KFD_VERSION = "1.0.0-alpha.47";
 export const BUILDCHAIN_PACKAGE = "@kungfu-tech/buildchain";
-export const BUILDCHAIN_VERSION = "3.0.1-alpha.2";
+export const BUILDCHAIN_VERSION = "3.0.2-alpha.2";
 export const WHITEPAPER_CONTRACT = "kungfu-white-paper-brand-site-bundle";
 export const WHITEPAPER_CONSUMER = "kungfu.tech";
 export const WHITEPAPER_ORIGIN = "https://kungfu.tech";
@@ -25,12 +25,12 @@ export const PAPER_RELEASES = [
   },
   {
     package: "@kungfu-tech/paper-kfd-foundation-real-world-agent-work",
-    version: "0.1.0-alpha.7",
+    version: "0.1.0-alpha.8",
     slug: "kfd-foundation-real-world-agent-work",
   },
   {
     package: "@kungfu-tech/paper-observer-declared-timelines",
-    version: "0.1.0-alpha.8",
+    version: "0.1.0-alpha.9",
     slug: "observer-declared-timelines",
   },
   {

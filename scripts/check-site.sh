@@ -208,6 +208,15 @@ grep -q 'site pull request #163' public/about/bootstrapping/index.html
 grep -q 'partial bootstrap evidence—not proof that the finished Kungfu Work Runtime already exists.' public/about/bootstrapping/index.html
 grep -q 'Why could this begin here?' public/about/bootstrapping/index.html
 grep -q 'The strongest objection' public/about/bootstrapping/index.html
+python3 - <<'PY'
+from pathlib import Path
+
+page = Path("public/about/bootstrapping/index.html").read_text()
+agent_note = page.index("Read this with your agent")
+first_argument = page.index("What is Kungfu trying to make real?")
+if agent_note > first_argument:
+    raise SystemExit("error: the agent reading invitation must precede the article argument")
+PY
 grep -q 'Scale after the runtime exists' public/about/bootstrapping/index.html
 if grep -Fq 'building infrastructure for durable agent work while using agents to build more of that infrastructure' \
   public/about/index.html public/about/bootstrapping/index.html; then
