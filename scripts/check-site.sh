@@ -424,7 +424,12 @@ if [ -d dist ]; then
   grep -q 'kungfu-agent-hub-public-entry/v1' dist/agent-hub.json
   grep -q '"run": "kungfu agent hub qualify --output-dir <new-directory>"' dist/agent-hub.json
   grep -q 'Machine route: https://kungfu.tech/agent-hub.json' dist/llms.txt
-  grep -q 'property="og:title" content="Agent Supply Chain | Kungfu"' dist/agent-supply-chain/index.html
+  grep -q 'property="og:title" content="Agent Supply Chain | Kungfu UNGFU™"' dist/agent-supply-chain/index.html
+  grep -q '<title>Kungfu UNGFU™ — Continuity for Agent Work</title>' dist/index.html
+  grep -q 'aria-label="Kungfu UNGFU™"' dist/index.html
+  grep -q '^# Kungfu UNGFU™$' dist/llms.txt
+  grep -q '"signature": "Kungfu UNGFU™"' dist/agent-hub.json
+  grep -q 'Authenticode is not a qualification requirement for this Alpha.' dist/install/index.html
   grep -q 'Maturity claims matrix' dist/agent-supply-chain/index.html
   grep -q 'Exact evidence' dist/agent-supply-chain/index.html
   grep -q 'Known limit' dist/agent-supply-chain/index.html
