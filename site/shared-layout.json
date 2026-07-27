@@ -1,6 +1,7 @@
 {
   "pages": [
     "public/index.html",
+    "public/how-tested/auditable-demo/index.html",
     "public/agent-builders/index.html",
     "public/why-kungfu/index.html",
     "public/about/index.html",

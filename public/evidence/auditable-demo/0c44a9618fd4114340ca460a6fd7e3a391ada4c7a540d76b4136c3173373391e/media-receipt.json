@@ -1,0 +1,8 @@
+{
+  "qualifiedGateRoot": "sha256:7587c9bc315f49f88e11152d5387ff13a4fe606ef6ba97be8f70c5995aebf2d6",
+  "rendererImage": "ghcr.io/kungfu-systems/build-images/demo-renderer@sha256:cb5e1dec368d21c7d4e8baded99ac75f12f7eff0d19505751888cf974086efa6",
+  "rendererManifestRoot": "sha256:3115d7661663f10f4518fdc22fd1c785d86107662b8b3b67955918507bcb65bc",
+  "schema": "buildchain.auditable-demo-media/v1",
+  "sourceSha": "0c584fc0e6446a07a5bdb1462738ffab47dddadb",
+  "status": "passed"
+}

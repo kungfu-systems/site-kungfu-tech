@@ -1,0 +1,28 @@
+{
+  "adapter": {
+    "path": "scripts/auditable-demo-adapter.py",
+    "sha256": "sha256:1d01c7e344f70811c490f39cce2276e8eb6c2de702375131bbb0e81791800501"
+  },
+  "qualifiedInputs": {
+    "claimBoundary": "This proves the exact retained Linux x64 artifact can expose its bundled agent brief in an isolated credential-free Home. It does not prove continuity, provider behavior, signed macOS behavior, production durability, comparative performance, or FO10.",
+    "evidenceClass": "exact-installed-artifact-agent-brief/v1",
+    "projection": "sha256:f2dea92c83c7622b66bb80362f0501d4b65916e45c6c81b8dfffd8583dd60981",
+    "scene": "sha256:ba4c4c517c5a2a6d4d2dee19a49655355f479d3993673bfbb039245fc149e624",
+    "transcript": "sha256:424b9964391f8dbbaec0678110561653edf694a7b19cdff83a4ff9c690b3d5c8"
+  },
+  "renderer": {
+    "image": "ghcr.io/kungfu-systems/build-images/demo-renderer@sha256:cb5e1dec368d21c7d4e8baded99ac75f12f7eff0d19505751888cf974086efa6",
+    "smokeManifestRoot": "sha256:008daa592ae3fc5da4bd6f94f3299bddb0928b3959614c44f930307db315780c"
+  },
+  "schema": "buildchain.auditable-demo-gate/v1",
+  "sourceArtifact": {
+    "digest": "sha256:c7a721a54491d62edc9dcc904da27577e6366266226dc8b5b61d088d34613431",
+    "expiresAt": "2026-08-10T02:48:48Z",
+    "id": "8640708681",
+    "name": "kungfu-linux-x64-0c584fc0e6446a07a5bdb1462738ffab47dddadb",
+    "runId": "30230901970"
+  },
+  "sourceRepository": "kungfu-systems/kungfu",
+  "sourceSha": "0c584fc0e6446a07a5bdb1462738ffab47dddadb",
+  "status": "passed"
+}

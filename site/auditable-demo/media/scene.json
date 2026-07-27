@@ -1,0 +1,12 @@
+{
+  "accent": "#67e8a5",
+  "background": "#0b1020",
+  "commandLabel": "kungfu agent brief",
+  "durationMs": 18000,
+  "fps": 15,
+  "height": 720,
+  "id": "kungfu-agent-brief-artifact",
+  "schema": "build-images.demo-scene/v1",
+  "title": "Kungfu — exact installed artifact",
+  "width": 1280
+}

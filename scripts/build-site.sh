@@ -7,6 +7,7 @@ cd "$repo_root"
 test -d public
 test -f site/shared-layout.json
 
+node scripts/import-auditable-demo.mjs
 node scripts/render-shared-layout.mjs
 
 rm -rf dist
@@ -24,6 +25,8 @@ node scripts/fingerprint-site-assets.mjs --root dist
 test -f dist/index.html
 test -f dist/404.html
 test -f dist/how-tested/continuity/index.html
+test -f dist/how-tested/auditable-demo/index.html
+test -f dist/auditable-demo.json
 test -f dist/agent-builders/index.html
 test -f dist/agent-supply-chain/index.html
 test -f dist/agent-supply-chain.json
