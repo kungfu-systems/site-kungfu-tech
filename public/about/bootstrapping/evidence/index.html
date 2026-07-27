@@ -1,0 +1,519 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>A Public Week of Agent-Mediated Work | Kungfu UNGFU™</title>
+  <meta name="description" content="A first-party declaration, public GitHub sample, conventional organization comparison, and reproducible research materials for Kungfu's agent-native bootstrap.">
+  <link rel="alternate" type="application/json" href="/about/bootstrapping/evidence/data/manifest.json" title="Bootstrap evidence manifest">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%2314171f'/%3E%3Ctext x='32' y='39' text-anchor='middle' font-family='Arial,sans-serif' font-size='22' font-weight='700' fill='white'%3EKF%3C/text%3E%3C/svg%3E">
+  <link rel="stylesheet" href="/assets/site.css">
+  <style>
+    main {
+      width: min(1120px, calc(100% - 40px));
+      margin: 0 auto;
+      padding: 34px 0 68px;
+    }
+
+    .report-header {
+      max-width: 930px;
+      padding: 34px 0 42px;
+    }
+
+    .eyebrow {
+      margin: 0 0 16px;
+      color: var(--accent);
+      font-size: 14px;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      max-width: 900px;
+      margin: 0;
+      font-size: clamp(42px, 7vw, 76px);
+      line-height: 1;
+    }
+
+    .lead {
+      max-width: 850px;
+      margin: 24px 0 0;
+      color: var(--text);
+      font-size: clamp(19px, 2.6vw, 25px);
+      line-height: 1.5;
+    }
+
+    article {
+      display: grid;
+      gap: 34px;
+    }
+
+    article > * {
+      min-width: 0;
+    }
+
+    section,
+    .agent-note,
+    .boundary {
+      max-width: 960px;
+    }
+
+    section > h2,
+    .agent-note h2,
+    .boundary h2 {
+      margin-top: 0;
+      font-size: clamp(28px, 4vw, 40px);
+    }
+
+    .declaration {
+      padding: 28px;
+      border: 1px solid var(--accent);
+      background: color-mix(in srgb, var(--accent) 7%, var(--panel));
+    }
+
+    .declaration-label,
+    .scope-label,
+    .metric-label,
+    .function-label {
+      color: var(--accent);
+      font: 700 13px/1.3 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      text-transform: uppercase;
+    }
+
+    .declaration h2 {
+      max-width: 820px;
+      margin: 10px 0 16px;
+      font-size: clamp(28px, 4.6vw, 46px);
+    }
+
+    .declaration p {
+      max-width: 850px;
+      font-size: 18px;
+    }
+
+    .declaration p:last-child {
+      margin-bottom: 0;
+    }
+
+    .agent-note {
+      padding: 24px;
+      border: 1px solid var(--line);
+      background: var(--panel-soft);
+    }
+
+    .agent-note h2 {
+      font-size: 24px;
+    }
+
+    .agent-note pre {
+      overflow-x: auto;
+      max-width: 100%;
+      margin: 18px 0 0;
+      padding: 18px;
+      border: 1px solid var(--line);
+      box-sizing: border-box;
+      background: var(--bg);
+      color: var(--fg);
+      font: 14px/1.55 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      overflow-wrap: anywhere;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .scope-grid,
+    .metrics,
+    .functions,
+    .materials {
+      display: grid;
+      gap: 1px;
+      border: 1px solid var(--line);
+      background: var(--line);
+    }
+
+    .scope-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .scope-card,
+    .metric,
+    .function,
+    .material {
+      padding: 22px;
+      background: var(--panel);
+    }
+
+    .scope-card h3,
+    .function h3,
+    .material h3 {
+      margin: 10px 0;
+    }
+
+    .scope-card p,
+    .function p,
+    .material p {
+      margin-bottom: 0;
+      font-size: 15px;
+    }
+
+    .metrics {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      margin: 24px 0;
+    }
+
+    .metric-value {
+      display: block;
+      margin: 8px 0 4px;
+      color: var(--fg);
+      font-size: clamp(30px, 4vw, 44px);
+      font-weight: 750;
+      line-height: 1;
+    }
+
+    .metric-note {
+      color: var(--text);
+      font-size: 14px;
+    }
+
+    .sample-window {
+      padding: 16px 18px;
+      border-left: 3px solid var(--accent);
+      background: var(--panel-soft);
+    }
+
+    .functions {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      margin-top: 24px;
+    }
+
+    .function h3 {
+      font-size: 20px;
+    }
+
+    .dependency {
+      margin: 24px 0 0;
+      padding: 22px;
+      border: 1px solid var(--line);
+      background: var(--panel-soft);
+      font-size: 18px;
+    }
+
+    .dependency code {
+      color: var(--accent);
+    }
+
+    .materials {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      margin: 24px 0;
+    }
+
+    .material a {
+      overflow-wrap: anywhere;
+    }
+
+    .material code {
+      display: block;
+      margin-top: 9px;
+      color: var(--text);
+      font-size: 13px;
+      overflow-wrap: anywhere;
+    }
+
+    .command {
+      overflow-x: auto;
+      padding: 18px;
+      border: 1px solid var(--line);
+      background: var(--bg);
+      color: var(--fg);
+      font: 14px/1.55 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      white-space: pre-wrap;
+    }
+
+    .boundary {
+      padding: 28px;
+      border: 1px solid var(--warn);
+      background: color-mix(in srgb, var(--warn) 6%, var(--panel));
+    }
+
+    .boundary ul {
+      margin-bottom: 0;
+    }
+
+    .closing {
+      color: var(--text);
+      font-size: 20px;
+      line-height: 1.55;
+    }
+
+    @media (max-width: 820px) {
+      .scope-grid { grid-template-columns: 1fr; }
+      .metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .functions, .materials { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 520px) {
+      main { width: min(100% - 28px, 640px); padding-top: 28px; }
+      .report-header { padding-top: 26px; }
+      .metrics { grid-template-columns: 1fr; }
+      .declaration, .agent-note, .boundary { padding: 20px; }
+      .scope-card, .metric, .function, .material { padding: 18px; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <!-- shared-header:start -->
+    <header class="site-header">
+      <a class="brand" href="/" aria-label="Kungfu UNGFU™">
+        <span class="mark" aria-hidden="true">🧘</span>
+        <span class="brand-copy"><span>Kungfu UNGFU™</span><span class="brand-tagline">Continuity for Agent Work</span></span>
+      </a>
+      <nav class="site-nav" aria-label="Project links">
+        <a href="/agent-supply-chain/">Agent Supply Chain</a>
+        <a href="/agent-builders/">Agent Builders</a>
+        <details class="nav-menu">
+          <summary>Developers</summary>
+          <div class="nav-menu-panel">
+          <a href="https://kfd.libkungfu.dev/">KFD Protocol</a>
+          <a href="https://libkungfu.dev">Developer Platform</a>
+          <a href="/agent-hub/">Verify Agent Hub</a>
+          <a href="https://github.com/kungfu-systems/kungfu">GitHub</a>
+          </div>
+        </details>
+        <a href="/whitepaper/">Papers</a>
+        <a href="/about/index.html">About</a>
+        <a class="nav-cta" href="/install/">Get Kungfu</a>
+      </nav>
+    </header>
+    <!-- shared-header:end -->
+
+    <header class="report-header">
+      <p class="eyebrow">Bootstrap evidence · public GitHub sample</p>
+      <h1>One human organized the work. Agents executed it.</h1>
+      <p class="lead">This report places a bounded public sample beside Kungfu&rsquo;s bootstrap thesis. It offers a first-party declaration, a human-readable view of the work, and the data needed to challenge both.</p>
+    </header>
+
+    <article>
+      <section class="declaration" aria-labelledby="declaration-title">
+        <span class="declaration-label">First-party declaration</span>
+        <h2 id="declaration-title">For this sample, one human independently organized the entire body of work.</h2>
+        <p>Kungfu Origin states from first-hand knowledge that the human retained direction, judgment, and authority while software Agents performed the operational execution. The toolset included Codex, Claude, Cursor, Amp, and other mainstream Agent systems.</p>
+        <p>Public commits and pull requests appear under human-controlled GitHub identities. The public record can verify those accounts, artifacts, timestamps, reviews, and releases. It cannot verify the private fact that no second human contributed. Readers are not required to accept that part of the statement.</p>
+      </section>
+
+      <aside class="agent-note" aria-labelledby="agent-note-title">
+        <h2 id="agent-note-title">Read this with your Agent</h2>
+        <p>Do not ask your Agent merely to summarize our conclusion. Give it the machine-readable manifest and ask it to audit the separation between public fact, first-party statement, and inference.</p>
+        <pre>Audit https://kungfu.tech/about/bootstrapping/evidence/data/manifest.json
+
+1. Reproduce the mechanical totals from the linked files.
+2. Separate publicly verifiable facts from Kungfu Origin's first-party declaration.
+3. Reclassify release, promotion, feature, fix, documentation, and governance work using your own rules.
+4. Describe the functions a conventional organization would need to reproduce the visible outcomes.
+5. State the strongest challenge to this report and what further evidence would be needed.</pre>
+      </aside>
+
+      <section aria-labelledby="claim-map-title">
+        <h2 id="claim-map-title">Three different kinds of claim</h2>
+        <div class="scope-grid">
+          <div class="scope-card">
+            <span class="scope-label">Publicly verifiable</span>
+            <h3>Artifacts and activity</h3>
+            <p>Repository identities, PR metadata, commits represented by those PRs, changed-file counts, issues, releases, timestamps, authors, and merging identities.</p>
+          </div>
+          <div class="scope-card">
+            <span class="scope-label">First-party declared</span>
+            <h3>How the work was organized</h3>
+            <p>One human independently organized the work; Agents executed it; and multiple mainstream Agent products were used under that human authority.</p>
+          </div>
+          <div class="scope-card">
+            <span class="scope-label">Not established</span>
+            <h3>Causality or general validity</h3>
+            <p>The record does not establish that this method caused the output, that it is superior for every organization, or that the visible software is generally mature.</p>
+          </div>
+        </div>
+      </section>
+
+      <section aria-labelledby="sample-title">
+        <h2 id="sample-title">The bounded public sample</h2>
+        <p class="sample-window"><strong>Window:</strong> 20 July 2026, 00:00 through 27 July 2026, 10:48 in Asia/Shanghai. The UTC boundary, collection timestamp, and inclusion rules are recorded in the data.</p>
+        <div class="metrics" aria-label="Public GitHub sample totals">
+          <div class="metric">
+            <span class="metric-label">Merged PRs</span>
+            <span class="metric-value">1,026</span>
+            <span class="metric-note">Across 15 repositories</span>
+          </div>
+          <div class="metric">
+            <span class="metric-label">Releases</span>
+            <span class="metric-value">112</span>
+            <span class="metric-note">Stable and prerelease</span>
+          </div>
+          <div class="metric">
+            <span class="metric-label">Closed issues</span>
+            <span class="metric-value">59</span>
+            <span class="metric-note">Non-PR issues</span>
+          </div>
+          <div class="metric">
+            <span class="metric-label">Commits</span>
+            <span class="metric-value">5,501</span>
+            <span class="metric-note">Represented by merged PRs</span>
+          </div>
+        </div>
+        <p>These are mechanical activity measures, not a feature count and not a labor conversion. Release trains can express one capability through several PRs. Generated files, lockfiles, and repeated propagation can inflate additions, deletions, and changed-file totals. Conversely, one feature PR can cross runtime code, tests, schemas, packages, and documentation.</p>
+        <p>As a simple orientation, 200 titles begin with the conventional <code>feat</code> prefix. That does not make them 200 equally sized features. The raw records are provided so readers can apply stricter or different classifications.</p>
+      </section>
+
+      <section aria-labelledby="moved-title">
+        <h2 id="moved-title">What actually moved</h2>
+        <p>The visible output is easier to understand as connected work streams than as Git operations.</p>
+        <div class="functions">
+          <div class="function">
+            <span class="function-label">01 · Runtime</span>
+            <h3>Durable Work foundations</h3>
+            <p>Work identity, facts, journals, action authority, assignments, workspace coordination, and explicit mutation boundaries.</p>
+          </div>
+          <div class="function">
+            <span class="function-label">02 · Product</span>
+            <h3>Human-facing work surfaces</h3>
+            <p>Full-window terminal interfaces, GUI projection, qualification progress, transcripts, and inspection surfaces.</p>
+          </div>
+          <div class="function">
+            <span class="function-label">03 · Integration</span>
+            <h3>Language and embedding boundaries</h3>
+            <p>Layered SDK work, Agent Runtime adapters, OpenCode embedding, portable packages, and cross-language authority boundaries.</p>
+          </div>
+          <div class="function">
+            <span class="function-label">04 · Protocol</span>
+            <h3>KFD and Agent Hub adoption</h3>
+            <p>Profiles, activation contracts, executable onboarding, qualification, a clean-room demo, and reference binaries.</p>
+          </div>
+          <div class="function">
+            <span class="function-label">05 · Delivery</span>
+            <h3>Release and distribution systems</h3>
+            <p>Exact-source release evidence, governed promotion, recovery, installers, package publication, images, and multiple release lines.</p>
+          </div>
+          <div class="function">
+            <span class="function-label">06 · Evidence</span>
+            <h3>Qualification and dogfood</h3>
+            <p>Continuity fixtures, auditable demo artifacts, retained evidence, operational feedback, and append-only public projections.</p>
+          </div>
+          <div class="function">
+            <span class="function-label">07 · Communication</span>
+            <h3>Public product understanding</h3>
+            <p>Developer and reader entry points, installation paths, specification rendering, brand consistency, and the bootstrap argument.</p>
+          </div>
+          <div class="function">
+            <span class="function-label">08 · Stewardship</span>
+            <h3>Research and governance</h3>
+            <p>Four public papers, ADR identity rules, ownership boundaries, community intake, analytics, and drift checks.</p>
+          </div>
+        </div>
+      </section>
+
+      <section aria-labelledby="organization-title">
+        <h2 id="organization-title">What a conventional organization would usually require</h2>
+        <p>We do not assign a person-month total. A conventional organization attempting the same visible breadth would normally need named responsibility for runtime and storage; protocol and SDK design; terminal, desktop, and web product surfaces; release engineering and package distribution; qualification, QA, security, and governance; technical writing and research publication; and product architecture and acceptance.</p>
+        <p>Those responsibilities would usually be distributed across multiple teams or specialists, then reconnected through planning, architecture review, dependency management, release management, and cross-team acceptance. Adding people can increase capacity, but it also creates the coordination layer that Kungfu&rsquo;s bootstrap is trying to externalize.</p>
+        <p class="dependency"><code>runtime → protocol and SDK → qualification → distribution → public evidence</code><br>The work has dependency order. Readers should map these functions onto their own organization and make their own scale estimate.</p>
+      </section>
+
+      <section aria-labelledby="materials-title">
+        <h2 id="materials-title">Inspect and reanalyze the sample</h2>
+        <p>This collection and its first analysis were also performed by an Agent. They are reference materials, not a privileged interpretation. Anyone comfortable with Node.js and an authenticated GitHub CLI can inspect the script, rerun the fixed window, adapt the queries, or ask another Agent to produce a competing analysis.</p>
+        <div class="materials">
+          <div class="material">
+            <span class="scope-label">Machine entry</span>
+            <h3><a href="/about/bootstrapping/evidence/data/manifest.json">Evidence manifest</a></h3>
+            <p>Exact window, claim boundaries, totals, file URLs, byte sizes, and SHA-256 digests.</p>
+            <code>data/manifest.json</code>
+          </div>
+          <div class="material">
+            <span class="scope-label">Collector</span>
+            <h3><a href="/about/bootstrapping/evidence/data/collect.mjs">GitHub collector</a></h3>
+            <p>A readable Node.js reference using the authenticated GitHub CLI and public GraphQL API.</p>
+            <code>data/collect.mjs</code>
+          </div>
+          <div class="material">
+            <span class="scope-label">Summary</span>
+            <h3><a href="/about/bootstrapping/evidence/data/summary.json">Mechanical totals</a></h3>
+            <p>Totals grouped by repository, Shanghai date, and public author identity.</p>
+            <code>data/summary.json</code>
+          </div>
+          <div class="material">
+            <span class="scope-label">Raw records</span>
+            <h3><a href="/about/bootstrapping/evidence/data/pull-requests.json">Merged pull requests</a></h3>
+            <p>The largest source file, with repository, title, time, size, author, merge identity, and commit metadata.</p>
+            <code>data/pull-requests.json</code>
+          </div>
+          <div class="material">
+            <span class="scope-label">Public outcomes</span>
+            <h3><a href="/about/bootstrapping/evidence/data/releases.json">Releases</a> and <a href="/about/bootstrapping/evidence/data/closed-issues.json">issues</a></h3>
+            <p>Published releases and closed non-PR issues inside the fixed window.</p>
+            <code>data/releases.json · data/closed-issues.json</code>
+          </div>
+          <div class="material">
+            <span class="scope-label">Context</span>
+            <h3><a href="/about/bootstrapping/evidence/data/repositories.json">Repository snapshot</a></h3>
+            <p>Public repository metadata used to interpret the activity across the organization.</p>
+            <code>data/repositories.json</code>
+          </div>
+          <div class="material">
+            <span class="scope-label">Reference interpretation</span>
+            <h3><a href="/about/bootstrapping/evidence/data/workload-analysis.md">Agent-written analysis</a></h3>
+            <p>The first grouping of the records into connected work streams and conventional organizational functions.</p>
+            <code>data/workload-analysis.md</code>
+          </div>
+        </div>
+        <p>Reference refresh command:</p>
+        <pre class="command">KUNGFU_RESEARCH_START=2026-07-19T16:00:00Z \
+KUNGFU_RESEARCH_END=2026-07-27T02:48:00Z \
+node collect.mjs</pre>
+      </section>
+
+      <aside class="boundary" aria-labelledby="not-proof-title">
+        <h2 id="not-proof-title">This is evidence, not proof of the method</h2>
+        <p>This sample demonstrates broad, continuous production of public, inspectable artifacts. It does not prove that the bootstrap method is effective, that minimal human staffing caused the output, that another organization would obtain the same result, or that every merged capability has equal depth, maturity, or user value.</p>
+        <ul>
+          <li>Public GitHub data cannot reveal private planning, rejected candidates, or human and Agent time.</li>
+          <li>The first-party declaration cannot independently establish that only one human was involved.</li>
+          <li>A one-week sample cannot establish long-term maintainability, adoption, or institutional resilience.</li>
+          <li>Independent replication and alternative classification can change the interpretation.</li>
+        </ul>
+      </aside>
+
+      <section aria-labelledby="invitation-title">
+        <h2 id="invitation-title">An invitation to independent research</h2>
+        <p class="closing">We welcome independent analysis, comparison, criticism, and replication. Use your own Agent, your own categories, and your own organizational model. Publish disagreements where others can inspect them.</p>
+        <p>Our analysis is offered as a reference. It does not claim that Kungfu has already proved the bootstrap method. Return to <a href="/about/bootstrapping/">the bootstrap argument</a>, inspect the <a href="https://github.com/kungfu-systems">public organization</a>, or begin with the <a href="/about/bootstrapping/evidence/data/manifest.json">machine-readable evidence manifest</a>.</p>
+      </section>
+    </article>
+
+    <!-- shared-footer:start -->
+    <footer class="site-footer">
+      <nav class="footer-links" aria-label="Footer links">
+        <a href="/services/index.html">Services</a>
+        <a href="/capital/">Capital &amp; Stewardship</a>
+        <a href="/trust/index.html">Trust</a>
+        <a href="/legal/index.html">Legal</a>
+      </nav>
+      <p class="footer-note">Kungfu core software is licensed under the Apache License 2.0.</p>
+      <p class="footer-trademark">Kungfu UNGFU™ is a trademark of Kungfu Origin Technology Limited.</p>
+      <p class="footer-copy">Copyright 2026 Kungfu Origin Technology Limited. All rights reserved.</p>
+    </footer>
+    <script>
+      document.addEventListener("click", (event) => {
+        document.querySelectorAll("details.nav-menu[open]").forEach((menu) => {
+          if (!menu.contains(event.target)) menu.removeAttribute("open");
+        });
+      });
+      document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape") {
+          document.querySelectorAll("details.nav-menu[open]").forEach((menu) => {
+            menu.removeAttribute("open");
+          });
+        }
+      });
+    </script>
+    <!-- shared-footer:end -->
+  </main>
+</body>
+</html>

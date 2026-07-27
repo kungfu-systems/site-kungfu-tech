@@ -1,0 +1,865 @@
+[
+  {
+    "number": 1424,
+    "title": "feat(anchored-release): support verified derived version material before heavy builds",
+    "url": "https://github.com/kungfu-systems/buildchain/issues/1424",
+    "state": "CLOSED",
+    "createdAt": "2026-07-19T22:22:26Z",
+    "updatedAt": "2026-07-20T13:43:03Z",
+    "closedAt": "2026-07-20T13:43:03Z",
+    "author": "dongkeren",
+    "labels": [],
+    "repository": "kungfu-systems/buildchain",
+    "repositoryUrl": "https://github.com/kungfu-systems/buildchain"
+  },
+  {
+    "number": 1380,
+    "title": "fix(propagation): refresh managed README badges and sign off consumer commits",
+    "url": "https://github.com/kungfu-systems/buildchain/issues/1380",
+    "state": "CLOSED",
+    "createdAt": "2026-07-18T09:45:04Z",
+    "updatedAt": "2026-07-20T13:43:03Z",
+    "closedAt": "2026-07-20T13:43:03Z",
+    "author": "dongkeren",
+    "labels": [
+      "bug"
+    ],
+    "repository": "kungfu-systems/buildchain",
+    "repositoryUrl": "https://github.com/kungfu-systems/buildchain"
+  },
+  {
+    "number": 1426,
+    "title": "fix(release-propagation): align optional consumer stages in controller receipts",
+    "url": "https://github.com/kungfu-systems/buildchain/issues/1426",
+    "state": "CLOSED",
+    "createdAt": "2026-07-20T07:59:50Z",
+    "updatedAt": "2026-07-20T13:43:04Z",
+    "closedAt": "2026-07-20T13:43:04Z",
+    "author": "dongkeren",
+    "labels": [],
+    "repository": "kungfu-systems/buildchain",
+    "repositoryUrl": "https://github.com/kungfu-systems/buildchain"
+  },
+  {
+    "number": 1431,
+    "title": "fix(release): keep stable pinned shell compatible when adding promotion inputs",
+    "url": "https://github.com/kungfu-systems/buildchain/issues/1431",
+    "state": "CLOSED",
+    "createdAt": "2026-07-20T15:15:42Z",
+    "updatedAt": "2026-07-20T15:29:19Z",
+    "closedAt": "2026-07-20T15:29:19Z",
+    "author": "dongkeren",
+    "labels": [],
+    "repository": "kungfu-systems/buildchain",
+    "repositoryUrl": "https://github.com/kungfu-systems/buildchain"
+  },
+  {
+    "number": 1442,
+    "title": "bug(release-governance): required release check does not match channel-router nested job name",
+    "url": "https://github.com/kungfu-systems/buildchain/issues/1442",
+    "state": "CLOSED",
+    "createdAt": "2026-07-21T00:12:18Z",
+    "updatedAt": "2026-07-21T01:24:53Z",
+    "closedAt": "2026-07-21T00:54:54Z",
+    "author": "dongkeren",
+    "labels": [],
+    "repository": "kungfu-systems/buildchain",
+    "repositoryUrl": "https://github.com/kungfu-systems/buildchain"
+  },
+  {
+    "number": 1434,
+    "title": "fix(release-propagation): v2 controller descriptor rejects emitted consumer stages",
+    "url": "https://github.com/kungfu-systems/buildchain/issues/1434",
+    "state": "CLOSED",
+    "createdAt": "2026-07-20T16:01:03Z",
+    "updatedAt": "2026-07-21T01:24:51Z",
+    "closedAt": "2026-07-21T00:54:54Z",
+    "author": "dongkeren",
+    "labels": [
+      "bug"
+    ],
+    "repository": "kungfu-systems/buildchain",
+    "repositoryUrl": "https://github.com/kungfu-systems/buildchain"
+  },
+  {
+    "number": 2,
+    "title": "[Buildchain contract] kungfu-systems/paper-episodes-to-primitives publication artifact drift on v2-alpha",
+    "url": "https://github.com/kungfu-systems/paper-episodes-to-primitives/issues/2",
+    "state": "CLOSED",
+    "createdAt": "2026-07-21T10:16:35Z",
+    "updatedAt": "2026-07-21T10:24:26Z",
+    "closedAt": "2026-07-21T10:24:26Z",
+    "author": "github-actions",
+    "labels": [
+      "buildchain-contract-drift"
+    ],
+    "repository": "kungfu-systems/paper-episodes-to-primitives",
+    "repositoryUrl": "https://github.com/kungfu-systems/paper-episodes-to-primitives"
+  },
+  {
+    "number": 1452,
+    "title": "fix(promotion): resolve floating stable workflow shell exactly once",
+    "url": "https://github.com/kungfu-systems/buildchain/issues/1452",
+    "state": "CLOSED",
+    "createdAt": "2026-07-21T14:13:50Z",
+    "updatedAt": "2026-07-21T14:35:14Z",
+    "closedAt": "2026-07-21T14:35:14Z",
+    "author": "dongkeren",
+    "labels": [],
+    "repository": "kungfu-systems/buildchain",
+    "repositoryUrl": "https://github.com/kungfu-systems/buildchain"
+  },
+  {
+    "number": 1471,
+    "title": "[Buildchain feedback] buildchain-ref-promotion-failed: kungfu-systems/libnode",
+    "url": "https://github.com/kungfu-systems/buildchain/issues/1471",
+    "state": "CLOSED",
+    "createdAt": "2026-07-21T17:00:41Z",
+    "updatedAt": "2026-07-21T17:25:44Z",
+    "closedAt": "2026-07-21T17:25:44Z",
+    "author": "kungfu-buildchain-issue-reporter",
+    "labels": [
+      "buildchain-feedback",
+      "workflow-friction"
+    ],
+    "repository": "kungfu-systems/buildchain",
+    "repositoryUrl": "https://github.com/kungfu-systems/buildchain"
+  },
+  {
+    "number": 1478,
+    "title": "[Buildchain feedback] buildchain-ref-promotion-failed: kungfu-systems/libnode",
+    "url": "https://github.com/kungfu-systems/buildchain/issues/1478",
+    "state": "CLOSED",
+    "createdAt": "2026-07-21T18:00:49Z",
+    "updatedAt": "2026-07-21T18:19:39Z",
+    "closedAt": "2026-07-21T18:19:39Z",
+    "author": "kungfu-buildchain-issue-reporter",
+    "labels": [
+      "buildchain-feedback",
+      "workflow-friction"
+    ],
+    "repository": "kungfu-systems/buildchain",
+    "repositoryUrl": "https://github.com/kungfu-systems/buildchain"
+  },
+  {
+    "number": 1491,
+    "title": "[Buildchain feedback] buildchain-ref-promotion-failed: kungfu-systems/libnode",
+    "url": "https://github.com/kungfu-systems/buildchain/issues/1491",
+    "state": "CLOSED",
+    "createdAt": "2026-07-21T19:34:52Z",
+    "updatedAt": "2026-07-21T20:39:18Z",
+    "closedAt": "2026-07-21T19:52:33Z",
+    "author": "kungfu-buildchain-issue-reporter",
+    "labels": [
+      "buildchain-feedback",
+      "workflow-friction"
+    ],
+    "repository": "kungfu-systems/buildchain",
+    "repositoryUrl": "https://github.com/kungfu-systems/buildchain"
+  },
+  {
+    "number": 1495,
+    "title": "[Buildchain contract] kungfu-systems/buildchain drift on v2-alpha",
+    "url": "https://github.com/kungfu-systems/buildchain/issues/1495",
+    "state": "CLOSED",
+    "createdAt": "2026-07-21T20:03:02Z",
+    "updatedAt": "2026-07-21T20:39:20Z",
+    "closedAt": "2026-07-21T20:37:44Z",
+    "author": "github-actions",
+    "labels": [
+      "buildchain-contract-drift"
+    ],
+    "repository": "kungfu-systems/buildchain",
+    "repositoryUrl": "https://github.com/kungfu-systems/buildchain"
+  },
+  {
+    "number": 1498,
+    "title": "[Buildchain contract] kungfu-systems/buildchain drift on v2-alpha",
+    "url": "https://github.com/kungfu-systems/buildchain/issues/1498",
+    "state": "CLOSED",
+    "createdAt": "2026-07-21T20:27:02Z",
+    "updatedAt": "2026-07-21T20:41:01Z",
+    "closedAt": "2026-07-21T20:41:00Z",
+    "author": "github-actions",
+    "labels": [
+      "buildchain-contract-drift"
+    ],
+    "repository": "kungfu-systems/buildchain",
+    "repositoryUrl": "https://github.com/kungfu-systems/buildchain"
+  },
+  {
+    "number": 1490,
+    "title": "[Buildchain contract] kungfu-systems/buildchain drift on v2-alpha",
+    "url": "https://github.com/kungfu-systems/buildchain/issues/1490",
+    "state": "CLOSED",
+    "createdAt": "2026-07-21T19:34:42Z",
+    "updatedAt": "2026-07-21T20:41:04Z",
+    "closedAt": "2026-07-21T20:41:04Z",
+    "author": "github-actions",
+    "labels": [
+      "buildchain-contract-drift"
+    ],
+    "repository": "kungfu-systems/buildchain",
+    "repositoryUrl": "https://github.com/kungfu-systems/buildchain"
+  },
+  {
+    "number": 1487,
+    "title": "[Buildchain contract] kungfu-systems/buildchain drift on v2-alpha",
+    "url": "https://github.com/kungfu-systems/buildchain/issues/1487",
+    "state": "CLOSED",
+    "createdAt": "2026-07-21T19:04:24Z",
+    "updatedAt": "2026-07-21T20:41:07Z",
+    "closedAt": "2026-07-21T20:41:07Z",
+    "author": "github-actions",
+    "labels": [
+      "buildchain-contract-drift"
+    ],
+    "repository": "kungfu-systems/buildchain",
+    "repositoryUrl": "https://github.com/kungfu-systems/buildchain"
+  },
+  {
+    "number": 1483,
+    "title": "[Buildchain contract] kungfu-systems/buildchain drift on v2-alpha",
+    "url": "https://github.com/kungfu-systems/buildchain/issues/1483",
+    "state": "CLOSED",
+    "createdAt": "2026-07-21T18:32:19Z",
+    "updatedAt": "2026-07-21T20:41:10Z",
+    "closedAt": "2026-07-21T20:41:10Z",
+    "author": "github-actions",
+    "labels": [
+      "buildchain-contract-drift"
+    ],
+    "repository": "kungfu-systems/buildchain",
+    "repositoryUrl": "https://github.com/kungfu-systems/buildchain"
+  },
+  {
+    "number": 1479,
+    "title": "[Buildchain contract] kungfu-systems/buildchain drift on v2-alpha",
+    "url": "https://github.com/kungfu-systems/buildchain/issues/1479",
+    "state": "CLOSED",
+    "createdAt": "2026-07-21T18:01:41Z",
+    "updatedAt": "2026-07-21T20:41:13Z",
+    "closedAt": "2026-07-21T20:41:12Z",
+    "author": "github-actions",
+    "labels": [
+      "buildchain-contract-drift"
+    ],
+    "repository": "kungfu-systems/buildchain",
+    "repositoryUrl": "https://github.com/kungfu-systems/buildchain"
+  },
+  {
+    "number": 1475,
+    "title": "[Buildchain contract] kungfu-systems/buildchain drift on v2-alpha",
+    "url": "https://github.com/kungfu-systems/buildchain/issues/1475",
+    "state": "CLOSED",
+    "createdAt": "2026-07-21T17:37:11Z",
+    "updatedAt": "2026-07-21T20:41:15Z",
+    "closedAt": "2026-07-21T20:41:15Z",
+    "author": "github-actions",
+    "labels": [
+      "buildchain-contract-drift"
+    ],
+    "repository": "kungfu-systems/buildchain",
+    "repositoryUrl": "https://github.com/kungfu-systems/buildchain"
+  },
+  {
+    "number": 1470,
+    "title": "[Buildchain contract] kungfu-systems/buildchain drift on v2-alpha",
+    "url": "https://github.com/kungfu-systems/buildchain/issues/1470",
+    "state": "CLOSED",
+    "createdAt": "2026-07-21T16:59:50Z",
+    "updatedAt": "2026-07-21T20:41:18Z",
+    "closedAt": "2026-07-21T20:41:18Z",
+    "author": "github-actions",
+    "labels": [
+      "buildchain-contract-drift"
+    ],
+    "repository": "kungfu-systems/buildchain",
+    "repositoryUrl": "https://github.com/kungfu-systems/buildchain"
+  },
+  {
+    "number": 1466,
+    "title": "[Buildchain contract] kungfu-systems/buildchain drift on v2-alpha",
+    "url": "https://github.com/kungfu-systems/buildchain/issues/1466",
+    "state": "CLOSED",
+    "createdAt": "2026-07-21T16:24:29Z",
+    "updatedAt": "2026-07-21T20:41:21Z",
+    "closedAt": "2026-07-21T20:41:21Z",
+    "author": "github-actions",
+    "labels": [
+      "buildchain-contract-drift"
+    ],
+    "repository": "kungfu-systems/buildchain",
+    "repositoryUrl": "https://github.com/kungfu-systems/buildchain"
+  },
+  {
+    "number": 1463,
+    "title": "[Buildchain contract] kungfu-systems/buildchain drift on v2-alpha",
+    "url": "https://github.com/kungfu-systems/buildchain/issues/1463",
+    "state": "CLOSED",
+    "createdAt": "2026-07-21T16:00:07Z",
+    "updatedAt": "2026-07-21T20:41:24Z",
+    "closedAt": "2026-07-21T20:41:24Z",
+    "author": "github-actions",
+    "labels": [
+      "buildchain-contract-drift"
+    ],
+    "repository": "kungfu-systems/buildchain",
+    "repositoryUrl": "https://github.com/kungfu-systems/buildchain"
+  },
+  {
+    "number": 1460,
+    "title": "[Buildchain contract] kungfu-systems/buildchain drift on v2-alpha",
+    "url": "https://github.com/kungfu-systems/buildchain/issues/1460",
+    "state": "CLOSED",
+    "createdAt": "2026-07-21T15:36:53Z",
+    "updatedAt": "2026-07-21T20:41:26Z",
+    "closedAt": "2026-07-21T20:41:26Z",
+    "author": "github-actions",
+    "labels": [
+      "buildchain-contract-drift"
+    ],
+    "repository": "kungfu-systems/buildchain",
+    "repositoryUrl": "https://github.com/kungfu-systems/buildchain"
+  },
+  {
+    "number": 1456,
+    "title": "[Buildchain contract] kungfu-systems/buildchain drift on v2-alpha",
+    "url": "https://github.com/kungfu-systems/buildchain/issues/1456",
+    "state": "CLOSED",
+    "createdAt": "2026-07-21T14:51:12Z",
+    "updatedAt": "2026-07-21T20:41:29Z",
+    "closedAt": "2026-07-21T20:41:29Z",
+    "author": "github-actions",
+    "labels": [
+      "buildchain-contract-drift"
+    ],
+    "repository": "kungfu-systems/buildchain",
+    "repositoryUrl": "https://github.com/kungfu-systems/buildchain"
+  },
+  {
+    "number": 1450,
+    "title": "[Buildchain contract] kungfu-systems/buildchain drift on v2-alpha",
+    "url": "https://github.com/kungfu-systems/buildchain/issues/1450",
+    "state": "CLOSED",
+    "createdAt": "2026-07-21T08:21:22Z",
+    "updatedAt": "2026-07-21T20:41:32Z",
+    "closedAt": "2026-07-21T20:41:32Z",
+    "author": "github-actions",
+    "labels": [
+      "buildchain-contract-drift"
+    ],
+    "repository": "kungfu-systems/buildchain",
+    "repositoryUrl": "https://github.com/kungfu-systems/buildchain"
+  },
+  {
+    "number": 1446,
+    "title": "[Buildchain contract] kungfu-systems/buildchain drift on v2-alpha",
+    "url": "https://github.com/kungfu-systems/buildchain/issues/1446",
+    "state": "CLOSED",
+    "createdAt": "2026-07-21T01:08:08Z",
+    "updatedAt": "2026-07-21T20:41:35Z",
+    "closedAt": "2026-07-21T20:41:35Z",
+    "author": "github-actions",
+    "labels": [
+      "buildchain-contract-drift"
+    ],
+    "repository": "kungfu-systems/buildchain",
+    "repositoryUrl": "https://github.com/kungfu-systems/buildchain"
+  },
+  {
+    "number": 1444,
+    "title": "[Buildchain contract] kungfu-systems/buildchain drift on v2-alpha",
+    "url": "https://github.com/kungfu-systems/buildchain/issues/1444",
+    "state": "CLOSED",
+    "createdAt": "2026-07-21T00:50:03Z",
+    "updatedAt": "2026-07-21T20:41:38Z",
+    "closedAt": "2026-07-21T20:41:38Z",
+    "author": "github-actions",
+    "labels": [
+      "buildchain-contract-drift"
+    ],
+    "repository": "kungfu-systems/buildchain",
+    "repositoryUrl": "https://github.com/kungfu-systems/buildchain"
+  },
+  {
+    "number": 1453,
+    "title": "[web-surface] Retry CloudFront UpdateDistribution after stale ETag",
+    "url": "https://github.com/kungfu-systems/buildchain/issues/1453",
+    "state": "CLOSED",
+    "createdAt": "2026-07-21T14:28:57Z",
+    "updatedAt": "2026-07-21T22:39:53Z",
+    "closedAt": "2026-07-21T22:39:53Z",
+    "author": "dongkeren",
+    "labels": [],
+    "repository": "kungfu-systems/buildchain",
+    "repositoryUrl": "https://github.com/kungfu-systems/buildchain"
+  },
+  {
+    "number": 1503,
+    "title": "site bundle splits the README badge block across homepage fields",
+    "url": "https://github.com/kungfu-systems/buildchain/issues/1503",
+    "state": "CLOSED",
+    "createdAt": "2026-07-21T22:47:01Z",
+    "updatedAt": "2026-07-22T00:39:45Z",
+    "closedAt": "2026-07-22T00:39:45Z",
+    "author": "dongkeren",
+    "labels": [],
+    "repository": "kungfu-systems/buildchain",
+    "repositoryUrl": "https://github.com/kungfu-systems/buildchain"
+  },
+  {
+    "number": 1500,
+    "title": "fix(github-release): honor stable promotion channel for anchored public versions",
+    "url": "https://github.com/kungfu-systems/buildchain/issues/1500",
+    "state": "CLOSED",
+    "createdAt": "2026-07-21T21:21:46Z",
+    "updatedAt": "2026-07-22T00:39:45Z",
+    "closedAt": "2026-07-22T00:39:45Z",
+    "author": "dongkeren",
+    "labels": [],
+    "repository": "kungfu-systems/buildchain",
+    "repositoryUrl": "https://github.com/kungfu-systems/buildchain"
+  },
+  {
+    "number": 1504,
+    "title": "[Buildchain contract] kungfu-systems/buildchain drift on v2-alpha",
+    "url": "https://github.com/kungfu-systems/buildchain/issues/1504",
+    "state": "CLOSED",
+    "createdAt": "2026-07-21T22:51:52Z",
+    "updatedAt": "2026-07-22T00:39:46Z",
+    "closedAt": "2026-07-22T00:39:46Z",
+    "author": "github-actions",
+    "labels": [
+      "buildchain-contract-drift"
+    ],
+    "repository": "kungfu-systems/buildchain",
+    "repositoryUrl": "https://github.com/kungfu-systems/buildchain"
+  },
+  {
+    "number": 167,
+    "title": "[Buildchain contract] kungfu-systems/site-libkungfu-dev drift on v2-alpha",
+    "url": "https://github.com/kungfu-systems/site-libkungfu-dev/issues/167",
+    "state": "CLOSED",
+    "createdAt": "2026-07-22T02:28:14Z",
+    "updatedAt": "2026-07-22T03:20:08Z",
+    "closedAt": "2026-07-22T03:20:08Z",
+    "author": "github-actions",
+    "labels": [
+      "buildchain-contract-drift"
+    ],
+    "repository": "kungfu-systems/site-libkungfu-dev",
+    "repositoryUrl": "https://github.com/kungfu-systems/site-libkungfu-dev"
+  },
+  {
+    "number": 1510,
+    "title": "[Buildchain feedback] buildchain-ref-promotion-failed: kungfu-systems/buildchain",
+    "url": "https://github.com/kungfu-systems/buildchain/issues/1510",
+    "state": "CLOSED",
+    "createdAt": "2026-07-22T01:56:58Z",
+    "updatedAt": "2026-07-22T04:39:08Z",
+    "closedAt": "2026-07-22T04:23:09Z",
+    "author": "kungfu-buildchain-issue-reporter",
+    "labels": [
+      "buildchain-feedback",
+      "workflow-friction"
+    ],
+    "repository": "kungfu-systems/buildchain",
+    "repositoryUrl": "https://github.com/kungfu-systems/buildchain"
+  },
+  {
+    "number": 184,
+    "title": "[Buildchain contract] kungfu-systems/site-libkungfu-dev drift on v2",
+    "url": "https://github.com/kungfu-systems/site-libkungfu-dev/issues/184",
+    "state": "CLOSED",
+    "createdAt": "2026-07-22T08:54:12Z",
+    "updatedAt": "2026-07-22T09:13:19Z",
+    "closedAt": "2026-07-22T09:13:19Z",
+    "author": "github-actions",
+    "labels": [
+      "buildchain-contract-drift"
+    ],
+    "repository": "kungfu-systems/site-libkungfu-dev",
+    "repositoryUrl": "https://github.com/kungfu-systems/site-libkungfu-dev"
+  },
+  {
+    "number": 10,
+    "title": "[Buildchain contract] kungfu-systems/agent-hub-demo drift on v2-alpha",
+    "url": "https://github.com/kungfu-systems/agent-hub-demo/issues/10",
+    "state": "CLOSED",
+    "createdAt": "2026-07-22T14:21:01Z",
+    "updatedAt": "2026-07-22T14:49:15Z",
+    "closedAt": "2026-07-22T14:49:15Z",
+    "author": "github-actions",
+    "labels": [
+      "buildchain-contract-drift"
+    ],
+    "repository": "kungfu-systems/agent-hub-demo",
+    "repositoryUrl": "https://github.com/kungfu-systems/agent-hub-demo"
+  },
+  {
+    "number": 63,
+    "title": "[Buildchain contract] kungfu-systems/paper-kfd-foundation-real-world-agent-work publication artifact drift on v2-alpha",
+    "url": "https://github.com/kungfu-systems/paper-kfd-foundation-real-world-agent-work/issues/63",
+    "state": "CLOSED",
+    "createdAt": "2026-07-22T14:36:20Z",
+    "updatedAt": "2026-07-22T14:50:32Z",
+    "closedAt": "2026-07-22T14:50:32Z",
+    "author": "github-actions",
+    "labels": [
+      "buildchain-contract-drift"
+    ],
+    "repository": "kungfu-systems/paper-kfd-foundation-real-world-agent-work",
+    "repositoryUrl": "https://github.com/kungfu-systems/paper-kfd-foundation-real-world-agent-work"
+  },
+  {
+    "number": 15,
+    "title": "[Buildchain contract] kungfu-systems/agent-hub-demo drift on v2-alpha",
+    "url": "https://github.com/kungfu-systems/agent-hub-demo/issues/15",
+    "state": "CLOSED",
+    "createdAt": "2026-07-22T14:55:01Z",
+    "updatedAt": "2026-07-22T15:22:31Z",
+    "closedAt": "2026-07-22T15:22:31Z",
+    "author": "github-actions",
+    "labels": [
+      "buildchain-contract-drift"
+    ],
+    "repository": "kungfu-systems/agent-hub-demo",
+    "repositoryUrl": "https://github.com/kungfu-systems/agent-hub-demo"
+  },
+  {
+    "number": 1554,
+    "title": "fix(contract): classify optional action inputs without blocking v2-alpha consumers",
+    "url": "https://github.com/kungfu-systems/buildchain/issues/1554",
+    "state": "CLOSED",
+    "createdAt": "2026-07-22T22:06:36Z",
+    "updatedAt": "2026-07-22T23:24:01Z",
+    "closedAt": "2026-07-22T23:24:01Z",
+    "author": "dongkeren",
+    "labels": [],
+    "repository": "kungfu-systems/buildchain",
+    "repositoryUrl": "https://github.com/kungfu-systems/buildchain"
+  },
+  {
+    "number": 1533,
+    "title": "web-surface: merged release PR closed event routes to preview cleanup instead of production",
+    "url": "https://github.com/kungfu-systems/buildchain/issues/1533",
+    "state": "CLOSED",
+    "createdAt": "2026-07-22T07:03:23Z",
+    "updatedAt": "2026-07-22T23:24:01Z",
+    "closedAt": "2026-07-22T23:24:01Z",
+    "author": "dongkeren",
+    "labels": [],
+    "repository": "kungfu-systems/buildchain",
+    "repositoryUrl": "https://github.com/kungfu-systems/buildchain"
+  },
+  {
+    "number": 1518,
+    "title": "[Buildchain feedback] buildchain-ref-promotion-failed: kungfu-systems/kfd",
+    "url": "https://github.com/kungfu-systems/buildchain/issues/1518",
+    "state": "CLOSED",
+    "createdAt": "2026-07-22T05:10:30Z",
+    "updatedAt": "2026-07-22T23:25:36Z",
+    "closedAt": "2026-07-22T23:25:36Z",
+    "author": "kungfu-buildchain-issue-reporter",
+    "labels": [
+      "buildchain-feedback",
+      "workflow-friction"
+    ],
+    "repository": "kungfu-systems/buildchain",
+    "repositoryUrl": "https://github.com/kungfu-systems/buildchain"
+  },
+  {
+    "number": 1536,
+    "title": "[Buildchain feedback] buildchain-ref-promotion-failed: kungfu-systems/kfd",
+    "url": "https://github.com/kungfu-systems/buildchain/issues/1536",
+    "state": "CLOSED",
+    "createdAt": "2026-07-22T07:22:09Z",
+    "updatedAt": "2026-07-22T23:25:39Z",
+    "closedAt": "2026-07-22T23:25:39Z",
+    "author": "kungfu-buildchain-issue-reporter",
+    "labels": [
+      "buildchain-feedback",
+      "workflow-friction"
+    ],
+    "repository": "kungfu-systems/buildchain",
+    "repositoryUrl": "https://github.com/kungfu-systems/buildchain"
+  },
+  {
+    "number": 296,
+    "title": "[Buildchain contract] kungfu-systems/build-images drift on v2-alpha",
+    "url": "https://github.com/kungfu-systems/build-images/issues/296",
+    "state": "CLOSED",
+    "createdAt": "2026-07-22T22:04:58Z",
+    "updatedAt": "2026-07-23T01:05:13Z",
+    "closedAt": "2026-07-23T01:05:13Z",
+    "author": "github-actions",
+    "labels": [
+      "buildchain-contract-drift"
+    ],
+    "repository": "kungfu-systems/build-images",
+    "repositoryUrl": "https://github.com/kungfu-systems/build-images"
+  },
+  {
+    "number": 93,
+    "title": "[Buildchain contract] kungfu-systems/site-kungfu-tech drift on v2",
+    "url": "https://github.com/kungfu-systems/site-kungfu-tech/issues/93",
+    "state": "CLOSED",
+    "createdAt": "2026-07-22T08:17:54Z",
+    "updatedAt": "2026-07-23T07:51:07Z",
+    "closedAt": "2026-07-23T07:51:07Z",
+    "author": "github-actions",
+    "labels": [
+      "buildchain-contract-drift"
+    ],
+    "repository": "kungfu-systems/site-kungfu-tech",
+    "repositoryUrl": "https://github.com/kungfu-systems/site-kungfu-tech"
+  },
+  {
+    "number": 1610,
+    "title": "[Buildchain feedback] buildchain-ref-promotion-failed: kungfu-systems/kfd",
+    "url": "https://github.com/kungfu-systems/buildchain/issues/1610",
+    "state": "CLOSED",
+    "createdAt": "2026-07-24T07:13:21Z",
+    "updatedAt": "2026-07-24T07:59:17Z",
+    "closedAt": "2026-07-24T07:59:17Z",
+    "author": "kungfu-buildchain-issue-reporter",
+    "labels": [
+      "buildchain-feedback",
+      "workflow-friction"
+    ],
+    "repository": "kungfu-systems/buildchain",
+    "repositoryUrl": "https://github.com/kungfu-systems/buildchain"
+  },
+  {
+    "number": 1620,
+    "title": "[Buildchain feedback] buildchain-ref-promotion-failed: kungfu-systems/buildchain",
+    "url": "https://github.com/kungfu-systems/buildchain/issues/1620",
+    "state": "CLOSED",
+    "createdAt": "2026-07-24T10:48:27Z",
+    "updatedAt": "2026-07-24T11:23:29Z",
+    "closedAt": "2026-07-24T11:23:29Z",
+    "author": "kungfu-buildchain-issue-reporter",
+    "labels": [
+      "buildchain-feedback",
+      "workflow-friction"
+    ],
+    "repository": "kungfu-systems/buildchain",
+    "repositoryUrl": "https://github.com/kungfu-systems/buildchain"
+  },
+  {
+    "number": 1624,
+    "title": "[Buildchain feedback] buildchain-ref-promotion-failed: kungfu-systems/buildchain",
+    "url": "https://github.com/kungfu-systems/buildchain/issues/1624",
+    "state": "CLOSED",
+    "createdAt": "2026-07-24T11:37:08Z",
+    "updatedAt": "2026-07-24T11:50:29Z",
+    "closedAt": "2026-07-24T11:50:29Z",
+    "author": "kungfu-buildchain-issue-reporter",
+    "labels": [
+      "buildchain-feedback",
+      "workflow-friction"
+    ],
+    "repository": "kungfu-systems/buildchain",
+    "repositoryUrl": "https://github.com/kungfu-systems/buildchain"
+  },
+  {
+    "number": 1643,
+    "title": "[publication] finalize v3.0.0 refs and packages after merged major gate",
+    "url": "https://github.com/kungfu-systems/buildchain/issues/1643",
+    "state": "CLOSED",
+    "createdAt": "2026-07-24T12:55:46Z",
+    "updatedAt": "2026-07-26T01:32:07Z",
+    "closedAt": "2026-07-26T01:32:07Z",
+    "author": "dongkeren",
+    "labels": [],
+    "repository": "kungfu-systems/buildchain",
+    "repositoryUrl": "https://github.com/kungfu-systems/buildchain"
+  },
+  {
+    "number": 1061,
+    "title": "Dev verify patrol: dev/v4/v4.0 verify is failing",
+    "url": "https://github.com/kungfu-systems/kungfu/issues/1061",
+    "state": "CLOSED",
+    "createdAt": "2026-07-18T05:21:20Z",
+    "updatedAt": "2026-07-26T04:42:25Z",
+    "closedAt": "2026-07-26T04:42:25Z",
+    "author": "github-actions",
+    "labels": [],
+    "repository": "kungfu-systems/kungfu",
+    "repositoryUrl": "https://github.com/kungfu-systems/kungfu"
+  },
+  {
+    "number": 1087,
+    "title": "Windows Shifu cache-active lifecycle exits successfully without running the task",
+    "url": "https://github.com/kungfu-systems/kungfu/issues/1087",
+    "state": "CLOSED",
+    "createdAt": "2026-07-18T12:49:38Z",
+    "updatedAt": "2026-07-26T06:56:21Z",
+    "closedAt": "2026-07-26T06:56:21Z",
+    "author": "dongkeren",
+    "labels": [],
+    "repository": "kungfu-systems/kungfu",
+    "repositoryUrl": "https://github.com/kungfu-systems/kungfu"
+  },
+  {
+    "number": 1516,
+    "title": "Dev verify patrol: dev/v4/v4.0 verify is failing",
+    "url": "https://github.com/kungfu-systems/kungfu/issues/1516",
+    "state": "CLOSED",
+    "createdAt": "2026-07-26T05:13:02Z",
+    "updatedAt": "2026-07-26T11:54:50Z",
+    "closedAt": "2026-07-26T11:54:50Z",
+    "author": "github-actions",
+    "labels": [],
+    "repository": "kungfu-systems/kungfu",
+    "repositoryUrl": "https://github.com/kungfu-systems/kungfu"
+  },
+  {
+    "number": 1888,
+    "title": "Gate runner presets do not expose user Cargo toolchains",
+    "url": "https://github.com/kungfu-systems/buildchain/issues/1888",
+    "state": "CLOSED",
+    "createdAt": "2026-07-26T11:17:56Z",
+    "updatedAt": "2026-07-26T13:03:47Z",
+    "closedAt": "2026-07-26T13:03:47Z",
+    "author": "dongkeren",
+    "labels": [],
+    "repository": "kungfu-systems/buildchain",
+    "repositoryUrl": "https://github.com/kungfu-systems/buildchain"
+  },
+  {
+    "number": 1892,
+    "title": "feat(workflow): allow consumers to route control jobs to self-hosted runners",
+    "url": "https://github.com/kungfu-systems/buildchain/issues/1892",
+    "state": "CLOSED",
+    "createdAt": "2026-07-26T11:50:13Z",
+    "updatedAt": "2026-07-26T13:25:05Z",
+    "closedAt": "2026-07-26T13:25:05Z",
+    "author": "kungfu-origin",
+    "labels": [],
+    "repository": "kungfu-systems/buildchain",
+    "repositoryUrl": "https://github.com/kungfu-systems/buildchain"
+  },
+  {
+    "number": 1913,
+    "title": "[Buildchain feedback] buildchain-ref-promotion-failed: kungfu-systems/buildchain",
+    "url": "https://github.com/kungfu-systems/buildchain/issues/1913",
+    "state": "CLOSED",
+    "createdAt": "2026-07-26T14:03:00Z",
+    "updatedAt": "2026-07-26T14:28:21Z",
+    "closedAt": "2026-07-26T14:28:21Z",
+    "author": "kungfu-buildchain-issue-reporter",
+    "labels": [
+      "buildchain-feedback",
+      "workflow-friction"
+    ],
+    "repository": "kungfu-systems/buildchain",
+    "repositoryUrl": "https://github.com/kungfu-systems/buildchain"
+  },
+  {
+    "number": 1917,
+    "title": "[Buildchain feedback] duplicate-channel-pr: kungfu-systems/buildchain",
+    "url": "https://github.com/kungfu-systems/buildchain/issues/1917",
+    "state": "CLOSED",
+    "createdAt": "2026-07-26T14:46:34Z",
+    "updatedAt": "2026-07-26T14:57:29Z",
+    "closedAt": "2026-07-26T14:57:29Z",
+    "author": "kungfu-buildchain-issue-reporter",
+    "labels": [
+      "buildchain-feedback",
+      "workflow-friction"
+    ],
+    "repository": "kungfu-systems/buildchain",
+    "repositoryUrl": "https://github.com/kungfu-systems/buildchain"
+  },
+  {
+    "number": 1924,
+    "title": "[Buildchain feedback] buildchain-ref-promotion-failed: kungfu-systems/buildchain",
+    "url": "https://github.com/kungfu-systems/buildchain/issues/1924",
+    "state": "CLOSED",
+    "createdAt": "2026-07-26T15:21:35Z",
+    "updatedAt": "2026-07-26T15:34:19Z",
+    "closedAt": "2026-07-26T15:34:19Z",
+    "author": "kungfu-buildchain-issue-reporter",
+    "labels": [
+      "buildchain-feedback",
+      "workflow-friction"
+    ],
+    "repository": "kungfu-systems/buildchain",
+    "repositoryUrl": "https://github.com/kungfu-systems/buildchain"
+  },
+  {
+    "number": 1926,
+    "title": "[Buildchain feedback] duplicate-channel-pr: kungfu-systems/buildchain",
+    "url": "https://github.com/kungfu-systems/buildchain/issues/1926",
+    "state": "CLOSED",
+    "createdAt": "2026-07-26T15:24:14Z",
+    "updatedAt": "2026-07-26T15:34:22Z",
+    "closedAt": "2026-07-26T15:34:22Z",
+    "author": "kungfu-buildchain-issue-reporter",
+    "labels": [
+      "buildchain-feedback",
+      "workflow-friction"
+    ],
+    "repository": "kungfu-systems/buildchain",
+    "repositoryUrl": "https://github.com/kungfu-systems/buildchain"
+  },
+  {
+    "number": 1935,
+    "title": "Make reusable artifact downloads survive failed-job reruns",
+    "url": "https://github.com/kungfu-systems/buildchain/issues/1935",
+    "state": "CLOSED",
+    "createdAt": "2026-07-26T17:15:28Z",
+    "updatedAt": "2026-07-26T17:28:39Z",
+    "closedAt": "2026-07-26T17:28:39Z",
+    "author": "dongkeren",
+    "labels": [],
+    "repository": "kungfu-systems/buildchain",
+    "repositoryUrl": "https://github.com/kungfu-systems/buildchain"
+  },
+  {
+    "number": 1544,
+    "title": "Dev verify patrol: dev/v4/v4.0 verify is failing",
+    "url": "https://github.com/kungfu-systems/kungfu/issues/1544",
+    "state": "CLOSED",
+    "createdAt": "2026-07-26T12:27:59Z",
+    "updatedAt": "2026-07-26T19:38:46Z",
+    "closedAt": "2026-07-26T19:38:46Z",
+    "author": "github-actions",
+    "labels": [
+      "kind/internal",
+      "area/buildchain",
+      "state/blocked",
+      "source/automation"
+    ],
+    "repository": "kungfu-systems/kungfu",
+    "repositoryUrl": "https://github.com/kungfu-systems/kungfu"
+  },
+  {
+    "number": 1940,
+    "title": "Auditable demo rejects renderer-normalized input roots",
+    "url": "https://github.com/kungfu-systems/buildchain/issues/1940",
+    "state": "CLOSED",
+    "createdAt": "2026-07-26T20:43:48Z",
+    "updatedAt": "2026-07-26T20:51:49Z",
+    "closedAt": "2026-07-26T20:51:49Z",
+    "author": "dongkeren",
+    "labels": [],
+    "repository": "kungfu-systems/buildchain",
+    "repositoryUrl": "https://github.com/kungfu-systems/buildchain"
+  },
+  {
+    "number": 1579,
+    "title": "Auditable demo Passport rejects upload-artifact digest without sha256 prefix",
+    "url": "https://github.com/kungfu-systems/kungfu/issues/1579",
+    "state": "CLOSED",
+    "createdAt": "2026-07-27T01:11:57Z",
+    "updatedAt": "2026-07-27T01:52:19Z",
+    "closedAt": "2026-07-27T01:52:19Z",
+    "author": "dongkeren",
+    "labels": [],
+    "repository": "kungfu-systems/kungfu",
+    "repositoryUrl": "https://github.com/kungfu-systems/kungfu"
+  }
+]

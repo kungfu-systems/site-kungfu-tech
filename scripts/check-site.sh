@@ -11,11 +11,14 @@ node scripts/consume-installer-publication-bundle.mjs \
   --output-root public
 node scripts/check-infra-outputs.mjs
 node scripts/render-shared-layout.mjs --check
+node --check scripts/publish-bootstrap-evidence.mjs
+node --check docs/research/2026-07-20-kungfu-systems-public-work-week/collect.mjs
 grep -q '"label": "Verify Agent Hub"' site/shared-layout.json
 grep -q '"href": "/agent-hub/"' site/shared-layout.json
 grep -q '"label": "Get Kungfu"' site/shared-layout.json
 grep -q '"class": "nav-cta"' site/shared-layout.json
 grep -q '"public/about/bootstrapping/index.html"' site/shared-layout.json
+grep -q '"public/about/bootstrapping/evidence/index.html"' site/shared-layout.json
 grep -q '.site-nav > \*:not(:first-child):not(.nav-cta)::before' public/assets/site.css
 node scripts/check-whitepaper.mjs
 node scripts/check-dogfood-proof.mjs
@@ -82,6 +85,7 @@ test -f public/.well-known/kungfu-release-status.json
 node -e 'const fs=require("fs"); const s=JSON.parse(fs.readFileSync("public/.well-known/kungfu-release-status.json","utf8")); if(s.schema!=="kungfu.release-status/v1" || s.status!=="unavailable" || s.releasedUseClaim!==false || s.release!==null || s.acquisitionEvidence!==null) throw new Error("pre-release status endpoint is not truthful")'
 test -f public/about/index.html
 test -f public/about/bootstrapping/index.html
+test -f public/about/bootstrapping/evidence/index.html
 test -f public/capital/index.html
 test -f public/capital/investor-perspective/index.html
 test -f public/services/index.html
@@ -89,7 +93,7 @@ test -f public/trust/index.html
 test -f public/legal/index.html
 test -f public/install/index.html
 test -f site/public-dogfood-proof.json
-for page in public/index.html public/how-tested/continuity/index.html public/agent-builders/index.html public/why-kungfu/index.html public/about/index.html public/about/bootstrapping/index.html public/capital/index.html public/capital/investor-perspective/index.html public/services/index.html public/trust/index.html public/legal/index.html public/install/index.html; do
+for page in public/index.html public/how-tested/continuity/index.html public/agent-builders/index.html public/why-kungfu/index.html public/about/index.html public/about/bootstrapping/index.html public/about/bootstrapping/evidence/index.html public/capital/index.html public/capital/investor-perspective/index.html public/services/index.html public/trust/index.html public/legal/index.html public/install/index.html; do
   grep -q 'href="/assets/site.css"' "$page"
 done
 if grep -RInE '^    \\.(site-header|brand|mark|site-nav|site-footer|nav-menu)\\b' \
@@ -206,6 +210,8 @@ grep -q 'When the runtime stays human' public/about/bootstrapping/index.html
 grep -q 'When responsibility is externalized' public/about/bootstrapping/index.html
 grep -q 'site pull request #163' public/about/bootstrapping/index.html
 grep -q 'partial bootstrap evidence—not proof that the finished Kungfu Work Runtime already exists.' public/about/bootstrapping/index.html
+grep -q 'href="/about/bootstrapping/evidence/"' public/about/bootstrapping/index.html
+grep -q 'Examine the public work sample and reanalyze it with your Agent' public/about/bootstrapping/index.html
 grep -q 'Why could this begin here?' public/about/bootstrapping/index.html
 grep -q 'The strongest objection' public/about/bootstrapping/index.html
 python3 - <<'PY'
@@ -230,6 +236,65 @@ if grep -q 'docs/concepts/bootstrapping-agent-work.md' public/about/bootstrappin
   echo "error: preview thesis must not point readers to the unsynchronized repository essay" >&2
   exit 1
 fi
+grep -q 'shared-header:start' public/about/bootstrapping/evidence/index.html
+grep -q 'shared-footer:start' public/about/bootstrapping/evidence/index.html
+grep -q 'One human organized the work. Agents executed it.' public/about/bootstrapping/evidence/index.html
+grep -q 'First-party declaration' public/about/bootstrapping/evidence/index.html
+grep -q 'Readers are not required to accept that part of the statement.' public/about/bootstrapping/evidence/index.html
+grep -q 'Codex, Claude, Cursor, Amp' public/about/bootstrapping/evidence/index.html
+grep -q 'Three different kinds of claim' public/about/bootstrapping/evidence/index.html
+grep -q 'Publicly verifiable' public/about/bootstrapping/evidence/index.html
+grep -q 'First-party declared' public/about/bootstrapping/evidence/index.html
+grep -q 'Not established' public/about/bootstrapping/evidence/index.html
+grep -q '1,026' public/about/bootstrapping/evidence/index.html
+grep -q 'What a conventional organization would usually require' public/about/bootstrapping/evidence/index.html
+grep -q 'We do not assign a person-month total.' public/about/bootstrapping/evidence/index.html
+grep -q 'This collection and its first analysis were also performed by an Agent.' public/about/bootstrapping/evidence/index.html
+grep -q 'href="/about/bootstrapping/evidence/data/manifest.json"' public/about/bootstrapping/evidence/index.html
+grep -q 'This is evidence, not proof of the method' public/about/bootstrapping/evidence/index.html
+grep -q 'We welcome independent analysis, comparison, criticism, and replication.' public/about/bootstrapping/evidence/index.html
+assert_before public/about/bootstrapping/evidence/index.html 'Read this with your Agent' 'Three different kinds of claim'
+assert_before public/about/bootstrapping/evidence/index.html 'First-party declaration' 'The bounded public sample'
+if grep -Eq '[0-9]+[–-][0-9]+ (senior )?person-months|[0-9]+[–-][0-9]+ calendar months' \
+  public/about/bootstrapping/evidence/index.html \
+  docs/research/2026-07-20-kungfu-systems-public-work-week/workload-analysis.md; then
+  echo "error: bootstrap evidence must compare organizational functions without a person-month estimate" >&2
+  exit 1
+fi
+node - <<'NODE'
+const fs = require("fs");
+const root = "docs/research/2026-07-20-kungfu-systems-public-work-week";
+const collection = JSON.parse(fs.readFileSync(`${root}/collection.json`, "utf8"));
+const summary = JSON.parse(fs.readFileSync(`${root}/summary.json`, "utf8"));
+const pullRequests = JSON.parse(fs.readFileSync(`${root}/pull-requests.json`, "utf8"));
+const closedIssues = JSON.parse(fs.readFileSync(`${root}/closed-issues.json`, "utf8"));
+const releases = JSON.parse(fs.readFileSync(`${root}/releases.json`, "utf8"));
+const repositories = JSON.parse(fs.readFileSync(`${root}/repositories.json`, "utf8"));
+if (collection.window.start !== "2026-07-19T16:00:00Z") throw new Error("unexpected evidence start");
+if (collection.window.end !== "2026-07-27T02:48:00Z") throw new Error("unexpected evidence end");
+const expected = {
+  pullRequests: 1026,
+  additions: 738437,
+  deletions: 125367,
+  changedFiles: 14005,
+  commits: 5501,
+  closedIssues: 59,
+  releases: 112,
+  repositories: 18,
+  repositoriesWithMergedPullRequests: 15,
+};
+for (const [key, value] of Object.entries(expected)) {
+  if (summary.totals[key] !== value) throw new Error(`unexpected ${key}: ${summary.totals[key]}`);
+}
+if (pullRequests.length !== summary.totals.pullRequests) throw new Error("PR record count mismatch");
+if (closedIssues.length !== summary.totals.closedIssues) throw new Error("issue record count mismatch");
+if (releases.length !== summary.totals.releases) throw new Error("release record count mismatch");
+if (repositories.length !== summary.totals.repositories) throw new Error("repository record count mismatch");
+const featurePrefixed = pullRequests.filter((pullRequest) =>
+  /^feat(?:\([^)]*\))?:/i.test(pullRequest.title)
+).length;
+if (featurePrefixed !== 200) throw new Error(`unexpected feat-prefixed count: ${featurePrefixed}`);
+NODE
 grep -q 'shared-header:start' public/capital/index.html
 grep -q 'shared-footer:start' public/capital/index.html
 grep -q 'Capital should expand the ecosystem, not control the standard.' public/capital/index.html
@@ -438,6 +503,16 @@ if [ -d dist ]; then
   test -f dist/assets/site.css
   test -f dist/.well-known/security.txt
   test -f dist/about/index.html
+  test -f dist/about/bootstrapping/index.html
+  test -f dist/about/bootstrapping/evidence/index.html
+  test -f dist/about/bootstrapping/evidence/data/manifest.json
+  test -f dist/about/bootstrapping/evidence/data/collect.mjs
+  test -f dist/about/bootstrapping/evidence/data/summary.json
+  test -f dist/about/bootstrapping/evidence/data/pull-requests.json
+  test -f dist/about/bootstrapping/evidence/data/closed-issues.json
+  test -f dist/about/bootstrapping/evidence/data/releases.json
+  test -f dist/about/bootstrapping/evidence/data/repositories.json
+  test -f dist/about/bootstrapping/evidence/data/workload-analysis.md
   test -f dist/capital/index.html
   test -f dist/capital/investor-perspective/index.html
   test -f dist/services/index.html
@@ -503,6 +578,9 @@ if [ -d dist ]; then
   grep -q 'being prepared' dist/index.html
   grep -q 'Kungfu Origin Technology Limited' dist/index.html
   grep -q 'libkungfu.dev' dist/about/index.html
+  grep -q 'One human organized the work. Agents executed it.' dist/about/bootstrapping/evidence/index.html
+  grep -q 'kungfu.bootstrap-public-work-evidence/v1' dist/about/bootstrapping/evidence/data/manifest.json
+  grep -q '"featurePrefixedPullRequests": 200' dist/about/bootstrapping/evidence/data/manifest.json
   grep -q 'How an open protocol can create commercial value.' dist/capital/investor-perspective/index.html
   grep -q 'Kungfu Origin Technology Limited is incorporated in Hong Kong.' dist/capital/investor-perspective/index.html
   grep -q 'Buildchain release passport' dist/trust/index.html

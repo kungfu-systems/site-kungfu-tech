@@ -12,6 +12,7 @@ node scripts/render-shared-layout.mjs
 rm -rf dist
 mkdir -p dist
 cp -R public/. dist/
+node scripts/publish-bootstrap-evidence.mjs
 
 node scripts/consume-installer-publication-bundle.mjs \
   --source site/installer-publication-source.json \
@@ -34,6 +35,10 @@ test -f dist/.well-known/security.txt
 test -f dist/.well-known/kungfu-release-status.json
 test -f dist/about/index.html
 test -f dist/about/bootstrapping/index.html
+test -f dist/about/bootstrapping/evidence/index.html
+test -f dist/about/bootstrapping/evidence/data/manifest.json
+test -f dist/about/bootstrapping/evidence/data/collect.mjs
+test -f dist/about/bootstrapping/evidence/data/pull-requests.json
 test -f dist/capital/index.html
 test -f dist/capital/investor-perspective/index.html
 test -f dist/services/index.html

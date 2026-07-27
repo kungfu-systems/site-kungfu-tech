@@ -1,0 +1,236 @@
+{
+  "schemaVersion": 1,
+  "organization": "kungfu-systems",
+  "window": {
+    "start": "2026-07-19T16:00:00Z",
+    "end": "2026-07-27T02:48:00Z",
+    "timezone": "Asia/Shanghai",
+    "humanReadable": "2026-07-20 00:00 CST through collection time"
+  },
+  "collectedAt": "2026-07-27T02:48:13.233Z",
+  "totals": {
+    "pullRequests": 1026,
+    "additions": 738437,
+    "deletions": 125367,
+    "changedFiles": 14005,
+    "commits": 5501,
+    "closedIssues": 59,
+    "releases": 112,
+    "repositories": 18,
+    "repositoriesWithMergedPullRequests": 15
+  },
+  "byRepository": [
+    {
+      "name": "kungfu-systems/buildchain",
+      "pullRequests": 371,
+      "additions": 292112,
+      "deletions": 39019,
+      "changedFiles": 4939,
+      "commits": 3823
+    },
+    {
+      "name": "kungfu-systems/kungfu",
+      "pullRequests": 280,
+      "additions": 325211,
+      "deletions": 67453,
+      "changedFiles": 6356,
+      "commits": 789
+    },
+    {
+      "name": "kungfu-systems/site-kungfu-tech",
+      "pullRequests": 86,
+      "additions": 9171,
+      "deletions": 1608,
+      "changedFiles": 337,
+      "commits": 113
+    },
+    {
+      "name": "kungfu-systems/site-libkungfu-dev",
+      "pullRequests": 56,
+      "additions": 9532,
+      "deletions": 1544,
+      "changedFiles": 201,
+      "commits": 73
+    },
+    {
+      "name": "kungfu-systems/build-images",
+      "pullRequests": 53,
+      "additions": 6462,
+      "deletions": 1131,
+      "changedFiles": 259,
+      "commits": 124
+    },
+    {
+      "name": "kungfu-systems/agent-hub-demo",
+      "pullRequests": 50,
+      "additions": 9303,
+      "deletions": 1501,
+      "changedFiles": 270,
+      "commits": 134
+    },
+    {
+      "name": "kungfu-systems/kfd",
+      "pullRequests": 50,
+      "additions": 65131,
+      "deletions": 8337,
+      "changedFiles": 1084,
+      "commits": 121
+    },
+    {
+      "name": "kungfu-systems/libnode",
+      "pullRequests": 18,
+      "additions": 1927,
+      "deletions": 331,
+      "changedFiles": 91,
+      "commits": 172
+    },
+    {
+      "name": "kungfu-systems/paper-kungfu-product-white-paper",
+      "pullRequests": 18,
+      "additions": 3358,
+      "deletions": 1350,
+      "changedFiles": 158,
+      "commits": 59
+    },
+    {
+      "name": "kungfu-systems/infra-kungfu-sites",
+      "pullRequests": 15,
+      "additions": 6817,
+      "deletions": 91,
+      "changedFiles": 59,
+      "commits": 24
+    },
+    {
+      "name": "kungfu-systems/paper-episodes-to-primitives",
+      "pullRequests": 9,
+      "additions": 3615,
+      "deletions": 6,
+      "changedFiles": 76,
+      "commits": 15
+    },
+    {
+      "name": "kungfu-systems/paper-kfd-foundation-real-world-agent-work",
+      "pullRequests": 7,
+      "additions": 1607,
+      "deletions": 1663,
+      "changedFiles": 43,
+      "commits": 14
+    },
+    {
+      "name": "kungfu-systems/paper-observer-declared-timelines",
+      "pullRequests": 7,
+      "additions": 1493,
+      "deletions": 1138,
+      "changedFiles": 44,
+      "commits": 12
+    },
+    {
+      "name": "kungfu-systems/homebrew-tap",
+      "pullRequests": 3,
+      "additions": 896,
+      "deletions": 168,
+      "changedFiles": 39,
+      "commits": 8
+    },
+    {
+      "name": "kungfu-systems/runtime-images",
+      "pullRequests": 3,
+      "additions": 1802,
+      "deletions": 27,
+      "changedFiles": 49,
+      "commits": 20
+    }
+  ],
+  "byShanghaiDay": [
+    {
+      "name": "2026-07-20",
+      "pullRequests": 54,
+      "additions": 98400,
+      "deletions": 8496,
+      "changedFiles": 1240,
+      "commits": 136
+    },
+    {
+      "name": "2026-07-21",
+      "pullRequests": 110,
+      "additions": 70808,
+      "deletions": 16724,
+      "changedFiles": 1866,
+      "commits": 414
+    },
+    {
+      "name": "2026-07-22",
+      "pullRequests": 181,
+      "additions": 73992,
+      "deletions": 8915,
+      "changedFiles": 2627,
+      "commits": 571
+    },
+    {
+      "name": "2026-07-23",
+      "pullRequests": 154,
+      "additions": 66066,
+      "deletions": 6642,
+      "changedFiles": 1663,
+      "commits": 407
+    },
+    {
+      "name": "2026-07-24",
+      "pullRequests": 158,
+      "additions": 213714,
+      "deletions": 28779,
+      "changedFiles": 2593,
+      "commits": 2625
+    },
+    {
+      "name": "2026-07-25",
+      "pullRequests": 187,
+      "additions": 83339,
+      "deletions": 14924,
+      "changedFiles": 1716,
+      "commits": 820
+    },
+    {
+      "name": "2026-07-26",
+      "pullRequests": 143,
+      "additions": 77907,
+      "deletions": 32752,
+      "changedFiles": 1896,
+      "commits": 424
+    },
+    {
+      "name": "2026-07-27",
+      "pullRequests": 39,
+      "additions": 54211,
+      "deletions": 8135,
+      "changedFiles": 404,
+      "commits": 104
+    }
+  ],
+  "byAuthor": [
+    {
+      "name": "dongkeren",
+      "pullRequests": 965,
+      "additions": 737936,
+      "deletions": 125098,
+      "changedFiles": 13924,
+      "commits": 5435
+    },
+    {
+      "name": "kungfu-systems-release-bot",
+      "pullRequests": 48,
+      "additions": 0,
+      "deletions": 0,
+      "changedFiles": 0,
+      "commits": 48
+    },
+    {
+      "name": "kungfu-origin",
+      "pullRequests": 13,
+      "additions": 501,
+      "deletions": 269,
+      "changedFiles": 81,
+      "commits": 18
+    }
+  ]
+}

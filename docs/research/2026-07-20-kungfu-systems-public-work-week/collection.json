@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "organization": "kungfu-systems",
+  "window": {
+    "start": "2026-07-19T16:00:00Z",
+    "end": "2026-07-27T02:48:00Z",
+    "timezone": "Asia/Shanghai",
+    "humanReadable": "2026-07-20 00:00 CST through collection time"
+  },
+  "collectedAt": "2026-07-27T02:48:13.233Z",
+  "source": "GitHub public GraphQL API through the authenticated gh client",
+  "inclusion": {
+    "pullRequests": "Merged pull requests whose mergedAt falls inside the exact window",
+    "issues": "Closed non-PR issues whose closedAt falls inside the exact window",
+    "releases": "Repository releases whose publishedAt (or createdAt fallback) falls inside the exact window"
+  },
+  "caveats": [
+    "PR counts include release, promotion, propagation, and automation PRs and must not be read as independent features.",
+    "Line and file totals are gross GitHub PR metrics; generated files, lockfiles, and overlapping release propagation can inflate them.",
+    "Public GitHub data cannot reveal private planning, rejected candidates, unattended runtime, or the amount of human and Agent time."
+  ]
+}
