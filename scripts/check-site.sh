@@ -255,6 +255,8 @@ fi
 grep -q 'shared-header:start' public/about/bootstrapping/evidence/index.html
 grep -q 'shared-footer:start' public/about/bootstrapping/evidence/index.html
 grep -q 'href="/about/bootstrapping/">← Back to the Bootstrap argument</a>' public/about/bootstrapping/evidence/index.html
+grep -q '<article aria-labelledby="report-title">' public/about/bootstrapping/evidence/index.html
+grep -q '<h1 id="report-title">One human organized the work. Agents executed it.</h1>' public/about/bootstrapping/evidence/index.html
 grep -q 'One human organized the work. Agents executed it.' public/about/bootstrapping/evidence/index.html
 grep -q 'First-party declaration' public/about/bootstrapping/evidence/index.html
 grep -q 'Readers are not required to accept that part of the statement.' public/about/bootstrapping/evidence/index.html
