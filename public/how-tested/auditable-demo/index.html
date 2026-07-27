@@ -40,15 +40,104 @@
 <body>
   <main>
     <!-- shared-header:start -->
-    <header class="site-header"></header>
+    <header class="site-header">
+      <a class="brand" href="/" aria-label="Kungfu UNGFU™">
+        <span class="mark" aria-hidden="true">🧘</span>
+        <span class="brand-copy"><span>Kungfu UNGFU™</span><span class="brand-tagline">Continuity for Agent Work</span></span>
+      </a>
+      <nav class="site-nav" aria-label="Project links">
+        <a href="/agent-supply-chain/">Agent Supply Chain</a>
+        <a href="/agent-builders/">Agent Builders</a>
+        <details class="nav-menu">
+          <summary>Developers</summary>
+          <div class="nav-menu-panel">
+          <a href="https://kfd.libkungfu.dev/">KFD Protocol</a>
+          <a href="https://libkungfu.dev">Developer Platform</a>
+          <a href="/agent-hub/">Verify Agent Hub</a>
+          <a href="https://github.com/kungfu-systems/kungfu">GitHub</a>
+          </div>
+        </details>
+        <a href="/whitepaper/">Papers</a>
+        <a href="/about/index.html">About</a>
+        <a class="nav-cta" href="/install/">Get Kungfu</a>
+      </nav>
+    </header>
     <!-- shared-header:end -->
 
       <!-- auditable-demo-evidence:start -->
-      <p>Auditable demo evidence has not been imported.</p>
+      <section class="demo-player" aria-labelledby="demo-heading">
+        <div>
+          <p class="eyebrow">Exact installed artifact · bounded Linux proof</p>
+          <h1 id="demo-heading">Watch the artifact explain itself.</h1>
+          <p class="lead">No account, hosted session, or hand-authored transcript is required. This 18-second recording was rendered from the exact output of the installed <code>kungfu agent brief</code> command after the reusable Buildchain Gate passed.</p>
+        </div>
+        <video controls playsinline preload="metadata" aria-label="Exact installed Kungfu agent brief demonstration" poster="/evidence/auditable-demo/0c44a9618fd4114340ca460a6fd7e3a391ada4c7a540d76b4136c3173373391e/poster.png">
+          <source src="/evidence/auditable-demo/0c44a9618fd4114340ca460a6fd7e3a391ada4c7a540d76b4136c3173373391e/demo.webm" type="video/webm">
+          <source src="/evidence/auditable-demo/0c44a9618fd4114340ca460a6fd7e3a391ada4c7a540d76b4136c3173373391e/demo.mp4" type="video/mp4">
+          <p><a href="/evidence/auditable-demo/0c44a9618fd4114340ca460a6fd7e3a391ada4c7a540d76b4136c3173373391e/demo.mp4">Download the MP4 recording.</a></p>
+        </video>
+        <p class="fallback">Static fallback: <a href="/evidence/auditable-demo/0c44a9618fd4114340ca460a6fd7e3a391ada4c7a540d76b4136c3173373391e/poster.png">open the exact poster</a>. Text alternative: <a href="/evidence/auditable-demo/0c44a9618fd4114340ca460a6fd7e3a391ada4c7a540d76b4136c3173373391e/complete-transcript.txt">read the complete transcript</a>. The page never autoplays media.</p>
+      </section>
+
+      <section class="proof-grid" aria-label="Auditable demo proof">
+        <article><h2>What ran</h2><p>The installed Linux artifact executed its own <code>kungfu</code> launcher in a disposable home with a minimal environment.</p></article>
+        <article><h2>What passed</h2><p>The exact transcript, public projection, and scene passed an isolated renderer smoke before full media was allowed.</p></article>
+        <article><h2>What is retained</h2><p>Source, Gate, media, toolchain, expiry, run, and canonical Passport roots remain machine-readable.</p></article>
+        <article><h2>What is not claimed</h2><p>Not cross-run continuity, provider migration, macOS execution, durability, performance, or FO10.</p></article>
+      </section>
+
+      <section class="coordinates">
+        <h2>Release Passport</h2>
+        <dl>
+          <div><dt>Source SHA</dt><dd><code>0c584fc0e6446a07a5bdb1462738ffab47dddadb</code></dd></div>
+          <div><dt>Gate root</dt><dd><code>sha256:7587c9bc315f49f88e11152d5387ff13a4fe606ef6ba97be8f70c5995aebf2d6</code></dd></div>
+          <div><dt>Media root</dt><dd><code>sha256:ee95e4c65effd4edea98a4355595fe8c9eb3291f1966cb6e46f6fad6a8caab21</code></dd></div>
+          <div><dt>Passport root</dt><dd><code>sha256:0c44a9618fd4114340ca460a6fd7e3a391ada4c7a540d76b4136c3173373391e</code></dd></div>
+          <div><dt>Buildchain</dt><dd><code>625384b4927222022a2cd0758399afbf9333ccdc</code></dd></div>
+          <div><dt>Renderer</dt><dd><code>ghcr.io/kungfu-systems/build-images/demo-renderer@sha256:cb5e1dec368d21c7d4e8baded99ac75f12f7eff0d19505751888cf974086efa6</code></dd></div>
+          <div><dt>Source expires</dt><dd><time datetime="2026-08-10T02:48:48.000Z">2026-08-10T02:48:48.000Z</time></dd></div>
+          <div><dt>Gate expires</dt><dd><time datetime="2026-08-10T02:51:11.000Z">2026-08-10T02:51:11.000Z</time></dd></div>
+          <div><dt>Media expires</dt><dd><time datetime="2026-08-10T02:52:28.000Z">2026-08-10T02:52:28.000Z</time></dd></div>
+        </dl>
+        <nav class="evidence-links" aria-label="Exact evidence links">
+          <a href="https://github.com/kungfu-systems/kungfu/actions/runs/30230901970/artifacts/8640708681">Exact source artifact</a>
+          <a href="https://github.com/kungfu-systems/kungfu/actions/runs/30230901970/artifacts/8640731842">Passing Gate artifact</a>
+          <a href="https://github.com/kungfu-systems/kungfu/actions/runs/30230901970/artifacts/8640746864">Rendered media artifact</a>
+          <a href="https://github.com/kungfu-systems/kungfu/actions/runs/30230901970">GitHub Actions run</a>
+          <a href="https://github.com/kungfu-systems/kungfu/commit/0c584fc0e6446a07a5bdb1462738ffab47dddadb">Exact source commit</a>
+          <a href="/evidence/auditable-demo/0c44a9618fd4114340ca460a6fd7e3a391ada4c7a540d76b4136c3173373391e/passport.json">Machine-readable Passport</a>
+          <a href="/auditable-demo.json">Public site projection</a>
+        </nav>
+        <p class="retention-note">The original GitHub Artifacts are explicitly retained for 14 days. This site projection copies the verified public media and Passport; it does not rewrite their roots or claim that the originating workflow deployed production.</p>
+      </section>
       <!-- auditable-demo-evidence:end -->
 
     <!-- shared-footer:start -->
-    <footer class="site-footer"></footer>
+    <footer class="site-footer">
+      <nav class="footer-links" aria-label="Footer links">
+        <a href="/services/index.html">Services</a>
+        <a href="/capital/">Capital &amp; Stewardship</a>
+        <a href="/trust/index.html">Trust</a>
+        <a href="/legal/index.html">Legal</a>
+      </nav>
+      <p class="footer-note">Kungfu core software is licensed under the Apache License 2.0.</p>
+      <p class="footer-trademark">Kungfu UNGFU™ is a trademark of Kungfu Origin Technology Limited.</p>
+      <p class="footer-copy">Copyright 2026 Kungfu Origin Technology Limited. All rights reserved.</p>
+    </footer>
+    <script>
+      document.addEventListener("click", (event) => {
+        document.querySelectorAll("details.nav-menu[open]").forEach((menu) => {
+          if (!menu.contains(event.target)) menu.removeAttribute("open");
+        });
+      });
+      document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape") {
+          document.querySelectorAll("details.nav-menu[open]").forEach((menu) => {
+            menu.removeAttribute("open");
+          });
+        }
+      });
+    </script>
     <!-- shared-footer:end -->
   </main>
 </body>

@@ -1,0 +1,41 @@
+{
+  "errors": [],
+  "media": [
+    {
+      "bytes": 313586,
+      "codec": "h264",
+      "durationMs": 18000,
+      "frameRate": "15/1",
+      "height": 720,
+      "name": "demo.mp4",
+      "width": 1280
+    },
+    {
+      "bytes": 319785,
+      "codec": "vp9",
+      "durationMs": 18000,
+      "frameRate": "15/1",
+      "height": 720,
+      "name": "demo.webm",
+      "width": 1280
+    },
+    {
+      "bytes": 233891,
+      "codec": "gif",
+      "durationMs": 18000,
+      "frameRate": "25/2",
+      "height": 720,
+      "name": "demo.gif",
+      "width": 1280
+    },
+    {
+      "bytes": 89313,
+      "codec": "png",
+      "height": 720,
+      "name": "poster.png",
+      "width": 1280
+    }
+  ],
+  "passed": true,
+  "schema": "build-images.demo-media-probe/v1"
+}

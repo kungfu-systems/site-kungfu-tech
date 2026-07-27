@@ -1,0 +1,69 @@
+{
+  "authority": {
+    "claims": [
+      "The exact retained Linux artifact executed its installed kungfu launcher.",
+      "The exact transcript, public projection, and scene passed the Buildchain Gate."
+    ],
+    "evidenceClass": "exact-installed-artifact-agent-brief/v1",
+    "nonClaims": [
+      "cross-run continuity",
+      "provider migration",
+      "macOS execution",
+      "durability",
+      "performance",
+      "FO10"
+    ],
+    "productionDeployment": false,
+    "publication": "github-artifacts-only"
+  },
+  "gate": {
+    "artifact": {
+      "digest": "sha256:f1c4f976f149a473fc1c56a21c9b976ddecff748d591fe7d31d9eb9c33a449e4",
+      "expiresAt": "2026-08-10T02:51:11.000Z",
+      "id": "8640731842",
+      "name": "auditable-demo-gate-0c584fc0e644-7587c9bc315f49f8",
+      "url": "https://github.com/kungfu-systems/kungfu/actions/runs/30230901970/artifacts/8640731842"
+    },
+    "root": "sha256:7587c9bc315f49f88e11152d5387ff13a4fe606ef6ba97be8f70c5995aebf2d6",
+    "status": "passed"
+  },
+  "media": {
+    "artifact": {
+      "digest": "sha256:794bf5a229311de642b3e313ecf92a31e22717239d1d3bdb95fc2058c8adeb40",
+      "expiresAt": "2026-08-10T02:52:28.000Z",
+      "id": "8640746864",
+      "name": "auditable-demo-media-0c584fc0e644-ee95e4c65effd4ed",
+      "url": "https://github.com/kungfu-systems/kungfu/actions/runs/30230901970/artifacts/8640746864"
+    },
+    "root": "sha256:ee95e4c65effd4edea98a4355595fe8c9eb3291f1966cb6e46f6fad6a8caab21",
+    "status": "rendered"
+  },
+  "root": {
+    "algorithm": "sha256",
+    "profile": "sorted-object-json-utf8-lf/v1",
+    "value": "sha256:0c44a9618fd4114340ca460a6fd7e3a391ada4c7a540d76b4136c3173373391e"
+  },
+  "schema": "kungfu.auditable-demo.release-passport/v1",
+  "source": {
+    "artifact": {
+      "digest": "sha256:c7a721a54491d62edc9dcc904da27577e6366266226dc8b5b61d088d34613431",
+      "expiresAt": "2026-08-10T02:48:48.000Z",
+      "id": "8640708681",
+      "name": "kungfu-linux-x64-0c584fc0e6446a07a5bdb1462738ffab47dddadb",
+      "url": "https://github.com/kungfu-systems/kungfu/actions/runs/30230901970/artifacts/8640708681"
+    },
+    "repository": "kungfu-systems/kungfu",
+    "sha": "0c584fc0e6446a07a5bdb1462738ffab47dddadb"
+  },
+  "status": "qualified",
+  "toolchain": {
+    "buildchainSha": "625384b4927222022a2cd0758399afbf9333ccdc",
+    "rendererImage": "ghcr.io/kungfu-systems/build-images/demo-renderer@sha256:cb5e1dec368d21c7d4e8baded99ac75f12f7eff0d19505751888cf974086efa6"
+  },
+  "workflow": {
+    "repository": "kungfu-systems/kungfu",
+    "runAttempt": "1",
+    "runId": "30230901970",
+    "url": "https://github.com/kungfu-systems/kungfu/actions/runs/30230901970"
+  }
+}
