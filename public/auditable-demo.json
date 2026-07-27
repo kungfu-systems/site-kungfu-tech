@@ -1,0 +1,25 @@
+{
+  "buildchainSha": "625384b4927222022a2cd0758399afbf9333ccdc",
+  "claims": [
+    "The exact retained Linux artifact executed its installed kungfu launcher.",
+    "The exact transcript, public projection, and scene passed the Buildchain Gate."
+  ],
+  "evidenceClass": "exact-installed-artifact-agent-brief/v1",
+  "gateRoot": "sha256:7587c9bc315f49f88e11152d5387ff13a4fe606ef6ba97be8f70c5995aebf2d6",
+  "mediaRoot": "sha256:ee95e4c65effd4edea98a4355595fe8c9eb3291f1966cb6e46f6fad6a8caab21",
+  "nonClaims": [
+    "cross-run continuity",
+    "provider migration",
+    "macOS execution",
+    "durability",
+    "performance",
+    "FO10"
+  ],
+  "passportRoot": "sha256:0c44a9618fd4114340ca460a6fd7e3a391ada4c7a540d76b4136c3173373391e",
+  "publicEvidencePath": "/evidence/auditable-demo/0c44a9618fd4114340ca460a6fd7e3a391ada4c7a540d76b4136c3173373391e",
+  "rendererImage": "ghcr.io/kungfu-systems/build-images/demo-renderer@sha256:cb5e1dec368d21c7d4e8baded99ac75f12f7eff0d19505751888cf974086efa6",
+  "schema": "kungfu.site.auditable-demo/v1",
+  "sourceSha": "0c584fc0e6446a07a5bdb1462738ffab47dddadb",
+  "status": "qualified",
+  "workflowUrl": "https://github.com/kungfu-systems/kungfu/actions/runs/30230901970"
+}

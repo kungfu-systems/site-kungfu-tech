@@ -6,9 +6,11 @@ cd "$repo_root"
 
 node --test scripts/import-bootstrap-publication.test.mjs
 node --test scripts/consume-installer-publication-bundle.test.mjs
+node --test scripts/import-auditable-demo.test.mjs
 node scripts/consume-installer-publication-bundle.mjs \
   --source site/installer-publication-source.json \
   --output-root public
+node scripts/import-auditable-demo.mjs --check
 node scripts/check-infra-outputs.mjs
 node scripts/render-shared-layout.mjs --check
 node --check scripts/publish-bootstrap-evidence.mjs
@@ -77,6 +79,8 @@ if grep -qi '<meta[^>]*name="robots"[^>]*noindex' public/404.html; then
 fi
 grep -q 'href="/"' public/404.html
 test -f public/how-tested/continuity/index.html
+test -f public/how-tested/auditable-demo/index.html
+test -f public/auditable-demo.json
 test -f public/agent-builders/index.html
 test -f public/why-kungfu/index.html
 test -f public/assets/site.css
@@ -93,7 +97,7 @@ test -f public/trust/index.html
 test -f public/legal/index.html
 test -f public/install/index.html
 test -f site/public-dogfood-proof.json
-for page in public/index.html public/how-tested/continuity/index.html public/agent-builders/index.html public/why-kungfu/index.html public/about/index.html public/about/bootstrapping/index.html public/about/bootstrapping/evidence/index.html public/capital/index.html public/capital/investor-perspective/index.html public/services/index.html public/trust/index.html public/legal/index.html public/install/index.html; do
+for page in public/index.html public/how-tested/continuity/index.html public/how-tested/auditable-demo/index.html public/agent-builders/index.html public/why-kungfu/index.html public/about/index.html public/about/bootstrapping/index.html public/about/bootstrapping/evidence/index.html public/capital/index.html public/capital/investor-perspective/index.html public/services/index.html public/trust/index.html public/legal/index.html public/install/index.html; do
   grep -q 'href="/assets/site.css"' "$page"
 done
 if grep -RInE '^    \\.(site-header|brand|mark|site-nav|site-footer|nav-menu)\\b' \
@@ -108,6 +112,17 @@ grep -q 'Continuation unsupported' public/index.html
 grep -q 'Continuation oracle passed' public/index.html
 grep -q 'prefers-reduced-motion: reduce' public/index.html
 grep -q 'href="/how-tested/continuity/"' public/index.html
+grep -q 'href="/how-tested/auditable-demo/">Watch the exact artifact proof</a>' public/index.html
+grep -q 'prefers-reduced-motion: reduce' public/how-tested/auditable-demo/index.html
+grep -q 'Watch the artifact explain itself.' public/how-tested/auditable-demo/index.html
+grep -q 'What is not claimed' public/how-tested/auditable-demo/index.html
+grep -q 'Machine-readable Passport' public/how-tested/auditable-demo/index.html
+grep -q 'read the complete transcript' public/how-tested/auditable-demo/index.html
+if grep -q '<video[^>]*autoplay' public/how-tested/auditable-demo/index.html; then
+  echo "error: auditable demo media must never autoplay" >&2
+  exit 1
+fi
+grep -q 'kungfu.site.auditable-demo/v1' public/auditable-demo.json
 grep -q 'Never Guess. Facts Unfold.' public/index.html
 grep -q 'href="/why-kungfu/"' public/index.html
 grep -q 'durable work facts between sessions' public/index.html
@@ -493,6 +508,8 @@ if [ -d dist ]; then
   node scripts/fingerprint-site-assets.mjs --root dist --check
   test -f dist/index.html
   test -f dist/how-tested/continuity/index.html
+  test -f dist/how-tested/auditable-demo/index.html
+  test -f dist/auditable-demo.json
   test -f dist/agent-builders/index.html
   test -f dist/agent-supply-chain/index.html
   test -f dist/agent-supply-chain.json
@@ -520,6 +537,7 @@ if [ -d dist ]; then
   test -f dist/legal/index.html
   grep -q "Your agent shouldn't start over when the chat ends." dist/index.html
   grep -q 'How continuity was tested' dist/how-tested/continuity/index.html
+  grep -q 'Watch the artifact explain itself.' dist/how-tested/auditable-demo/index.html
   grep -q 'Kungfu does not compete for your Hub.' dist/agent-builders/index.html
   grep -q 'The next software user is an Agent.' dist/agent-supply-chain/index.html
   grep -q 'Software distribution is becoming Agent-mediated.' dist/agent-supply-chain/index.html

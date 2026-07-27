@@ -1,0 +1,5 @@
+{
+  "schema": "kungfu.site.auditable-demo-source/v1",
+  "passport": "site/auditable-demo/passport.json",
+  "mediaDirectory": "site/auditable-demo/media"
+}
