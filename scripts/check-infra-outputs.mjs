@@ -135,8 +135,9 @@ for (const activationBinding of [
 }
 for (const governanceBinding of [
   "github-governance-receipt:",
-  "ref: v3",
+  `ref: ${expectedBuildchainShellRef}`,
   "git -C .buildchain/governance-runtime rev-parse HEAD",
+  "governance verifier does not match the exact Buildchain release runtime",
   "KUNGFU_GOVERNANCE_AUDITOR_APP_ID",
   "KUNGFU_GOVERNANCE_AUDITOR_APP_PRIVATE_KEY",
   "scripts/audit-github-governance.mjs",
