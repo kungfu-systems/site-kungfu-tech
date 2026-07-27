@@ -201,8 +201,8 @@ repository does not duplicate the suite or qualification verdict.
 The publication catalog is generated from exact npm artifacts:
 
 - `@kungfu-tech/paper-kungfu-product-white-paper@0.1.0-alpha.10`
-- `@kungfu-tech/paper-kfd-foundation-real-world-agent-work@0.1.0-alpha.7`
-- `@kungfu-tech/paper-observer-declared-timelines@0.1.0-alpha.8`
+- `@kungfu-tech/paper-kfd-foundation-real-world-agent-work@0.1.0-alpha.8`
+- `@kungfu-tech/paper-observer-declared-timelines@0.1.0-alpha.9`
 - `@kungfu-tech/paper-episodes-to-primitives@0.1.0-alpha.2`
 
 The catalog preserves this reader order: White Paper, Foundation Model,
@@ -215,7 +215,7 @@ The product white paper's upstream `site/brand-site.json` bundle owns its
 selected HTML reader content. Every paper's publication manifest owns its title,
 abstract, PDF digest, source commit, canonical route, and evidence links. The
 catalog also renders source-contract facts from `@kungfu-tech/kfd@1.0.0-alpha.47`
-and `@kungfu-tech/buildchain@3.0.1-alpha.2`. This repository owns only site layout,
+and `@kungfu-tech/buildchain@3.0.2-alpha.2`. This repository owns only site layout,
 navigation, responsive presentation, and machine entry rendering.
 
 Generated routes:

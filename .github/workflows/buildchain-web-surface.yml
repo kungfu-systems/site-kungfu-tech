@@ -107,22 +107,22 @@ jobs:
     outputs:
       receipt-json: ${{ steps.receipt.outputs.receipt-json }}
     steps:
-      - name: Checkout floating Buildchain governance verifier
+      - name: Checkout exact Buildchain governance verifier
         uses: actions/checkout@v7.0.0
         with:
           repository: kungfu-systems/buildchain
-          ref: v3
+          ref: 9e904de2c85dbea7c799780ee166510b3336d812
           path: .buildchain/governance-runtime
           persist-credentials: false
 
-      - name: Resolve exact floating v3 verifier
+      - name: Resolve exact Buildchain governance verifier
         id: runtime
         shell: bash
         run: |
           set -euo pipefail
           runtime_sha="$(git -C .buildchain/governance-runtime rev-parse HEAD)"
-          if [[ ! "$runtime_sha" =~ ^[0-9a-f]{40}$ ]]; then
-            echo "::error::floating v3 checkout did not resolve to an exact runtime SHA"
+          if [ "$runtime_sha" != "9e904de2c85dbea7c799780ee166510b3336d812" ]; then
+            echo "::error::governance verifier does not match the exact Buildchain release runtime"
             exit 1
           fi
           echo "sha=$runtime_sha" >> "$GITHUB_OUTPUT"
