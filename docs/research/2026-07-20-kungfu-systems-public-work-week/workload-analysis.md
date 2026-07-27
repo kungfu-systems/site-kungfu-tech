@@ -90,7 +90,7 @@ The visible output groups into ten connected programs:
 4. **KFD and Agent Hub adoption** — Agent Hub and Runtime profiles, activation
    contracts, executable onboarding, first-party qualification, a clean-room
    demo, and standalone reference binaries.
-5. **Buildchain release infrastructure** — exact-source release passports,
+5. **[Buildchain](https://buildchain.libkungfu.dev/) release infrastructure** — exact-source release passports,
    governance receipts, ruleset rollback, cache policy, artifact recovery,
    signed installer publication, cross-repository activation, and v3 stable
    release lines.

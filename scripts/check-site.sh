@@ -224,6 +224,7 @@ grep -q 'One ordinary piece of Work' public/about/bootstrapping/index.html
 grep -q 'When the runtime stays human' public/about/bootstrapping/index.html
 grep -q 'When responsibility is externalized' public/about/bootstrapping/index.html
 grep -q 'site pull request #163' public/about/bootstrapping/index.html
+grep -q 'href="https://buildchain.libkungfu.dev/">Buildchain</a>' public/about/bootstrapping/index.html
 grep -q 'partial bootstrap evidence—not proof that the finished Kungfu Work Runtime already exists.' public/about/bootstrapping/index.html
 grep -q 'href="/about/bootstrapping/evidence/"' public/about/bootstrapping/index.html
 grep -q 'Examine the public work sample and reanalyze it with your Agent' public/about/bootstrapping/index.html
@@ -253,6 +254,7 @@ if grep -q 'docs/concepts/bootstrapping-agent-work.md' public/about/bootstrappin
 fi
 grep -q 'shared-header:start' public/about/bootstrapping/evidence/index.html
 grep -q 'shared-footer:start' public/about/bootstrapping/evidence/index.html
+grep -q 'href="/about/bootstrapping/">← Back to the Bootstrap argument</a>' public/about/bootstrapping/evidence/index.html
 grep -q 'One human organized the work. Agents executed it.' public/about/bootstrapping/evidence/index.html
 grep -q 'First-party declaration' public/about/bootstrapping/evidence/index.html
 grep -q 'Readers are not required to accept that part of the statement.' public/about/bootstrapping/evidence/index.html
@@ -262,6 +264,7 @@ grep -q 'Publicly verifiable' public/about/bootstrapping/evidence/index.html
 grep -q 'First-party declared' public/about/bootstrapping/evidence/index.html
 grep -q 'Not established' public/about/bootstrapping/evidence/index.html
 grep -q '1,026' public/about/bootstrapping/evidence/index.html
+grep -q '<h3><a href="https://buildchain.libkungfu.dev/">Buildchain</a>, release, and distribution</h3>' public/about/bootstrapping/evidence/index.html
 grep -q 'What a conventional organization would usually require' public/about/bootstrapping/evidence/index.html
 grep -q 'We do not assign a person-month total.' public/about/bootstrapping/evidence/index.html
 grep -q 'This collection and its first analysis were also performed by an Agent.' public/about/bootstrapping/evidence/index.html
@@ -269,6 +272,7 @@ grep -q 'href="/about/bootstrapping/evidence/data/manifest.json"' public/about/b
 grep -q 'This is evidence, not proof of the method' public/about/bootstrapping/evidence/index.html
 grep -q 'We welcome independent analysis, comparison, criticism, and replication.' public/about/bootstrapping/evidence/index.html
 assert_before public/about/bootstrapping/evidence/index.html 'Read this with your Agent' 'Three different kinds of claim'
+assert_before public/about/bootstrapping/evidence/index.html '← Back to the Bootstrap argument' 'One human organized the work. Agents executed it.'
 assert_before public/about/bootstrapping/evidence/index.html 'First-party declaration' 'The bounded public sample'
 if grep -Eq '[0-9]+[–-][0-9]+ (senior )?person-months|[0-9]+[–-][0-9]+ calendar months' \
   public/about/bootstrapping/evidence/index.html \
@@ -276,6 +280,8 @@ if grep -Eq '[0-9]+[–-][0-9]+ (senior )?person-months|[0-9]+[–-][0-9]+ calen
   echo "error: bootstrap evidence must compare organizational functions without a person-month estimate" >&2
   exit 1
 fi
+grep -q '\[Buildchain\](https://buildchain.libkungfu.dev/) release infrastructure' \
+  docs/research/2026-07-20-kungfu-systems-public-work-week/workload-analysis.md
 node - <<'NODE'
 const fs = require("fs");
 const root = "docs/research/2026-07-20-kungfu-systems-public-work-week";
