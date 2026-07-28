@@ -446,13 +446,19 @@
       </a>
       <nav class="site-nav" aria-label="Project links">
         <a href="/agent-supply-chain/">Agent Supply Chain</a>
-        <a href="/agent-builders/">Agent Builders</a>
+        <details class="nav-menu">
+          <summary>Agent Builders</summary>
+          <div class="nav-menu-panel">
+          <a href="/agent-builders/">Overview</a>
+          <a href="/agent-builders/hub-starter/">Hub Starter</a>
+          <a href="/agent-hub/">Verify Agent Hub</a>
+          </div>
+        </details>
         <details class="nav-menu">
           <summary>Developers</summary>
           <div class="nav-menu-panel">
           <a href="https://kfd.libkungfu.dev/">KFD Protocol</a>
           <a href="https://libkungfu.dev">Developer Platform</a>
-          <a href="/agent-hub/">Verify Agent Hub</a>
           <a href="https://github.com/kungfu-systems/kungfu">GitHub</a>
           </div>
         </details>
@@ -544,6 +550,7 @@
           <span>libkungfu runs locally</span>
         </div>
         <div class="builder-actions">
+          <a href="/agent-builders/hub-starter/">Run the course Hub Starter</a>
           <a href="/agent-builders/">See the adoption architecture</a>
           <a href="/agent-hub/">Verify Kungfu's Hub capability</a>
           <a href="https://github.com/kungfu-systems/kungfu/tree/7eeb5bd1b45492f4da27eaacbe63eddfd6245176/examples/opencode-kungfu/quickstart">Open the exact reference source</a>
