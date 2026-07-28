@@ -3,6 +3,7 @@
     "public/index.html",
     "public/how-tested/auditable-demo/index.html",
     "public/agent-builders/index.html",
+    "public/agent-builders/hub-starter/index.html",
     "public/why-kungfu/index.html",
     "public/about/index.html",
     "public/about/bootstrapping/index.html",
@@ -27,7 +28,20 @@
     },
     {
       "label": "Agent Builders",
-      "href": "/agent-builders/"
+      "items": [
+        {
+          "label": "Overview",
+          "href": "/agent-builders/"
+        },
+        {
+          "label": "Hub Starter",
+          "href": "/agent-builders/hub-starter/"
+        },
+        {
+          "label": "Verify Agent Hub",
+          "href": "/agent-hub/"
+        }
+      ]
     },
     {
       "label": "Developers",
@@ -39,10 +53,6 @@
         {
           "label": "Developer Platform",
           "href": "https://libkungfu.dev"
-        },
-        {
-          "label": "Verify Agent Hub",
-          "href": "/agent-hub/"
         },
         {
           "label": "GitHub",

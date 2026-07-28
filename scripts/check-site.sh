@@ -82,6 +82,7 @@ test -f public/how-tested/continuity/index.html
 test -f public/how-tested/auditable-demo/index.html
 test -f public/auditable-demo.json
 test -f public/agent-builders/index.html
+test -f public/agent-builders/hub-starter/index.html
 test -f public/why-kungfu/index.html
 test -f public/assets/site.css
 test -f public/.well-known/security.txt
@@ -97,7 +98,7 @@ test -f public/trust/index.html
 test -f public/legal/index.html
 test -f public/install/index.html
 test -f site/public-dogfood-proof.json
-for page in public/index.html public/how-tested/continuity/index.html public/how-tested/auditable-demo/index.html public/agent-builders/index.html public/why-kungfu/index.html public/about/index.html public/about/bootstrapping/index.html public/about/bootstrapping/evidence/index.html public/capital/index.html public/capital/investor-perspective/index.html public/services/index.html public/trust/index.html public/legal/index.html public/install/index.html; do
+for page in public/index.html public/how-tested/continuity/index.html public/how-tested/auditable-demo/index.html public/agent-builders/index.html public/agent-builders/hub-starter/index.html public/why-kungfu/index.html public/about/index.html public/about/bootstrapping/index.html public/about/bootstrapping/evidence/index.html public/capital/index.html public/capital/investor-perspective/index.html public/services/index.html public/trust/index.html public/legal/index.html public/install/index.html; do
   grep -q 'href="/assets/site.css"' "$page"
 done
 if grep -RInE '^    \\.(site-header|brand|mark|site-nav|site-footer|nav-menu)\\b' \
@@ -159,12 +160,14 @@ assert_shared_contains header public/index.html 'href="/whitepaper/"'
 assert_shared_contains header public/index.html 'class="nav-menu"'
 assert_shared_contains header public/index.html 'class="nav-cta" href="/install/">Get Kungfu</a>'
 assert_shared_contains header public/index.html 'href="/agent-builders/"'
+assert_shared_contains header public/index.html 'href="/agent-builders/hub-starter/"'
+assert_shared_contains header public/index.html 'href="/agent-hub/"'
 assert_shared_contains header public/index.html 'href="/agent-supply-chain/"'
 assert_shared_contains header public/index.html 'href="https://kfd.libkungfu.dev/"'
 assert_shared_contains header public/index.html '>Developer Platform</a>'
 assert_shared_contains header public/index.html 'github.com/kungfu-systems/kungfu'
 assert_shared_lacks header public/index.html '>Install CLI</a>'
-assert_before public/index.html '<a href="/agent-builders/">Agent Builders</a>' '<summary>Developers</summary>'
+assert_before public/index.html '<summary>Agent Builders</summary>' '<summary>Developers</summary>'
 assert_before public/index.html '<summary>Developers</summary>' '<a href="/whitepaper/">Papers</a>'
 assert_before public/index.html '<a href="/whitepaper/">Papers</a>' '<a href="/about/index.html">About</a>'
 assert_before public/index.html '<a href="/about/index.html">About</a>' '<a class="nav-cta" href="/install/">Get Kungfu</a>'
@@ -426,6 +429,7 @@ grep -q 'shared-footer:start' public/install/index.html
 grep -q 'shared-header:start' public/agent-builders/index.html
 grep -q 'shared-footer:start' public/agent-builders/index.html
 grep -q 'Build your Hub. Don&rsquo;t rebuild the runtime.' public/agent-builders/index.html
+grep -q 'href="/agent-builders/hub-starter/">Open Hub Starter</a>' public/agent-builders/index.html
 grep -q 'KFD in one sentence' public/agent-builders/index.html
 grep -q 'KFD&mdash;Kung Fu Decisions&mdash;is an open engineering standard' public/agent-builders/index.html
 grep -q 'href="https://kfd.libkungfu.dev/">Understand KFD</a>' public/agent-builders/index.html
@@ -506,6 +510,18 @@ grep -q 'github.com/kungfu-systems/kungfu/pull/1171' public/agent-builders/index
 grep -q 'github.com/kungfu-systems/buildchain/pull/1435' public/agent-builders/index.html
 grep -q 'https://libkungfu.dev/dogfood/' public/agent-builders/index.html
 grep -q 'https://libkungfu.dev/dogfood-evidence.json' public/agent-builders/index.html
+grep -q 'shared-header:start' public/agent-builders/hub-starter/index.html
+grep -q 'shared-footer:start' public/agent-builders/hub-starter/index.html
+grep -q 'See a real Hub before you build your own.' public/agent-builders/hub-starter/index.html
+grep -q 'Apache-2.0 course-business reference' public/agent-builders/hub-starter/index.html
+grep -q 'docker compose -f oci://ghcr.io/kungfu-systems/runtime-images/hub-starter:compose-preview up --wait' public/agent-builders/hub-starter/index.html
+grep -q 'HUB_PORT=9090 docker compose' public/agent-builders/hub-starter/index.html
+grep -q 'PostgreSQL · private network only' public/agent-builders/hub-starter/index.html
+grep -q 'Mock by default' public/agent-builders/hub-starter/index.html
+grep -q 'The product, the model, and the work runtime are separate authorities.' public/agent-builders/hub-starter/index.html
+grep -q 'Ask your Agent to explain the repository first.' public/agent-builders/hub-starter/index.html
+grep -q 'kungfu agent brief' public/agent-builders/hub-starter/index.html
+grep -q 'Not claimed by this alpha' public/agent-builders/hub-starter/index.html
 
 if grep -RIn 'Kungfu v4\\|Developer substrate\\|substrate view\\|developer substrate' public; then
   echo "error: public copy contains internal or uncommon product wording" >&2
@@ -519,6 +535,7 @@ if [ -d dist ]; then
   test -f dist/how-tested/auditable-demo/index.html
   test -f dist/auditable-demo.json
   test -f dist/agent-builders/index.html
+  test -f dist/agent-builders/hub-starter/index.html
   test -f dist/agent-supply-chain/index.html
   test -f dist/agent-supply-chain.json
   test -f dist/agent-hub/index.html

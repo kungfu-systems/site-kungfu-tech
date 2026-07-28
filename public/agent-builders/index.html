@@ -54,6 +54,50 @@
       margin-top: 8px;
     }
 
+    .starter-callout {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 18px 28px;
+      align-items: center;
+      padding: 18px 20px;
+      border: 1px solid var(--fg);
+      border-top: 5px solid #2e9d72;
+      background: var(--surface);
+    }
+
+    .starter-callout-copy {
+      display: grid;
+      gap: 7px;
+    }
+
+    .starter-callout h2,
+    .starter-callout p {
+      margin: 0;
+    }
+
+    .starter-callout h2 {
+      font-size: 24px;
+      line-height: 1.15;
+    }
+
+    .starter-callout p {
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .starter-callout a {
+      display: inline-flex;
+      align-items: center;
+      min-height: 42px;
+      padding: 9px 14px;
+      border: 1px solid var(--accent);
+      background: var(--accent);
+      color: #fff;
+      font-weight: 700;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
     .kfd-primer {
       display: grid;
       grid-template-columns: minmax(0, 1fr) auto;
@@ -1076,6 +1120,8 @@
         grid-template-columns: 1fr;
       }
 
+      .starter-callout { grid-template-columns: 1fr; }
+
       .action-node { min-height: auto; overflow-wrap: anywhere; }
 
       .foundation-node, .hub-boundary, .protocol-link, .invariant-card,
@@ -1107,13 +1153,19 @@
       </a>
       <nav class="site-nav" aria-label="Project links">
         <a href="/agent-supply-chain/">Agent Supply Chain</a>
-        <a href="/agent-builders/">Agent Builders</a>
+        <details class="nav-menu">
+          <summary>Agent Builders</summary>
+          <div class="nav-menu-panel">
+          <a href="/agent-builders/">Overview</a>
+          <a href="/agent-builders/hub-starter/">Hub Starter</a>
+          <a href="/agent-hub/">Verify Agent Hub</a>
+          </div>
+        </details>
         <details class="nav-menu">
           <summary>Developers</summary>
           <div class="nav-menu-panel">
           <a href="https://kfd.libkungfu.dev/">KFD Protocol</a>
           <a href="https://libkungfu.dev">Developer Platform</a>
-          <a href="/agent-hub/">Verify Agent Hub</a>
           <a href="https://github.com/kungfu-systems/kungfu">GitHub</a>
           </div>
         </details>
@@ -1129,6 +1181,14 @@
         <p class="eyebrow">For Agent Builders</p>
         <h1 id="builder-title">Build your Hub. Don&rsquo;t rebuild the runtime.</h1>
         <p class="lead">Our ambition is deliberately narrow: make KFD the standard interoperability protocol and libkungfu the local runtime. You build and own the Hub.</p>
+        <aside class="starter-callout" aria-labelledby="starter-callout-heading">
+          <div class="starter-callout-copy">
+            <p class="eyebrow">Runnable first step</p>
+            <h2 id="starter-callout-heading">See the boundary in a real course business Hub.</h2>
+            <p>Start an Apache-2.0 reference with accounts, PostgreSQL, selectable AI, and visible Kungfu work control in one Docker Compose command.</p>
+          </div>
+          <a href="/agent-builders/hub-starter/">Open Hub Starter</a>
+        </aside>
         <aside class="kfd-primer" aria-labelledby="kfd-primer-heading">
           <div class="kfd-primer-copy">
             <h2 id="kfd-primer-heading">KFD in one sentence</h2>

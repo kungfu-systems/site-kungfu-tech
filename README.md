@@ -157,9 +157,16 @@ control of the public protocol.
 
 ## Agent Builders
 
-The `/agent-builders/` route is a primary path from the homepage header and
-hero. The homepage keeps the continuity-first message concise and leaves the
-adoption architecture to that dedicated route. The Builder route first gives
+`Agent Builders` is a primary grouped path in the site header:
+
+- `/agent-builders/` explains the adoption architecture and ownership boundary.
+- `/agent-builders/hub-starter/` gives Builders a runnable, Apache-2.0 course
+  business reference with a one-command OCI Compose start.
+- `/agent-hub/` retains the installed Kungfu capability proof and its
+  machine-readable `/agent-hub.json` companion.
+
+The homepage keeps the continuity-first message concise and routes practical
+exploration through the Hub Starter page. The Builder overview first gives
 KFD a one-sentence, site-owned reader definition and links the canonical KFD
 overview and KFD-3 implementation guidance. It then establishes the adoption
 decision before asking readers to decode the architecture: a Hub still works

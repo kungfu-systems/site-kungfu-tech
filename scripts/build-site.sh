@@ -29,6 +29,7 @@ test -f dist/how-tested/continuity/index.html
 test -f dist/how-tested/auditable-demo/index.html
 test -f dist/auditable-demo.json
 test -f dist/agent-builders/index.html
+test -f dist/agent-builders/hub-starter/index.html
 test -f dist/agent-supply-chain/index.html
 test -f dist/agent-supply-chain.json
 test -f dist/agent-hub/index.html
