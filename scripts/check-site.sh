@@ -276,6 +276,8 @@ grep -q 'This collection and its first analysis were also performed by an Agent.
 grep -q 'href="/about/bootstrapping/evidence/data/manifest.json"' public/about/bootstrapping/evidence/index.html
 grep -q 'This is evidence, not proof of the method' public/about/bootstrapping/evidence/index.html
 grep -q 'We welcome independent analysis, comparison, criticism, and replication.' public/about/bootstrapping/evidence/index.html
+grep -q 'href="https://libkungfu.dev/dogfood/"' public/about/bootstrapping/evidence/index.html
+grep -q 'That record does not establish one-human bootstrap causality.' public/about/bootstrapping/evidence/index.html
 assert_before public/about/bootstrapping/evidence/index.html 'Read this with your Agent' 'Three different kinds of claim'
 assert_before public/about/bootstrapping/evidence/index.html '← Back to the Bootstrap argument' 'One human organized the work. Agents executed it.'
 assert_before public/about/bootstrapping/evidence/index.html 'First-party declaration' 'The bounded public sample'
@@ -510,6 +512,8 @@ grep -q 'github.com/kungfu-systems/kungfu/pull/1171' public/agent-builders/index
 grep -q 'github.com/kungfu-systems/buildchain/pull/1435' public/agent-builders/index.html
 grep -q 'https://libkungfu.dev/dogfood/' public/agent-builders/index.html
 grep -q 'https://libkungfu.dev/dogfood-evidence.json' public/agent-builders/index.html
+grep -q 'id="dogfood-bootstrap-link" href="/about/bootstrapping/evidence/"' public/agent-builders/index.html
+grep -q 'Read the bounded bootstrap interpretation' public/agent-builders/index.html
 grep -q 'shared-header:start' public/agent-builders/hub-starter/index.html
 grep -q 'shared-footer:start' public/agent-builders/hub-starter/index.html
 grep -q 'See a real Hub before you build your own.' public/agent-builders/hub-starter/index.html
@@ -624,6 +628,8 @@ if [ -d dist ]; then
   grep -q 'One human organized the work. Agents executed it.' dist/about/bootstrapping/evidence/index.html
   grep -q 'kungfu.bootstrap-public-work-evidence/v1' dist/about/bootstrapping/evidence/data/manifest.json
   grep -q '"featurePrefixedPullRequests": 200' dist/about/bootstrapping/evidence/data/manifest.json
+  grep -q '"relationship": "maintained-evidence-chain"' dist/about/bootstrapping/evidence/data/manifest.json
+  grep -q '"claimBoundary": "The rolling dogfood record does not establish one-human bootstrap causality."' dist/about/bootstrapping/evidence/data/manifest.json
   grep -q 'How an open protocol can create commercial value.' dist/capital/investor-perspective/index.html
   grep -q 'Kungfu Origin Technology Limited is incorporated in Hong Kong.' dist/capital/investor-perspective/index.html
   grep -q 'Buildchain release passport' dist/trust/index.html
