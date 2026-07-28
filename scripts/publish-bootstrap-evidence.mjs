@@ -117,6 +117,14 @@ const manifest = {
     invitation:
       "Reproduce the totals, choose different classifications, compare the visible functions with your own organization, and publish independent findings.",
   },
+  relatedEvidence: {
+    label: "Rolling public dogfood record",
+    humanPage: "https://libkungfu.dev/dogfood/",
+    machineEvidence: "https://libkungfu.dev/dogfood-evidence.json",
+    relationship: "maintained-evidence-chain",
+    claimBoundary:
+      "The rolling dogfood record does not establish one-human bootstrap causality.",
+  },
   files,
 };
 

@@ -18,6 +18,12 @@
     "machineEvidence": "https://libkungfu.dev/dogfood-evidence.json",
     "immutablePattern": "https://libkungfu.dev/dogfood-evidence/snapshots/{snapshotId}.json"
   },
+  "relatedInterpretation": {
+    "label": "A Public Week of Agent-Mediated Work",
+    "url": "https://kungfu.tech/about/bootstrapping/evidence/",
+    "relationship": "bounded-first-party-interpretation",
+    "claimBoundary": "This interpretation is not additional qualification evidence."
+  },
   "boundaries": [
     "pull-request-not-feature",
     "author-account-not-agent-actor",

@@ -16,6 +16,12 @@ assert.deepEqual(proof.boundaries, [
   "author-account-not-agent-actor",
   "review-search-not-approval",
 ]);
+assert.deepEqual(proof.relatedInterpretation, {
+  label: "A Public Week of Agent-Mediated Work",
+  url: "https://kungfu.tech/about/bootstrapping/evidence/",
+  relationship: "bounded-first-party-interpretation",
+  claimBoundary: "This interpretation is not additional qualification evidence.",
+});
 
 for (const bridgeContract of [
   'data-src="https://libkungfu.dev/dogfood/?projection=kungfu-tech"',
@@ -46,5 +52,9 @@ for (const requiredText of [
 for (const url of [proof.upstream.humanPage, proof.upstream.machineEvidence]) {
   assert.ok(page.includes(url), `missing dogfood proof URL: ${url}`);
 }
+assert.ok(
+  page.includes('id="dogfood-bootstrap-link" href="/about/bootstrapping/evidence/"'),
+  "missing bounded bootstrap interpretation link",
+);
 
 console.log("public dogfood proof valid: upstream append-only history projection");
