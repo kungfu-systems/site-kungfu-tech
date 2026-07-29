@@ -20,6 +20,9 @@ importers:
       '@kungfu-tech/paper-kfd-foundation-real-world-agent-work':
         specifier: 0.1.0-alpha.8
         version: 0.1.0-alpha.8
+      '@kungfu-tech/paper-kfd-machine-life-roadmap':
+        specifier: 0.1.0-alpha.1
+        version: 0.1.0-alpha.1
       '@kungfu-tech/paper-kungfu-product-white-paper':
         specifier: 0.1.0-alpha.10
         version: 0.1.0-alpha.10
@@ -46,6 +49,9 @@ packages:
 
   '@kungfu-tech/paper-kfd-foundation-real-world-agent-work@0.1.0-alpha.8':
     resolution: {integrity: sha512-2eLq7poJ/Zb0l6OJhIwx2iG5GbPz7CD6dW5aKlPwQn/9tEjQpd06+K+NZIwrhiBlqj+EjF36PPgy6+6UldSs8g==}
+
+  '@kungfu-tech/paper-kfd-machine-life-roadmap@0.1.0-alpha.1':
+    resolution: {integrity: sha512-75lwk/2nIHN31R9ka7W4ngCTMrAm5Gu2nRNITUMALkNWrlemT3dyLklmUDZZvDJMuxMuEj462BUm4YUfd17qZQ==}
 
   '@kungfu-tech/paper-kungfu-product-white-paper@0.1.0-alpha.10':
     resolution: {integrity: sha512-E72T/WnVn9tLCHGdJVsORZzvwS281hUcWDmr3kIOcQQ0D/SK8Ktf8GlGv/Ov43dy9VtKlqMNm8BgO/P1zCQkMQ==}
@@ -93,6 +99,8 @@ snapshots:
   '@kungfu-tech/paper-episodes-to-primitives@0.1.0-alpha.2': {}
 
   '@kungfu-tech/paper-kfd-foundation-real-world-agent-work@0.1.0-alpha.8': {}
+
+  '@kungfu-tech/paper-kfd-machine-life-roadmap@0.1.0-alpha.1': {}
 
   '@kungfu-tech/paper-kungfu-product-white-paper@0.1.0-alpha.10': {}
 

@@ -10,6 +10,8 @@ import {
   KFD_VERSION,
   loadPublicationCatalog,
   loadWhitepaperSource,
+  MACHINE_LIFE_PACKAGE,
+  MACHINE_LIFE_VERSION,
   PAPER_RELEASES,
   sha256File,
   WHITEPAPER_PACKAGE,
@@ -82,6 +84,7 @@ const expectedCatalogManifest = buildPublicationCatalogManifest(catalog);
 const pdfPath = path.join(distRoot, "whitepaper", "kungfu-white-paper.pdf");
 const expectedDisplayOrder = [
   WHITEPAPER_PACKAGE,
+  MACHINE_LIFE_PACKAGE,
   "@kungfu-tech/paper-kfd-foundation-real-world-agent-work",
   "@kungfu-tech/paper-observer-declared-timelines",
   "@kungfu-tech/paper-episodes-to-primitives",
@@ -95,7 +98,7 @@ assert(sha256File(pdfPath) === source.pdfArtifact.sha256, "generated white paper
 assert(fs.statSync(pdfPath).size === source.pdfArtifact.bytes, "generated white paper PDF byte count mismatch");
 assert(
   catalog.papers.map((paper) => paper.packageInfo.name).join(",") === expectedDisplayOrder.join(","),
-  "publication display order must be White Paper, Foundation Model, Observer, Episodes",
+  "publication catalog order must be White Paper, Machine Life, Foundation Model, Observer, Episodes",
 );
 
 for (const [name, html] of [["white paper index", indexHtml], ["white paper reader", readerHtml]]) {
@@ -109,25 +112,26 @@ for (const [name, html] of [["white paper index", indexHtml], ["white paper read
 
 assert(indexHtml.includes(source.bundle.hero.title), "white paper index must render the upstream title");
 assert(indexHtml.includes(WHITEPAPER_VERSION), "white paper index must render the upstream version");
-assert(indexHtml.includes("Start with the White Paper. Continue into the research."), "publication index must explain the White Paper and research hierarchy");
-assert(indexHtml.includes('class="paper-listing featured-whitepaper"'), "publication index must visually distinguish the White Paper card");
-assert(indexHtml.includes('class="paper-type-badge whitepaper">White Paper</p>'), "White Paper card must carry an explicit type label");
-assert(indexHtml.includes('class="paper-type-badge">Research Paper</p>'), "research cards must carry an explicit type label");
+assert(indexHtml.includes("Two papers frame Kungfu."), "publication index must lead with the now-and-future frame");
+assert(indexHtml.includes('data-paper-moment="now" data-paper-package="@kungfu-tech/paper-kungfu-product-white-paper"'), "publication index must frame the White Paper as now");
+assert(indexHtml.includes('data-paper-moment="future" data-paper-package="@kungfu-tech/paper-kfd-machine-life-roadmap"'), "publication index must frame Machine Life as future");
+assert(indexHtml.includes("Now · White Paper"), "White Paper card must carry the now label");
+assert(indexHtml.includes("Future · Machine Life"), "Machine Life card must carry the future label");
 assert(indexHtml.includes(">Read the White Paper</a>"), "White Paper card must use a distinct primary action");
-const displayPositions = expectedDisplayOrder.map((packageName) => indexHtml.indexOf(`<code>${packageName}</code>`));
-assert(displayPositions.every((position) => position >= 0), "publication index must render every ordered source package");
-assert(displayPositions.every((position, index) => index === 0 || displayPositions[index - 1] < position), "publication index card order must be White Paper, Foundation Model, Observer, Episodes");
+assert(indexHtml.includes(">Read Machine Life</a>"), "Machine Life card must use a distinct primary action");
+assert(indexHtml.includes('href="https://papers.libkungfu.dev/"'), "publication index must route deeper research to papers.libkungfu.dev");
+assert(!indexHtml.includes('class="paper-source-catalog"'), "publication index must not expose source-contract cards on the main human page");
+const supportingPapers = catalog.papers.filter((paper) => ![WHITEPAPER_PACKAGE, MACHINE_LIFE_PACKAGE].includes(paper.packageInfo.name));
+for (const paper of supportingPapers) {
+  assert(!indexHtml.includes(paper.title), `main publication page must defer ${paper.packageInfo.name} to papers.libkungfu.dev`);
+}
 for (const paper of catalog.papers) {
-  assert(indexHtml.includes(paper.title), `paper index must render ${paper.packageInfo.name} title`);
-  assert(indexHtml.includes(paper.abstract), `paper index must render ${paper.packageInfo.name} abstract`);
-  assert(indexHtml.includes(paper.packageInfo.version), `paper index must render ${paper.packageInfo.name} version`);
   assert(llms.includes(`${paper.packageInfo.name}@${paper.packageInfo.version}`), `llms.txt must identify ${paper.packageInfo.name}`);
   assert(llms.includes(paper.pdfArtifact.sha256), `llms.txt must expose ${paper.packageInfo.name} PDF digest`);
 }
-assert(indexHtml.includes(catalog.kfd.title), "paper index must render KFD package facts");
-assert(indexHtml.includes(catalog.buildchain.title), "paper index must render Buildchain package facts");
-assert(indexHtml.includes(`${KFD_PACKAGE}`) && indexHtml.includes(KFD_VERSION), "paper index must identify the KFD source package");
-assert(indexHtml.includes(`${BUILDCHAIN_PACKAGE}`) && indexHtml.includes(BUILDCHAIN_VERSION), "paper index must identify the Buildchain source package");
+assert(llms.includes(`${MACHINE_LIFE_PACKAGE}@${MACHINE_LIFE_VERSION}`), "llms.txt must identify the exact Machine Life source package");
+assert(llms.includes(`${KFD_PACKAGE}@${KFD_VERSION}`), "llms.txt must identify the KFD source package");
+assert(llms.includes(`${BUILDCHAIN_PACKAGE}@${BUILDCHAIN_VERSION}`), "llms.txt must identify the Buildchain source package");
 assert(readerHtml.includes(source.bundle.hero.lead), "white paper reader must render the upstream lead");
 assert(readerHtml.includes(`data="${source.routes.pdf}#page=1&amp;view=FitH"`), "white paper reader must preview the package PDF");
 assert(!readerHtml.includes("KFD-1 |"), "structured KFD principles must not render as raw pipe-separated text");
