@@ -104,7 +104,9 @@ assert(
 for (const [name, html] of [["white paper index", indexHtml], ["white paper reader", readerHtml]]) {
   assert(html.includes("shared-header:start"), `${name} must use the shared header`);
   assert(html.includes("shared-footer:start"), `${name} must use the shared footer`);
-  assert(html.includes("/assets/whitepaper.css"), `${name} must load the white paper stylesheet`);
+  const stylesheetHref = html.match(/\/assets\/whitepaper\.[0-9a-f]{12}\.css/)?.[0];
+  assert(stylesheetHref, `${name} must load the fingerprinted white paper stylesheet`);
+  assert(fs.existsSync(path.join(distRoot, stylesheetHref.slice(1))), `${name} white paper stylesheet must resolve`);
   assert(!/<a[^>]+href="https:\/\/kungfu\.tech\/whitepaper/i.test(html), `${name} must keep same-site navigation in the active deployment`);
   assert(!/[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}/.test(html), `${name} must not expose an email address`);
   assertLocalLinksResolve(html, name);

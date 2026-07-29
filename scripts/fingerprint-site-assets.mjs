@@ -13,13 +13,20 @@ if (rootIndex >= 0 && !args[rootIndex + 1]) {
 }
 
 const assetDirectory = path.join(outputRoot, "assets");
-const sourcePath = path.join(assetDirectory, "site.css");
-const sourceBytes = fs.readFileSync(sourcePath);
-const fingerprint = crypto.createHash("sha256").update(sourceBytes).digest("hex").slice(0, 12);
-const fingerprintedName = `site.${fingerprint}.css`;
-const fingerprintedPath = path.join(assetDirectory, fingerprintedName);
-const expectedHref = `/assets/${fingerprintedName}`;
-const stylesheetPattern = /href="\/assets\/site(?:\.[0-9a-f]{12})?\.css"/g;
+const stylesheets = ["site", "whitepaper"].map((name) => {
+  const sourcePath = path.join(assetDirectory, `${name}.css`);
+  const sourceBytes = fs.readFileSync(sourcePath);
+  const fingerprint = crypto.createHash("sha256").update(sourceBytes).digest("hex").slice(0, 12);
+  const fingerprintedName = `${name}.${fingerprint}.css`;
+  return {
+    name,
+    sourcePath,
+    sourceBytes,
+    fingerprintedPath: path.join(assetDirectory, fingerprintedName),
+    expectedHref: `/assets/${fingerprintedName}`,
+    pattern: new RegExp(`href="/assets/${name}(?:\\.[0-9a-f]{12})?\\.css"`, "g"),
+  };
+});
 
 function listHtmlFiles(directory) {
   const files = [];
@@ -35,38 +42,40 @@ function listHtmlFiles(directory) {
 }
 
 const htmlFiles = listHtmlFiles(outputRoot);
-let linkedPages = 0;
+for (const stylesheet of stylesheets) {
+  let linkedPages = 0;
 
-if (checkOnly) {
-  if (!fs.existsSync(fingerprintedPath)) {
-    throw new Error(`missing fingerprinted stylesheet: ${fingerprintedPath}`);
-  }
-  if (!sourceBytes.equals(fs.readFileSync(fingerprintedPath))) {
-    throw new Error(`fingerprinted stylesheet bytes drifted: ${fingerprintedPath}`);
-  }
+  if (checkOnly) {
+    if (!fs.existsSync(stylesheet.fingerprintedPath)) {
+      throw new Error(`missing fingerprinted stylesheet: ${stylesheet.fingerprintedPath}`);
+    }
+    if (!stylesheet.sourceBytes.equals(fs.readFileSync(stylesheet.fingerprintedPath))) {
+      throw new Error(`fingerprinted stylesheet bytes drifted: ${stylesheet.fingerprintedPath}`);
+    }
 
-  for (const htmlPath of htmlFiles) {
-    const html = fs.readFileSync(htmlPath, "utf8");
-    const links = html.match(stylesheetPattern) ?? [];
-    linkedPages += links.length;
-    if (links.some((link) => link !== `href="${expectedHref}"`)) {
-      throw new Error(`stale shared stylesheet reference: ${htmlPath}`);
+    for (const htmlPath of htmlFiles) {
+      const html = fs.readFileSync(htmlPath, "utf8");
+      const links = html.match(stylesheet.pattern) ?? [];
+      linkedPages += links.length;
+      if (links.some((link) => link !== `href="${stylesheet.expectedHref}"`)) {
+        throw new Error(`stale ${stylesheet.name} stylesheet reference: ${htmlPath}`);
+      }
+    }
+  } else {
+    fs.copyFileSync(stylesheet.sourcePath, stylesheet.fingerprintedPath);
+    for (const htmlPath of htmlFiles) {
+      const before = fs.readFileSync(htmlPath, "utf8");
+      const links = before.match(stylesheet.pattern) ?? [];
+      linkedPages += links.length;
+      if (links.length === 0) continue;
+      const after = before.replace(stylesheet.pattern, `href="${stylesheet.expectedHref}"`);
+      fs.writeFileSync(htmlPath, after);
     }
   }
-} else {
-  fs.copyFileSync(sourcePath, fingerprintedPath);
-  for (const htmlPath of htmlFiles) {
-    const before = fs.readFileSync(htmlPath, "utf8");
-    const links = before.match(stylesheetPattern) ?? [];
-    linkedPages += links.length;
-    if (links.length === 0) continue;
-    const after = before.replace(stylesheetPattern, `href="${expectedHref}"`);
-    fs.writeFileSync(htmlPath, after);
+
+  if (linkedPages === 0) {
+    throw new Error(`no HTML pages reference the ${stylesheet.name} stylesheet under ${outputRoot}`);
   }
-}
 
-if (linkedPages === 0) {
-  throw new Error(`no HTML pages reference the shared stylesheet under ${outputRoot}`);
+  console.log(`${checkOnly ? "verified" : "fingerprinted"} ${stylesheet.name} CSS: ${stylesheet.expectedHref} (${linkedPages} links)`);
 }
-
-console.log(`${checkOnly ? "verified" : "fingerprinted"} shared CSS: ${expectedHref} (${linkedPages} links)`);
