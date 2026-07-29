@@ -522,6 +522,11 @@ grep -q 'docker compose -f oci://ghcr.io/kungfu-systems/runtime-images/hub-start
 grep -q 'HUB_PORT=9090 docker compose' public/agent-builders/hub-starter/index.html
 grep -q 'PostgreSQL · private network only' public/agent-builders/hub-starter/index.html
 grep -q 'Mock by default' public/agent-builders/hub-starter/index.html
+grep -q 'Update the image without losing your courses.' public/agent-builders/hub-starter/index.html
+grep -q 'up --pull always --wait' public/agent-builders/hub-starter/index.html
+grep -q 'compose-v&lt;VERSION&gt;' public/agent-builders/hub-starter/index.html
+grep -q 'do not run <code>docker compose down -v</code>' public/agent-builders/hub-starter/index.html
+grep -q 'docs/UPGRADING.md' public/agent-builders/hub-starter/index.html
 grep -q 'The product, the model, and the work runtime are separate authorities.' public/agent-builders/hub-starter/index.html
 grep -q 'Ask your Agent to explain the repository first.' public/agent-builders/hub-starter/index.html
 grep -q 'kungfu agent brief' public/agent-builders/hub-starter/index.html

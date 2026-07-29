@@ -161,7 +161,8 @@ control of the public protocol.
 
 - `/agent-builders/` explains the adoption architecture and ownership boundary.
 - `/agent-builders/hub-starter/` gives Builders a runnable, Apache-2.0 course
-  business reference with a one-command OCI Compose start.
+  business reference with a one-command OCI Compose start, an in-place image
+  refresh path, and exact-version rollback guidance.
 - `/agent-hub/` retains the installed Kungfu capability proof and its
   machine-readable `/agent-hub.json` companion.
 
