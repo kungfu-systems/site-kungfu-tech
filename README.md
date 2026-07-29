@@ -209,15 +209,17 @@ repository does not duplicate the suite or qualification verdict.
 The publication catalog is generated from exact npm artifacts:
 
 - `@kungfu-tech/paper-kungfu-product-white-paper@0.1.0-alpha.10`
+- `@kungfu-tech/paper-kfd-machine-life-roadmap@0.1.0-alpha.1`
 - `@kungfu-tech/paper-kfd-foundation-real-world-agent-work@0.1.0-alpha.8`
 - `@kungfu-tech/paper-observer-declared-timelines@0.1.0-alpha.9`
 - `@kungfu-tech/paper-episodes-to-primitives@0.1.0-alpha.2`
 
-The catalog preserves this reader order: White Paper, Foundation Model,
-Observer, then Episodes. The White Paper is the product-level thesis and uses
-an explicit label, distinct card treatment, and dedicated primary action; the
-other entries are labeled Research Paper so the catalog cannot be mistaken for
-four equivalent academic papers.
+The human page presents only the two defining papers: the White Paper as
+Kungfu now, and Machine Life as Kungfu's future direction. They use distinct
+but paired card treatments and route deeper research to
+`https://papers.libkungfu.dev/`. The machine catalog and agent entrypoint retain
+the complete package-backed paper set so existing consumers do not lose exact
+publication facts.
 
 The product white paper's upstream `site/brand-site.json` bundle owns its
 selected HTML reader content. Every paper's publication manifest owns its title,
@@ -239,8 +241,8 @@ Generated routes:
 - `/llms.txt`
 
 The product white paper keeps its `kungfu.tech` reader on the active preview,
-staging, or production origin. Research papers retain their canonical
-`papers.libkungfu.dev` readers and evidence paths.
+staging, or production origin. Machine Life and the supporting research papers
+retain their canonical `papers.libkungfu.dev` readers and evidence paths.
 
 ## Buildchain
 

@@ -8,6 +8,8 @@ const require = createRequire(import.meta.url);
 
 export const WHITEPAPER_PACKAGE = "@kungfu-tech/paper-kungfu-product-white-paper";
 export const WHITEPAPER_VERSION = "0.1.0-alpha.10";
+export const MACHINE_LIFE_PACKAGE = "@kungfu-tech/paper-kfd-machine-life-roadmap";
+export const MACHINE_LIFE_VERSION = "0.1.0-alpha.1";
 export const KFD_PACKAGE = "@kungfu-tech/kfd";
 export const KFD_VERSION = "1.0.0-alpha.47";
 export const BUILDCHAIN_PACKAGE = "@kungfu-tech/buildchain";
@@ -22,6 +24,11 @@ export const PAPER_RELEASES = [
     version: WHITEPAPER_VERSION,
     slug: "kungfu-white-paper",
     localReader: true,
+  },
+  {
+    package: MACHINE_LIFE_PACKAGE,
+    version: MACHINE_LIFE_VERSION,
+    slug: "kfd-machine-life-roadmap",
   },
   {
     package: "@kungfu-tech/paper-kfd-foundation-real-world-agent-work",

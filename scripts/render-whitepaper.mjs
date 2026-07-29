@@ -14,6 +14,7 @@ import {
   buildWhitepaperManifest,
   loadPublicationCatalog,
   loadWhitepaperSource,
+  MACHINE_LIFE_PACKAGE,
   siteHref,
   WHITEPAPER_PACKAGE,
   WHITEPAPER_ORIGIN,
@@ -158,31 +159,45 @@ ${renderFooter(layout)}
 }
 
 function renderIndex() {
-  const paperListings = catalog.papers.map((paper) => {
-    const isWhitePaper = paper.packageInfo.name === WHITEPAPER_PACKAGE;
-    const typeLabel = isWhitePaper ? "White Paper" : "Research Paper";
-    return `      <article class="paper-listing${isWhitePaper ? " featured-whitepaper" : " research-paper"}">
-        <div class="paper-listing-copy">
-          <p class="paper-type-badge${isWhitePaper ? " whitepaper" : ""}">${typeLabel}</p>
-          <p class="paper-section-role">${isWhitePaper ? "Product thesis" : "Research publication"} / ${escapeHtml(paper.packageInfo.version)}</p>
+  const featuredFrames = [
+    {
+      packageName: WHITEPAPER_PACKAGE,
+      moment: "now",
+      label: "Now · White Paper",
+      orientation: "What Kungfu is today",
+      action: "Read the White Paper",
+    },
+    {
+      packageName: MACHINE_LIFE_PACKAGE,
+      moment: "future",
+      label: "Future · Machine Life",
+      orientation: "Where this architecture can lead",
+      action: "Read Machine Life",
+    },
+  ];
+  const featuredPapers = featuredFrames.map((frame) => {
+    const paper = catalog.papers.find((entry) => entry.packageInfo.name === frame.packageName);
+    if (!paper) throw new Error(`featured paper is missing from the catalog: ${frame.packageName}`);
+    return { paper, frame };
+  });
+  const paperListings = featuredPapers.map(({ paper, frame }, index) => `      <article class="paper-anchor-card paper-anchor-${escapeAttr(frame.moment)}" data-paper-moment="${escapeAttr(frame.moment)}" data-paper-package="${escapeAttr(paper.packageInfo.name)}">
+        <header class="paper-anchor-heading">
+          <span class="paper-anchor-number">0${index + 1}</span>
+          <div>
+            <p class="paper-type-badge">${escapeHtml(frame.label)}</p>
+            <p class="paper-anchor-orientation">${escapeHtml(frame.orientation)}</p>
+          </div>
+        </header>
+        <div class="paper-anchor-copy">
+          <p class="paper-section-role">${escapeHtml(paper.packageInfo.version)}</p>
           <h2><a href="${escapeAttr(paper.routes.reader)}">${escapeHtml(paper.title)}</a></h2>
           <p>${escapeHtml(paper.abstract)}</p>
         </div>
-        <dl class="paper-listing-facts">
-          <div><dt>Source</dt><dd><code>${escapeHtml(paper.packageInfo.name)}</code></dd></div>
-          <div><dt>Version</dt><dd><code>${escapeHtml(paper.packageInfo.version)}</code></dd></div>
-          <div><dt>PDF SHA256</dt><dd><code>${escapeHtml(paper.pdfArtifact.sha256.slice(0, 16))}&hellip;</code></dd></div>
-        </dl>
         <div class="paper-actions">
-          <a class="paper-button primary" href="${escapeAttr(paper.routes.reader)}">${isWhitePaper ? "Read the White Paper" : "Read paper"}</a>
+          <a class="paper-button primary" href="${escapeAttr(paper.routes.reader)}">${escapeHtml(frame.action)}</a>
           <a class="paper-button" href="${escapeAttr(paper.routes.pdf)}">Open PDF</a>
-          <a class="paper-button" href="${escapeAttr(paper.routes.evidence)}">Inspect evidence</a>
         </div>
-      </article>`;
-  }).join("\n");
-  const kfdCommitments = catalog.kfd.commitments
-    .map((commitment) => `<li><strong>${escapeHtml(commitment.id)}</strong> ${escapeHtml(commitment.text)}</li>`)
-    .join("");
+      </article>`).join("\n");
   return `<!doctype html>
 <html lang="en">
 <head>
@@ -197,35 +212,22 @@ ${head({
   <main class="whitepaper-page whitepaper-index">
 ${sharedHeader()}
     <section class="paper-index-hero" aria-labelledby="whitepaper-index-title">
-      <p class="paper-eyebrow">Kungfu publication library</p>
-      <h1 id="whitepaper-index-title">Start with the White Paper. Continue into the research.</h1>
-      <p>The White Paper presents the product thesis. The Foundation Model, Observer, and Episodes papers develop specific systems arguments, each with an exact package, PDF, source revision, and Buildchain evidence path.</p>
+      <p class="paper-eyebrow">The defining papers</p>
+      <h1 id="whitepaper-index-title">Two papers frame Kungfu.</h1>
+      <p>The White Paper explains what Kungfu is now. Machine Life explores the future this architecture makes possible.</p>
     </section>
 
-    <section class="paper-catalog" aria-label="Published white papers">
+    <section class="paper-anchor-grid" aria-label="Kungfu now and future">
 ${paperListings}
     </section>
 
-    <section class="paper-source-catalog" aria-labelledby="paper-source-heading">
-      <div class="paper-source-heading">
-        <p class="paper-eyebrow">Upstream contracts</p>
-        <h2 id="paper-source-heading">Generated from KFD and Buildchain facts.</h2>
-        <p>The catalog is built from exact package-owned site bundles, not a parallel hand-maintained version ledger.</p>
+    <section class="paper-library-bridge" aria-labelledby="paper-library-heading">
+      <div>
+        <p class="paper-eyebrow">More research</p>
+        <h2 id="paper-library-heading">The complete publication library lives on papers.libkungfu.dev.</h2>
+        <p>Continue into foundations, observer models, working primitives, publication versions, and immutable evidence when you need the deeper technical record.</p>
       </div>
-      <div class="paper-source-grid">
-        <article class="paper-source-card">
-          <p class="paper-section-role">${escapeHtml(catalog.kfd.packageInfo.name)} / ${escapeHtml(catalog.kfd.packageInfo.version)}</p>
-          <h3><a href="${escapeAttr(catalog.kfd.url)}">${escapeHtml(catalog.kfd.title)}</a></h3>
-          <p>${escapeHtml(catalog.kfd.summary)}</p>
-          <ul>${kfdCommitments}</ul>
-        </article>
-        <article class="paper-source-card">
-          <p class="paper-section-role">${escapeHtml(catalog.buildchain.packageInfo.name)} / ${escapeHtml(catalog.buildchain.packageInfo.version)}</p>
-          <h3><a href="${escapeAttr(catalog.buildchain.url)}">${escapeHtml(catalog.buildchain.title)}</a></h3>
-          <p>${escapeHtml(catalog.buildchain.summary)}</p>
-          <p><a href="${escapeAttr(catalog.buildchain.url)}">Inspect the release-passport system</a></p>
-        </article>
-      </div>
+      <a class="paper-button primary" href="https://papers.libkungfu.dev/">Explore all Kungfu Papers</a>
     </section>
 ${sharedFooter()}
   </main>
