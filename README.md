@@ -209,7 +209,7 @@ repository does not duplicate the suite or qualification verdict.
 The publication catalog is generated from exact npm artifacts:
 
 - `@kungfu-tech/paper-kungfu-product-white-paper@0.1.0-alpha.10`
-- `@kungfu-tech/paper-kfd-machine-life-roadmap@0.1.0-alpha.1`
+- `@kungfu-tech/paper-kfd-machine-life-roadmap@0.1.0-alpha.2`
 - `@kungfu-tech/paper-kfd-foundation-real-world-agent-work@0.1.0-alpha.8`
 - `@kungfu-tech/paper-observer-declared-timelines@0.1.0-alpha.9`
 - `@kungfu-tech/paper-episodes-to-primitives@0.1.0-alpha.2`
