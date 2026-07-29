@@ -116,7 +116,8 @@ grep -q 'href="/how-tested/continuity/"' public/index.html
 grep -q 'href="/how-tested/auditable-demo/">Watch the exact artifact proof</a>' public/index.html
 grep -q 'prefers-reduced-motion: reduce' public/how-tested/auditable-demo/index.html
 grep -q 'Watch the artifact explain itself.' public/how-tested/auditable-demo/index.html
-grep -q 'What is not claimed' public/how-tested/auditable-demo/index.html
+grep -q 'Authority boundary' public/how-tested/auditable-demo/index.html
+grep -q 'exact Passport, Core policy, Work or Warrant, an explicit capability grant, and runtime isolation' public/how-tested/auditable-demo/index.html
 grep -q 'Machine-readable Passport' public/how-tested/auditable-demo/index.html
 grep -q 'read the complete transcript' public/how-tested/auditable-demo/index.html
 if grep -q '<video[^>]*autoplay' public/how-tested/auditable-demo/index.html; then
