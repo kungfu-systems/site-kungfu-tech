@@ -11,6 +11,25 @@ const DIGEST = /^sha256:[0-9a-f]{64}$/u;
 const SHA = /^[0-9a-f]{40}$/u;
 const ID = /^[1-9][0-9]*$/u;
 const ARTIFACT_NAME = /^[A-Za-z0-9][A-Za-z0-9._-]{0,255}$/u;
+const EVIDENCE_CLASS = "exact-installed-artifact-agent-work-lab-autoplay/v1";
+const REQUIRED_AUTHORIZATION_SOURCES = [
+  "exact-release-passport",
+  "core-policy",
+  "work-or-warrant",
+  "explicit-capability-grant",
+  "runtime-isolation",
+];
+const NON_AUTHORITIES = [
+  "first-party-identity",
+  "system-identity",
+  "kfd-compliance",
+  "product-system-metadata",
+  "local-bundle-presence",
+  "package-metadata",
+  "registry-history",
+  "scan-output",
+  "standalone-generation",
+];
 const EXPECTED_MEDIA_MEMBERS = [
   "checksums.sha256",
   "complete-transcript.txt",
@@ -145,6 +164,24 @@ function verifyPassport(passport) {
   );
   invariant(passport.authority?.publication === "github-artifacts-only", "unexpected publication authority");
   invariant(passport.authority?.productionDeployment === false, "source run must not claim a production deployment");
+  invariant(passport.authority?.evidenceClass === EVIDENCE_CLASS, "unexpected evidence class");
+  invariant(
+    passport.authority?.authorization?.status === "not-granted-by-demo"
+      && JSON.stringify(passport.authority.authorization.requiredSources)
+        === JSON.stringify(REQUIRED_AUTHORIZATION_SOURCES)
+      && JSON.stringify(passport.authority.authorization.nonAuthorities)
+        === JSON.stringify(NON_AUTHORITIES),
+    "identity-neutral authorization boundary is invalid",
+  );
+  invariant(
+    Array.isArray(passport.authority.claims)
+      && passport.authority.claims.length > 0
+      && passport.authority.claims.every((claim) => typeof claim === "string" && claim.length > 0)
+      && Array.isArray(passport.authority.nonClaims)
+      && passport.authority.nonClaims.length > 0
+      && passport.authority.nonClaims.every((claim) => typeof claim === "string" && claim.length > 0),
+    "Passport claims and non-claims are invalid",
+  );
   return passport;
 }
 
@@ -190,6 +227,16 @@ function verifyMedia(mediaDirectory, passport) {
       && scene.durationMs <= 60000,
     "scene duration is invalid",
   );
+  const manifest = readJson(path.join(mediaDirectory, "manifest.json"), "renderer manifest");
+  invariant(
+    manifest.schema === "build-images.auditable-demo-render/v1"
+      && manifest.renderer?.image === passport.toolchain.rendererImage
+      && manifest.policy?.evidenceClass === passport.authority.evidenceClass
+      && manifest.policy?.visualClassification === "bounded-pty-replay"
+      && manifest.policy?.runtimeTextAuthority === "terminal-capture.json"
+      && DIGEST.test(manifest.inputs?.terminalCapture?.root || ""),
+    "renderer manifest does not prove the qualified PTY replay",
+  );
   return scene;
 }
 
@@ -208,14 +255,20 @@ function renderEvidence(passport, publicPath, scene) {
     ["GitHub Actions run", runUrl],
     ["Exact source commit", sourceUrl],
   ];
+  const claims = passport.authority.claims
+    .map((claim) => `<li>${escapeHtml(claim)}</li>`)
+    .join("");
+  const nonClaims = passport.authority.nonClaims
+    .map((claim) => `<li>${escapeHtml(claim)}</li>`)
+    .join("");
   return `      <!-- auditable-demo-evidence:start -->
       <section class="demo-player" aria-labelledby="demo-heading">
         <div>
           <p class="eyebrow">Exact installed artifact · bounded Linux proof</p>
           <h1 id="demo-heading">Watch the artifact explain itself.</h1>
-          <p class="lead">No account, hosted session, or hand-authored transcript is required. This ${formatDuration(scene.durationMs)}-second recording was rendered from the exact output of the installed <code>kungfu agent brief</code> command after the reusable Buildchain Gate passed.</p>
+          <p class="lead">No account, hosted session, or hand-authored transcript is required. This ${formatDuration(scene.durationMs)}-second animation replays the bounded PTY output of the installed <code>kungfu agent-work-lab autoplay</code> command after the reusable Buildchain Gate passed.</p>
         </div>
-        <video controls playsinline preload="metadata" aria-label="Exact installed Kungfu agent brief demonstration" poster="${escapeAttr(publicPath)}/poster.png">
+        <video controls playsinline preload="metadata" aria-label="Exact installed Kungfu Agent Work Lab autoplay demonstration" poster="${escapeAttr(publicPath)}/poster.png">
           <source src="${escapeAttr(publicPath)}/demo.webm" type="video/webm">
           <source src="${escapeAttr(publicPath)}/demo.mp4" type="video/mp4">
           <p><a href="${escapeAttr(publicPath)}/demo.mp4">Download the MP4 recording.</a></p>
@@ -224,10 +277,17 @@ function renderEvidence(passport, publicPath, scene) {
       </section>
 
       <section class="proof-grid" aria-label="Auditable demo proof">
-        <article><h2>What ran</h2><p>The installed Linux artifact executed its own <code>kungfu</code> launcher in a disposable home with a minimal environment.</p></article>
-        <article><h2>What passed</h2><p>The exact transcript, public projection, and scene passed an isolated renderer smoke before full media was allowed.</p></article>
+        <article><h2>What ran</h2><p>The installed Linux artifact executed its own <code>kungfu agent-work-lab autoplay</code> launcher in a disposable bounded PTY.</p></article>
+        <article><h2>What passed</h2><p>The exact terminal capture, transcript, public projection, and scene passed an isolated renderer smoke before full media was allowed.</p></article>
         <article><h2>What is retained</h2><p>Source, Gate, media, toolchain, expiry, run, and canonical Passport roots remain machine-readable.</p></article>
-        <article><h2>What is not claimed</h2><p>Not cross-run continuity, provider migration, macOS execution, durability, performance, or FO10.</p></article>
+        <article><h2>Authority boundary</h2><p>The capture grants no authority. Authorization still requires the exact Passport, Core policy, Work or Warrant, an explicit capability grant, and runtime isolation.</p></article>
+      </section>
+
+      <section class="coordinates">
+        <h2>Claims from the exact Passport</h2>
+        <ul>${claims}</ul>
+        <h2>Explicit non-claims</h2>
+        <ul>${nonClaims}</ul>
       </section>
 
       <section class="coordinates">
