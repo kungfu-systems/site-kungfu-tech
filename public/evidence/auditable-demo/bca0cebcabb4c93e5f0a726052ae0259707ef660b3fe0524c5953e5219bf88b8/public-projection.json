@@ -1,0 +1,83 @@
+{
+  "claimBoundary": "This proves one exact retained Linux x64 artifact completed the bundled offline Agent Work Lab autoplay inside a bounded, credential-free PTY. Terminal bytes are observation only and grant no authority. It does not prove hosted provider behavior, general production continuity, signed macOS behavior, performance, FO10, or production deployment.",
+  "cues": [
+    {
+      "annotation": "Exact artifact, executable, bounded PTY, and observation-only authority identity.",
+      "endMs": 6333,
+      "startMs": 0,
+      "transcriptLines": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18
+      ]
+    },
+    {
+      "annotation": "Installed-product PTY stream with controls removed.",
+      "endMs": 12666,
+      "startMs": 6333,
+      "transcriptLines": [
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54
+      ]
+    },
+    {
+      "annotation": "Passed completion sentinel and zero process exit; the Release Passport remains the publication authority.",
+      "endMs": 19000,
+      "startMs": 12666,
+      "transcriptLines": [
+        54,
+        55
+      ]
+    }
+  ],
+  "evidenceClass": "exact-installed-artifact-agent-work-lab-autoplay/v1",
+  "schema": "build-images.demo-projection/v1"
+}
