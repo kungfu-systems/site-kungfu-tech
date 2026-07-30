@@ -52,6 +52,10 @@ test -f dist/install/index.html
 test -f dist/whitepaper/index.html
 test -f dist/whitepaper/kungfu-white-paper/index.html
 test -f dist/whitepaper/kungfu-white-paper.pdf
+test -f dist/whitepaper/kfd-machine-life-roadmap/index.html
+test -f dist/whitepaper/kfd-machine-life-roadmap.pdf
+test -f dist/whitepaper/kfd-machine-life-roadmap/manifest.json
+test -f dist/whitepaper/kfd-machine-life-roadmap/llms.txt
 test -f dist/whitepaper/manifest.json
 test -f dist/whitepaper/catalog.json
 test -f dist/whitepaper/llms.txt

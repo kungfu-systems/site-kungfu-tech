@@ -9,12 +9,13 @@ const require = createRequire(import.meta.url);
 export const WHITEPAPER_PACKAGE = "@kungfu-tech/paper-kungfu-product-white-paper";
 export const WHITEPAPER_VERSION = "0.1.0-alpha.10";
 export const MACHINE_LIFE_PACKAGE = "@kungfu-tech/paper-kfd-machine-life-roadmap";
-export const MACHINE_LIFE_VERSION = "0.1.0-alpha.2";
+export const MACHINE_LIFE_VERSION = "0.1.0-alpha.3";
 export const KFD_PACKAGE = "@kungfu-tech/kfd";
 export const KFD_VERSION = "1.0.0-alpha.47";
 export const BUILDCHAIN_PACKAGE = "@kungfu-tech/buildchain";
 export const BUILDCHAIN_VERSION = "3.0.2-alpha.2";
 export const WHITEPAPER_CONTRACT = "kungfu-white-paper-brand-site-bundle";
+export const MACHINE_LIFE_CONTRACT = "kungfu-machine-life-brand-site-bundle";
 export const WHITEPAPER_CONSUMER = "kungfu.tech";
 export const WHITEPAPER_ORIGIN = "https://kungfu.tech";
 
@@ -29,6 +30,7 @@ export const PAPER_RELEASES = [
     package: MACHINE_LIFE_PACKAGE,
     version: MACHINE_LIFE_VERSION,
     slug: "kfd-machine-life-roadmap",
+    localReader: true,
   },
   {
     package: "@kungfu-tech/paper-kfd-foundation-real-world-agent-work",
@@ -76,12 +78,22 @@ export function siteHref(value) {
   return `${pathname}${url.search}${url.hash}`;
 }
 
-export function loadWhitepaperSource(repoRoot = process.cwd()) {
-  const packageJsonPath = require.resolve(`${WHITEPAPER_PACKAGE}/package.json`, { paths: [repoRoot] });
+function loadBrandPaperSource({
+  repoRoot,
+  packageName,
+  version,
+  contract,
+  readerRoute,
+  pdfRoute,
+  manifestRoute,
+  llmsRoute,
+  requireAgentSupplyChain = false,
+}) {
+  const packageJsonPath = require.resolve(`${packageName}/package.json`, { paths: [repoRoot] });
   const packageRoot = path.dirname(packageJsonPath);
   const packageInfo = readJson(packageJsonPath);
   const bundlePath = path.join(packageRoot, "site", "brand-site.json");
-  const publicationManifestPath = require.resolve(`${WHITEPAPER_PACKAGE}/publication-artifact.json`, { paths: [repoRoot] });
+  const publicationManifestPath = require.resolve(`${packageName}/publication-artifact.json`, { paths: [repoRoot] });
   const publicationManifest = readJson(publicationManifestPath);
   const pdfPackagePath = publicationManifest.publication?.primaryArtifact;
   assertString(pdfPackagePath, "publication manifest primaryArtifact");
@@ -92,25 +104,25 @@ export function loadWhitepaperSource(repoRoot = process.cwd()) {
   const pdfPath = path.join(packageRoot, pdfPackagePath);
   const bundle = readJson(bundlePath);
 
-  assert(packageInfo.name === WHITEPAPER_PACKAGE, `unexpected white paper package: ${packageInfo.name}`);
-  assert(packageInfo.version === WHITEPAPER_VERSION, `expected ${WHITEPAPER_PACKAGE}@${WHITEPAPER_VERSION}`);
-  assert(bundle.schemaVersion === 1, "white paper brand bundle schemaVersion must be 1");
-  assert(bundle.contract === WHITEPAPER_CONTRACT, `unexpected white paper contract: ${bundle.contract}`);
-  assert(bundle.consumer === WHITEPAPER_CONSUMER, `unexpected white paper consumer: ${bundle.consumer}`);
-  assert(bundle.source?.package === WHITEPAPER_PACKAGE, "brand bundle source package mismatch");
-  assert(bundle.source?.packageVersion === WHITEPAPER_VERSION, "brand bundle source version mismatch");
+  assert(packageInfo.name === packageName, `unexpected brand paper package: ${packageInfo.name}`);
+  assert(packageInfo.version === version, `expected ${packageName}@${version}`);
+  assert(bundle.schemaVersion === 1, `${packageName} brand bundle schemaVersion must be 1`);
+  assert(bundle.contract === contract, `unexpected ${packageName} brand contract: ${bundle.contract}`);
+  assert(bundle.consumer === WHITEPAPER_CONSUMER, `unexpected ${packageName} consumer: ${bundle.consumer}`);
+  assert(bundle.source?.package === packageName, `${packageName} brand bundle source package mismatch`);
+  assert(bundle.source?.packageVersion === version, `${packageName} brand bundle source version mismatch`);
   assert(bundle.routes?.canonicalHost === WHITEPAPER_CONSUMER, "brand bundle canonical host mismatch");
   assert(siteHref(bundle.routes.indexUrl) === "/whitepaper/", "brand bundle index route mismatch");
   assert(
-    siteHref(bundle.routes.canonicalUrl) === "/whitepaper/kungfu-white-paper/",
+    siteHref(bundle.routes.canonicalUrl) === readerRoute,
     "brand bundle reader route mismatch",
   );
   assert(
-    siteHref(bundle.routes.pdfUrl) === "/whitepaper/kungfu-white-paper.pdf",
+    siteHref(bundle.routes.pdfUrl) === pdfRoute,
     "brand bundle PDF route mismatch",
   );
   assert(publicationManifest.contract === "kungfu-buildchain-publication-artifact-manifest", "publication manifest contract mismatch");
-  assert(publicationManifest.publication?.version === WHITEPAPER_VERSION, "publication manifest version mismatch");
+  assert(publicationManifest.publication?.version === version, "publication manifest version mismatch");
   assert(publicationManifest.publication?.siteConsumers?.includes(WHITEPAPER_CONSUMER), "publication manifest must name kungfu.tech as a site consumer");
   assertString(publicationManifest.generatedAt, "publication manifest generatedAt");
   assertString(publicationManifest.source?.sha, "publication manifest source.sha");
@@ -118,20 +130,23 @@ export function loadWhitepaperSource(repoRoot = process.cwd()) {
   assertString(publicationManifest.publication?.archive?.routes?.immutableVersionUrl, "publication manifest immutable version URL");
   assertString(publicationManifest.publication?.archive?.publicArtifacts?.passport?.url, "publication manifest passport URL");
   assertString(publicationManifest.publication?.archive?.publicArtifacts?.sourceBundle?.url, "publication manifest source bundle URL");
-  assert(fs.existsSync(pdfPath), "white paper package PDF is missing");
+  assert(fs.existsSync(pdfPath), `${packageName} package PDF is missing`);
 
   const publicArtifacts = publicationManifest.publication?.archive?.publicArtifacts?.artifacts || [];
   const pdfArtifact = publicArtifacts.find((artifact) => artifact.path === pdfPackagePath);
   assert(pdfArtifact, `publication manifest does not describe exported PDF ${pdfPackagePath}`);
-  assert(pdfArtifact.sha256 === sha256File(pdfPath), "white paper PDF digest does not match publication manifest");
-  assert(pdfArtifact.bytes === fs.statSync(pdfPath).size, "white paper PDF byte count does not match publication manifest");
+  assert(pdfArtifact.sha256 === sha256File(pdfPath), `${packageName} PDF digest does not match publication manifest`);
+  assert(pdfArtifact.bytes === fs.statSync(pdfPath).size, `${packageName} PDF byte count does not match publication manifest`);
 
   assertString(bundle.hero?.title, "brand bundle hero.title");
   assertString(bundle.hero?.lead, "brand bundle hero.lead");
   assert(Array.isArray(bundle.homepageSections) && bundle.homepageSections.length > 0, "brand bundle homepageSections must not be empty");
-  assert(Array.isArray(bundle.principles) && bundle.principles.length > 0, "brand bundle principles must not be empty");
-  assert(bundle.agentSupplyChain?.contract === "kungfu-agent-supply-chain-public-narrative/v1", "brand bundle Agent Supply Chain contract mismatch");
-  assert(bundle.agentSupplyChain?.layers?.length === 5, "brand bundle must expose five Agent Supply Chain layers");
+  assert(Array.isArray(bundle.principles), "brand bundle principles must be an array");
+  if (requireAgentSupplyChain) {
+    assert(bundle.principles.length > 0, "white paper brand bundle principles must not be empty");
+    assert(bundle.agentSupplyChain?.contract === "kungfu-agent-supply-chain-public-narrative/v1", "brand bundle Agent Supply Chain contract mismatch");
+    assert(bundle.agentSupplyChain?.layers?.length === 5, "brand bundle must expose five Agent Supply Chain layers");
+  }
 
   const sectionIds = new Set();
   for (const section of bundle.homepageSections) {
@@ -157,10 +172,37 @@ export function loadWhitepaperSource(repoRoot = process.cwd()) {
       reader: siteHref(bundle.routes.canonicalUrl),
       pdf: siteHref(bundle.routes.pdfUrl),
       evidence: bundle.routes.evidenceUrl,
-      manifest: "/whitepaper/manifest.json",
-      llms: "/whitepaper/llms.txt",
+      manifest: manifestRoute,
+      llms: llmsRoute,
     },
   };
+}
+
+export function loadWhitepaperSource(repoRoot = process.cwd()) {
+  return loadBrandPaperSource({
+    repoRoot,
+    packageName: WHITEPAPER_PACKAGE,
+    version: WHITEPAPER_VERSION,
+    contract: WHITEPAPER_CONTRACT,
+    readerRoute: "/whitepaper/kungfu-white-paper/",
+    pdfRoute: "/whitepaper/kungfu-white-paper.pdf",
+    manifestRoute: "/whitepaper/manifest.json",
+    llmsRoute: "/whitepaper/llms.txt",
+    requireAgentSupplyChain: true,
+  });
+}
+
+export function loadMachineLifeSource(repoRoot = process.cwd()) {
+  return loadBrandPaperSource({
+    repoRoot,
+    packageName: MACHINE_LIFE_PACKAGE,
+    version: MACHINE_LIFE_VERSION,
+    contract: MACHINE_LIFE_CONTRACT,
+    readerRoute: "/whitepaper/kfd-machine-life-roadmap/",
+    pdfRoute: "/whitepaper/kfd-machine-life-roadmap.pdf",
+    manifestRoute: "/whitepaper/kfd-machine-life-roadmap/manifest.json",
+    llmsRoute: "/whitepaper/kfd-machine-life-roadmap/llms.txt",
+  });
 }
 
 function loadPublicationPaper(spec, repoRoot) {
@@ -216,24 +258,30 @@ function loadPublicationPaper(spec, repoRoot) {
 
 export function loadPublicationCatalog(repoRoot = process.cwd()) {
   const primary = loadWhitepaperSource(repoRoot);
+  const machineLife = loadMachineLifeSource(repoRoot);
   const papers = PAPER_RELEASES.map((spec) => {
-    if (spec.package !== WHITEPAPER_PACKAGE) return loadPublicationPaper(spec, repoRoot);
+    const brandSource = spec.package === WHITEPAPER_PACKAGE
+      ? primary
+      : spec.package === MACHINE_LIFE_PACKAGE
+        ? machineLife
+        : null;
+    if (!brandSource) return loadPublicationPaper(spec, repoRoot);
     return {
       ...spec,
-      packageRoot: primary.packageRoot,
-      packageInfo: primary.packageInfo,
-      publicationManifest: primary.publicationManifest,
-      publicationManifestPath: primary.publicationManifestPath,
-      pdfPath: primary.pdfPath,
-      pdfArtifact: primary.pdfArtifact,
-      title: primary.publicationManifest.publication.title,
-      abstract: primary.publicationManifest.publication.abstract,
-      authors: primary.publicationManifest.publication.authors || [],
+      packageRoot: brandSource.packageRoot,
+      packageInfo: brandSource.packageInfo,
+      publicationManifest: brandSource.publicationManifest,
+      publicationManifestPath: brandSource.publicationManifestPath,
+      pdfPath: brandSource.pdfPath,
+      pdfArtifact: brandSource.pdfArtifact,
+      title: brandSource.publicationManifest.publication.title,
+      abstract: brandSource.publicationManifest.publication.abstract,
+      authors: brandSource.publicationManifest.publication.authors || [],
       routes: {
-        reader: primary.routes.reader,
-        pdf: primary.routes.pdf,
-        evidence: primary.routes.evidence,
-        immutableVersion: primary.publicationManifest.publication.archive.routes.immutableVersionUrl,
+        reader: brandSource.routes.reader,
+        pdf: brandSource.routes.pdf,
+        evidence: brandSource.routes.evidence,
+        immutableVersion: brandSource.publicationManifest.publication.archive.routes.immutableVersionUrl,
       },
     };
   });
@@ -255,6 +303,7 @@ export function loadPublicationCatalog(repoRoot = process.cwd()) {
 
   return {
     primary,
+    machineLife,
     papers,
     kfd: {
       packageInfo: kfdPackage,
@@ -317,11 +366,11 @@ export function buildPublicationCatalogManifest(catalog) {
   };
 }
 
-export function buildWhitepaperManifest(source) {
+function buildBrandPaperManifest(source, { contract, rendererContract }) {
   const { bundle, packageInfo, pdfArtifact, publicationManifest, routes } = source;
   return {
     schemaVersion: 1,
-    contract: "kungfu-white-paper-brand-site-manifest",
+    contract,
     generatedAt: publicationManifest.generatedAt,
     timestampPolicy: "upstream-publication-artifact",
     title: bundle.hero.title,
@@ -338,7 +387,7 @@ export function buildWhitepaperManifest(source) {
     },
     renderer: {
       repository: "https://github.com/kungfu-systems/site-kungfu-tech",
-      contract: "site-kungfu-tech-white-paper-renderer-v1",
+      contract: rendererContract,
     },
     artifact: {
       role: "primary",
@@ -364,4 +413,18 @@ export function buildWhitepaperManifest(source) {
       sourceBundleUrl: publicationManifest.publication.archive.publicArtifacts.sourceBundle.url,
     },
   };
+}
+
+export function buildWhitepaperManifest(source) {
+  return buildBrandPaperManifest(source, {
+    contract: "kungfu-white-paper-brand-site-manifest",
+    rendererContract: "site-kungfu-tech-white-paper-renderer-v1",
+  });
+}
+
+export function buildMachineLifeManifest(source) {
+  return buildBrandPaperManifest(source, {
+    contract: "kungfu-machine-life-brand-site-manifest",
+    rendererContract: "site-kungfu-tech-machine-life-renderer-v1",
+  });
 }
