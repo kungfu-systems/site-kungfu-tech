@@ -518,6 +518,14 @@ grep -q 'shared-header:start' public/agent-builders/hub-starter/index.html
 grep -q 'shared-footer:start' public/agent-builders/hub-starter/index.html
 grep -q 'See a real Hub before you build your own.' public/agent-builders/hub-starter/index.html
 grep -q 'Apache-2.0 course-business reference' public/agent-builders/hub-starter/index.html
+grep -q 'role="tablist" aria-label="Hub Starter command mode"' public/agent-builders/hub-starter/index.html
+grep -q 'data-command-tab="install"' public/agent-builders/hub-starter/index.html
+grep -q 'data-command-tab="update"' public/agent-builders/hub-starter/index.html
+grep -q 'data-command-panel="update" hidden' public/agent-builders/hub-starter/index.html
+test "$(grep -c '<button class="copy-button"' public/agent-builders/hub-starter/index.html)" -eq 3
+grep -q 'navigator.clipboard.writeText' public/agent-builders/hub-starter/index.html
+grep -q 'button.textContent = "Copied"' public/agent-builders/hub-starter/index.html
+grep -q 'button.setAttribute("aria-label", "Command copied")' public/agent-builders/hub-starter/index.html
 grep -q 'docker compose -f oci://ghcr.io/kungfu-systems/runtime-images/hub-starter:compose-preview up --wait' public/agent-builders/hub-starter/index.html
 grep -q 'HUB_PORT=9090 docker compose' public/agent-builders/hub-starter/index.html
 grep -q 'PostgreSQL · private network only' public/agent-builders/hub-starter/index.html
