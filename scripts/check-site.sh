@@ -127,7 +127,16 @@ grep -q 'Authority boundary' public/how-tested/auditable-demo/index.html
 grep -q 'exact Passport, Core policy, Work or Warrant, an explicit capability grant, and runtime isolation' public/how-tested/auditable-demo/index.html
 grep -q 'Machine-readable Passport' public/how-tested/auditable-demo/index.html
 grep -q 'read the complete transcript' public/how-tested/auditable-demo/index.html
-if grep -q '<video[^>]*autoplay' public/how-tested/auditable-demo/index.html; then
+if node - public/how-tested/auditable-demo/index.html <<'NODE'
+const fs = require("node:fs");
+const html = fs.readFileSync(process.argv[2], "utf8");
+const hasAutoplayAttribute = [...html.matchAll(/<video\b[^>]*>/giu)].some(
+  ([tag]) =>
+    /\bautoplay\b/iu.test(tag.replace(/"[^"]*"|'[^']*'/gu, "")),
+);
+process.exit(hasAutoplayAttribute ? 0 : 1);
+NODE
+then
   echo "error: auditable demo media must never autoplay" >&2
   exit 1
 fi
