@@ -567,14 +567,20 @@ function renderInstallerPage({
       <section>
         <h2>macOS and Linux</h2>
         <p>Convenience install from the revalidated canonical route:</p>
-        <code class="command">curl --fail --proto '=https' --tlsv1.2 https://kungfu.tech/install.sh | sh</code>
+        <div class="command-block">
+          <code class="command">curl --fail --proto '=https' --tlsv1.2 https://kungfu.tech/install.sh | sh</code>
+          <button class="copy-button" type="button" data-copy-command aria-label="Copy macOS and Linux install command" aria-live="polite">Copy</button>
+        </div>
         <p>For higher assurance, download the immutable script below, compare its digest, inspect it, then execute it.</p>
       </section>
 
       <section>
         <h2>Windows PowerShell</h2>
         <p>Convenience install from the revalidated canonical route:</p>
-        <code class="command">irm https://kungfu.tech/install.ps1 | iex</code>
+        <div class="command-block">
+          <code class="command">irm https://kungfu.tech/install.ps1 | iex</code>
+          <button class="copy-button" type="button" data-copy-command aria-label="Copy Windows PowerShell install command" aria-live="polite">Copy</button>
+        </div>
         <p>The qualified Windows Alpha archive may be unsigned: trust comes from signed release-channel evidence, an immutable URL, and a published SHA-256 digest. Authenticode is not a qualification requirement for this Alpha.</p>
       </section>
 
