@@ -81,6 +81,61 @@
       box-shadow: 0 24px 60px rgba(18, 23, 34, 0.11);
     }
 
+    .start-panel[data-active-mode="update"] {
+      border-top-color: #7857c7;
+    }
+
+    .command-switcher-header {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px 24px;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .command-tabs {
+      display: inline-flex;
+      padding: 4px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: var(--surface);
+    }
+
+    .command-tab {
+      min-height: 40px;
+      padding: 8px 18px;
+      border: 0;
+      border-radius: 999px;
+      background: transparent;
+      color: var(--muted);
+      cursor: pointer;
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 750;
+      line-height: 1.2;
+    }
+
+    .command-tab[aria-selected="true"] {
+      background: var(--fg);
+      color: var(--panel);
+    }
+
+    .command-tab:focus-visible,
+    .copy-button:focus-visible {
+      outline: 3px solid rgba(42, 104, 255, 0.4);
+      outline-offset: 2px;
+    }
+
+    .command-mode {
+      display: grid;
+      min-width: 0;
+      gap: 18px;
+    }
+
+    .command-mode[hidden] {
+      display: none;
+    }
+
     .start-panel h2,
     .section-heading h2,
     .boundary-card h3,
@@ -93,25 +148,14 @@
       line-height: 1.05;
     }
 
-    .upgrade-panel {
-      display: grid;
-      min-width: 0;
-      gap: 20px;
-      padding: clamp(20px, 4vw, 34px);
-      border: 1px solid var(--line);
-      background:
-        linear-gradient(135deg, rgba(42, 104, 255, 0.08), transparent 55%),
-        var(--surface);
-    }
-
-    .upgrade-panel h2 {
+    .command-mode.update h2 {
       max-width: 780px;
       margin: 0;
       font-size: clamp(28px, 4vw, 42px);
       line-height: 1.08;
     }
 
-    .upgrade-panel > p:not(.eyebrow) {
+    .command-mode.update > p {
       max-width: 850px;
       margin: 0;
       color: var(--muted);
@@ -149,17 +193,46 @@
       color: #4d3a00;
     }
 
+    .command-block {
+      position: relative;
+      min-width: 0;
+    }
+
     .command {
       overflow-x: auto;
       min-width: 0;
       max-width: 100%;
       margin: 0;
-      padding: 18px;
+      padding: 18px 100px 18px 18px;
       border: 1px solid #2b3852;
       background: #10141d;
       color: #f4f7ff;
       font: 650 14px/1.65 "SFMono-Regular", Consolas, monospace;
       white-space: pre;
+    }
+
+    .copy-button {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      min-width: 72px;
+      min-height: 36px;
+      padding: 7px 10px;
+      border: 1px solid #60708f;
+      border-radius: 6px;
+      background: #202838;
+      color: #f4f7ff;
+      cursor: pointer;
+      font: 750 12px/1 "SFMono-Regular", Consolas, monospace;
+    }
+
+    .copy-button:hover {
+      background: #2b3852;
+    }
+
+    .copy-button[data-copy-state="copied"] {
+      border-color: #58c99b;
+      color: #9cf0cd;
     }
 
     .start-meta,
@@ -357,6 +430,21 @@
         transform: translateX(50%);
       }
     }
+
+    @media (max-width: 520px) {
+      .command-switcher-header,
+      .command-tabs {
+        width: 100%;
+      }
+
+      .command-tab {
+        flex: 1;
+      }
+
+      .command {
+        padding: 60px 16px 16px;
+      }
+    }
   </style>
 </head>
 <body>
@@ -400,38 +488,55 @@
         <p class="release-note"><strong>Alpha boundary</strong><span>This is a runnable reference for exploration—not a production SaaS, public-ingress, billing, or high-availability claim.</span></p>
       </section>
 
-      <section class="start-panel" aria-labelledby="start-heading">
-        <p class="eyebrow">Docker installed? Start here.</p>
-        <h2 id="start-heading">One command. No source checkout.</h2>
-        <pre class="command"><code>docker compose -f oci://ghcr.io/kungfu-systems/runtime-images/hub-starter:compose-preview up --wait</code></pre>
-        <div class="start-meta" aria-label="Default installation behavior">
-          <span>Web · http://127.0.0.1:8080</span>
-          <span>PostgreSQL · private network only</span>
-          <span>AI · Mock by default</span>
+      <section class="start-panel" data-command-switcher data-active-mode="install" aria-label="Run or update Hub Starter">
+        <div class="command-switcher-header">
+          <p class="eyebrow">Hub Starter · Docker Compose</p>
+          <div class="command-tabs" role="tablist" aria-label="Hub Starter command mode">
+            <button class="command-tab" id="install-tab" type="button" role="tab" aria-selected="true" aria-controls="install-panel" tabindex="0" data-command-tab="install">Install</button>
+            <button class="command-tab" id="update-tab" type="button" role="tab" aria-selected="false" aria-controls="update-panel" tabindex="-1" data-command-tab="update">Update</button>
+          </div>
         </div>
-        <p>Choose another Web port without exposing the database:</p>
-        <pre class="command"><code>HUB_PORT=9090 docker compose -f oci://ghcr.io/kungfu-systems/runtime-images/hub-starter:compose-preview up --wait</code></pre>
-        <div class="action-row">
-          <a href="http://127.0.0.1:8080">Open the local Hub</a>
-          <a href="https://github.com/kungfu-systems/runtime-images">Inspect the source</a>
-          <a href="https://github.com/kungfu-systems/runtime-images/releases">Audit alpha releases</a>
-        </div>
-      </section>
 
-      <section class="upgrade-panel" aria-labelledby="upgrade-heading">
-        <p class="eyebrow">Already running Hub Starter?</p>
-        <h2 id="upgrade-heading">Update the image without losing your courses.</h2>
-        <p>Run the same Compose application with <code>--pull always</code>. Keep the same <code>HUB_PORT</code>, <code>HUB_PUBLIC_ORIGIN</code>, and <code>COMPOSE_PROJECT_NAME</code> values you used at first start.</p>
-        <pre class="command"><code>docker compose -f oci://ghcr.io/kungfu-systems/runtime-images/hub-starter:compose-preview up --pull always --wait</code></pre>
-        <div class="upgrade-steps" aria-label="What the upgrade command does">
-          <div class="upgrade-step"><strong>1 · Pull</strong><span>Fetch the current Buildchain-qualified Alpha application and Hub image.</span></div>
-          <div class="upgrade-step"><strong>2 · Recreate</strong><span>Replace changed containers and wait until their health checks pass.</span></div>
-          <div class="upgrade-step"><strong>3 · Preserve</strong><span>Keep PostgreSQL, Kungfu state, model files, and credentials in named volumes.</span></div>
+        <div class="command-mode install" id="install-panel" role="tabpanel" aria-labelledby="install-tab" tabindex="0" data-command-panel="install">
+          <h2 id="start-heading">One command. No source checkout.</h2>
+          <div class="command-block">
+            <pre class="command"><code>docker compose -f oci://ghcr.io/kungfu-systems/runtime-images/hub-starter:compose-preview up --wait</code></pre>
+            <button class="copy-button" type="button" data-copy-command aria-label="Copy install command" aria-live="polite">Copy</button>
+          </div>
+          <div class="start-meta" aria-label="Default installation behavior">
+            <span>Web · http://127.0.0.1:8080</span>
+            <span>PostgreSQL · private network only</span>
+            <span>AI · Mock by default</span>
+          </div>
+          <p>Choose another Web port without exposing the database:</p>
+          <div class="command-block">
+            <pre class="command"><code>HUB_PORT=9090 docker compose -f oci://ghcr.io/kungfu-systems/runtime-images/hub-starter:compose-preview up --wait</code></pre>
+            <button class="copy-button" type="button" data-copy-command aria-label="Copy alternate-port install command" aria-live="polite">Copy</button>
+          </div>
+          <div class="action-row">
+            <a href="http://127.0.0.1:8080">Open the local Hub</a>
+            <a href="https://github.com/kungfu-systems/runtime-images">Inspect the source</a>
+            <a href="https://github.com/kungfu-systems/runtime-images/releases">Audit alpha releases</a>
+          </div>
         </div>
-        <p class="upgrade-warning"><strong>Keep local data:</strong> do not run <code>docker compose down -v</code>. To pin or roll back, use an immutable <code>compose-v&lt;VERSION&gt;</code> coordinate from the release list.</p>
-        <div class="action-row">
-          <a href="https://github.com/kungfu-systems/runtime-images/blob/dev/v1/v1.0/docs/UPGRADING.md">Read upgrade and rollback steps</a>
-          <a href="https://github.com/kungfu-systems/runtime-images/releases">Choose an exact release</a>
+
+        <div class="command-mode update" id="update-panel" role="tabpanel" aria-labelledby="update-tab" tabindex="0" data-command-panel="update" hidden>
+          <h2 id="upgrade-heading">Update the image without losing your courses.</h2>
+          <p>Run the same Compose application with <code>--pull always</code>. Keep the same <code>HUB_PORT</code>, <code>HUB_PUBLIC_ORIGIN</code>, and <code>COMPOSE_PROJECT_NAME</code> values you used at first start.</p>
+          <div class="command-block">
+            <pre class="command"><code>docker compose -f oci://ghcr.io/kungfu-systems/runtime-images/hub-starter:compose-preview up --pull always --wait</code></pre>
+            <button class="copy-button" type="button" data-copy-command aria-label="Copy update command" aria-live="polite">Copy</button>
+          </div>
+          <div class="upgrade-steps" aria-label="What the upgrade command does">
+            <div class="upgrade-step"><strong>1 · Pull</strong><span>Fetch the current Buildchain-qualified Alpha application and Hub image.</span></div>
+            <div class="upgrade-step"><strong>2 · Recreate</strong><span>Replace changed containers and wait until their health checks pass.</span></div>
+            <div class="upgrade-step"><strong>3 · Preserve</strong><span>Keep PostgreSQL, Kungfu state, model files, and credentials in named volumes.</span></div>
+          </div>
+          <p class="upgrade-warning"><strong>Keep local data:</strong> do not run <code>docker compose down -v</code>. To pin or roll back, use an immutable <code>compose-v&lt;VERSION&gt;</code> coordinate from the release list.</p>
+          <div class="action-row">
+            <a href="https://github.com/kungfu-systems/runtime-images/blob/dev/v1/v1.0/docs/UPGRADING.md">Read upgrade and rollback steps</a>
+            <a href="https://github.com/kungfu-systems/runtime-images/releases">Choose an exact release</a>
+          </div>
         </div>
       </section>
 
@@ -541,6 +646,79 @@ kungfu agent brief</code></pre>
       });
     </script>
     <!-- shared-footer:end -->
+    <script>
+      const commandSwitcher = document.querySelector("[data-command-switcher]");
+      const commandTabs = commandSwitcher ? Array.from(commandSwitcher.querySelectorAll("[data-command-tab]")) : [];
+      const commandPanels = commandSwitcher ? Array.from(commandSwitcher.querySelectorAll("[data-command-panel]")) : [];
+
+      function selectCommandMode(mode, moveFocus = false) {
+        commandTabs.forEach((tab) => {
+          const selected = tab.dataset.commandTab === mode;
+          tab.setAttribute("aria-selected", String(selected));
+          tab.tabIndex = selected ? 0 : -1;
+          if (selected && moveFocus) tab.focus();
+        });
+        commandPanels.forEach((panel) => {
+          panel.hidden = panel.dataset.commandPanel !== mode;
+        });
+        if (commandSwitcher) commandSwitcher.dataset.activeMode = mode;
+      }
+
+      commandTabs.forEach((tab, index) => {
+        tab.addEventListener("click", () => selectCommandMode(tab.dataset.commandTab));
+        tab.addEventListener("keydown", (event) => {
+          const keys = ["ArrowLeft", "ArrowRight", "Home", "End"];
+          if (!keys.includes(event.key)) return;
+          event.preventDefault();
+          let nextIndex = index;
+          if (event.key === "ArrowLeft") nextIndex = (index - 1 + commandTabs.length) % commandTabs.length;
+          if (event.key === "ArrowRight") nextIndex = (index + 1) % commandTabs.length;
+          if (event.key === "Home") nextIndex = 0;
+          if (event.key === "End") nextIndex = commandTabs.length - 1;
+          selectCommandMode(commandTabs[nextIndex].dataset.commandTab, true);
+        });
+      });
+
+      async function writeClipboard(text) {
+        if (navigator.clipboard && window.isSecureContext) {
+          await navigator.clipboard.writeText(text);
+          return;
+        }
+        const input = document.createElement("textarea");
+        input.value = text;
+        input.setAttribute("readonly", "");
+        input.style.position = "fixed";
+        input.style.opacity = "0";
+        document.body.appendChild(input);
+        input.select();
+        const copied = document.execCommand("copy");
+        input.remove();
+        if (!copied) throw new Error("Copy command was not accepted");
+      }
+
+      document.querySelectorAll("[data-copy-command]").forEach((button) => {
+        button.addEventListener("click", async () => {
+          const command = button.closest(".command-block")?.querySelector("code")?.textContent?.trim();
+          if (!command) return;
+          const defaultLabel = button.getAttribute("aria-label") || "Copy command";
+          try {
+            await writeClipboard(command);
+            button.textContent = "Copied";
+            button.setAttribute("aria-label", "Command copied");
+            button.dataset.copyState = "copied";
+          } catch {
+            button.textContent = "Copy failed";
+            button.setAttribute("aria-label", "Copy failed");
+            button.dataset.copyState = "failed";
+          }
+          window.setTimeout(() => {
+            button.textContent = "Copy";
+            button.setAttribute("aria-label", defaultLabel);
+            delete button.dataset.copyState;
+          }, 1800);
+        });
+      });
+    </script>
   </main>
 </body>
 </html>
