@@ -209,7 +209,7 @@ repository does not duplicate the suite or qualification verdict.
 The publication catalog is generated from exact npm artifacts:
 
 - `@kungfu-tech/paper-kungfu-product-white-paper@0.1.0-alpha.10`
-- `@kungfu-tech/paper-kfd-machine-life-roadmap@0.1.0-alpha.2`
+- `@kungfu-tech/paper-kfd-machine-life-roadmap@0.1.0-alpha.3`
 - `@kungfu-tech/paper-kfd-foundation-real-world-agent-work@0.1.0-alpha.8`
 - `@kungfu-tech/paper-observer-declared-timelines@0.1.0-alpha.9`
 - `@kungfu-tech/paper-episodes-to-primitives@0.1.0-alpha.2`
@@ -221,8 +221,8 @@ but paired card treatments and route deeper research to
 the complete package-backed paper set so existing consumers do not lose exact
 publication facts.
 
-The product white paper's upstream `site/brand-site.json` bundle owns its
-selected HTML reader content. Every paper's publication manifest owns its title,
+The upstream `site/brand-site.json` bundles for the White Paper and Machine Life
+own their selected HTML reader content. Every paper's publication manifest owns its title,
 abstract, PDF digest, source commit, canonical route, and evidence links. The
 catalog also renders source-contract facts from `@kungfu-tech/kfd@1.0.0-alpha.47`
 and `@kungfu-tech/buildchain@3.0.2-alpha.2`. This repository owns only site layout,
@@ -233,6 +233,10 @@ Generated routes:
 - `/whitepaper/`
 - `/whitepaper/kungfu-white-paper/`
 - `/whitepaper/kungfu-white-paper.pdf`
+- `/whitepaper/kfd-machine-life-roadmap/`
+- `/whitepaper/kfd-machine-life-roadmap.pdf`
+- `/whitepaper/kfd-machine-life-roadmap/manifest.json`
+- `/whitepaper/kfd-machine-life-roadmap/llms.txt`
 - `/whitepaper/manifest.json`
 - `/whitepaper/catalog.json`
 - `/whitepaper/llms.txt`
@@ -240,9 +244,10 @@ Generated routes:
 - `/agent-hub.json`
 - `/llms.txt`
 
-The product white paper keeps its `kungfu.tech` reader on the active preview,
-staging, or production origin. Machine Life and the supporting research papers
-retain their canonical `papers.libkungfu.dev` readers and evidence paths.
+The White Paper and Machine Life keep their `kungfu.tech` readers on the active
+preview, staging, or production origin. Their publication evidence and immutable
+archives remain on `papers.libkungfu.dev`; supporting research papers retain
+their canonical readers there as well.
 
 ## Buildchain
 

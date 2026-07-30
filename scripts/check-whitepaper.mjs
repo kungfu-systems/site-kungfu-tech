@@ -4,10 +4,12 @@ import path from "node:path";
 import {
   BUILDCHAIN_PACKAGE,
   BUILDCHAIN_VERSION,
+  buildMachineLifeManifest,
   buildPublicationCatalogManifest,
   buildWhitepaperManifest,
   KFD_PACKAGE,
   KFD_VERSION,
+  loadMachineLifeSource,
   loadPublicationCatalog,
   loadWhitepaperSource,
   MACHINE_LIFE_PACKAGE,
@@ -21,6 +23,7 @@ import {
 const repoRoot = process.cwd();
 const distRoot = path.join(repoRoot, "dist");
 const source = loadWhitepaperSource(repoRoot);
+const machineLifeSource = loadMachineLifeSource(repoRoot);
 const catalog = loadPublicationCatalog(repoRoot);
 
 function assert(condition, message) {
@@ -76,12 +79,17 @@ for (const [packageName, version] of expectedDependencies) {
 
 const indexHtml = readDist("whitepaper/index.html");
 const readerHtml = readDist("whitepaper/kungfu-white-paper/index.html");
+const machineLifeHtml = readDist("whitepaper/kfd-machine-life-roadmap/index.html");
 const llms = readDist("whitepaper/llms.txt");
+const machineLifeLlms = readDist("whitepaper/kfd-machine-life-roadmap/llms.txt");
 const manifest = JSON.parse(readDist("whitepaper/manifest.json"));
+const machineLifeManifest = JSON.parse(readDist("whitepaper/kfd-machine-life-roadmap/manifest.json"));
 const catalogManifest = JSON.parse(readDist("whitepaper/catalog.json"));
 const expectedManifest = buildWhitepaperManifest(source);
+const expectedMachineLifeManifest = buildMachineLifeManifest(machineLifeSource);
 const expectedCatalogManifest = buildPublicationCatalogManifest(catalog);
 const pdfPath = path.join(distRoot, "whitepaper", "kungfu-white-paper.pdf");
+const machineLifePdfPath = path.join(distRoot, "whitepaper", "kfd-machine-life-roadmap.pdf");
 const expectedDisplayOrder = [
   WHITEPAPER_PACKAGE,
   MACHINE_LIFE_PACKAGE,
@@ -91,17 +99,26 @@ const expectedDisplayOrder = [
 ];
 
 assert(JSON.stringify(manifest) === JSON.stringify(expectedManifest), "generated white paper manifest drifted from the source package");
+assert(JSON.stringify(machineLifeManifest) === JSON.stringify(expectedMachineLifeManifest), "generated Machine Life manifest drifted from the source package");
 assert(JSON.stringify(catalogManifest) === JSON.stringify(expectedCatalogManifest), "generated publication catalog drifted from source packages");
-assert(manifest.evidence.immutableVersionUrl.includes(`/v${WHITEPAPER_VERSION}/`), "machine manifest must expose the immutable publication version URL");
+assert(manifest.evidence.immutableVersionUrl.includes(`/v${WHITEPAPER_VERSION}/`), "white paper manifest must expose the immutable publication version URL");
+assert(machineLifeManifest.evidence.immutableVersionUrl.includes(`/v${MACHINE_LIFE_VERSION}/`), "Machine Life manifest must expose the immutable publication version URL");
 assert(fs.existsSync(pdfPath), "generated white paper PDF is missing");
 assert(sha256File(pdfPath) === source.pdfArtifact.sha256, "generated white paper PDF digest mismatch");
 assert(fs.statSync(pdfPath).size === source.pdfArtifact.bytes, "generated white paper PDF byte count mismatch");
+assert(fs.existsSync(machineLifePdfPath), "generated Machine Life PDF is missing");
+assert(sha256File(machineLifePdfPath) === machineLifeSource.pdfArtifact.sha256, "generated Machine Life PDF digest mismatch");
+assert(fs.statSync(machineLifePdfPath).size === machineLifeSource.pdfArtifact.bytes, "generated Machine Life PDF byte count mismatch");
 assert(
   catalog.papers.map((paper) => paper.packageInfo.name).join(",") === expectedDisplayOrder.join(","),
   "publication catalog order must be White Paper, Machine Life, Foundation Model, Observer, Episodes",
 );
 
-for (const [name, html] of [["white paper index", indexHtml], ["white paper reader", readerHtml]]) {
+for (const [name, html] of [
+  ["white paper index", indexHtml],
+  ["white paper reader", readerHtml],
+  ["Machine Life reader", machineLifeHtml],
+]) {
   assert(html.includes("shared-header:start"), `${name} must use the shared header`);
   assert(html.includes("shared-footer:start"), `${name} must use the shared footer`);
   const stylesheetHref = html.match(/\/assets\/whitepaper\.[0-9a-f]{12}\.css/)?.[0];
@@ -121,6 +138,9 @@ assert(indexHtml.includes("Now · White Paper"), "White Paper card must carry th
 assert(indexHtml.includes("Future · Machine Life"), "Machine Life card must carry the future label");
 assert(indexHtml.includes(">Read the White Paper</a>"), "White Paper card must use a distinct primary action");
 assert(indexHtml.includes(">Read Machine Life</a>"), "Machine Life card must use a distinct primary action");
+assert(indexHtml.includes(`href="${machineLifeSource.routes.reader}"`), "Machine Life primary action must use the same-site reader");
+assert(indexHtml.includes(`href="${machineLifeSource.routes.pdf}"`), "Machine Life PDF action must use the same-site artifact");
+assert(!indexHtml.includes('href="https://papers.libkungfu.dev/kfd-machine-life-roadmap/">Read Machine Life</a>'), "Machine Life primary action must not leave kungfu.tech");
 assert(indexHtml.includes('href="https://papers.libkungfu.dev/"'), "publication index must route deeper research to papers.libkungfu.dev");
 assert(!indexHtml.includes('class="paper-source-catalog"'), "publication index must not expose source-contract cards on the main human page");
 const supportingPapers = catalog.papers.filter((paper) => ![WHITEPAPER_PACKAGE, MACHINE_LIFE_PACKAGE].includes(paper.packageInfo.name));
@@ -132,6 +152,9 @@ for (const paper of catalog.papers) {
   assert(llms.includes(paper.pdfArtifact.sha256), `llms.txt must expose ${paper.packageInfo.name} PDF digest`);
 }
 assert(llms.includes(`${MACHINE_LIFE_PACKAGE}@${MACHINE_LIFE_VERSION}`), "llms.txt must identify the exact Machine Life source package");
+assert(machineLifeLlms.includes(`${MACHINE_LIFE_PACKAGE}@${MACHINE_LIFE_VERSION}`), "Machine Life llms.txt must identify its exact source package");
+assert(machineLifeLlms.includes(machineLifeSource.pdfArtifact.sha256), "Machine Life llms.txt must expose the local PDF digest");
+assert(machineLifeLlms.includes(machineLifeSource.routes.evidence), "Machine Life llms.txt must preserve the external evidence surface");
 assert(llms.includes(`${KFD_PACKAGE}@${KFD_VERSION}`), "llms.txt must identify the KFD source package");
 assert(llms.includes(`${BUILDCHAIN_PACKAGE}@${BUILDCHAIN_VERSION}`), "llms.txt must identify the Buildchain source package");
 assert(readerHtml.includes(source.bundle.hero.lead), "white paper reader must render the upstream lead");
@@ -145,6 +168,16 @@ assert(!readerHtml.includes("If you are a user |"), "white paper audience guidan
 for (const section of source.bundle.homepageSections) {
   assert(readerHtml.includes(`id="section-${section.id}"`), `white paper reader is missing section ${section.id}`);
   assert(readerHtml.includes(`href="#section-${section.id}"`), `white paper navigation is missing section ${section.id}`);
+}
+
+assert(machineLifeHtml.includes(machineLifeSource.bundle.hero.lead), "Machine Life reader must render the upstream lead");
+assert(machineLifeHtml.includes(`data="${machineLifeSource.routes.pdf}#page=1&amp;view=FitH"`), "Machine Life reader must preview the package PDF");
+assert(machineLifeHtml.includes(`href="${machineLifeSource.routes.evidence}"`), "Machine Life reader must preserve the publication evidence link");
+assert(machineLifeHtml.includes("Figure available in the primary PDF"), "Machine Life reader must preserve figure boundaries from the source bundle");
+assert(machineLifeSource.bundle.homepageSections.length === 11, "Machine Life source bundle must expose all eleven sections");
+for (const section of machineLifeSource.bundle.homepageSections) {
+  assert(machineLifeHtml.includes(`id="section-${section.id}"`), `Machine Life reader is missing section ${section.id}`);
+  assert(machineLifeHtml.includes(`href="#section-${section.id}"`), `Machine Life navigation is missing section ${section.id}`);
 }
 
 assert(llms.includes(`${WHITEPAPER_PACKAGE}@${WHITEPAPER_VERSION}`), "llms.txt must identify the exact source package");

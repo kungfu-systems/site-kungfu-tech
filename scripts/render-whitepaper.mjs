@@ -10,8 +10,10 @@ import {
   renderHeader,
 } from "./site-layout.mjs";
 import {
+  buildMachineLifeManifest,
   buildPublicationCatalogManifest,
   buildWhitepaperManifest,
+  loadMachineLifeSource,
   loadPublicationCatalog,
   loadWhitepaperSource,
   MACHINE_LIFE_PACKAGE,
@@ -22,7 +24,8 @@ import {
 
 const repoRoot = process.cwd();
 const distRoot = path.join(repoRoot, "dist");
-const source = loadWhitepaperSource(repoRoot);
+const whitepaperSource = loadWhitepaperSource(repoRoot);
+const machineLifeSource = loadMachineLifeSource(repoRoot);
 const catalog = loadPublicationCatalog(repoRoot);
 const layout = readLayout(repoRoot);
 const markdown = new MarkdownIt({ html: false, linkify: true, typographer: false });
@@ -33,7 +36,7 @@ function writeText(relativePath, content) {
   fs.writeFileSync(outputPath, content);
 }
 
-function stripSectionTitle(section) {
+function stripSectionTitle(source, section) {
   const lines = section.markdown.replace(/\r\n/g, "\n").split("\n");
   if (lines[0]?.replace(/^#\s+/, "").trim() === section.title.trim()) lines.shift();
   while (lines[0]?.trim() === "") lines.shift();
@@ -113,8 +116,8 @@ function localizeRenderedLinks(html) {
   });
 }
 
-function renderSection(section) {
-  const principles = section.presentation === "kfd-principles"
+function renderSection(source, section) {
+  const principles = section.presentation === "kfd-principles" && source.bundle.principles.length > 0
     ? `<div class="paper-principles" aria-label="Kungfu Design Principles">
 ${source.bundle.principles.map((principle) => `          <article class="paper-principle">
             <span>${escapeHtml(principle.id)}</span>
@@ -122,7 +125,7 @@ ${source.bundle.principles.map((principle) => `          <article class="paper-p
           </article>`).join("\n")}
         </div>`
     : "";
-  const body = localizeRenderedLinks(markdown.render(stripSectionTitle(section)));
+  const body = localizeRenderedLinks(markdown.render(stripSectionTitle(source, section)));
   return `      <section class="paper-section" id="section-${escapeAttr(section.id)}">
         <p class="paper-section-role">${escapeHtml(section.role)} / ${escapeHtml(section.presentation)}</p>
         <h2>${escapeHtml(section.title)}</h2>
@@ -133,14 +136,21 @@ ${body.trim().split("\n").map((line) => `          ${line}`).join("\n")}
       </section>`;
 }
 
-function head({ title, description, canonicalUrl, manifestHref = "/whitepaper/manifest.json" }) {
+function head({
+  title,
+  description,
+  canonicalUrl,
+  manifestHref = "/whitepaper/manifest.json",
+  llmsHref = "/whitepaper/llms.txt",
+  agentEntryTitle = "Paper agent entrypoint",
+}) {
   return `  <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>${escapeHtml(title)}</title>
   <meta name="description" content="${escapeAttr(description)}">
   <link rel="canonical" href="${escapeAttr(canonicalUrl)}">
   <link rel="alternate" type="application/json" title="Publication manifest" href="${escapeAttr(manifestHref)}">
-  <link rel="alternate" type="text/plain" title="White paper agent entrypoint" href="/whitepaper/llms.txt">
+  <link rel="alternate" type="text/plain" title="${escapeAttr(agentEntryTitle)}" href="${escapeAttr(llmsHref)}">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%2314171f'/%3E%3Ctext x='32' y='39' text-anchor='middle' font-family='Arial,sans-serif' font-size='22' font-weight='700' fill='white'%3EKF%3C/text%3E%3C/svg%3E">
   <link rel="stylesheet" href="/assets/site.css">
   <link rel="stylesheet" href="/assets/whitepaper.css">`;
@@ -236,12 +246,12 @@ ${sharedFooter()}
 `;
 }
 
-function renderReader() {
+function renderReader(source, paperLabel) {
   const { bundle, packageInfo, routes } = source;
   const toc = bundle.homepageSections
     .map((section) => `          <a href="#section-${escapeAttr(section.id)}">${escapeHtml(section.title)}</a>`)
     .join("\n");
-  const sections = bundle.homepageSections.map(renderSection).join("\n\n");
+  const sections = bundle.homepageSections.map((section) => renderSection(source, section)).join("\n\n");
   const evidenceUrl = bundle.hero.secondaryCta.href || routes.evidence;
 
   return `<!doctype html>
@@ -251,12 +261,15 @@ ${head({
   title: `${bundle.hero.title} | Kungfu`,
   description: bundle.hero.lead,
   canonicalUrl: bundle.routes.canonicalUrl,
+  manifestHref: routes.manifest,
+  llmsHref: routes.llms,
+  agentEntryTitle: `${paperLabel} agent entrypoint`,
 })}
 </head>
 <body>
   <main class="whitepaper-page">
 ${sharedHeader()}
-    <p class="paper-page-kicker"><a href="${escapeAttr(routes.index)}">Back to white papers</a><span>White paper / ${escapeHtml(packageInfo.version)}</span></p>
+    <p class="paper-page-kicker"><a href="${escapeAttr(routes.index)}">Back to papers</a><span>${escapeHtml(paperLabel)} / ${escapeHtml(packageInfo.version)}</span></p>
 
     <header class="paper-hero">
       <p class="paper-eyebrow">${escapeHtml(bundle.hero.eyebrow)}</p>
@@ -278,13 +291,13 @@ ${sharedHeader()}
         <a href="${escapeAttr(routes.pdf)}">Open PDF</a>
       </div>
       <object data="${escapeAttr(`${routes.pdf}#page=1&view=FitH`)}" type="application/pdf" aria-label="First page of ${escapeAttr(bundle.hero.title)}">
-        <p>Your browser cannot preview this PDF. <a href="${escapeAttr(routes.pdf)}">Open the white paper PDF.</a></p>
+        <p>Your browser cannot preview this PDF. <a href="${escapeAttr(routes.pdf)}">Open the paper PDF.</a></p>
       </object>
     </section>
 
     <div class="paper-layout">
       <aside class="paper-sidebar">
-        <nav class="paper-toc" aria-label="White paper sections">
+        <nav class="paper-toc" aria-label="${escapeAttr(paperLabel)} sections">
           <strong>On this page</strong>
 ${toc}
         </nav>
@@ -334,13 +347,19 @@ ${sectionLines}
 `;
 }
 
-const manifest = buildWhitepaperManifest(source);
+const whitepaperManifest = buildWhitepaperManifest(whitepaperSource);
+const machineLifeManifest = buildMachineLifeManifest(machineLifeSource);
 const catalogManifest = buildPublicationCatalogManifest(catalog);
 writeText("whitepaper/index.html", renderIndex());
-writeText("whitepaper/kungfu-white-paper/index.html", renderReader());
-writeText("whitepaper/manifest.json", `${JSON.stringify(manifest, null, 2)}\n`);
+writeText("whitepaper/kungfu-white-paper/index.html", renderReader(whitepaperSource, "White Paper"));
+writeText("whitepaper/kfd-machine-life-roadmap/index.html", renderReader(machineLifeSource, "Machine Life"));
+writeText("whitepaper/manifest.json", `${JSON.stringify(whitepaperManifest, null, 2)}\n`);
+writeText("whitepaper/kfd-machine-life-roadmap/manifest.json", `${JSON.stringify(machineLifeManifest, null, 2)}\n`);
 writeText("whitepaper/catalog.json", `${JSON.stringify(catalogManifest, null, 2)}\n`);
-writeText("whitepaper/llms.txt", renderLlms(manifest));
-fs.copyFileSync(source.pdfPath, path.join(distRoot, "whitepaper", "kungfu-white-paper.pdf"));
+writeText("whitepaper/llms.txt", renderLlms(whitepaperManifest));
+writeText("whitepaper/kfd-machine-life-roadmap/llms.txt", renderLlms(machineLifeManifest));
+fs.copyFileSync(whitepaperSource.pdfPath, path.join(distRoot, "whitepaper", "kungfu-white-paper.pdf"));
+fs.copyFileSync(machineLifeSource.pdfPath, path.join(distRoot, "whitepaper", "kfd-machine-life-roadmap.pdf"));
 
-console.log(`rendered white paper from ${source.packageInfo.name}@${source.packageInfo.version}`);
+console.log(`rendered White Paper from ${whitepaperSource.packageInfo.name}@${whitepaperSource.packageInfo.version}`);
+console.log(`rendered Machine Life from ${machineLifeSource.packageInfo.name}@${machineLifeSource.packageInfo.version}`);
