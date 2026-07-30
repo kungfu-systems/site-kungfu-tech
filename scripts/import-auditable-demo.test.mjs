@@ -34,12 +34,23 @@ function fixture() {
   const rendererImage =
     `ghcr.io/kungfu-systems/build-images/demo-renderer@sha256:${"3".repeat(64)}`;
   const members = {
-    "complete-transcript.txt": Buffer.from("kungfu agent brief\nqualified\n"),
+    "complete-transcript.txt": Buffer.from("kungfu agent-work-lab autoplay\nqualified\n"),
     "demo.gif": Buffer.from("gif"),
     "demo.mp4": Buffer.from("mp4"),
     "demo.webm": Buffer.from("webm"),
     "gate-receipt.json": Buffer.from("{}\n"),
-    "manifest.json": Buffer.from("{}\n"),
+    "manifest.json": Buffer.from(stableJson({
+      schema: "build-images.auditable-demo-render/v1",
+      renderer: { image: rendererImage },
+      policy: {
+        evidenceClass: "exact-installed-artifact-agent-work-lab-autoplay/v1",
+        visualClassification: "bounded-pty-replay",
+        runtimeTextAuthority: "terminal-capture.json",
+      },
+      inputs: {
+        terminalCapture: { root: `sha256:${"9".repeat(64)}` },
+      },
+    })),
     "media-probe.json": Buffer.from('{"passed":true}\n'),
     "media-receipt.json": Buffer.from(stableJson({
       schema: "buildchain.auditable-demo-media/v1",
@@ -109,11 +120,32 @@ function fixture() {
       rendererImage,
     },
     authority: {
-      evidenceClass: "exact-installed-artifact-agent-brief/v1",
+      evidenceClass: "exact-installed-artifact-agent-work-lab-autoplay/v1",
       publication: "github-artifacts-only",
       productionDeployment: false,
-      claims: ["exact artifact ran", "Gate passed"],
-      nonClaims: ["durability", "performance"],
+      authorization: {
+        status: "not-granted-by-demo",
+        requiredSources: [
+          "exact-release-passport",
+          "core-policy",
+          "work-or-warrant",
+          "explicit-capability-grant",
+          "runtime-isolation",
+        ],
+        nonAuthorities: [
+          "first-party-identity",
+          "system-identity",
+          "kfd-compliance",
+          "product-system-metadata",
+          "local-bundle-presence",
+          "package-metadata",
+          "registry-history",
+          "scan-output",
+          "standalone-generation",
+        ],
+      },
+      claims: ["exact autoplay artifact ran", "bounded PTY Gate passed"],
+      nonClaims: ["durability", "performance", "implicit identity authority"],
     },
   };
   const passport = {
@@ -163,19 +195,43 @@ test("imports exact media and a source-bound public projection", () => {
     const projection = JSON.parse(fs.readFileSync(path.join(input.outputRoot, "auditable-demo.json"), "utf8"));
     assert.equal(projection.passportRoot, input.passport.root.value);
     assert.equal(projection.sourceSha, input.passport.source.sha);
+    assert.deepEqual(projection.claims, input.passport.authority.claims);
+    assert.deepEqual(projection.nonClaims, input.passport.authority.nonClaims);
     assert.match(
       fs.readFileSync(path.join(input.outputRoot, "how-tested/auditable-demo/index.html"), "utf8"),
       /Watch the artifact explain itself\./u,
     );
     assert.match(
       fs.readFileSync(path.join(input.outputRoot, "how-tested/auditable-demo/index.html"), "utf8"),
-      /18\.5-second recording/u,
+      /18\.5-second animation/u,
     );
     assert.match(
       fs.readFileSync(path.join(input.outputRoot, "how-tested/auditable-demo/index.html"), "utf8"),
       /read the complete transcript/u,
     );
+    assert.match(
+      fs.readFileSync(path.join(input.outputRoot, "how-tested/auditable-demo/index.html"), "utf8"),
+      /kungfu agent-work-lab autoplay/u,
+    );
     assert.equal(importAuditableDemo({ ...input, checkOnly: true }).changed, false);
+  } finally {
+    fs.rmSync(input.repoRoot, { recursive: true, force: true });
+  }
+});
+
+test("rejects incomplete identity-neutral authority even under a re-rooted Passport", () => {
+  const input = fixture();
+  try {
+    const passportPath = path.join(input.repoRoot, "site/auditable-demo/passport.json");
+    const passport = JSON.parse(fs.readFileSync(passportPath, "utf8"));
+    passport.authority.authorization.nonAuthorities.pop();
+    const { root: ignoredRoot, ...payload } = passport;
+    passport.root.value = sha256(Buffer.from(stableJson(payload)));
+    fs.writeFileSync(passportPath, stableJson(passport));
+    assert.throws(
+      () => importAuditableDemo(input),
+      /identity-neutral authorization boundary is invalid/u,
+    );
   } finally {
     fs.rmSync(input.repoRoot, { recursive: true, force: true });
   }
