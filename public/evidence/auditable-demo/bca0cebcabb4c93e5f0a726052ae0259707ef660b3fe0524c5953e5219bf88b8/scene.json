@@ -1,0 +1,12 @@
+{
+  "accent": "#67e8a5",
+  "background": "#0b1020",
+  "commandLabel": "kungfu agent-work-lab autoplay",
+  "durationMs": 19000,
+  "fps": 15,
+  "height": 720,
+  "id": "kungfu-agent-work-lab-autoplay",
+  "schema": "build-images.demo-scene/v1",
+  "title": "Kungfu Agent Work Lab — exact installed artifact",
+  "width": 1280
+}
