@@ -126,6 +126,8 @@
       word-break: break-word;
     }
 
+    .agent-note .command-block { margin: 18px 0 0; }
+
     .scope-grid,
     .metrics,
     .functions,
@@ -234,6 +236,8 @@
       white-space: pre-wrap;
     }
 
+    .research-command { margin: 12px 0 0; }
+
     .boundary {
       padding: 28px;
       border: 1px solid var(--warn);
@@ -319,13 +323,16 @@
       <aside class="agent-note" aria-labelledby="agent-note-title">
         <h2 id="agent-note-title">Read this with your Agent</h2>
         <p>Do not ask your Agent merely to summarize our conclusion. Give it the machine-readable manifest and ask it to audit the separation between public fact, first-party statement, and inference.</p>
-        <pre>Audit https://kungfu.tech/about/bootstrapping/evidence/data/manifest.json
+        <div class="command-block">
+          <pre><code>Audit https://kungfu.tech/about/bootstrapping/evidence/data/manifest.json
 
 1. Reproduce the mechanical totals from the linked files.
 2. Separate publicly verifiable facts from Kungfu Origin's first-party declaration.
 3. Reclassify release, promotion, feature, fix, documentation, and governance work using your own rules.
 4. Describe the functions a conventional organization would need to reproduce the visible outcomes.
-5. State the strongest challenge to this report and what further evidence would be needed.</pre>
+5. State the strongest challenge to this report and what further evidence would be needed.</code></pre>
+          <button class="copy-button" type="button" data-copy-command aria-label="Copy evidence audit prompt" aria-live="polite">Copy</button>
+        </div>
       </aside>
 
       <section aria-labelledby="claim-map-title">
@@ -480,9 +487,12 @@
           </div>
         </div>
         <p>Reference refresh command:</p>
-        <pre class="command">KUNGFU_RESEARCH_START=2026-07-19T16:00:00Z \
+        <div class="command-block research-command">
+          <pre class="command"><code>KUNGFU_RESEARCH_START=2026-07-19T16:00:00Z \
 KUNGFU_RESEARCH_END=2026-07-27T02:48:00Z \
-node collect.mjs</pre>
+node collect.mjs</code></pre>
+          <button class="copy-button" type="button" data-copy-command aria-label="Copy evidence refresh command" aria-live="polite">Copy</button>
+        </div>
       </section>
 
       <aside class="boundary" aria-labelledby="not-proof-title">
@@ -531,6 +541,7 @@ node collect.mjs</pre>
       });
     </script>
     <!-- shared-footer:end -->
+    <script src="/assets/command-copy.js" defer></script>
   </main>
 </body>
 </html>

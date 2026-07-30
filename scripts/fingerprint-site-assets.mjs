@@ -13,18 +13,24 @@ if (rootIndex >= 0 && !args[rootIndex + 1]) {
 }
 
 const assetDirectory = path.join(outputRoot, "assets");
-const stylesheets = ["site", "whitepaper"].map((name) => {
-  const sourcePath = path.join(assetDirectory, `${name}.css`);
+const assets = [
+  { name: "site", extension: "css", attribute: "href", label: "site CSS" },
+  { name: "whitepaper", extension: "css", attribute: "href", label: "whitepaper CSS" },
+  { name: "command-copy", extension: "js", attribute: "src", label: "command copy JS" },
+].map(({ name, extension, attribute, label }) => {
+  const sourcePath = path.join(assetDirectory, `${name}.${extension}`);
   const sourceBytes = fs.readFileSync(sourcePath);
   const fingerprint = crypto.createHash("sha256").update(sourceBytes).digest("hex").slice(0, 12);
-  const fingerprintedName = `${name}.${fingerprint}.css`;
+  const fingerprintedName = `${name}.${fingerprint}.${extension}`;
   return {
     name,
+    attribute,
+    label,
     sourcePath,
     sourceBytes,
     fingerprintedPath: path.join(assetDirectory, fingerprintedName),
-    expectedHref: `/assets/${fingerprintedName}`,
-    pattern: new RegExp(`href="/assets/${name}(?:\\.[0-9a-f]{12})?\\.css"`, "g"),
+    expectedUrl: `/assets/${fingerprintedName}`,
+    pattern: new RegExp(`${attribute}="/assets/${name}(?:\\.[0-9a-f]{12})?\\.${extension}"`, "g"),
   };
 });
 
@@ -42,40 +48,40 @@ function listHtmlFiles(directory) {
 }
 
 const htmlFiles = listHtmlFiles(outputRoot);
-for (const stylesheet of stylesheets) {
+for (const asset of assets) {
   let linkedPages = 0;
 
   if (checkOnly) {
-    if (!fs.existsSync(stylesheet.fingerprintedPath)) {
-      throw new Error(`missing fingerprinted stylesheet: ${stylesheet.fingerprintedPath}`);
+    if (!fs.existsSync(asset.fingerprintedPath)) {
+      throw new Error(`missing fingerprinted asset: ${asset.fingerprintedPath}`);
     }
-    if (!stylesheet.sourceBytes.equals(fs.readFileSync(stylesheet.fingerprintedPath))) {
-      throw new Error(`fingerprinted stylesheet bytes drifted: ${stylesheet.fingerprintedPath}`);
+    if (!asset.sourceBytes.equals(fs.readFileSync(asset.fingerprintedPath))) {
+      throw new Error(`fingerprinted asset bytes drifted: ${asset.fingerprintedPath}`);
     }
 
     for (const htmlPath of htmlFiles) {
       const html = fs.readFileSync(htmlPath, "utf8");
-      const links = html.match(stylesheet.pattern) ?? [];
+      const links = html.match(asset.pattern) ?? [];
       linkedPages += links.length;
-      if (links.some((link) => link !== `href="${stylesheet.expectedHref}"`)) {
-        throw new Error(`stale ${stylesheet.name} stylesheet reference: ${htmlPath}`);
+      if (links.some((link) => link !== `${asset.attribute}="${asset.expectedUrl}"`)) {
+        throw new Error(`stale ${asset.label} reference: ${htmlPath}`);
       }
     }
   } else {
-    fs.copyFileSync(stylesheet.sourcePath, stylesheet.fingerprintedPath);
+    fs.copyFileSync(asset.sourcePath, asset.fingerprintedPath);
     for (const htmlPath of htmlFiles) {
       const before = fs.readFileSync(htmlPath, "utf8");
-      const links = before.match(stylesheet.pattern) ?? [];
+      const links = before.match(asset.pattern) ?? [];
       linkedPages += links.length;
       if (links.length === 0) continue;
-      const after = before.replace(stylesheet.pattern, `href="${stylesheet.expectedHref}"`);
+      const after = before.replace(asset.pattern, `${asset.attribute}="${asset.expectedUrl}"`);
       fs.writeFileSync(htmlPath, after);
     }
   }
 
   if (linkedPages === 0) {
-    throw new Error(`no HTML pages reference the ${stylesheet.name} stylesheet under ${outputRoot}`);
+    throw new Error(`no HTML pages reference the ${asset.label} under ${outputRoot}`);
   }
 
-  console.log(`${checkOnly ? "verified" : "fingerprinted"} ${stylesheet.name} CSS: ${stylesheet.expectedHref} (${linkedPages} links)`);
+  console.log(`${checkOnly ? "verified" : "fingerprinted"} ${asset.label}: ${asset.expectedUrl} (${linkedPages} links)`);
 }

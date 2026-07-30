@@ -7,6 +7,7 @@ cd "$repo_root"
 node --test scripts/import-bootstrap-publication.test.mjs
 node --test scripts/consume-installer-publication-bundle.test.mjs
 node --test scripts/import-auditable-demo.test.mjs
+node --test scripts/check-copyable-code.test.mjs
 node scripts/consume-installer-publication-bundle.mjs \
   --source site/installer-publication-source.json \
   --output-root public
@@ -26,6 +27,9 @@ node scripts/check-whitepaper.mjs
 node scripts/check-dogfood-proof.mjs
 node scripts/check-trademark-use.mjs
 node scripts/check-trademark-use.mjs --self-test
+node --check public/assets/command-copy.js
+node --check scripts/check-copyable-code.mjs
+node scripts/check-copyable-code.mjs --root public
 
 shared_block() {
   block_name=$1
@@ -85,6 +89,7 @@ test -f public/agent-builders/index.html
 test -f public/agent-builders/hub-starter/index.html
 test -f public/why-kungfu/index.html
 test -f public/assets/site.css
+test -f public/assets/command-copy.js
 test -f public/.well-known/security.txt
 test -f public/.well-known/kungfu-release-status.json
 node -e 'const fs=require("fs"); const s=JSON.parse(fs.readFileSync("public/.well-known/kungfu-release-status.json","utf8")); if(s.schema!=="kungfu.release-status/v1" || s.status!=="unavailable" || s.releasedUseClaim!==false || s.release!==null || s.acquisitionEvidence!==null) throw new Error("pre-release status endpoint is not truthful")'
@@ -522,10 +527,11 @@ grep -q 'role="tablist" aria-label="Hub Starter command mode"' public/agent-buil
 grep -q 'data-command-tab="install"' public/agent-builders/hub-starter/index.html
 grep -q 'data-command-tab="update"' public/agent-builders/hub-starter/index.html
 grep -q 'data-command-panel="update" hidden' public/agent-builders/hub-starter/index.html
-test "$(grep -c '<button class="copy-button"' public/agent-builders/hub-starter/index.html)" -eq 3
-grep -q 'navigator.clipboard.writeText' public/agent-builders/hub-starter/index.html
-grep -q 'button.textContent = "Copied"' public/agent-builders/hub-starter/index.html
-grep -q 'button.setAttribute("aria-label", "Command copied")' public/agent-builders/hub-starter/index.html
+test "$(grep -c '<button class="copy-button"' public/agent-builders/hub-starter/index.html)" -eq 4
+grep -q 'src="/assets/command-copy.js" defer' public/agent-builders/hub-starter/index.html
+grep -q 'navigator.clipboard.writeText' public/assets/command-copy.js
+grep -q 'button.textContent = "Copied"' public/assets/command-copy.js
+grep -q 'button.setAttribute("aria-label", "Command copied")' public/assets/command-copy.js
 grep -q 'docker compose -f oci://ghcr.io/kungfu-systems/runtime-images/hub-starter:compose-preview up --wait' public/agent-builders/hub-starter/index.html
 grep -q 'HUB_PORT=9090 docker compose' public/agent-builders/hub-starter/index.html
 grep -q 'PostgreSQL · private network only' public/agent-builders/hub-starter/index.html
@@ -547,6 +553,7 @@ fi
 
 if [ -d dist ]; then
   node scripts/fingerprint-site-assets.mjs --root dist --check
+  node scripts/check-copyable-code.mjs --root dist
   test -f dist/index.html
   test -f dist/how-tested/continuity/index.html
   test -f dist/how-tested/auditable-demo/index.html

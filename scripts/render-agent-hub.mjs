@@ -75,7 +75,8 @@ const html = `<!doctype html>
     .eyebrow { margin: 0; color: var(--accent); font-size: 13px; font-weight: 750; text-transform: uppercase; }
     h1 { max-width: 920px; margin: 0; font-size: clamp(46px, 8vw, 86px); line-height: .96; }
     .lead { max-width: 820px; margin: 0; color: var(--muted); font-size: 20px; }
-    .command { overflow-x: auto; margin: 8px 0 0; padding: 20px; border: 1px solid var(--line); border-left: 5px solid var(--accent); background: var(--panel); color: var(--fg); font: 700 15px/1.6 "SFMono-Regular", Consolas, monospace; white-space: pre-wrap; overflow-wrap: anywhere; }
+    .command-block { margin: 8px 0 0; }
+    .command { overflow-x: auto; padding: 20px; border: 1px solid var(--line); border-left: 5px solid var(--accent); background: var(--panel); color: var(--fg); font: 700 15px/1.6 "SFMono-Regular", Consolas, monospace; white-space: pre-wrap; overflow-wrap: anywhere; }
     .actions { display: flex; flex-wrap: wrap; gap: 12px; }
     .actions a { padding: 10px 14px; border: 1px solid var(--line); font-weight: 700; text-decoration: none; }
     .actions a:first-child { border-color: var(--accent); background: var(--accent); color: white; }
@@ -101,7 +102,10 @@ ${renderHeader(layout)}
       <p class="eyebrow">Executable first-party proof · ${escapeHtml(page.status)}</p>
       <h1>Ask Kungfu to prove its Agent Hub capability.</h1>
       <p class="lead">The installed product runs the fixed KFD Hub ${page.suite.fixedVectorCount} suite against two isolated local authority domains, then explains the exact result to a human. Add <code>--json</code> for an Agent.</p>
-      <pre class="command"><code>${escapeHtml(command)}</code></pre>
+      <div class="command-block">
+        <pre class="command"><code>${escapeHtml(command)}</code></pre>
+        <button class="copy-button" type="button" data-copy-command aria-label="Copy Agent Hub qualification command" aria-live="polite">Copy</button>
+      </div>
       <div class="actions">
         <a href="https://kfd.libkungfu.dev/agent-hub">Read the KFD-owned profile</a>
         <a href="/agent-hub.json">Open the machine entry</a>
@@ -120,7 +124,10 @@ ${renderHeader(layout)}
     <section class="section" aria-labelledby="verify-heading">
       <p class="eyebrow">Retained evidence</p>
       <h2 id="verify-heading">Verify again without rerunning the suite.</h2>
-      <pre class="command"><code>${escapeHtml(verify)}</code></pre>
+      <div class="command-block">
+        <pre class="command"><code>${escapeHtml(verify)}</code></pre>
+        <button class="copy-button" type="button" data-copy-command aria-label="Copy Agent Hub verification command" aria-live="polite">Copy</button>
+      </div>
       <p>The verifier rechecks the KFD report, adapter bytes, current product artifact, isolation statement, and bounded meaning. The qualification also records whether real <code>~/.kungfu</code> metadata stayed unchanged.</p>
     </section>
     <section class="section" aria-labelledby="ownership-heading">
@@ -134,6 +141,7 @@ ${renderHeader(layout)}
     <!-- shared-footer:start -->
 ${renderFooter(layout)}
     <!-- shared-footer:end -->
+    <script src="/assets/command-copy.js" defer></script>
   </main>
 </body>
 </html>
