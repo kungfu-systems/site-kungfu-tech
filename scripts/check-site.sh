@@ -102,6 +102,8 @@ test -f public/services/index.html
 test -f public/trust/index.html
 test -f public/legal/index.html
 test -f public/install/index.html
+grep -q 'width: min(1040px, calc(100% - 40px));' public/install/index.html
+grep -q 'padding: 34px 0 64px;' public/install/index.html
 test -f site/public-dogfood-proof.json
 for page in public/index.html public/how-tested/continuity/index.html public/how-tested/auditable-demo/index.html public/agent-builders/index.html public/agent-builders/hub-starter/index.html public/why-kungfu/index.html public/about/index.html public/about/bootstrapping/index.html public/about/bootstrapping/evidence/index.html public/capital/index.html public/capital/investor-perspective/index.html public/services/index.html public/trust/index.html public/legal/index.html public/install/index.html; do
   grep -q 'href="/assets/site.css"' "$page"
