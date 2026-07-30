@@ -219,6 +219,8 @@ test("imports signed channel and installers into mutable and immutable routes", 
       page,
       /href="https:\/\/kungfu\.tech\/install\.sh"/,
     );
+    assert.equal((page.match(/data-copy-command/g) || []).length, 2);
+    assert.equal((page.match(/class="command-block"/g) || []).length, 2);
     assert.match(
       page,
       new RegExp(
@@ -383,6 +385,8 @@ test("the committed page remains truthful before a signed publication", () => {
   );
   assert.match(page, /Public installer not released yet\./);
   assert.match(page, /machine-readable <code>unavailable<\/code> result/);
+  assert.equal((page.match(/data-copy-command/g) || []).length, 2);
+  assert.match(page, /src="\/assets\/command-copy\.js" defer/);
   assert.doesNotMatch(page, /data-ungfu-release-acquisition/);
   const unavailable = {
     schema: "kungfu.bootstrap-installer-availability/v1",
