@@ -131,6 +131,11 @@ grep -q 'class="demo-carousel-phase">Coming soon</span>' public/index.html
 grep -q 'position: absolute' public/index.html
 grep -q 'right: 10px' public/index.html
 grep -q 'bottom: 10px' public/index.html
+grep -q 'min-height: 70px' public/index.html
+grep -q 'padding: 10px 310px 10px 15px' public/index.html
+grep -q 'linear-gradient(135deg, #f8fafb 0%, #edf2f5 56%, #e3eaf0 100%)' public/index.html
+grep -q 'border: 0' public/index.html
+grep -q 'box-shadow: none' public/index.html
 grep -q 'transition: opacity 720ms ease' public/index.html
 grep -q 'container-type: inline-size' public/index.html
 grep -q 'calc(177.777dvh - 380px)' public/index.html
@@ -169,11 +174,21 @@ if (html.includes('class="demo-showcase-heading"')
   || html.indexOf('class="demo-carousel-controls"') < html.indexOf('data-carousel-track')) {
   throw new Error("homepage carousel controls must remain overlaid inside the demonstration card");
 }
+if (!html.includes("min-height: 70px")
+  || !html.includes("padding: 10px 310px 10px 15px")) {
+  throw new Error("homepage caption does not preserve control spacing and vertical alignment");
+}
 if (!html.includes("@media (min-width: 1800px) and (min-height: 1200px)")
   || !html.includes("@media (min-width: 3000px) and (min-height: 1800px)")) {
   throw new Error("homepage is missing its 2K and 4K landscape sizing contracts");
 }
 if (!html.includes("width: min(100%, max(480px, calc(177.777dvh - 380px)))")
+  || !/@media \(min-width: 821px\) \{\s*\.demo-carousel-viewport \{/u.test(html)
+  || !/\.demo-showcase \{[\s\S]*?border: 1px solid var\(--line\);[\s\S]*?linear-gradient\(135deg, #f8fafb 0%, #edf2f5 56%, #e3eaf0 100%\);[\s\S]*?box-shadow: 0 24px 60px/u.test(html)
+  || !/\.hero-demo \{[\s\S]*?border: 0;[\s\S]*?background: transparent;[\s\S]*?box-shadow: none;/u.test(html)
+  || !/\.claim-demo-title \{[\s\S]*?color: var\(--fg\);/u.test(html)
+  || !/\.claim-demo-tagline \{[\s\S]*?color: var\(--muted\);/u.test(html)
+  || !html.includes("@media (prefers-color-scheme: dark)")
   || !html.includes("margin-top: -28px")
   || !html.includes("font-size: clamp(30px, 5.8cqw, 86px)")) {
   throw new Error("homepage carousel does not preserve its header-tight viewport-height contract");
