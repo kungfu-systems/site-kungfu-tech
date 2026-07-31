@@ -122,8 +122,13 @@ grep -q 'Exact installed artifact · 19 seconds' public/index.html
 grep -q 'class="demo-showcase"' public/index.html
 grep -q 'data-demo-carousel' public/index.html
 grep -q 'data-carousel-track' public/index.html
+grep -q 'data-demo-title="Core idea" data-active' public/index.html
+grep -q '01 / 02 · Core idea' public/index.html
 grep -q 'data-carousel-previous' public/index.html
 grep -q 'data-carousel-next' public/index.html
+grep -q 'transition: opacity 720ms ease' public/index.html
+grep -q 'window.setTimeout' public/index.html
+grep -q '}, 5000);' public/index.html
 grep -q 'event.key === "ArrowLeft"' public/index.html
 grep -q 'event.key === "ArrowRight"' public/index.html
 grep -q 'addEventListener("touchstart"' public/index.html
@@ -141,8 +146,20 @@ if (/class="continuity-demo"|Same task\. New chat\. No re-explanation\./u.test(h
   throw new Error("homepage still contains the retired static continuity card");
 }
 const slides = html.match(/<article\b[^>]*data-demo-slide[^>]*>/giu) || [];
-if (slides.length < 1 || slides.some((slide) => !/\bdata-demo-title="[^"]+"/u.test(slide))) {
-  throw new Error("homepage carousel requires at least one titled demonstration slide");
+if (slides.length !== 2 || slides.some((slide) => !/\bdata-demo-title="[^"]+"/u.test(slide))) {
+  throw new Error("homepage carousel requires the core idea and one titled exact demonstration");
+}
+if (!/data-demo-title="Core idea"[^>]*data-active/u.test(slides[0])
+  || !/data-demo-title="Agent Work Lab"/u.test(slides[1])) {
+  throw new Error("homepage carousel must open on the core idea before the Agent Work Lab replay");
+}
+if (html.includes('class="hero-copy"')
+  || html.indexOf('class="brand-principle"') < html.indexOf('<!-- auditable-demo-home:end -->')) {
+  throw new Error("homepage supporting copy must remain below the complete demonstration reel");
+}
+if (!html.includes("@media (min-width: 1800px) and (min-height: 1200px)")
+  || !html.includes("@media (min-width: 3000px) and (min-height: 1800px)")) {
+  throw new Error("homepage is missing its 2K and 4K landscape sizing contracts");
 }
 for (const member of ["poster.png", "demo.webm", "demo.mp4", "complete-transcript.txt"]) {
   const expected = `${projection.publicEvidencePath}/${member}`;
@@ -632,7 +649,9 @@ if [ -d dist ]; then
   grep -q "Your agent shouldn't start over when the chat ends." dist/index.html
   grep -q 'One Work. Two fresh Agent processes.' dist/index.html
   grep -q 'data-demo-carousel' dist/index.html
+  grep -q 'data-demo-title="Core idea" data-active' dist/index.html
   grep -q 'data-demo-slide data-demo-title="Agent Work Lab"' dist/index.html
+  grep -q '01 / 02 · Core idea' dist/index.html
   grep -q 'data-carousel-previous' dist/index.html
   grep -q 'data-carousel-next' dist/index.html
   grep -q 'data-autoplay-demo controls muted loop playsinline' dist/index.html
