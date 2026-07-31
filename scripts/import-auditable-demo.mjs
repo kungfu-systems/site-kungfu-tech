@@ -10,8 +10,9 @@ import { escapeAttr, escapeHtml } from "./site-layout.mjs";
 const DIGEST = /^sha256:[0-9a-f]{64}$/u;
 const SHA = /^[0-9a-f]{40}$/u;
 const ID = /^[1-9][0-9]*$/u;
+const DEMO_ID = /^[a-z0-9]+(?:-[a-z0-9]+)*$/u;
 const ARTIFACT_NAME = /^[A-Za-z0-9][A-Za-z0-9._-]{0,255}$/u;
-const EVIDENCE_CLASS = "exact-installed-artifact-agent-work-lab-autoplay/v1";
+const EVIDENCE_CLASS = /^[a-z0-9][a-z0-9._/-]*\/v[1-9][0-9]*$/u;
 const REQUIRED_AUTHORIZATION_SOURCES = [
   "exact-release-passport",
   "core-policy",
@@ -100,7 +101,10 @@ function listRegularFiles(directory) {
 
 function verifyPassport(passport) {
   invariant(
-    passport?.schema === "kungfu.auditable-demo.release-passport/v1"
+    [
+      "kungfu.auditable-demo.release-passport/v1",
+      "kungfu.auditable-demo.release-passport/v2",
+    ].includes(passport?.schema)
       && passport.status === "qualified",
     "passport schema or status is invalid",
   );
@@ -164,7 +168,7 @@ function verifyPassport(passport) {
   );
   invariant(passport.authority?.publication === "github-artifacts-only", "unexpected publication authority");
   invariant(passport.authority?.productionDeployment === false, "source run must not claim a production deployment");
-  invariant(passport.authority?.evidenceClass === EVIDENCE_CLASS, "unexpected evidence class");
+  invariant(EVIDENCE_CLASS.test(passport.authority?.evidenceClass || ""), "unexpected evidence class");
   invariant(
     passport.authority?.authorization?.status === "not-granted-by-demo"
       && JSON.stringify(passport.authority.authorization.requiredSources)
@@ -182,7 +186,35 @@ function verifyPassport(passport) {
       && passport.authority.nonClaims.every((claim) => typeof claim === "string" && claim.length > 0),
     "Passport claims and non-claims are invalid",
   );
-  return passport;
+  const demo = passport.schema.endsWith("/v2")
+    ? passport.demo
+    : {
+      id: "agent-work-lab",
+      catalogRoot: null,
+      descriptorRoot: null,
+      commandLabel: "kungfu agent-work-lab autoplay",
+      evidenceClass: "exact-installed-artifact-agent-work-lab-autoplay/v1",
+      sceneId: "kungfu-agent-work-lab-autoplay",
+      publication: {
+        readmeFeatured: true,
+        siteSlug: "agent-work-lab",
+      },
+    };
+  invariant(
+    DEMO_ID.test(demo?.id || "")
+      && (passport.schema.endsWith("/v1") || (
+        DIGEST.test(demo?.catalogRoot || "")
+        && DIGEST.test(demo?.descriptorRoot || "")
+      ))
+      && typeof demo?.commandLabel === "string"
+      && demo.commandLabel.startsWith("kungfu ")
+      && demo.evidenceClass === passport.authority.evidenceClass
+      && DEMO_ID.test(demo?.sceneId || "")
+      && typeof demo?.publication?.readmeFeatured === "boolean"
+      && DEMO_ID.test(demo?.publication?.siteSlug || ""),
+    "demo identity or catalog binding is invalid",
+  );
+  return { passport, demo };
 }
 
 function verifyMedia(mediaDirectory, passport) {
@@ -336,6 +368,46 @@ function renderHomepageDemo(publicPath, scene) {
       <!-- auditable-demo-home:end -->`;
 }
 
+function renderAdditionalEvidence(passport, demo, publicPath, scene) {
+  const claims = passport.authority.claims
+    .map((claim) => `<li>${escapeHtml(claim)}</li>`)
+    .join("");
+  const nonClaims = passport.authority.nonClaims
+    .map((claim) => `<li>${escapeHtml(claim)}</li>`)
+    .join("");
+  return `
+      <section class="demo-player" aria-labelledby="demo-${escapeAttr(demo.id)}-heading">
+        <div>
+          <p class="eyebrow">Additional exact installed-artifact demo · ${escapeHtml(demo.id)}</p>
+          <h2 id="demo-${escapeAttr(demo.id)}-heading">${escapeHtml(demo.commandLabel)}</h2>
+          <p class="lead">This ${formatDuration(scene.durationMs)}-second animation is selected by the exact demo id <code>${escapeHtml(demo.id)}</code>. It passed its own Gate and Passport; catalog membership alone grants no authority.</p>
+        </div>
+        <video controls playsinline preload="metadata" aria-label="${escapeAttr(demo.commandLabel)} exact installed-artifact demonstration" poster="${escapeAttr(publicPath)}/poster.png">
+          <source src="${escapeAttr(publicPath)}/demo.webm" type="video/webm">
+          <source src="${escapeAttr(publicPath)}/demo.mp4" type="video/mp4">
+          <p><a href="${escapeAttr(publicPath)}/demo.mp4">Download the MP4 recording.</a></p>
+        </video>
+        <p class="fallback">Static fallback: <a href="${escapeAttr(publicPath)}/poster.png">open the exact poster</a>. Text alternative: <a href="${escapeAttr(publicPath)}/complete-transcript.txt">read the complete transcript</a>.</p>
+      </section>
+
+      <section class="coordinates">
+        <h2>${escapeHtml(demo.id)} claims</h2>
+        <ul>${claims}</ul>
+        <h3>Explicit non-claims</h3>
+        <ul>${nonClaims}</ul>
+        <dl>
+          <div><dt>Demo descriptor</dt><dd><code>${escapeHtml(demo.descriptorRoot)}</code></dd></div>
+          <div><dt>Gate root</dt><dd><code>${escapeHtml(passport.gate.root)}</code></dd></div>
+          <div><dt>Media root</dt><dd><code>${escapeHtml(passport.media.root)}</code></dd></div>
+          <div><dt>Passport root</dt><dd><code>${escapeHtml(passport.root.value)}</code></dd></div>
+        </dl>
+        <nav class="evidence-links" aria-label="${escapeAttr(demo.id)} exact evidence links">
+          <a href="${escapeAttr(publicPath)}/passport.json">Machine-readable Passport</a>
+          <a href="/auditable-demos/${escapeAttr(demo.id)}.json">Public site projection</a>
+        </nav>
+      </section>`;
+}
+
 function replaceEvidence(page, rendered) {
   const pattern = /      <!-- auditable-demo-evidence:start -->[\s\S]*?      <!-- auditable-demo-evidence:end -->/mu;
   invariant(pattern.test(page), "page is missing auditable-demo evidence markers");
@@ -348,6 +420,63 @@ function replaceHomepageDemo(page, rendered) {
   return page.replace(pattern, rendered);
 }
 
+function normalizeSources(source) {
+  if (source.schema === "kungfu.site.auditable-demo-source/v1") {
+    return {
+      featuredDemoId: "agent-work-lab",
+      demos: [{
+        id: "agent-work-lab",
+        passport: source.passport,
+        mediaDirectory: source.mediaDirectory,
+      }],
+      collection: false,
+    };
+  }
+  invariant(
+    source.schema === "kungfu.site.auditable-demo-source/v2"
+      && DEMO_ID.test(source.featuredDemoId || "")
+      && Array.isArray(source.demos)
+      && source.demos.length >= 1
+      && source.demos.length <= 8,
+    "source descriptor schema or demo collection is invalid",
+  );
+  const demos = source.demos.map((entry, index) => {
+    invariant(
+      entry && Object.keys(entry).sort().join(",") === "id,mediaDirectory,passport"
+        && DEMO_ID.test(entry.id || "")
+        && typeof entry.passport === "string"
+        && entry.passport.length > 0
+        && typeof entry.mediaDirectory === "string"
+        && entry.mediaDirectory.length > 0,
+      `source descriptor demo ${index} is invalid`,
+    );
+    return entry;
+  });
+  const ids = demos.map(({ id }) => id);
+  invariant(new Set(ids).size === ids.length, "source descriptor demo ids must be unique");
+  invariant(ids.includes(source.featuredDemoId), "featured demo id is not declared");
+  return { featuredDemoId: source.featuredDemoId, demos, collection: true };
+}
+
+function siteProjection(passport, demo, publicPath) {
+  return {
+    schema: "kungfu.site.auditable-demo/v2",
+    status: "qualified",
+    demo,
+    sourceSha: passport.source.sha,
+    evidenceClass: passport.authority.evidenceClass,
+    gateRoot: passport.gate.root,
+    mediaRoot: passport.media.root,
+    passportRoot: passport.root.value,
+    buildchainSha: passport.toolchain.buildchainSha,
+    rendererImage: passport.toolchain.rendererImage,
+    workflowUrl: passport.workflow.url,
+    publicEvidencePath: publicPath,
+    claims: passport.authority.claims,
+    nonClaims: passport.authority.nonClaims,
+  };
+}
+
 export function importAuditableDemo({
   repoRoot,
   sourcePath,
@@ -355,49 +484,117 @@ export function importAuditableDemo({
   checkOnly = false,
 }) {
   const source = readJson(sourcePath, "source descriptor");
-  invariant(source.schema === "kungfu.site.auditable-demo-source/v1", "source descriptor schema is invalid");
-  const passportPath = path.resolve(repoRoot, source.passport);
-  const mediaDirectory = path.resolve(repoRoot, source.mediaDirectory);
-  invariant(passportPath.startsWith(`${repoRoot}${path.sep}`), "passport path escapes repository");
-  invariant(mediaDirectory.startsWith(`${repoRoot}${path.sep}`), "media path escapes repository");
-  const passport = verifyPassport(readJson(passportPath, "passport"));
-  const scene = verifyMedia(mediaDirectory, passport);
-
-  const rootName = passport.root.value.slice(7);
-  const publicPath = `/evidence/auditable-demo/${rootName}`;
-  const evidenceDirectory = path.join(outputRoot, publicPath);
+  const normalizedSource = normalizeSources(source);
   const pagePath = path.join(outputRoot, "how-tested/auditable-demo/index.html");
   const homepagePath = path.join(outputRoot, "index.html");
   const projectionPath = path.join(outputRoot, "auditable-demo.json");
   const expected = new Map();
-  for (const member of EXPECTED_MEDIA_MEMBERS) {
-    expected.set(path.join(evidenceDirectory, member), readRegular(path.join(mediaDirectory, member), member));
+  const imports = [];
+  for (const entry of normalizedSource.demos) {
+    const passportPath = path.resolve(repoRoot, entry.passport);
+    const mediaDirectory = path.resolve(repoRoot, entry.mediaDirectory);
+    invariant(passportPath.startsWith(`${repoRoot}${path.sep}`), "passport path escapes repository");
+    invariant(mediaDirectory.startsWith(`${repoRoot}${path.sep}`), "media path escapes repository");
+    const verified = verifyPassport(readJson(passportPath, "passport"));
+    const { passport, demo } = verified;
+    invariant(entry.id === demo.id, `source demo id ${entry.id} does not match its Passport`);
+    invariant(
+      demo.publication.readmeFeatured === (entry.id === normalizedSource.featuredDemoId),
+      `demo ${entry.id} README feature status drifts from the source descriptor`,
+    );
+    const scene = verifyMedia(mediaDirectory, passport);
+    const rootName = passport.root.value.slice(7);
+    const publicPath =
+      demo.id === "agent-work-lab" && demo.publication.readmeFeatured
+        ? `/evidence/auditable-demo/${rootName}`
+        : `/evidence/auditable-demo/${demo.publication.siteSlug}/${rootName}`;
+    const evidenceDirectory = path.join(outputRoot, publicPath);
+    for (const member of EXPECTED_MEDIA_MEMBERS) {
+      expected.set(
+        path.join(evidenceDirectory, member),
+        readRegular(path.join(mediaDirectory, member), member),
+      );
+    }
+    expected.set(
+      path.join(evidenceDirectory, "passport.json"),
+      Buffer.from(stableJson(passport)),
+    );
+    const projection = siteProjection(passport, demo, publicPath);
+    imports.push({ passport, demo, scene, publicPath, projection });
+    if (normalizedSource.collection) {
+      expected.set(
+        path.join(outputRoot, "auditable-demos", `${demo.id}.json`),
+        Buffer.from(stableJson(projection)),
+      );
+    }
   }
-  expected.set(path.join(evidenceDirectory, "passport.json"), Buffer.from(stableJson(passport)));
+  const featured = imports.find(({ demo }) => demo.id === normalizedSource.featuredDemoId);
+  invariant(featured, "featured demo did not import");
   expected.set(
     projectionPath,
-    Buffer.from(stableJson({
-      schema: "kungfu.site.auditable-demo/v1",
-      status: "qualified",
-      sourceSha: passport.source.sha,
-      evidenceClass: passport.authority.evidenceClass,
-      gateRoot: passport.gate.root,
-      mediaRoot: passport.media.root,
-      passportRoot: passport.root.value,
-      buildchainSha: passport.toolchain.buildchainSha,
-      rendererImage: passport.toolchain.rendererImage,
-      workflowUrl: passport.workflow.url,
-      publicEvidencePath: publicPath,
-      claims: passport.authority.claims,
-      nonClaims: passport.authority.nonClaims,
-    })),
+    Buffer.from(
+      stableJson(
+        normalizedSource.collection
+          ? featured.projection
+          : {
+            ...featured.projection,
+            schema: "kungfu.site.auditable-demo/v1",
+            demo: undefined,
+          },
+      ),
+    ),
   );
+  if (normalizedSource.collection) {
+    expected.set(
+      path.join(outputRoot, "auditable-demos.json"),
+      Buffer.from(stableJson({
+        schema: "kungfu.site.auditable-demo-collection/v1",
+        status: "qualified",
+        featuredDemoId: featured.demo.id,
+        demos: imports
+          .map(({ projection }) => ({
+            id: projection.demo.id,
+            siteSlug: projection.demo.publication.siteSlug,
+            projectionPath: `/auditable-demos/${projection.demo.id}.json`,
+            passportRoot: projection.passportRoot,
+            mediaRoot: projection.mediaRoot,
+          }))
+          .sort((left, right) => left.id.localeCompare(right.id)),
+      })),
+    );
+  }
   const pageBefore = readRegular(pagePath, "auditable demo page").toString("utf8");
-  expected.set(pagePath, Buffer.from(replaceEvidence(pageBefore, renderEvidence(passport, publicPath, scene))));
+  let rendered = renderEvidence(
+    featured.passport,
+    featured.publicPath,
+    featured.scene,
+  );
+  const additional = imports
+    .filter(({ demo }) => demo.id !== featured.demo.id)
+    .sort((left, right) => left.demo.id.localeCompare(right.demo.id))
+    .map(({ passport, demo, publicPath, scene }) =>
+      renderAdditionalEvidence(passport, demo, publicPath, scene),
+    )
+    .join("");
+  if (additional) {
+    rendered = rendered.replace(
+      "      <!-- auditable-demo-evidence:end -->",
+      `${additional}\n      <!-- auditable-demo-evidence:end -->`,
+    );
+  }
+  expected.set(
+    pagePath,
+    Buffer.from(replaceEvidence(pageBefore, rendered)),
+  );
   const homepageBefore = readRegular(homepagePath, "homepage").toString("utf8");
   expected.set(
     homepagePath,
-    Buffer.from(replaceHomepageDemo(homepageBefore, renderHomepageDemo(publicPath, scene))),
+    Buffer.from(
+      replaceHomepageDemo(
+        homepageBefore,
+        renderHomepageDemo(featured.publicPath, featured.scene),
+      ),
+    ),
   );
 
   const drift = [];
@@ -413,7 +610,12 @@ export function importAuditableDemo({
   if (checkOnly) {
     invariant(drift.length === 0, `generated publication drift: ${drift.map((item) => path.relative(repoRoot, item)).join(", ")}`);
   }
-  return { passport, publicPath, changed: drift.length > 0 };
+  return {
+    passport: featured.passport,
+    publicPath: featured.publicPath,
+    demos: imports,
+    changed: drift.length > 0,
+  };
 }
 
 function parseArguments(argv) {
