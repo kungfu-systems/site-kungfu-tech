@@ -181,9 +181,9 @@ if (!heroActions
   || /\.hero-actions a:first-child\s*\{/u.test(html)) {
   throw new Error("homepage supporting row must keep installation in the header and expose only neutral tested-product links");
 }
-if (!/\.summary \{[\s\S]*?justify-self: center;[\s\S]*?text-align: center;/u.test(html)
+if (!/\.summary \{[\s\S]*?justify-self: center;[\s\S]*?text-align: left;/u.test(html)
   || !/\.hero-actions \{[\s\S]*?flex-direction: column;[\s\S]*?align-items: flex-end;[\s\S]*?justify-self: end;/u.test(html)) {
-  throw new Error("homepage supporting row does not preserve centered copy and stacked right-aligned actions");
+  throw new Error("homepage supporting row does not preserve its centered left-aligned copy block and stacked right-aligned actions");
 }
 if (html.includes('class="demo-showcase-heading"')
   || html.indexOf('class="demo-carousel-controls"') < html.indexOf('data-carousel-track')) {
