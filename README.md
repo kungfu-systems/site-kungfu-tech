@@ -104,7 +104,11 @@ homepage's primary visual field look artificially narrow. In the light theme it
 uses the site's cool gray-blue surface instead of a black container; the video
 itself keeps its natural dark media field. The showcase owns the single border,
 background, and shadow; slides do not draw a second nested card.
-The adjacent language must preserve each slide's evidence and non-authority
+The supporting row keeps the brand principle on the left, centers the execution-
+surface explanation, and right-aligns the Agent Supply Chain and Agent Builders
+links. Installation remains a single primary action in the shared header until
+the temporary carousel phase label is replaced at Alpha. The adjacent language
+must preserve each slide's evidence and non-authority
 boundaries rather than presenting a demonstration as provider, durability, or
 production proof. Do not restore the retired static continuity comparison card:
 its explanation duplicated the Agent Work Lab replay and diluted the primary

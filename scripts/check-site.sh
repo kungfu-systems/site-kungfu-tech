@@ -140,6 +140,8 @@ grep -q 'transition: opacity 720ms ease' public/index.html
 grep -q 'container-type: inline-size' public/index.html
 grep -q 'calc(177.777dvh - 380px)' public/index.html
 grep -q '5.8cqw' public/index.html
+grep -q 'Use Codex, Claude, OpenCode, or your own execution surface.' public/index.html
+grep -q 'class="hero-actions" aria-label="Explore Kungfu"' public/index.html
 grep -q 'window.setTimeout' public/index.html
 grep -q '}, 5000);' public/index.html
 grep -q 'event.key === "ArrowLeft"' public/index.html
@@ -169,6 +171,19 @@ if (!/data-demo-title="Core idea"[^>]*data-active/u.test(slides[0])
 if (html.includes('class="hero-copy"')
   || html.indexOf('class="brand-principle"') < html.indexOf('<!-- auditable-demo-home:end -->')) {
   throw new Error("homepage supporting copy must remain below the complete demonstration reel");
+}
+const heroActions = html.match(/<div class="hero-actions"[\s\S]*?<\/div>/u)?.[0] || "";
+if (!heroActions
+  || heroActions.includes('href="/install/"')
+  || !heroActions.includes('href="/agent-supply-chain/"')
+  || !heroActions.includes('href="/agent-builders/"')
+  || html.includes("Copilot")
+  || /\.hero-actions a:first-child\s*\{/u.test(html)) {
+  throw new Error("homepage supporting row must keep installation in the header and expose only neutral tested-product links");
+}
+if (!/\.summary \{[\s\S]*?justify-self: center;[\s\S]*?text-align: center;/u.test(html)
+  || !/\.hero-actions \{[\s\S]*?justify-content: flex-end;[\s\S]*?justify-self: end;/u.test(html)) {
+  throw new Error("homepage supporting row does not preserve centered copy and right-aligned actions");
 }
 if (html.includes('class="demo-showcase-heading"')
   || html.indexOf('class="demo-carousel-controls"') < html.indexOf('data-carousel-track')) {

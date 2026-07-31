@@ -40,7 +40,7 @@
       display: grid;
       grid-template-columns: minmax(260px, 0.8fr) minmax(320px, 1fr) auto;
       gap: 20px 28px;
-      align-items: start;
+      align-items: center;
       min-width: 0;
       grid-column: 1;
       grid-row: 2;
@@ -76,10 +76,12 @@
     }
 
     .summary {
-      max-width: 640px;
+      max-width: 560px;
       margin: 0;
+      justify-self: center;
       color: var(--muted);
       font-size: 17px;
+      text-align: center;
     }
 
     .brand-principle {
@@ -109,6 +111,8 @@
       flex-wrap: wrap;
       gap: 12px;
       align-items: center;
+      justify-content: flex-end;
+      justify-self: end;
     }
 
     .hero-actions a {
@@ -121,12 +125,6 @@
       color: var(--fg);
       text-decoration: none;
       font-weight: 650;
-    }
-
-    .hero-actions a:first-child {
-      border-color: var(--accent);
-      background: var(--accent);
-      color: #ffffff;
     }
 
     .demo-showcase {
@@ -627,9 +625,8 @@
           <strong><span class="brand-signature">Kungfu UNGFU™</span> · Never Guess. Facts Unfold.</strong>
           <a href="/why-kungfu/">Why Kungfu?</a>
         </div>
-        <p class="summary">Use Codex, Claude, Copilot, or your own execution surface. Kungfu keeps durable work facts between sessions; it is not another agent.</p>
-        <div class="hero-actions" aria-label="Primary actions">
-          <a href="/install/">Get Kungfu</a>
+        <p class="summary">Use Codex, Claude, OpenCode, or your own execution surface. Kungfu keeps durable work facts between sessions; it is not another agent.</p>
+        <div class="hero-actions" aria-label="Explore Kungfu">
           <a href="/agent-supply-chain/">Explore the Agent Supply Chain</a>
           <a class="primary-builder-action" href="/agent-builders/">For Agent Builders</a>
         </div>
