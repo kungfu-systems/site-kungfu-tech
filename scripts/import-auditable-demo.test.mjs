@@ -23,6 +23,19 @@ function stableJson(value) {
   return `${JSON.stringify(canonical(value), null, 2)}\n`;
 }
 
+function assertMp4BeforeWebm(html) {
+  const videos = [...html.matchAll(/<video\b[\s\S]*?<\/video>/giu)]
+    .map(([video]) => video)
+    .filter((video) => video.includes('type="video/mp4"') && video.includes('type="video/webm"'));
+  assert.ok(videos.length > 0, "expected at least one MP4 and WebM video source pair");
+  for (const video of videos) {
+    assert.ok(
+      video.indexOf('type="video/mp4"') < video.indexOf('type="video/webm"'),
+      "MP4 must precede WebM in each video source list",
+    );
+  }
+}
+
 function fixture() {
   const repoRoot = fs.mkdtempSync(path.join(os.tmpdir(), "auditable-demo-site-"));
   const mediaDirectory = path.join(repoRoot, "site/auditable-demo/media");
@@ -290,10 +303,12 @@ test("imports exact media and a source-bound public projection", () => {
     assert.equal(projection.sourceSha, input.passport.source.sha);
     assert.deepEqual(projection.claims, input.passport.authority.claims);
     assert.deepEqual(projection.nonClaims, input.passport.authority.nonClaims);
-    assert.match(
-      fs.readFileSync(path.join(input.outputRoot, "how-tested/auditable-demo/index.html"), "utf8"),
-      /Watch the artifact explain itself\./u,
+    const evidencePage = fs.readFileSync(
+      path.join(input.outputRoot, "how-tested/auditable-demo/index.html"),
+      "utf8",
     );
+    assert.match(evidencePage, /Watch the artifact explain itself\./u);
+    assertMp4BeforeWebm(evidencePage);
     assert.match(
       fs.readFileSync(path.join(input.outputRoot, "how-tested/auditable-demo/index.html"), "utf8"),
       /18\.5-second animation/u,
@@ -316,6 +331,7 @@ test("imports exact media and a source-bound public projection", () => {
     assert.match(homepage, /Exact installed artifact · 18\.5 seconds/u);
     assert.match(homepage, new RegExp(`${result.publicPath}/demo\\.webm`, "u"));
     assert.match(homepage, new RegExp(`${result.publicPath}/complete-transcript\\.txt`, "u"));
+    assertMp4BeforeWebm(homepage);
     assert.equal(importAuditableDemo({ ...input, checkOnly: true }).changed, false);
   } finally {
     fs.rmSync(input.repoRoot, { recursive: true, force: true });
@@ -357,6 +373,7 @@ test("imports a demo-id collection while preserving the Agent Work Lab route", (
     );
     assert.match(page, /Watch the artifact explain itself\./u);
     assert.match(page, /kungfu status --snapshot --no-interaction/u);
+    assertMp4BeforeWebm(page);
     assert.equal(importAuditableDemo({ ...input, checkOnly: true }).changed, false);
   } finally {
     fs.rmSync(input.repoRoot, { recursive: true, force: true });
