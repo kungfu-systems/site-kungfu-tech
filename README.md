@@ -84,7 +84,11 @@ retained Passport and closed media bundle. Only the active slide may play;
 playback remains muted and user-controllable, and falls back to the exact poster
 when a browser blocks it. The brand principle, explanation, and primary actions
 remain below the reel so the first reading sequence is claim, then proof, then
-navigation.
+navigation. On desktop, the reel width is capped by both the available page
+width and the dynamic viewport height. This keeps the complete card inside the
+first browser viewport even when a 4K monitor uses macOS display scaling or the
+browser chrome reduces the CSS-pixel height. Claim typography uses carousel
+container units so the words shrink with the card rather than overflowing it.
 The adjacent language must preserve each slide's evidence and non-authority
 boundaries rather than presenting a demonstration as provider, durability, or
 production proof. Do not restore the retired static continuity comparison card:
