@@ -32,7 +32,8 @@
       grid-template-columns: minmax(0, 1fr);
       gap: 16px;
       min-width: 0;
-      padding: 10px 0 24px;
+      margin-top: -28px;
+      padding: 0 0 24px;
     }
 
     .hero-details {
@@ -132,7 +133,7 @@
       display: grid;
       grid-column: 1 / -1;
       grid-row: 1;
-      gap: 10px;
+      gap: 8px;
       min-width: 0;
     }
 
@@ -161,8 +162,8 @@
 
     .demo-carousel-button {
       display: grid;
-      width: 44px;
-      height: 44px;
+      width: 40px;
+      height: 40px;
       place-items: center;
       border: 1px solid var(--line);
       background: var(--surface);
@@ -233,8 +234,8 @@
       justify-content: space-between;
       gap: 8px 16px;
       align-items: center;
-      min-height: 42px;
-      padding: 9px 13px;
+      min-height: 38px;
+      padding: 7px 13px;
       border-bottom: 1px solid #344054;
       color: #a8b8cc;
       font-size: 12px;
@@ -293,7 +294,7 @@
       grid-template-columns: minmax(0, 1fr) auto;
       gap: 12px 18px;
       align-items: center;
-      padding: 15px;
+      padding: 10px 15px;
       border-top: 1px solid #344054;
       background: #121a28;
     }
@@ -459,7 +460,7 @@
 
     @media (min-width: 821px) {
       .demo-showcase {
-        width: min(100%, max(480px, calc(177.777dvh - 544px)));
+        width: min(100%, max(480px, calc(177.777dvh - 380px)));
         justify-self: center;
       }
     }
@@ -481,7 +482,7 @@
 
     @media (max-width: 820px) {
       main { width: min(100% - 28px, 640px); gap: 32px; padding: 28px 0 40px; }
-      .hero { gap: 14px; padding: 8px 0; }
+      .hero { gap: 14px; margin-top: -32px; padding: 0 0 8px; }
       .summary { font-size: 16px; }
       .demo-showcase { gap: 8px; }
       .demo-showcase-heading { gap: 12px; align-items: center; }
@@ -539,14 +540,6 @@
 
     <section class="hero" aria-label="Kungfu homepage">
       <section class="demo-showcase" aria-labelledby="demo-showcase-title" data-demo-carousel>
-        <div class="demo-showcase-heading">
-          <p class="eyebrow" id="demo-showcase-title">Coming soon · Product demonstrations</p>
-          <div class="demo-carousel-controls" aria-label="Demonstration carousel controls">
-            <span class="demo-carousel-status" aria-live="polite" data-carousel-status>01 / 02 · Core idea</span>
-            <button class="demo-carousel-button" type="button" aria-label="Previous demonstration" data-carousel-previous disabled><span aria-hidden="true">←</span></button>
-            <button class="demo-carousel-button" type="button" aria-label="Next demonstration" data-carousel-next><span aria-hidden="true">→</span></button>
-          </div>
-        </div>
         <div class="demo-carousel-viewport" role="region" aria-roledescription="carousel" aria-label="Kungfu product demonstrations" tabindex="0" data-carousel-viewport>
           <div class="demo-carousel-track" data-carousel-track>
             <article class="demo-carousel-slide" aria-label="Kungfu core idea" data-demo-slide data-demo-title="Core idea" data-active>
@@ -585,6 +578,14 @@
         </figure>
       </article>
       <!-- auditable-demo-home:end -->
+          </div>
+        </div>
+        <div class="demo-showcase-heading">
+          <p class="eyebrow" id="demo-showcase-title">Coming soon · Product demonstrations</p>
+          <div class="demo-carousel-controls" aria-label="Demonstration carousel controls">
+            <span class="demo-carousel-status" aria-live="polite" data-carousel-status>01 / 02 · Core idea</span>
+            <button class="demo-carousel-button" type="button" aria-label="Previous demonstration" data-carousel-previous disabled><span aria-hidden="true">←</span></button>
+            <button class="demo-carousel-button" type="button" aria-label="Next demonstration" data-carousel-next><span aria-hidden="true">→</span></button>
           </div>
         </div>
       </section>

@@ -128,7 +128,7 @@ grep -q 'data-carousel-previous' public/index.html
 grep -q 'data-carousel-next' public/index.html
 grep -q 'transition: opacity 720ms ease' public/index.html
 grep -q 'container-type: inline-size' public/index.html
-grep -q 'calc(177.777dvh - 544px)' public/index.html
+grep -q 'calc(177.777dvh - 380px)' public/index.html
 grep -q '5.8cqw' public/index.html
 grep -q 'window.setTimeout' public/index.html
 grep -q '}, 5000);' public/index.html
@@ -160,13 +160,18 @@ if (html.includes('class="hero-copy"')
   || html.indexOf('class="brand-principle"') < html.indexOf('<!-- auditable-demo-home:end -->')) {
   throw new Error("homepage supporting copy must remain below the complete demonstration reel");
 }
+if (html.indexOf('class="demo-showcase-heading"')
+  < html.indexOf('class="demo-carousel-viewport"')) {
+  throw new Error("homepage carousel label and controls must remain below the demonstration card");
+}
 if (!html.includes("@media (min-width: 1800px) and (min-height: 1200px)")
   || !html.includes("@media (min-width: 3000px) and (min-height: 1800px)")) {
   throw new Error("homepage is missing its 2K and 4K landscape sizing contracts");
 }
-if (!html.includes("width: min(100%, max(480px, calc(177.777dvh - 544px)))")
+if (!html.includes("width: min(100%, max(480px, calc(177.777dvh - 380px)))")
+  || !html.includes("margin-top: -28px")
   || !html.includes("font-size: clamp(30px, 5.8cqw, 86px)")) {
-  throw new Error("homepage carousel is not constrained by browser viewport height");
+  throw new Error("homepage carousel does not preserve its header-tight viewport-height contract");
 }
 for (const member of ["poster.png", "demo.webm", "demo.mp4", "complete-transcript.txt"]) {
   const expected = `${projection.publicEvidencePath}/${member}`;
