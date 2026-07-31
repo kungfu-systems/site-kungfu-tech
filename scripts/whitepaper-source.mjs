@@ -7,7 +7,7 @@ import path from "node:path";
 const require = createRequire(import.meta.url);
 
 export const WHITEPAPER_PACKAGE = "@kungfu-tech/paper-kungfu-product-white-paper";
-export const WHITEPAPER_VERSION = "0.1.0-alpha.10";
+export const WHITEPAPER_VERSION = "0.1.0-alpha.11";
 export const MACHINE_LIFE_PACKAGE = "@kungfu-tech/paper-kfd-machine-life-roadmap";
 export const MACHINE_LIFE_VERSION = "0.1.0-alpha.3";
 export const KFD_PACKAGE = "@kungfu-tech/kfd";
@@ -23,7 +23,7 @@ export const PAPER_RELEASES = [
   {
     package: WHITEPAPER_PACKAGE,
     version: WHITEPAPER_VERSION,
-    slug: "kungfu-white-paper",
+    slug: "kungfu-real-world-agent-work",
     localReader: true,
   },
   {
@@ -87,7 +87,7 @@ function loadBrandPaperSource({
   pdfRoute,
   manifestRoute,
   llmsRoute,
-  requireAgentSupplyChain = false,
+  requireWhitePaperDisplayPlan = false,
 }) {
   const packageJsonPath = require.resolve(`${packageName}/package.json`, { paths: [repoRoot] });
   const packageRoot = path.dirname(packageJsonPath);
@@ -142,10 +142,21 @@ function loadBrandPaperSource({
   assertString(bundle.hero?.lead, "brand bundle hero.lead");
   assert(Array.isArray(bundle.homepageSections) && bundle.homepageSections.length > 0, "brand bundle homepageSections must not be empty");
   assert(Array.isArray(bundle.principles), "brand bundle principles must be an array");
-  if (requireAgentSupplyChain) {
+  if (requireWhitePaperDisplayPlan) {
     assert(bundle.principles.length > 0, "white paper brand bundle principles must not be empty");
-    assert(bundle.agentSupplyChain?.contract === "kungfu-agent-supply-chain-public-narrative/v1", "brand bundle Agent Supply Chain contract mismatch");
-    assert(bundle.agentSupplyChain?.layers?.length === 5, "brand bundle must expose five Agent Supply Chain layers");
+    assert(
+      bundle.displayPlan?.firstScreen?.join(",") === "hero,Executive Summary",
+      "white paper brand bundle first-screen display plan mismatch",
+    );
+    assert(
+      bundle.displayPlan?.primary?.join(",") === "The Problem,Product Thesis,Principles",
+      "white paper brand bundle primary display plan mismatch",
+    );
+    assert(
+      bundle.homepageSections.map((section) => section.id).join(",")
+        === "00-executive-summary,01-problem,02-thesis,03-principles,05-roadmap,09-conclusion",
+      "white paper brand bundle section plan mismatch",
+    );
   }
 
   const sectionIds = new Set();
@@ -184,11 +195,11 @@ export function loadWhitepaperSource(repoRoot = process.cwd()) {
     packageName: WHITEPAPER_PACKAGE,
     version: WHITEPAPER_VERSION,
     contract: WHITEPAPER_CONTRACT,
-    readerRoute: "/whitepaper/kungfu-white-paper/",
-    pdfRoute: "/whitepaper/kungfu-white-paper.pdf",
+    readerRoute: "/whitepaper/kungfu-real-world-agent-work/",
+    pdfRoute: "/whitepaper/kungfu-real-world-agent-work.pdf",
     manifestRoute: "/whitepaper/manifest.json",
     llmsRoute: "/whitepaper/llms.txt",
-    requireAgentSupplyChain: true,
+    requireWhitePaperDisplayPlan: true,
   });
 }
 

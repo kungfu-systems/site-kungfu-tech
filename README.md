@@ -268,11 +268,17 @@ repository does not duplicate the suite or qualification verdict.
 
 The publication catalog is generated from exact npm artifacts:
 
-- `@kungfu-tech/paper-kungfu-product-white-paper@0.1.0-alpha.10`
+- `@kungfu-tech/paper-kungfu-product-white-paper@0.1.0-alpha.11`
 - `@kungfu-tech/paper-kfd-machine-life-roadmap@0.1.0-alpha.3`
 - `@kungfu-tech/paper-kfd-foundation-real-world-agent-work@0.1.0-alpha.8`
 - `@kungfu-tech/paper-observer-declared-timelines@0.1.0-alpha.9`
 - `@kungfu-tech/paper-episodes-to-primitives@0.1.0-alpha.2`
+
+The standalone Agent Supply Chain page retains the exact structured narrative
+snapshot from White Paper `0.1.0-alpha.10`, pinned through an npm alias, because
+the `0.1.0-alpha.11` brand and evidence bundles no longer export that
+presentation contract. White Paper pages, PDF, metadata, and evidence use
+`0.1.0-alpha.11` exclusively.
 
 The human page presents only the two defining papers: the White Paper as
 Kungfu now, and Machine Life as Kungfu's future direction. They use distinct
@@ -291,8 +297,10 @@ navigation, responsive presentation, and machine entry rendering.
 Generated routes:
 
 - `/whitepaper/`
-- `/whitepaper/kungfu-white-paper/`
-- `/whitepaper/kungfu-white-paper.pdf`
+- `/whitepaper/kungfu-real-world-agent-work/`
+- `/whitepaper/kungfu-real-world-agent-work.pdf`
+- `/whitepaper/kungfu-white-paper/` (legacy alias)
+- `/whitepaper/kungfu-white-paper.pdf` (legacy alias)
 - `/whitepaper/kfd-machine-life-roadmap/`
 - `/whitepaper/kfd-machine-life-roadmap.pdf`
 - `/whitepaper/kfd-machine-life-roadmap/manifest.json`

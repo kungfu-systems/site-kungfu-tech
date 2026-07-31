@@ -58,9 +58,9 @@
       align-items: center;
       margin: 0;
       padding: 12px 14px;
-      border: 1px solid #d3a427;
-      background: #fff8dc;
-      color: #4d3a00;
+      border: 1px solid var(--warn);
+      background: color-mix(in srgb, var(--warn) 10%, var(--panel));
+      color: var(--fg);
       font-size: 14px;
     }
 
@@ -82,7 +82,7 @@
     }
 
     .start-panel[data-active-mode="update"] {
-      border-top-color: #7857c7;
+      border-top-color: var(--protocol);
     }
 
     .command-switcher-header {
@@ -121,7 +121,7 @@
     }
 
     .command-tab:focus-visible {
-      outline: 3px solid rgba(42, 104, 255, 0.4);
+      outline: 3px solid color-mix(in srgb, var(--evidence) 45%, transparent);
       outline-offset: 2px;
     }
 
@@ -187,9 +187,9 @@
 
     .upgrade-warning {
       padding: 12px 14px;
-      border-left: 4px solid #c77900;
-      background: #fff8dc;
-      color: #4d3a00;
+      border-left: 4px solid var(--warn);
+      background: color-mix(in srgb, var(--warn) 10%, var(--panel));
+      color: var(--fg);
     }
 
     .command {
@@ -238,7 +238,7 @@
     .action-row a:first-child {
       border-color: var(--accent);
       background: var(--accent);
-      color: #fff;
+      color: var(--on-accent);
     }
 
     .section-heading {
@@ -278,15 +278,15 @@
     }
 
     .boundary-card {
-      border-top: 5px solid #2e9d72;
+      border-top: 5px solid var(--accent);
     }
 
     .boundary-card.inference {
-      border-top-color: #b27b18;
+      border-top-color: var(--warn);
     }
 
     .boundary-card.kungfu {
-      border-top-color: #7857c7;
+      border-top-color: var(--protocol);
     }
 
     .boundary-card p,
@@ -359,7 +359,7 @@
       max-width: 100%;
       margin: 0;
       padding: 16px;
-      border-left: 5px solid #7857c7;
+      border-left: 5px solid var(--protocol);
       background: var(--surface);
       color: var(--fg);
       font: 600 14px/1.55 "SFMono-Regular", Consolas, monospace;

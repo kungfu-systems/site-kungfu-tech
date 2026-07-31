@@ -116,6 +116,16 @@ function localizeRenderedLinks(html) {
   });
 }
 
+function addCopyControls(html) {
+  return html.replace(
+    /<pre><code\b[^>]*>[\s\S]*?<\/code><\/pre>/g,
+    (codeBlock) => `<div class="command-block">
+${codeBlock}
+<button class="copy-button" type="button" data-copy-command aria-label="Copy code block" aria-live="polite">Copy</button>
+</div>`,
+  );
+}
+
 function renderSection(source, section) {
   const principles = section.presentation === "kfd-principles" && source.bundle.principles.length > 0
     ? `<div class="paper-principles" aria-label="Kungfu Design Principles">
@@ -125,7 +135,7 @@ ${source.bundle.principles.map((principle) => `          <article class="paper-p
           </article>`).join("\n")}
         </div>`
     : "";
-  const body = localizeRenderedLinks(markdown.render(stripSectionTitle(source, section)));
+  const body = addCopyControls(localizeRenderedLinks(markdown.render(stripSectionTitle(source, section))));
   return `      <section class="paper-section" id="section-${escapeAttr(section.id)}">
         <p class="paper-section-role">${escapeHtml(section.role)} / ${escapeHtml(section.presentation)}</p>
         <h2>${escapeHtml(section.title)}</h2>
@@ -313,6 +323,7 @@ ${sections}
     </div>
 ${sharedFooter()}
   </main>
+  <script src="/assets/command-copy.js" defer></script>
 </body>
 </html>
 `;
@@ -351,13 +362,16 @@ const whitepaperManifest = buildWhitepaperManifest(whitepaperSource);
 const machineLifeManifest = buildMachineLifeManifest(machineLifeSource);
 const catalogManifest = buildPublicationCatalogManifest(catalog);
 writeText("whitepaper/index.html", renderIndex());
-writeText("whitepaper/kungfu-white-paper/index.html", renderReader(whitepaperSource, "White Paper"));
+const whitepaperReader = renderReader(whitepaperSource, "White Paper");
+writeText("whitepaper/kungfu-real-world-agent-work/index.html", whitepaperReader);
+writeText("whitepaper/kungfu-white-paper/index.html", whitepaperReader);
 writeText("whitepaper/kfd-machine-life-roadmap/index.html", renderReader(machineLifeSource, "Machine Life"));
 writeText("whitepaper/manifest.json", `${JSON.stringify(whitepaperManifest, null, 2)}\n`);
 writeText("whitepaper/kfd-machine-life-roadmap/manifest.json", `${JSON.stringify(machineLifeManifest, null, 2)}\n`);
 writeText("whitepaper/catalog.json", `${JSON.stringify(catalogManifest, null, 2)}\n`);
 writeText("whitepaper/llms.txt", renderLlms(whitepaperManifest));
 writeText("whitepaper/kfd-machine-life-roadmap/llms.txt", renderLlms(machineLifeManifest));
+fs.copyFileSync(whitepaperSource.pdfPath, path.join(distRoot, "whitepaper", "kungfu-real-world-agent-work.pdf"));
 fs.copyFileSync(whitepaperSource.pdfPath, path.join(distRoot, "whitepaper", "kungfu-white-paper.pdf"));
 fs.copyFileSync(machineLifeSource.pdfPath, path.join(distRoot, "whitepaper", "kfd-machine-life-roadmap.pdf"));
 

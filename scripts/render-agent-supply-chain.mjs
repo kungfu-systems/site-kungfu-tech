@@ -1,14 +1,26 @@
 #!/usr/bin/env node
 import fs from "node:fs";
+import { createRequire } from "node:module";
 import path from "node:path";
 import { loadWhitepaperSource } from "./whitepaper-source.mjs";
 import { escapeAttr, escapeHtml, readLayout, renderFooter, renderHeader } from "./site-layout.mjs";
 
 const repoRoot = process.cwd();
 const source = loadWhitepaperSource(repoRoot);
-const narrative = source.bundle.agentSupplyChain;
+const require = createRequire(import.meta.url);
+const snapshotPackage = "@kungfu-tech/paper-kungfu-product-white-paper-agent-supply-chain";
+const snapshotVersion = "0.1.0-alpha.10";
+const snapshotPackageJsonPath = require.resolve(`${snapshotPackage}/package.json`, { paths: [repoRoot] });
+const snapshotRoot = path.dirname(snapshotPackageJsonPath);
+const snapshotPackageInfo = JSON.parse(fs.readFileSync(snapshotPackageJsonPath, "utf8"));
+const snapshotEvidence = JSON.parse(fs.readFileSync(path.join(snapshotRoot, "site", "evidence-site.json"), "utf8"));
+const narrative = snapshotEvidence.agentSupplyChain;
 if (
-  narrative?.contract !== "kungfu-agent-supply-chain-public-narrative/v1"
+  snapshotPackageInfo.name !== "@kungfu-tech/paper-kungfu-product-white-paper"
+  || snapshotPackageInfo.version !== snapshotVersion
+  || snapshotEvidence.source?.packageVersion !== snapshotVersion
+  || Object.hasOwn(source.bundle, "agentSupplyChain")
+  || narrative?.contract !== "kungfu-agent-supply-chain-public-narrative/v1"
   || narrative.layers?.map((layer) => layer.id).join(",") !== "kfd-3,buildchain,kfd-2,libkungfu,agent-hub-portability"
   || narrative.maturityVocabulary?.join(",") !== "proved-now,enabled-by-protocol,not-claimed"
   || narrative.notClaimed?.includes("two independent production Hubs") !== true
