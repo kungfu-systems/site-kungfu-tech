@@ -193,6 +193,7 @@ if (!/\.brand-principle \{[\s\S]*?display: grid;[\s\S]*?gap: 6px;/u.test(html)
 }
 if (!/\.builder-entry h2,\s*\.trust h2 \{[\s\S]*?font-size: clamp\(28px, 4vw, 44px\);/u.test(html)
   || !/\.trust \{[\s\S]*?align-items: center;[\s\S]*?padding: 28px;/u.test(html)
+  || !/\.trust \{[\s\S]*?border-right: 1px solid transparent;[\s\S]*?border-left: 1px solid transparent;/u.test(html)
   || !/\.builder-entry, \.trust \{ padding: 20px; \}/u.test(html)) {
   throw new Error("homepage stewardship card does not share the builder title scale, padding, and vertical alignment");
 }

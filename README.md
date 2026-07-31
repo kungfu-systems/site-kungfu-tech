@@ -169,9 +169,10 @@ belong in investor fit. The homepage remains product-first, while its
 "Open core. Commercial stewardship." section presents Capital & Stewardship as
 a prominent, explanatory call to action. Its heading shares the preceding
 builder cards' responsive title scale and remains vertically centered against
-the complete stewardship content. Matching desktop and mobile content padding
-also keeps all three card headings on the same left edge. About and the shared
-footer provide stable secondary discovery. The page is not a financing
+the complete stewardship content. Matching padding and transparent side
+alignment rails keep all three card headings on the exact same left edge without
+adding visible borders. About and the shared footer provide stable secondary
+discovery. The page is not a financing
 announcement or securities offer and must not contain an amount, valuation, pricing,
 allocation, timetable, subscription mechanics, or transaction terms.
 
