@@ -111,7 +111,7 @@ jobs:
         uses: actions/checkout@v7.0.0
         with:
           repository: kungfu-systems/buildchain
-          ref: 9e904de2c85dbea7c799780ee166510b3336d812
+          ref: ca36670853acf419f8d19ce3d77eefbb520135f4
           path: .buildchain/governance-runtime
           persist-credentials: false
 
@@ -121,7 +121,7 @@ jobs:
         run: |
           set -euo pipefail
           runtime_sha="$(git -C .buildchain/governance-runtime rev-parse HEAD)"
-          if [ "$runtime_sha" != "9e904de2c85dbea7c799780ee166510b3336d812" ]; then
+          if [ "$runtime_sha" != "ca36670853acf419f8d19ce3d77eefbb520135f4" ]; then
             echo "::error::governance verifier does not match the exact Buildchain release runtime"
             exit 1
           fi
@@ -177,7 +177,7 @@ jobs:
           needs.github-governance-receipt.result == 'skipped'
         )
       }}
-    uses: kungfu-systems/buildchain/.github/workflows/.web-surface.yml@9e904de2c85dbea7c799780ee166510b3336d812
+    uses: kungfu-systems/buildchain/.github/workflows/.web-surface.yml@ca36670853acf419f8d19ce3d77eefbb520135f4
     with:
       buildchain-contract-lock-path: ${{ (((github.event_name == 'workflow_dispatch' && inputs.production_approved) || (github.event_name == 'push' && github.ref == 'refs/heads/main') || (github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true && contains(github.event.pull_request.labels.*.name, 'buildchain-release')))) && '.buildchain/contract-lock.json' || '.buildchain/alpha-contract-lock.json' }}
       buildchain-contract-compatibility-policy: major-compatible
