@@ -301,8 +301,8 @@ function renderEvidence(passport, publicPath, scene) {
           <p class="lead">No account, hosted session, or hand-authored transcript is required. This ${formatDuration(scene.durationMs)}-second animation replays the bounded PTY output of the installed <code>kungfu agent-work-lab autoplay</code> command after the reusable Buildchain Gate passed.</p>
         </div>
         <video controls playsinline preload="metadata" aria-label="Exact installed Kungfu Agent Work Lab autoplay demonstration" poster="${escapeAttr(publicPath)}/poster.png">
-          <source src="${escapeAttr(publicPath)}/demo.webm" type="video/webm">
           <source src="${escapeAttr(publicPath)}/demo.mp4" type="video/mp4">
+          <source src="${escapeAttr(publicPath)}/demo.webm" type="video/webm">
           <p><a href="${escapeAttr(publicPath)}/demo.mp4">Download the MP4 recording.</a></p>
         </video>
         <p class="fallback">Static fallback: <a href="${escapeAttr(publicPath)}/poster.png">open the exact poster</a>. Text alternative: <a href="${escapeAttr(publicPath)}/complete-transcript.txt">read the complete transcript</a>. The page never autoplays media.</p>
@@ -355,8 +355,8 @@ function renderHomepageDemo(publicPath, scene) {
             <span>Exact installed artifact · ${escapeHtml(duration)} seconds</span>
           </div>
           <video data-autoplay-demo controls muted loop playsinline preload="metadata" aria-label="Exact installed Kungfu Agent Work Lab autoplay demonstration" aria-describedby="hero-demo-note" poster="${escapeAttr(publicPath)}/poster.png">
-            <source src="${escapeAttr(publicPath)}/demo.webm" type="video/webm">
             <source src="${escapeAttr(publicPath)}/demo.mp4" type="video/mp4">
+            <source src="${escapeAttr(publicPath)}/demo.webm" type="video/webm">
             <p><a href="${escapeAttr(publicPath)}/demo.mp4">Download the MP4 replay.</a></p>
           </video>
           <figcaption>
@@ -383,8 +383,8 @@ function renderAdditionalEvidence(passport, demo, publicPath, scene) {
           <p class="lead">This ${formatDuration(scene.durationMs)}-second animation is selected by the exact demo id <code>${escapeHtml(demo.id)}</code>. It passed its own Gate and Passport; catalog membership alone grants no authority.</p>
         </div>
         <video controls playsinline preload="metadata" aria-label="${escapeAttr(demo.commandLabel)} exact installed-artifact demonstration" poster="${escapeAttr(publicPath)}/poster.png">
-          <source src="${escapeAttr(publicPath)}/demo.webm" type="video/webm">
           <source src="${escapeAttr(publicPath)}/demo.mp4" type="video/mp4">
+          <source src="${escapeAttr(publicPath)}/demo.webm" type="video/webm">
           <p><a href="${escapeAttr(publicPath)}/demo.mp4">Download the MP4 recording.</a></p>
         </video>
         <p class="fallback">Static fallback: <a href="${escapeAttr(publicPath)}/poster.png">open the exact poster</a>. Text alternative: <a href="${escapeAttr(publicPath)}/complete-transcript.txt">read the complete transcript</a>.</p>

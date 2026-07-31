@@ -155,6 +155,20 @@ node - <<'NODE'
 const fs = require("node:fs");
 const html = fs.readFileSync("public/index.html", "utf8");
 const projection = JSON.parse(fs.readFileSync("public/auditable-demo.json", "utf8"));
+const assertMp4BeforeWebm = (document, label) => {
+  const videos = [...document.matchAll(/<video\b[\s\S]*?<\/video>/giu)]
+    .map(([video]) => video)
+    .filter((video) => video.includes('type="video/mp4"') && video.includes('type="video/webm"'));
+  if (videos.length === 0
+    || videos.some((video) => video.indexOf('type="video/mp4"') > video.indexOf('type="video/webm"'))) {
+    throw new Error(`${label} must prefer MP4 before its WebM fallback`);
+  }
+};
+assertMp4BeforeWebm(html, "homepage auditable demo");
+assertMp4BeforeWebm(
+  fs.readFileSync("public/how-tested/auditable-demo/index.html", "utf8"),
+  "auditable demo evidence page",
+);
 if (!html.includes("grid-column: 1 / -1;")) {
   throw new Error("homepage demo showcase is not assigned to a full-width grid row");
 }
