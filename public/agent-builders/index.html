@@ -61,7 +61,7 @@
       align-items: center;
       padding: 18px 20px;
       border: 1px solid var(--fg);
-      border-top: 5px solid #2e9d72;
+      border-top: 5px solid var(--accent);
       background: var(--surface);
     }
 
@@ -92,7 +92,7 @@
       padding: 9px 14px;
       border: 1px solid var(--accent);
       background: var(--accent);
-      color: #fff;
+      color: var(--on-accent);
       font-weight: 700;
       text-decoration: none;
       white-space: nowrap;
@@ -105,7 +105,7 @@
       align-items: center;
       padding: 18px 20px;
       border: 1px solid var(--line);
-      border-left: 5px solid #8b63d9;
+      border-left: 5px solid var(--protocol);
       background: var(--panel-soft);
     }
 
@@ -153,8 +153,8 @@
     }
 
     .kfd-primer-actions a:first-child {
-      border-color: #8b63d9;
-      color: #6f48c6;
+      border-color: var(--protocol);
+      color: var(--protocol);
     }
 
     .reader-path {
@@ -225,7 +225,7 @@
       min-width: 0;
       padding: 12px 14px;
       border: 1px solid var(--line);
-      border-left: 4px solid #2e9d72;
+      border-left: 4px solid var(--accent);
       background: var(--surface);
       color: var(--fg);
       font-weight: 700;
@@ -364,19 +364,19 @@
       transform: translateY(-50%);
     }
 
-    .action-node.fact { border-top-color: #2784c7; }
-    .action-node.geometry { border-top-color: #d69732; }
-    .action-node.binding { border-top-color: #8b63d9; }
-    .action-node.act { border-top-color: #7b8794; }
-    .action-node.episode { border-top-color: #2e9d72; }
-    .action-node.admission { border-top-color: #476dd0; }
+    .action-node.fact { border-top-color: var(--evidence); }
+    .action-node.geometry { border-top-color: var(--warn); }
+    .action-node.binding { border-top-color: var(--protocol); }
+    .action-node.act { border-top-color: var(--unknown); }
+    .action-node.episode { border-top-color: var(--accent); }
+    .action-node.admission { border-top-color: var(--evidence); }
 
     .action-example {
       display: grid;
       gap: 16px;
       padding: 22px;
       border: 1px solid var(--line);
-      border-left: 5px solid #2784c7;
+      border-left: 5px solid var(--evidence);
       background: var(--panel-soft);
     }
 
@@ -456,7 +456,7 @@
     }
 
     .geometry-parts li {
-      border-left: 2px solid #d69732;
+      border-left: 2px solid var(--warn);
       padding-left: 6px;
       font-size: 11px;
     }
@@ -488,7 +488,7 @@
       gap: 7px;
       padding: 14px;
       border: 1px solid var(--line);
-      border-left: 4px solid #2784c7;
+      border-left: 4px solid var(--evidence);
       background: var(--panel-soft);
     }
 
@@ -553,9 +553,9 @@
       background: var(--panel-soft);
     }
 
-    .topology-node.product { border-left: 4px solid #d69732; }
-    .topology-node.runtime { border-left: 4px solid #2e9d72; }
-    .topology-node.edge { border-left: 4px solid #8b63d9; }
+    .topology-node.product { border-left: 4px solid var(--warn); }
+    .topology-node.runtime { border-left: 4px solid var(--accent); }
+    .topology-node.edge { border-left: 4px solid var(--protocol); }
 
     .topology-node .layer-number {
       font-size: 11px;
@@ -584,8 +584,8 @@
       align-content: center;
       gap: 14px;
       padding: 16px;
-      border: 1px solid #8b63d9;
-      background: color-mix(in srgb, #8b63d9 8%, var(--panel-soft));
+      border: 1px solid var(--protocol);
+      background: color-mix(in srgb, var(--protocol) 8%, var(--panel-soft));
       text-align: center;
     }
 
@@ -617,16 +617,16 @@
       height: 24px;
       place-items: center;
       border-radius: 50%;
-      background: #8b63d9;
-      color: #fff;
+      background: var(--protocol);
+      color: var(--on-accent);
     }
 
-    .protocol-flow.outbound { border-right: 4px solid #8b63d9; }
-    .protocol-flow.inbound { border-left: 4px solid #2e9d72; }
+    .protocol-flow.outbound { border-right: 4px solid var(--protocol); }
+    .protocol-flow.inbound { border-left: 4px solid var(--accent); }
 
     .transport-bindings {
       padding-top: 10px;
-      border-top: 1px dashed #8b63d9;
+      border-top: 1px dashed var(--protocol);
     }
 
     .semantic-gate {
@@ -699,7 +699,7 @@
       text-align: center;
     }
 
-    .invariant-card b { color: #b24b4b; font-size: 20px; }
+    .invariant-card b { color: var(--danger); font-size: 20px; }
 
     .adoption-tradeoff {
       display: grid;
@@ -734,11 +734,11 @@
       gap: 10px;
       padding: 18px;
       border: 1px solid var(--line);
-      border-top: 4px solid #b24b4b;
+      border-top: 4px solid var(--danger);
       background: var(--surface);
     }
 
-    .adoption-value-card.with-kfd { border-top-color: #2e9d72; }
+    .adoption-value-card.with-kfd { border-top-color: var(--accent); }
 
     .adoption-value-card h4 {
       margin: 0;
@@ -973,7 +973,7 @@
     .dogfood-loop {
       margin: 0;
       padding: 12px 14px;
-      border-left: 4px solid #2e9d72;
+      border-left: 4px solid var(--accent);
       background: var(--panel-soft);
       color: var(--fg);
       font: 700 14px/1.4 "SFMono-Regular", Consolas, monospace;
@@ -1006,7 +1006,7 @@
       gap: 7px;
       padding: 15px;
       border: 1px solid var(--line);
-      border-top: 3px solid #2e9d72;
+      border-top: 3px solid var(--accent);
       background: var(--surface);
     }
 
@@ -1028,7 +1028,7 @@
       align-items: center;
       padding: 24px;
       border: 1px solid var(--line);
-      border-left: 5px solid #2e9d72;
+      border-left: 5px solid var(--accent);
       background: var(--surface);
     }
 
@@ -1059,10 +1059,10 @@
       box-shadow: 0 22px 60px rgba(18, 23, 34, 0.10);
     }
 
-    .chapter-network { --chapter-accent: #8b63d9; }
-    .chapter-action { --chapter-accent: #2784c7; }
-    .chapter-proof { --chapter-accent: #2e9d72; }
-    .chapter-adoption { --chapter-accent: #d69732; }
+    .chapter-network { --chapter-accent: var(--protocol); }
+    .chapter-action { --chapter-accent: var(--evidence); }
+    .chapter-proof { --chapter-accent: var(--accent); }
+    .chapter-adoption { --chapter-accent: var(--warn); }
 
     .builder-chapter > .chapter-heading {
       width: 100%;

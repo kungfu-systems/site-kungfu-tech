@@ -78,7 +78,8 @@ for (const [packageName, version] of expectedDependencies) {
 }
 
 const indexHtml = readDist("whitepaper/index.html");
-const readerHtml = readDist("whitepaper/kungfu-white-paper/index.html");
+const readerHtml = readDist("whitepaper/kungfu-real-world-agent-work/index.html");
+const legacyReaderHtml = readDist("whitepaper/kungfu-white-paper/index.html");
 const machineLifeHtml = readDist("whitepaper/kfd-machine-life-roadmap/index.html");
 const llms = readDist("whitepaper/llms.txt");
 const machineLifeLlms = readDist("whitepaper/kfd-machine-life-roadmap/llms.txt");
@@ -88,7 +89,8 @@ const catalogManifest = JSON.parse(readDist("whitepaper/catalog.json"));
 const expectedManifest = buildWhitepaperManifest(source);
 const expectedMachineLifeManifest = buildMachineLifeManifest(machineLifeSource);
 const expectedCatalogManifest = buildPublicationCatalogManifest(catalog);
-const pdfPath = path.join(distRoot, "whitepaper", "kungfu-white-paper.pdf");
+const pdfPath = path.join(distRoot, "whitepaper", "kungfu-real-world-agent-work.pdf");
+const legacyPdfPath = path.join(distRoot, "whitepaper", "kungfu-white-paper.pdf");
 const machineLifePdfPath = path.join(distRoot, "whitepaper", "kfd-machine-life-roadmap.pdf");
 const expectedDisplayOrder = [
   WHITEPAPER_PACKAGE,
@@ -106,6 +108,8 @@ assert(machineLifeManifest.evidence.immutableVersionUrl.includes(`/v${MACHINE_LI
 assert(fs.existsSync(pdfPath), "generated white paper PDF is missing");
 assert(sha256File(pdfPath) === source.pdfArtifact.sha256, "generated white paper PDF digest mismatch");
 assert(fs.statSync(pdfPath).size === source.pdfArtifact.bytes, "generated white paper PDF byte count mismatch");
+assert(legacyReaderHtml === readerHtml, "legacy white paper reader alias must match the canonical reader");
+assert(sha256File(legacyPdfPath) === source.pdfArtifact.sha256, "legacy white paper PDF alias digest mismatch");
 assert(fs.existsSync(machineLifePdfPath), "generated Machine Life PDF is missing");
 assert(sha256File(machineLifePdfPath) === machineLifeSource.pdfArtifact.sha256, "generated Machine Life PDF digest mismatch");
 assert(fs.statSync(machineLifePdfPath).size === machineLifeSource.pdfArtifact.bytes, "generated Machine Life PDF byte count mismatch");
@@ -159,11 +163,12 @@ assert(llms.includes(`${KFD_PACKAGE}@${KFD_VERSION}`), "llms.txt must identify t
 assert(llms.includes(`${BUILDCHAIN_PACKAGE}@${BUILDCHAIN_VERSION}`), "llms.txt must identify the Buildchain source package");
 assert(readerHtml.includes(source.bundle.hero.lead), "white paper reader must render the upstream lead");
 assert(readerHtml.includes(`data="${source.routes.pdf}#page=1&amp;view=FitH"`), "white paper reader must preview the package PDF");
-assert(!readerHtml.includes("KFD-1 |"), "structured KFD principles must not render as raw pipe-separated text");
-assert(readerHtml.includes("<table>"), "white paper reader must render structured source rows as an HTML table");
-assert(readerHtml.includes("KFD-13"), "white paper reader must preserve the complete upstream KFD status table");
-assert(readerHtml.includes("Vendor Agent Hub"), "white paper reader must preserve the upstream responsibility matrix");
-assert(!readerHtml.includes("If you are a user |"), "white paper audience guidance must not render as raw pipe-separated text");
+assert(source.routes.reader === "/whitepaper/kungfu-real-world-agent-work/", "white paper reader must follow the alpha.11 canonical route");
+assert(source.routes.pdf === "/whitepaper/kungfu-real-world-agent-work.pdf", "white paper PDF must follow the alpha.11 canonical route");
+assert(readerHtml.includes("Conversation Is Not Work State"), "white paper reader must preserve the upstream problem model");
+assert(readerHtml.includes("Project, Work, and Agent"), "white paper reader must preserve the upstream first-layer product model");
+assert(readerHtml.includes("Review Before Completion"), "white paper reader must preserve the upstream review boundary");
+assert(readerHtml.includes("From Work Continuity to Subject Continuity"), "white paper reader must preserve the upstream conclusion boundary");
 
 for (const section of source.bundle.homepageSections) {
   assert(readerHtml.includes(`id="section-${section.id}"`), `white paper reader is missing section ${section.id}`);

@@ -133,7 +133,13 @@ grep -q 'right: 10px' public/index.html
 grep -q 'bottom: 10px' public/index.html
 grep -q 'min-height: 70px' public/index.html
 grep -q 'padding: 10px 310px 10px 15px' public/index.html
-grep -q 'linear-gradient(135deg, #f8fafb 0%, #edf2f5 56%, #e3eaf0 100%)' public/index.html
+grep -q 'linear-gradient(135deg, #fffdf8 0%, #f0eee8 56%, #e3ece8 100%)' public/index.html
+grep -q -- '--bg: #f5f2ec;' public/assets/site.css
+grep -q -- '--panel: #fffdfc;' public/assets/site.css
+grep -q -- '--accent: #0b6f68;' public/assets/site.css
+grep -q -- '--accent-2: #4f6094;' public/assets/site.css
+grep -q 'border-top-color: var(--evidence)' public/agent-builders/index.html
+grep -q 'border-left: 5px solid var(--protocol)' public/agent-builders/hub-starter/index.html
 grep -q 'border: 0' public/index.html
 grep -q 'box-shadow: none' public/index.html
 grep -q 'transition: opacity 720ms ease' public/index.html
@@ -225,7 +231,7 @@ if (!html.includes("@media (min-width: 1800px) and (min-height: 1200px)")
 }
 if (!html.includes("width: min(100%, max(480px, calc(177.777dvh - 380px)))")
   || !/@media \(min-width: 821px\) \{\s*\.demo-carousel-viewport \{/u.test(html)
-  || !/\.demo-showcase \{[\s\S]*?border: 1px solid var\(--line\);[\s\S]*?linear-gradient\(135deg, #f8fafb 0%, #edf2f5 56%, #e3eaf0 100%\);[\s\S]*?box-shadow: 0 24px 60px/u.test(html)
+  || !/\.demo-showcase \{[\s\S]*?border: 1px solid var\(--line\);[\s\S]*?linear-gradient\(135deg, #fffdf8 0%, #f0eee8 56%, #e3ece8 100%\);[\s\S]*?box-shadow: 0 24px 60px/u.test(html)
   || !/\.hero-demo \{[\s\S]*?border: 0;[\s\S]*?background: transparent;[\s\S]*?box-shadow: none;/u.test(html)
   || !/\.claim-demo-title \{[\s\S]*?color: var\(--fg\);/u.test(html)
   || !/\.claim-demo-tagline \{[\s\S]*?color: var\(--muted\);/u.test(html)
