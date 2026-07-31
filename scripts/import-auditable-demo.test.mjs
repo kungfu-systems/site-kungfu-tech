@@ -49,6 +49,8 @@ function fixture() {
   const members = {
     "complete-transcript.txt": Buffer.from("kungfu agent-work-lab autoplay\nqualified\n"),
     "demo.gif": Buffer.from("gif"),
+    "demo-720p.mp4": Buffer.from("720p mp4"),
+    "demo-720p.webm": Buffer.from("720p webm"),
     "demo.mp4": Buffer.from("mp4"),
     "demo.webm": Buffer.from("webm"),
     "gate-receipt.json": Buffer.from("{}\n"),
@@ -63,24 +65,105 @@ function fixture() {
       inputs: {
         terminalCapture: { root: `sha256:${"9".repeat(64)}` },
       },
+      derivation: {
+        policy: "single-frame-set-deterministic-renditions/v1",
+        renditions: {
+          "demo.mp4": { width: 1920, height: 1080 },
+          "demo.webm": { width: 1920, height: 1080 },
+          "demo-720p.mp4": { width: 1280, height: 720 },
+          "demo-720p.webm": { width: 1280, height: 720 },
+          "demo.gif": { width: 1280, height: 720 },
+          "poster.png": { width: 1920, height: 1080 },
+        },
+      },
     })),
+    "media-inspection.json": Buffer.from('{"passed":true}\n'),
     "media-probe.json": Buffer.from('{"passed":true}\n'),
-    "media-receipt.json": Buffer.from(stableJson({
-      schema: "buildchain.auditable-demo-media/v1",
-      status: "passed",
-      sourceSha,
-      qualifiedGateRoot: gateRoot,
-      rendererImage,
-      rendererManifestRoot: `sha256:${"4".repeat(64)}`,
-    })),
     "poster.png": Buffer.from("png"),
     "public-projection.json": Buffer.from("{}\n"),
     "renderer-checksums.sha256": Buffer.from("renderer\n"),
     "scene.json": Buffer.from(stableJson({
       schema: "build-images.demo-scene/v1",
+      width: 1920,
+      height: 1080,
       durationMs: 18500,
     })),
   };
+  const renditionSpecs = [
+    ["primary-video", "demo.mp4", "video/mp4", 1920, 1080, "scene-exact"],
+    [
+      "alternate-video",
+      "demo.webm",
+      "video/webm",
+      1920,
+      1080,
+      "scene-exact",
+    ],
+    [
+      "responsive-primary-video",
+      "demo-720p.mp4",
+      "video/mp4",
+      1280,
+      720,
+      "exact-downscale-same-aspect",
+    ],
+    [
+      "responsive-alternate-video",
+      "demo-720p.webm",
+      "video/webm",
+      1280,
+      720,
+      "exact-downscale-same-aspect",
+    ],
+    [
+      "readme-compatibility",
+      "demo.gif",
+      "image/gif",
+      1280,
+      720,
+      "exact-downscale-same-aspect",
+    ],
+    [
+      "evidence-poster",
+      "poster.png",
+      "image/png",
+      1920,
+      1080,
+      "scene-exact",
+    ],
+  ];
+  const qualificationBody = {
+    schema: "buildchain.auditable-demo-media-qualification/v1",
+    profile: { id: "responsive-web-delivery-v1" },
+    inspectionRoot: `sha256:${"4".repeat(64)}`,
+    renditions: renditionSpecs.map(
+      ([role, file, mimeType, width, height, dimensionPolicy]) => ({
+        role,
+        path: file,
+        mimeType,
+        width,
+        height,
+        dimensionPolicy,
+        root: sha256(members[file]),
+        bytes: members[file].length,
+      }),
+    ),
+    nonClaims: [],
+  };
+  const qualification = {
+    ...qualificationBody,
+    qualificationRoot: sha256(Buffer.from(stableJson(qualificationBody))),
+  };
+  members["media-receipt.json"] = Buffer.from(stableJson({
+    schema: "buildchain.auditable-demo-media/v2",
+    status: "passed",
+    sourceSha,
+    qualifiedGateRoot: gateRoot,
+    rendererImage,
+    rendererManifestRoot: `sha256:${"4".repeat(64)}`,
+    qualification,
+    qualificationRoot: qualification.qualificationRoot,
+  }));
   for (const [name, bytes] of Object.entries(members)) {
     fs.writeFileSync(path.join(mediaDirectory, name), bytes);
   }
@@ -114,6 +197,8 @@ function fixture() {
     media: {
       status: "rendered",
       root: sha256(Buffer.from(checksums)),
+      profile: "responsive-web-delivery-v1",
+      qualificationRoot: qualification.qualificationRoot,
       artifact: {
         id: "103",
         name: `auditable-demo-media-${sourceSha.slice(0, 12)}-${sha256(Buffer.from(checksums)).slice(7, 23)}`,
@@ -303,6 +388,25 @@ test("imports exact media and a source-bound public projection", () => {
     assert.equal(projection.sourceSha, input.passport.source.sha);
     assert.deepEqual(projection.claims, input.passport.authority.claims);
     assert.deepEqual(projection.nonClaims, input.passport.authority.nonClaims);
+    assert.equal(projection.mediaProfile, "responsive-web-delivery-v1");
+    assert.equal(
+      projection.mediaQualificationRoot,
+      input.passport.media.qualificationRoot,
+    );
+    assert.deepEqual(
+      [
+        projection.renditions["responsive-primary-video"].width,
+        projection.renditions["responsive-primary-video"].height,
+      ],
+      [1280, 720],
+    );
+    assert.deepEqual(
+      [
+        projection.renditions["primary-video"].width,
+        projection.renditions["primary-video"].height,
+      ],
+      [1920, 1080],
+    );
     const evidencePage = fs.readFileSync(
       path.join(input.outputRoot, "how-tested/auditable-demo/index.html"),
       "utf8",
@@ -321,6 +425,14 @@ test("imports exact media and a source-bound public projection", () => {
       fs.readFileSync(path.join(input.outputRoot, "how-tested/auditable-demo/index.html"), "utf8"),
       /kungfu agent-work-lab autoplay/u,
     );
+    assert.match(
+      evidencePage,
+      /media="\(max-width: 767px\)" src="[^"]+\/demo-720p\.mp4"/u,
+    );
+    assert.match(
+      evidencePage,
+      /media="\(min-width: 768px\)" src="[^"]+\/demo\.mp4"/u,
+    );
     const homepage = fs.readFileSync(path.join(input.outputRoot, "index.html"), "utf8");
     assert.match(homepage, /data-demo-carousel/u);
     assert.match(homepage, /data-carousel-track/u);
@@ -329,6 +441,14 @@ test("imports exact media and a source-bound public projection", () => {
     assert.ok(homepage.indexOf('data-demo-title="Core idea"') < homepage.indexOf('data-demo-title="Agent Work Lab"'));
     assert.match(homepage, /data-autoplay-demo controls muted loop playsinline/u);
     assert.match(homepage, /Exact installed artifact · 18\.5 seconds/u);
+    assert.match(
+      homepage,
+      /media="\(max-width: 767px\)" src="[^"]+\/demo-720p\.webm"/u,
+    );
+    assert.match(
+      homepage,
+      /media="\(min-width: 768px\)" src="[^"]+\/demo\.webm"/u,
+    );
     assert.match(homepage, new RegExp(`${result.publicPath}/demo\\.webm`, "u"));
     assert.match(homepage, new RegExp(`${result.publicPath}/complete-transcript\\.txt`, "u"));
     assertMp4BeforeWebm(homepage);

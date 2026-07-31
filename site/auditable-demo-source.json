@@ -1,5 +1,11 @@
 {
-  "schema": "kungfu.site.auditable-demo-source/v1",
-  "passport": "site/auditable-demo/passport.json",
-  "mediaDirectory": "site/auditable-demo/media"
+  "schema": "kungfu.site.auditable-demo-source/v2",
+  "featuredDemoId": "agent-work-lab",
+  "demos": [
+    {
+      "id": "agent-work-lab",
+      "passport": "site/auditable-demo/passport.json",
+      "mediaDirectory": "site/auditable-demo/media"
+    }
+  ]
 }

@@ -1,0 +1,14 @@
+{
+  "demos": [
+    {
+      "id": "agent-work-lab",
+      "mediaRoot": "sha256:8353070c7b204bccb9e51e124cd07de215ef64db742a70333614c4fe065c59aa",
+      "passportRoot": "sha256:835bde89ae8cee57661dfc2f4ba96bbf6d2be1546d89f42fd0c18a331a7308da",
+      "projectionPath": "/auditable-demos/agent-work-lab.json",
+      "siteSlug": "agent-work-lab"
+    }
+  ],
+  "featuredDemoId": "agent-work-lab",
+  "schema": "kungfu.site.auditable-demo-collection/v1",
+  "status": "qualified"
+}

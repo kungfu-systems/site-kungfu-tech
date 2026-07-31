@@ -175,6 +175,27 @@ assertMp4BeforeWebm(
   fs.readFileSync("public/how-tested/auditable-demo/index.html", "utf8"),
   "auditable demo evidence page",
 );
+for (const [media, file] of [
+  ["(max-width: 767px)", "demo-720p.mp4"],
+  ["(max-width: 767px)", "demo-720p.webm"],
+  ["(min-width: 768px)", "demo.mp4"],
+  ["(min-width: 768px)", "demo.webm"],
+]) {
+  if (!html.includes(`media="${media}"`) || !html.includes(`/${file}"`)) {
+    throw new Error(`homepage is missing qualified responsive source ${media} -> ${file}`);
+  }
+}
+if (projection.schema !== "kungfu.site.auditable-demo/v2"
+  || projection.mediaProfile !== "responsive-web-delivery-v1"
+  || !/^sha256:[0-9a-f]{64}$/u.test(projection.mediaQualificationRoot || "")) {
+  throw new Error("auditable demo projection is missing responsive qualification authority");
+}
+if (projection.renditions?.["responsive-primary-video"]?.width !== 1280
+  || projection.renditions?.["responsive-primary-video"]?.height !== 720
+  || projection.renditions?.["primary-video"]?.width !== 1920
+  || projection.renditions?.["primary-video"]?.height !== 1080) {
+  throw new Error("auditable demo projection has invalid responsive rendition dimensions");
+}
 if (!html.includes("grid-column: 1 / -1;")) {
   throw new Error("homepage demo showcase is not assigned to a full-width grid row");
 }
@@ -269,7 +290,7 @@ then
   echo "error: auditable demo media must never autoplay" >&2
   exit 1
 fi
-grep -q 'kungfu.site.auditable-demo/v1' public/auditable-demo.json
+grep -q 'kungfu.site.auditable-demo/v2' public/auditable-demo.json
 grep -q 'Never Guess. Facts Unfold.' public/index.html
 grep -q 'href="/why-kungfu/"' public/index.html
 grep -q 'durable work facts between sessions' public/index.html
