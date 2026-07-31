@@ -192,8 +192,9 @@ if (!/\.brand-principle \{[\s\S]*?display: grid;[\s\S]*?gap: 6px;/u.test(html)
   throw new Error("homepage brand principle does not preserve its explicit three-line structure");
 }
 if (!/\.builder-entry h2,\s*\.trust h2 \{[\s\S]*?font-size: clamp\(28px, 4vw, 44px\);/u.test(html)
-  || !/\.trust \{[\s\S]*?align-items: center;/u.test(html)) {
-  throw new Error("homepage stewardship card does not share the builder title scale and vertical alignment");
+  || !/\.trust \{[\s\S]*?align-items: center;[\s\S]*?padding: 28px;/u.test(html)
+  || !/\.builder-entry, \.trust \{ padding: 20px; \}/u.test(html)) {
+  throw new Error("homepage stewardship card does not share the builder title scale, padding, and vertical alignment");
 }
 if (html.includes('class="demo-showcase-heading"')
   || html.indexOf('class="demo-carousel-controls"') < html.indexOf('data-carousel-track')) {

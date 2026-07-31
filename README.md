@@ -169,9 +169,10 @@ belong in investor fit. The homepage remains product-first, while its
 "Open core. Commercial stewardship." section presents Capital & Stewardship as
 a prominent, explanatory call to action. Its heading shares the preceding
 builder cards' responsive title scale and remains vertically centered against
-the complete stewardship content. About and the shared footer provide
-stable secondary discovery. The page is not a financing announcement or
-securities offer and must not contain an amount, valuation, pricing,
+the complete stewardship content. Matching desktop and mobile content padding
+also keeps all three card headings on the same left edge. About and the shared
+footer provide stable secondary discovery. The page is not a financing
+announcement or securities offer and must not contain an amount, valuation, pricing,
 allocation, timetable, subscription mechanics, or transaction terms.
 
 The page keeps three goals visible together: global credibility for KFD,
