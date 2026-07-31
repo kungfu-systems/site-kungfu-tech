@@ -115,12 +115,121 @@ if grep -RInE '^    \\.(site-header|brand|mark|site-nav|site-footer|nav-menu)\\b
 fi
 grep -q "Your agent shouldn't start over when the chat ends." public/index.html
 grep -q 'fresh agent continue the same work' public/index.html
-grep -q 'Same task. New chat. No re-explanation.' public/index.html
-grep -q 'Continuation unsupported' public/index.html
-grep -q 'Continuation oracle passed' public/index.html
 grep -q 'prefers-reduced-motion: reduce' public/index.html
-grep -q 'href="/how-tested/continuity/"' public/index.html
-grep -q 'href="/how-tested/auditable-demo/">Watch the exact artifact proof</a>' public/index.html
+grep -q 'href="/how-tested/auditable-demo/">How this was tested</a>' public/index.html
+grep -q 'One Work. Two fresh Agent processes.' public/index.html
+grep -q 'Exact installed artifact · 19 seconds' public/index.html
+grep -q 'class="demo-showcase"' public/index.html
+grep -q 'data-demo-carousel' public/index.html
+grep -q 'data-carousel-track' public/index.html
+grep -q 'data-demo-title="Core idea" data-active' public/index.html
+grep -q 'data-carousel-counter>01 / 02<' public/index.html
+grep -q 'data-carousel-status>01 / 02 · Core idea<' public/index.html
+grep -q 'data-carousel-previous' public/index.html
+grep -q 'data-carousel-next' public/index.html
+grep -q 'class="demo-carousel-phase">Coming soon</span>' public/index.html
+grep -q 'position: absolute' public/index.html
+grep -q 'right: 10px' public/index.html
+grep -q 'bottom: 10px' public/index.html
+grep -q 'min-height: 70px' public/index.html
+grep -q 'padding: 10px 310px 10px 15px' public/index.html
+grep -q 'linear-gradient(135deg, #f8fafb 0%, #edf2f5 56%, #e3eaf0 100%)' public/index.html
+grep -q 'border: 0' public/index.html
+grep -q 'box-shadow: none' public/index.html
+grep -q 'transition: opacity 720ms ease' public/index.html
+grep -q 'container-type: inline-size' public/index.html
+grep -q 'calc(177.777dvh - 380px)' public/index.html
+grep -q '5.8cqw' public/index.html
+grep -q 'Use Codex, Claude, OpenCode, or your own execution surface.' public/index.html
+grep -q 'class="hero-actions" aria-label="Explore Kungfu"' public/index.html
+grep -q 'class="brand-motto">Never Guess. Facts Unfold.</span>' public/index.html
+grep -q 'window.setTimeout' public/index.html
+grep -q '}, 5000);' public/index.html
+grep -q 'event.key === "ArrowLeft"' public/index.html
+grep -q 'event.key === "ArrowRight"' public/index.html
+grep -q 'addEventListener("touchstart"' public/index.html
+grep -q 'addEventListener("touchend"' public/index.html
+grep -q 'data-autoplay-demo controls muted loop playsinline' public/index.html
+grep -q 'window.matchMedia("(prefers-reduced-motion: reduce)")' public/index.html
+node - <<'NODE'
+const fs = require("node:fs");
+const html = fs.readFileSync("public/index.html", "utf8");
+const projection = JSON.parse(fs.readFileSync("public/auditable-demo.json", "utf8"));
+if (!html.includes("grid-column: 1 / -1;")) {
+  throw new Error("homepage demo showcase is not assigned to a full-width grid row");
+}
+if (/class="continuity-demo"|Same task\. New chat\. No re-explanation\./u.test(html)) {
+  throw new Error("homepage still contains the retired static continuity card");
+}
+const slides = html.match(/<article\b[^>]*data-demo-slide[^>]*>/giu) || [];
+if (slides.length !== 2 || slides.some((slide) => !/\bdata-demo-title="[^"]+"/u.test(slide))) {
+  throw new Error("homepage carousel requires the core idea and one titled exact demonstration");
+}
+if (!/data-demo-title="Core idea"[^>]*data-active/u.test(slides[0])
+  || !/data-demo-title="Agent Work Lab"/u.test(slides[1])) {
+  throw new Error("homepage carousel must open on the core idea before the Agent Work Lab replay");
+}
+if (html.includes('class="hero-copy"')
+  || html.indexOf('class="brand-principle"') < html.indexOf('<!-- auditable-demo-home:end -->')) {
+  throw new Error("homepage supporting copy must remain below the complete demonstration reel");
+}
+const heroActions = html.match(/<div class="hero-actions"[\s\S]*?<\/div>/u)?.[0] || "";
+if (!heroActions
+  || heroActions.includes('href="/install/"')
+  || !heroActions.includes('href="/agent-supply-chain/"')
+  || !heroActions.includes('href="/agent-builders/"')
+  || html.includes("Copilot")
+  || /\.hero-actions a:first-child\s*\{/u.test(html)) {
+  throw new Error("homepage supporting row must keep installation in the header and expose only neutral tested-product links");
+}
+if (!/\.summary \{[\s\S]*?justify-self: center;[\s\S]*?text-align: left;/u.test(html)
+  || !/\.hero-actions \{[\s\S]*?flex-direction: column;[\s\S]*?align-items: flex-end;[\s\S]*?justify-self: end;/u.test(html)) {
+  throw new Error("homepage supporting row does not preserve its centered left-aligned copy block and stacked right-aligned actions");
+}
+if (!/\.brand-principle \{[\s\S]*?display: grid;[\s\S]*?gap: 6px;/u.test(html)
+  || !/\.brand-principle strong \{[\s\S]*?display: grid;[\s\S]*?gap: 2px;/u.test(html)
+  || !/<span class="brand-signature">Kungfu UNGFU™<\/span><span class="brand-motto">Never Guess\. Facts Unfold\.<\/span>/u.test(html)) {
+  throw new Error("homepage brand principle does not preserve its explicit three-line structure");
+}
+if (!/\.builder-entry h2,\s*\.trust h2 \{[\s\S]*?font-size: clamp\(28px, 4vw, 44px\);/u.test(html)
+  || !/\.trust \{[\s\S]*?align-items: center;[\s\S]*?padding: 28px;/u.test(html)
+  || !/\.trust \{[\s\S]*?border-right: 1px solid transparent;[\s\S]*?border-left: 1px solid transparent;/u.test(html)
+  || !/\.builder-entry, \.trust \{ padding: 20px; \}/u.test(html)) {
+  throw new Error("homepage stewardship card does not share the builder title scale, padding, and vertical alignment");
+}
+if (html.includes('class="demo-showcase-heading"')
+  || html.indexOf('class="demo-carousel-controls"') < html.indexOf('data-carousel-track')) {
+  throw new Error("homepage carousel controls must remain overlaid inside the demonstration card");
+}
+if (!html.includes("min-height: 70px")
+  || !html.includes("padding: 10px 310px 10px 15px")) {
+  throw new Error("homepage caption does not preserve control spacing and vertical alignment");
+}
+if (!html.includes("@media (min-width: 1800px) and (min-height: 1200px)")
+  || !html.includes("@media (min-width: 3000px) and (min-height: 1800px)")) {
+  throw new Error("homepage is missing its 2K and 4K landscape sizing contracts");
+}
+if (!html.includes("width: min(100%, max(480px, calc(177.777dvh - 380px)))")
+  || !/@media \(min-width: 821px\) \{\s*\.demo-carousel-viewport \{/u.test(html)
+  || !/\.demo-showcase \{[\s\S]*?border: 1px solid var\(--line\);[\s\S]*?linear-gradient\(135deg, #f8fafb 0%, #edf2f5 56%, #e3eaf0 100%\);[\s\S]*?box-shadow: 0 24px 60px/u.test(html)
+  || !/\.hero-demo \{[\s\S]*?border: 0;[\s\S]*?background: transparent;[\s\S]*?box-shadow: none;/u.test(html)
+  || !/\.claim-demo-title \{[\s\S]*?color: var\(--fg\);/u.test(html)
+  || !/\.claim-demo-tagline \{[\s\S]*?color: var\(--muted\);/u.test(html)
+  || !html.includes("@media (prefers-color-scheme: dark)")
+  || !html.includes("margin-top: -28px")
+  || !html.includes("font-size: clamp(30px, 5.8cqw, 86px)")) {
+  throw new Error("homepage carousel does not preserve its header-tight viewport-height contract");
+}
+for (const member of ["poster.png", "demo.webm", "demo.mp4", "complete-transcript.txt"]) {
+  const expected = `${projection.publicEvidencePath}/${member}`;
+  if (!html.includes(expected)) throw new Error(`homepage demo is not source-bound to ${expected}`);
+}
+const [videoTag = ""] = html.match(/<video\b[^>]*data-autoplay-demo[^>]*>/iu) || [];
+if (!videoTag) throw new Error("homepage is missing its auditable demo video");
+if (/\sautoplay(?=\s|=|>|\/)/iu.test(videoTag.replace(/"[^"]*"|'[^']*'/gu, ""))) {
+  throw new Error("homepage media must defer autoplay to the reduced-motion-aware controller");
+}
+NODE
 grep -q 'prefers-reduced-motion: reduce' public/how-tested/auditable-demo/index.html
 grep -q 'Watch the artifact explain itself.' public/how-tested/auditable-demo/index.html
 grep -q 'Authority boundary' public/how-tested/auditable-demo/index.html
@@ -597,6 +706,19 @@ if [ -d dist ]; then
   test -f dist/trust/index.html
   test -f dist/legal/index.html
   grep -q "Your agent shouldn't start over when the chat ends." dist/index.html
+  grep -q 'One Work. Two fresh Agent processes.' dist/index.html
+  grep -q 'data-demo-carousel' dist/index.html
+  grep -q 'data-demo-title="Core idea" data-active' dist/index.html
+  grep -q 'data-demo-slide data-demo-title="Agent Work Lab"' dist/index.html
+  grep -q '01 / 02 · Core idea' dist/index.html
+  grep -q 'data-carousel-previous' dist/index.html
+  grep -q 'data-carousel-next' dist/index.html
+  grep -q 'data-autoplay-demo controls muted loop playsinline' dist/index.html
+  grep -q 'A bounded offline replay—not provider or durability proof.' dist/index.html
+  if grep -q 'class="continuity-demo"\|Same task. New chat. No re-explanation.' dist/index.html; then
+    echo "error: dist homepage still contains the retired static continuity card" >&2
+    exit 1
+  fi
   grep -q 'How continuity was tested' dist/how-tested/continuity/index.html
   grep -q 'Watch the artifact explain itself.' dist/how-tested/auditable-demo/index.html
   grep -q 'Kungfu does not compete for your Hub.' dist/agent-builders/index.html
