@@ -71,6 +71,17 @@ Header and footer content is generated from `site/shared-layout.json`. Update
 that file first, then run the build so every page receives the same navigation
 and footer.
 
+The auditable-demo importer accepts the current single-source
+`kungfu.site.auditable-demo-source/v1` descriptor and the collection form
+`kungfu.site.auditable-demo-source/v2`. The v2 form names one featured demo and
+one to eight exact `demo id -> Passport + media directory` bindings. Every
+entry is independently verified and materialized under its Passport root;
+`/auditable-demo.json` remains the featured compatibility projection, while
+`/auditable-demos.json` and `/auditable-demos/<demo-id>.json` expose the
+collection. Additional videos appear on `/how-tested/auditable-demo/` without
+replacing the existing Agent Work Lab hero. Demo identity selects presentation
+only and grants no publication or runtime authority.
+
 The committed `/install/` page remains a truthful Coming Soon surface and does
 not expose installer files or released acquisition evidence. The site-owned
 `site/installer-publication-source.json` is the only publication pin consumed by
