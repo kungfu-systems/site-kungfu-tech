@@ -142,6 +142,7 @@ grep -q 'calc(177.777dvh - 380px)' public/index.html
 grep -q '5.8cqw' public/index.html
 grep -q 'Use Codex, Claude, OpenCode, or your own execution surface.' public/index.html
 grep -q 'class="hero-actions" aria-label="Explore Kungfu"' public/index.html
+grep -q 'class="brand-motto">Never Guess. Facts Unfold.</span>' public/index.html
 grep -q 'window.setTimeout' public/index.html
 grep -q '}, 5000);' public/index.html
 grep -q 'event.key === "ArrowLeft"' public/index.html
@@ -184,6 +185,15 @@ if (!heroActions
 if (!/\.summary \{[\s\S]*?justify-self: center;[\s\S]*?text-align: left;/u.test(html)
   || !/\.hero-actions \{[\s\S]*?flex-direction: column;[\s\S]*?align-items: flex-end;[\s\S]*?justify-self: end;/u.test(html)) {
   throw new Error("homepage supporting row does not preserve its centered left-aligned copy block and stacked right-aligned actions");
+}
+if (!/\.brand-principle \{[\s\S]*?display: grid;[\s\S]*?gap: 6px;/u.test(html)
+  || !/\.brand-principle strong \{[\s\S]*?display: grid;[\s\S]*?gap: 2px;/u.test(html)
+  || !/<span class="brand-signature">Kungfu UNGFU™<\/span><span class="brand-motto">Never Guess\. Facts Unfold\.<\/span>/u.test(html)) {
+  throw new Error("homepage brand principle does not preserve its explicit three-line structure");
+}
+if (!/\.builder-entry h2,\s*\.trust h2 \{[\s\S]*?font-size: clamp\(28px, 4vw, 44px\);/u.test(html)
+  || !/\.trust \{[\s\S]*?align-items: center;/u.test(html)) {
+  throw new Error("homepage stewardship card does not share the builder title scale and vertical alignment");
 }
 if (html.includes('class="demo-showcase-heading"')
   || html.indexOf('class="demo-carousel-controls"') < html.indexOf('data-carousel-track')) {

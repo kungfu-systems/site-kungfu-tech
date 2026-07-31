@@ -85,15 +85,16 @@
     }
 
     .brand-principle {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px 18px;
-      align-items: baseline;
+      display: grid;
+      gap: 6px;
+      align-items: start;
       padding-left: 14px;
       border-left: 3px solid var(--accent);
     }
 
     .brand-principle strong {
+      display: grid;
+      gap: 2px;
       color: var(--fg);
       font-size: 18px;
       line-height: 1.35;
@@ -349,7 +350,8 @@
       background: var(--panel-soft);
     }
 
-    .builder-entry h2 {
+    .builder-entry h2,
+    .trust h2 {
       max-width: 420px;
       margin: 5px 0 0;
       font-size: clamp(28px, 4vw, 44px);
@@ -405,16 +407,10 @@
       display: grid;
       grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
       gap: 28px;
+      align-items: center;
       padding: 28px 0;
       border-top: 1px solid var(--line);
       border-bottom: 0;
-    }
-
-    .trust h2 {
-      margin: 0;
-      font-size: 28px;
-      line-height: 1.1;
-      letter-spacing: 0;
     }
 
     .trust h2 span {
@@ -621,7 +617,7 @@
       </section>
       <div class="hero-details">
         <div class="brand-principle" aria-label="Kungfu brand principle">
-          <strong><span class="brand-signature">Kungfu UNGFU™</span> · Never Guess. Facts Unfold.</strong>
+          <strong><span class="brand-signature">Kungfu UNGFU™</span><span class="brand-motto">Never Guess. Facts Unfold.</span></strong>
           <a href="/why-kungfu/">Why Kungfu?</a>
         </div>
         <p class="summary">Use Codex, Claude, OpenCode, or your own execution surface. Kungfu keeps durable work facts between sessions; it is not another agent.</p>
