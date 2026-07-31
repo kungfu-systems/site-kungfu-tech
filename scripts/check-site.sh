@@ -123,9 +123,14 @@ grep -q 'class="demo-showcase"' public/index.html
 grep -q 'data-demo-carousel' public/index.html
 grep -q 'data-carousel-track' public/index.html
 grep -q 'data-demo-title="Core idea" data-active' public/index.html
-grep -q '01 / 02 · Core idea' public/index.html
+grep -q 'data-carousel-counter>01 / 02<' public/index.html
+grep -q 'data-carousel-status>01 / 02 · Core idea<' public/index.html
 grep -q 'data-carousel-previous' public/index.html
 grep -q 'data-carousel-next' public/index.html
+grep -q 'class="demo-carousel-phase">Coming soon</span>' public/index.html
+grep -q 'position: absolute' public/index.html
+grep -q 'right: 10px' public/index.html
+grep -q 'bottom: 10px' public/index.html
 grep -q 'transition: opacity 720ms ease' public/index.html
 grep -q 'container-type: inline-size' public/index.html
 grep -q 'calc(177.777dvh - 380px)' public/index.html
@@ -160,9 +165,9 @@ if (html.includes('class="hero-copy"')
   || html.indexOf('class="brand-principle"') < html.indexOf('<!-- auditable-demo-home:end -->')) {
   throw new Error("homepage supporting copy must remain below the complete demonstration reel");
 }
-if (html.indexOf('class="demo-showcase-heading"')
-  < html.indexOf('class="demo-carousel-viewport"')) {
-  throw new Error("homepage carousel label and controls must remain below the demonstration card");
+if (html.includes('class="demo-showcase-heading"')
+  || html.indexOf('class="demo-carousel-controls"') < html.indexOf('data-carousel-track')) {
+  throw new Error("homepage carousel controls must remain overlaid inside the demonstration card");
 }
 if (!html.includes("@media (min-width: 1800px) and (min-height: 1200px)")
   || !html.includes("@media (min-width: 3000px) and (min-height: 1800px)")) {

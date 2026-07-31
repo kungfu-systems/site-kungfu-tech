@@ -133,30 +133,39 @@
       display: grid;
       grid-column: 1 / -1;
       grid-row: 1;
-      gap: 8px;
       min-width: 0;
     }
 
-    .demo-showcase-heading {
+    .demo-carousel-controls {
+      position: absolute;
+      z-index: 4;
+      right: 10px;
+      bottom: 10px;
       display: flex;
-      justify-content: space-between;
-      gap: 24px;
+      gap: 6px;
       align-items: center;
+      padding: 4px;
+      border: 1px solid #344054;
+      background: rgba(11, 16, 32, 0.94);
+      box-shadow: 0 10px 28px rgba(0, 0, 0, 0.28);
     }
 
-    .demo-carousel-controls {
-      display: flex;
-      flex: 0 0 auto;
-      gap: 8px;
-      align-items: center;
+    .demo-carousel-phase {
+      margin: 0 4px;
+      color: #67e8a5;
+      font-size: 11px;
+      font-weight: 750;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      white-space: nowrap;
     }
 
     .demo-carousel-status {
-      min-width: 184px;
-      color: var(--muted);
-      font-size: 13px;
+      min-width: 50px;
+      color: #a8b8cc;
+      font-size: 12px;
       font-weight: 700;
-      text-align: right;
+      text-align: center;
       text-transform: uppercase;
     }
 
@@ -165,9 +174,9 @@
       width: 40px;
       height: 40px;
       place-items: center;
-      border: 1px solid var(--line);
-      background: var(--surface);
-      color: var(--fg);
+      border: 1px solid #344054;
+      background: #121a28;
+      color: #ffffff;
       cursor: pointer;
       font: inherit;
       font-size: 22px;
@@ -185,6 +194,7 @@
     }
 
     .demo-carousel-viewport {
+      position: relative;
       container-type: inline-size;
       min-width: 0;
       overflow: hidden;
@@ -294,7 +304,7 @@
       grid-template-columns: minmax(0, 1fr) auto;
       gap: 12px 18px;
       align-items: center;
-      padding: 10px 15px;
+      padding: 10px 270px 10px 15px;
       border-top: 1px solid #344054;
       background: #121a28;
     }
@@ -484,16 +494,15 @@
       main { width: min(100% - 28px, 640px); gap: 32px; padding: 28px 0 40px; }
       .hero { gap: 14px; margin-top: -32px; padding: 0 0 8px; }
       .summary { font-size: 16px; }
-      .demo-showcase { gap: 8px; }
-      .demo-showcase-heading { gap: 12px; align-items: center; }
-      .demo-carousel-status { display: none; }
+      .demo-carousel-controls { right: 8px; bottom: 8px; }
+      .demo-carousel-phase { font-size: 10px; }
       .hero-details { padding: 20px; }
       .claim-demo-canvas { gap: 8px; padding: 18px 20px; }
       .claim-demo-kicker { font-size: 10px; }
       .claim-demo-title { font-size: clamp(24px, 8vw, 32px); line-height: 0.98; }
       .claim-demo-tagline { font-size: 13px; line-height: 1.25; }
       .hero-demo figcaption,
-      .hero-demo-caption { grid-template-columns: 1fr; }
+      .hero-demo-caption { grid-template-columns: 1fr; padding: 10px 15px 62px; }
       .hero-demo-links { justify-content: flex-start; }
       .builder-entry, .trust { grid-template-columns: 1fr; gap: 16px; }
       .builder-entry { padding: 20px; }
@@ -539,7 +548,7 @@
     <!-- shared-header:end -->
 
     <section class="hero" aria-label="Kungfu homepage">
-      <section class="demo-showcase" aria-labelledby="demo-showcase-title" data-demo-carousel>
+      <section class="demo-showcase" aria-label="Product demonstrations" data-demo-carousel>
         <div class="demo-carousel-viewport" role="region" aria-roledescription="carousel" aria-label="Kungfu product demonstrations" tabindex="0" data-carousel-viewport>
           <div class="demo-carousel-track" data-carousel-track>
             <article class="demo-carousel-slide" aria-label="Kungfu core idea" data-demo-slide data-demo-title="Core idea" data-active>
@@ -579,11 +588,10 @@
       </article>
       <!-- auditable-demo-home:end -->
           </div>
-        </div>
-        <div class="demo-showcase-heading">
-          <p class="eyebrow" id="demo-showcase-title">Coming soon · Product demonstrations</p>
           <div class="demo-carousel-controls" aria-label="Demonstration carousel controls">
-            <span class="demo-carousel-status" aria-live="polite" data-carousel-status>01 / 02 · Core idea</span>
+            <span class="demo-carousel-phase">Coming soon</span>
+            <span class="demo-carousel-status" aria-hidden="true" data-carousel-counter>01 / 02</span>
+            <span class="sr-only" aria-live="polite" data-carousel-status>01 / 02 · Core idea</span>
             <button class="demo-carousel-button" type="button" aria-label="Previous demonstration" data-carousel-previous disabled><span aria-hidden="true">←</span></button>
             <button class="demo-carousel-button" type="button" aria-label="Next demonstration" data-carousel-next><span aria-hidden="true">→</span></button>
           </div>
@@ -691,6 +699,7 @@
         const demoSlides = Array.from(demoCarousel.querySelectorAll("[data-demo-slide]"));
         const demoPrevious = demoCarousel.querySelector("[data-carousel-previous]");
         const demoNext = demoCarousel.querySelector("[data-carousel-next]");
+        const demoCounter = demoCarousel.querySelector("[data-carousel-counter]");
         const demoStatus = demoCarousel.querySelector("[data-carousel-status]");
         const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
         let activeDemoIndex = 0;
@@ -731,6 +740,7 @@
           const current = String(activeDemoIndex + 1).padStart(2, "0");
           const total = String(demoSlides.length).padStart(2, "0");
           const title = demoSlides[activeDemoIndex]?.dataset.demoTitle || "Demonstration";
+          demoCounter.textContent = `${current} / ${total}`;
           demoStatus.textContent = `${current} / ${total} · ${title}`;
           demoPrevious.disabled = activeDemoIndex === 0;
           demoNext.disabled = activeDemoIndex === demoSlides.length - 1;
