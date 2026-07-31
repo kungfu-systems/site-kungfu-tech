@@ -186,6 +186,95 @@ function rebindMedia(repoRoot) {
   fs.writeFileSync(passportPath, stableJson(passport));
 }
 
+function addSecondaryDemo(input) {
+  const secondaryRoot = path.join(input.repoRoot, "site/auditable-demo-secondary");
+  const secondaryMedia = path.join(secondaryRoot, "media");
+  fs.mkdirSync(secondaryRoot, { recursive: true });
+  fs.cpSync(
+    path.join(input.repoRoot, "site/auditable-demo/media"),
+    secondaryMedia,
+    { recursive: true },
+  );
+  const evidenceClass = "exact-installed-artifact-status-snapshot/v1";
+  const manifestPath = path.join(secondaryMedia, "manifest.json");
+  const manifest = JSON.parse(fs.readFileSync(manifestPath, "utf8"));
+  manifest.policy.evidenceClass = evidenceClass;
+  fs.writeFileSync(manifestPath, stableJson(manifest));
+  fs.writeFileSync(
+    path.join(secondaryMedia, "complete-transcript.txt"),
+    "kungfu status --snapshot --no-interaction\nqualified\n",
+  );
+  const members = fs
+    .readdirSync(secondaryMedia)
+    .filter((name) => name !== "checksums.sha256")
+    .sort();
+  const checksums =
+    `${members
+      .map(
+        (name) =>
+          `${sha256(fs.readFileSync(path.join(secondaryMedia, name))).slice(7)}  ${name}`,
+      )
+      .join("\n")}\n`;
+  fs.writeFileSync(path.join(secondaryMedia, "checksums.sha256"), checksums);
+  const payload = structuredClone(input.passport);
+  delete payload.root;
+  payload.schema = "kungfu.auditable-demo.release-passport/v2";
+  payload.demo = {
+    id: "status-snapshot",
+    catalogRoot: `sha256:${"a".repeat(64)}`,
+    descriptorRoot: `sha256:${"b".repeat(64)}`,
+    commandLabel: "kungfu status --snapshot --no-interaction",
+    evidenceClass,
+    sceneId: "kungfu-status-snapshot",
+    publication: {
+      readmeFeatured: false,
+      siteSlug: "status-snapshot",
+    },
+  };
+  payload.authority.evidenceClass = evidenceClass;
+  payload.authority.claims = ["exact status snapshot artifact ran"];
+  payload.authority.nonClaims = ["general runtime health"];
+  payload.gate.artifact.id = "202";
+  payload.gate.artifact.url =
+    `${payload.workflow.url}/artifacts/${payload.gate.artifact.id}`;
+  payload.media.root = sha256(Buffer.from(checksums));
+  payload.media.artifact.id = "203";
+  payload.media.artifact.url =
+    `${payload.workflow.url}/artifacts/${payload.media.artifact.id}`;
+  payload.media.artifact.name =
+    `auditable-demo-media-${payload.source.sha.slice(0, 12)}-` +
+    `${payload.media.root.slice(7, 23)}`;
+  const passport = {
+    ...payload,
+    root: {
+      algorithm: "sha256",
+      profile: "sorted-object-json-utf8-lf/v1",
+      value: sha256(Buffer.from(stableJson(payload))),
+    },
+  };
+  fs.writeFileSync(
+    path.join(secondaryRoot, "passport.json"),
+    stableJson(passport),
+  );
+  fs.writeFileSync(input.sourcePath, stableJson({
+    schema: "kungfu.site.auditable-demo-source/v2",
+    featuredDemoId: "agent-work-lab",
+    demos: [
+      {
+        id: "agent-work-lab",
+        passport: "site/auditable-demo/passport.json",
+        mediaDirectory: "site/auditable-demo/media",
+      },
+      {
+        id: "status-snapshot",
+        passport: "site/auditable-demo-secondary/passport.json",
+        mediaDirectory: "site/auditable-demo-secondary/media",
+      },
+    ],
+  }));
+  return passport;
+}
+
 test("imports exact media and a source-bound public projection", () => {
   const input = fixture();
   try {
@@ -213,6 +302,47 @@ test("imports exact media and a source-bound public projection", () => {
       fs.readFileSync(path.join(input.outputRoot, "how-tested/auditable-demo/index.html"), "utf8"),
       /kungfu agent-work-lab autoplay/u,
     );
+    assert.equal(importAuditableDemo({ ...input, checkOnly: true }).changed, false);
+  } finally {
+    fs.rmSync(input.repoRoot, { recursive: true, force: true });
+  }
+});
+
+test("imports a demo-id collection while preserving the Agent Work Lab route", () => {
+  const input = fixture();
+  try {
+    const secondary = addSecondaryDemo(input);
+    const result = importAuditableDemo(input);
+    assert.equal(result.demos.length, 2);
+    const collection = JSON.parse(
+      fs.readFileSync(
+        path.join(input.outputRoot, "auditable-demos.json"),
+        "utf8",
+      ),
+    );
+    assert.equal(collection.featuredDemoId, "agent-work-lab");
+    assert.deepEqual(
+      collection.demos.map(({ id }) => id),
+      ["agent-work-lab", "status-snapshot"],
+    );
+    const secondaryProjection = JSON.parse(
+      fs.readFileSync(
+        path.join(input.outputRoot, "auditable-demos/status-snapshot.json"),
+        "utf8",
+      ),
+    );
+    assert.equal(secondaryProjection.demo.id, "status-snapshot");
+    assert.equal(secondaryProjection.passportRoot, secondary.root.value);
+    assert.match(
+      secondaryProjection.publicEvidencePath,
+      /^\/evidence\/auditable-demo\/status-snapshot\/[0-9a-f]{64}$/u,
+    );
+    const page = fs.readFileSync(
+      path.join(input.outputRoot, "how-tested/auditable-demo/index.html"),
+      "utf8",
+    );
+    assert.match(page, /Watch the artifact explain itself\./u);
+    assert.match(page, /kungfu status --snapshot --no-interaction/u);
     assert.equal(importAuditableDemo({ ...input, checkOnly: true }).changed, false);
   } finally {
     fs.rmSync(input.repoRoot, { recursive: true, force: true });
