@@ -115,20 +115,35 @@ if grep -RInE '^    \\.(site-header|brand|mark|site-nav|site-footer|nav-menu)\\b
 fi
 grep -q "Your agent shouldn't start over when the chat ends." public/index.html
 grep -q 'fresh agent continue the same work' public/index.html
-grep -q 'Same task. New chat. No re-explanation.' public/index.html
-grep -q 'Continuation unsupported' public/index.html
-grep -q 'Continuation oracle passed' public/index.html
 grep -q 'prefers-reduced-motion: reduce' public/index.html
-grep -q 'href="/how-tested/continuity/"' public/index.html
 grep -q 'href="/how-tested/auditable-demo/">How this was tested</a>' public/index.html
 grep -q 'One Work. Two fresh Agent processes.' public/index.html
 grep -q 'Exact installed artifact · 19 seconds' public/index.html
+grep -q 'class="demo-showcase"' public/index.html
+grep -q 'data-demo-carousel' public/index.html
+grep -q 'data-carousel-track' public/index.html
+grep -q 'data-carousel-previous' public/index.html
+grep -q 'data-carousel-next' public/index.html
+grep -q 'event.key === "ArrowLeft"' public/index.html
+grep -q 'event.key === "ArrowRight"' public/index.html
+grep -q 'addEventListener("touchstart"' public/index.html
+grep -q 'addEventListener("touchend"' public/index.html
 grep -q 'data-autoplay-demo controls muted loop playsinline' public/index.html
 grep -q 'window.matchMedia("(prefers-reduced-motion: reduce)")' public/index.html
 node - <<'NODE'
 const fs = require("node:fs");
 const html = fs.readFileSync("public/index.html", "utf8");
 const projection = JSON.parse(fs.readFileSync("public/auditable-demo.json", "utf8"));
+if (!html.includes("grid-column: 1 / -1;")) {
+  throw new Error("homepage demo showcase is not assigned to a full-width grid row");
+}
+if (/class="continuity-demo"|Same task\. New chat\. No re-explanation\./u.test(html)) {
+  throw new Error("homepage still contains the retired static continuity card");
+}
+const slides = html.match(/<article\b[^>]*data-demo-slide[^>]*>/giu) || [];
+if (slides.length < 1 || slides.some((slide) => !/\bdata-demo-title="[^"]+"/u.test(slide))) {
+  throw new Error("homepage carousel requires at least one titled demonstration slide");
+}
 for (const member of ["poster.png", "demo.webm", "demo.mp4", "complete-transcript.txt"]) {
   const expected = `${projection.publicEvidencePath}/${member}`;
   if (!html.includes(expected)) throw new Error(`homepage demo is not source-bound to ${expected}`);
@@ -616,8 +631,16 @@ if [ -d dist ]; then
   test -f dist/legal/index.html
   grep -q "Your agent shouldn't start over when the chat ends." dist/index.html
   grep -q 'One Work. Two fresh Agent processes.' dist/index.html
+  grep -q 'data-demo-carousel' dist/index.html
+  grep -q 'data-demo-slide data-demo-title="Agent Work Lab"' dist/index.html
+  grep -q 'data-carousel-previous' dist/index.html
+  grep -q 'data-carousel-next' dist/index.html
   grep -q 'data-autoplay-demo controls muted loop playsinline' dist/index.html
   grep -q 'A bounded offline replay—not provider or durability proof.' dist/index.html
+  if grep -q 'class="continuity-demo"\|Same task. New chat. No re-explanation.' dist/index.html; then
+    echo "error: dist homepage still contains the retired static continuity card" >&2
+    exit 1
+  fi
   grep -q 'How continuity was tested' dist/how-tested/continuity/index.html
   grep -q 'Watch the artifact explain itself.' dist/how-tested/auditable-demo/index.html
   grep -q 'Kungfu does not compete for your Hub.' dist/agent-builders/index.html
