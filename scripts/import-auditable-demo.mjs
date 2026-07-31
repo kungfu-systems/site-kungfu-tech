@@ -34,11 +34,14 @@ const NON_AUTHORITIES = [
 const EXPECTED_MEDIA_MEMBERS = [
   "checksums.sha256",
   "complete-transcript.txt",
+  "demo-720p.mp4",
+  "demo-720p.webm",
   "demo.gif",
   "demo.mp4",
   "demo.webm",
   "gate-receipt.json",
   "manifest.json",
+  "media-inspection.json",
   "media-probe.json",
   "media-receipt.json",
   "poster.png",
@@ -147,7 +150,13 @@ function verifyPassport(passport) {
     "source artifact name is not bound to the source SHA",
   );
   invariant(passport.gate?.status === "passed" && DIGEST.test(passport.gate?.root || ""), "Gate is not qualified");
-  invariant(passport.media?.status === "rendered" && DIGEST.test(passport.media?.root || ""), "media is not rendered");
+  invariant(
+    passport.media?.status === "rendered"
+      && DIGEST.test(passport.media?.root || "")
+      && passport.media?.profile === "responsive-web-delivery-v1"
+      && DIGEST.test(passport.media?.qualificationRoot || ""),
+    "media is not rendered and responsively qualified",
+  );
   invariant(
     passport.gate.artifact.name.startsWith(
       `auditable-demo-gate-${passport.source.sha.slice(0, 12)}-${passport.gate.root.slice(7, 23)}`,
@@ -244,16 +253,85 @@ function verifyMedia(mediaDirectory, passport) {
   );
   const receipt = readJson(path.join(mediaDirectory, "media-receipt.json"), "media receipt");
   invariant(
-    receipt.schema === "buildchain.auditable-demo-media/v1"
+    receipt.schema === "buildchain.auditable-demo-media/v2"
       && receipt.status === "passed"
       && receipt.sourceSha === passport.source.sha
       && receipt.qualifiedGateRoot === passport.gate.root
-      && receipt.rendererImage === passport.toolchain.rendererImage,
+      && receipt.rendererImage === passport.toolchain.rendererImage
+      && receipt.qualification?.profile?.id === passport.media.profile
+      && receipt.qualificationRoot === passport.media.qualificationRoot
+      && receipt.qualification?.qualificationRoot === receipt.qualificationRoot,
     "media receipt does not bind the passport",
   );
+  const { qualificationRoot, ...qualificationBody } = receipt.qualification;
+  invariant(
+    qualificationRoot === sha256(Buffer.from(stableJson(qualificationBody))),
+    "media qualification root does not verify",
+  );
+  invariant(
+    Array.isArray(receipt.qualification.renditions),
+    "media qualification renditions are missing",
+  );
+  const roles = new Map();
+  for (const rendition of receipt.qualification.renditions) {
+    invariant(
+      rendition
+        && typeof rendition.role === "string"
+        && typeof rendition.path === "string"
+        && EXPECTED_MEDIA_MEMBERS.includes(rendition.path)
+        && rendition.path !== "checksums.sha256"
+        && !roles.has(rendition.role)
+        && DIGEST.test(rendition.root || ""),
+      "media qualification role mapping is invalid",
+    );
+    const bytes = readRegular(path.join(mediaDirectory, rendition.path), rendition.role);
+    invariant(
+      rendition.root === sha256(bytes) && rendition.bytes === bytes.length,
+      `media qualification drifted for role ${rendition.role}`,
+    );
+    roles.set(rendition.role, rendition);
+  }
+  const expectedRoles = {
+    "primary-video": ["video/mp4", 1920, 1080, "scene-exact"],
+    "alternate-video": ["video/webm", 1920, 1080, "scene-exact"],
+    "responsive-primary-video": [
+      "video/mp4",
+      1280,
+      720,
+      "exact-downscale-same-aspect",
+    ],
+    "responsive-alternate-video": [
+      "video/webm",
+      1280,
+      720,
+      "exact-downscale-same-aspect",
+    ],
+    "readme-compatibility": [
+      "image/gif",
+      1280,
+      720,
+      "exact-downscale-same-aspect",
+    ],
+    "evidence-poster": ["image/png", 1920, 1080, "scene-exact"],
+  };
+  for (const [role, [mimeType, width, height, dimensionPolicy]] of Object.entries(
+    expectedRoles,
+  )) {
+    const rendition = roles.get(role);
+    invariant(
+      rendition
+        && rendition.mimeType === mimeType
+        && rendition.width === width
+        && rendition.height === height
+        && rendition.dimensionPolicy === dimensionPolicy,
+      `qualified media role ${role} is missing or invalid`,
+    );
+  }
   const scene = readJson(path.join(mediaDirectory, "scene.json"), "scene");
   invariant(
     scene.schema === "build-images.demo-scene/v1"
+      && scene.width === 1920
+      && scene.height === 1080
       && Number.isInteger(scene.durationMs)
       && scene.durationMs >= 500
       && scene.durationMs <= 60000,
@@ -266,10 +344,21 @@ function verifyMedia(mediaDirectory, passport) {
       && manifest.policy?.evidenceClass === passport.authority.evidenceClass
       && manifest.policy?.visualClassification === "bounded-pty-replay"
       && manifest.policy?.runtimeTextAuthority === "terminal-capture.json"
-      && DIGEST.test(manifest.inputs?.terminalCapture?.root || ""),
+      && DIGEST.test(manifest.inputs?.terminalCapture?.root || "")
+      && manifest.derivation?.policy ===
+        "single-frame-set-deterministic-renditions/v1",
     "renderer manifest does not prove the qualified PTY replay",
   );
-  return scene;
+  for (const rendition of roles.values()) {
+    const derivation = manifest.derivation?.renditions?.[rendition.path];
+    invariant(
+      derivation
+        && derivation.width === rendition.width
+        && derivation.height === rendition.height,
+      `renderer derivation is missing for role ${rendition.role}`,
+    );
+  }
+  return { scene, roles };
 }
 
 function formatDuration(durationMs) {
@@ -277,7 +366,25 @@ function formatDuration(durationMs) {
   return Number.isInteger(seconds) ? `${seconds}` : seconds.toFixed(1);
 }
 
-function renderEvidence(passport, publicPath, scene) {
+function renderVideoSources(publicPath, roles) {
+  const constrainedMp4 = roles.get("responsive-primary-video");
+  const constrainedWebm = roles.get("responsive-alternate-video");
+  const desktopMp4 = roles.get("primary-video");
+  const desktopWebm = roles.get("alternate-video");
+  return [
+    [constrainedMp4, "(max-width: 767px)"],
+    [constrainedWebm, "(max-width: 767px)"],
+    [desktopMp4, "(min-width: 768px)"],
+    [desktopWebm, "(min-width: 768px)"],
+  ]
+    .map(
+      ([rendition, media]) =>
+        `<source media="${media}" src="${escapeAttr(publicPath)}/${escapeAttr(rendition.path)}" type="${escapeAttr(rendition.mimeType)}">`,
+    )
+    .join("\n          ");
+}
+
+function renderEvidence(passport, publicPath, scene, roles) {
   const runUrl = passport.workflow.url;
   const sourceUrl = `https://github.com/${passport.source.repository}/commit/${passport.source.sha}`;
   const artifactLinks = [
@@ -300,12 +407,11 @@ function renderEvidence(passport, publicPath, scene) {
           <h1 id="demo-heading">Watch the artifact explain itself.</h1>
           <p class="lead">No account, hosted session, or hand-authored transcript is required. This ${formatDuration(scene.durationMs)}-second animation replays the bounded PTY output of the installed <code>kungfu agent-work-lab autoplay</code> command after the reusable Buildchain Gate passed.</p>
         </div>
-        <video controls playsinline preload="metadata" aria-label="Exact installed Kungfu Agent Work Lab autoplay demonstration" poster="${escapeAttr(publicPath)}/poster.png">
-          <source src="${escapeAttr(publicPath)}/demo.mp4" type="video/mp4">
-          <source src="${escapeAttr(publicPath)}/demo.webm" type="video/webm">
-          <p><a href="${escapeAttr(publicPath)}/demo.mp4">Download the MP4 recording.</a></p>
+        <video controls playsinline preload="metadata" aria-label="Exact installed Kungfu Agent Work Lab autoplay demonstration" poster="${escapeAttr(publicPath)}/${escapeAttr(roles.get("evidence-poster").path)}">
+          ${renderVideoSources(publicPath, roles)}
+          <p><a href="${escapeAttr(publicPath)}/${escapeAttr(roles.get("responsive-primary-video").path)}">Download the 720p MP4 recording.</a></p>
         </video>
-        <p class="fallback">Static fallback: <a href="${escapeAttr(publicPath)}/poster.png">open the exact poster</a>. Text alternative: <a href="${escapeAttr(publicPath)}/complete-transcript.txt">read the complete transcript</a>. The page never autoplays media.</p>
+        <p class="fallback">Static fallback: <a href="${escapeAttr(publicPath)}/${escapeAttr(roles.get("evidence-poster").path)}">open the exact poster</a>. Text alternative: <a href="${escapeAttr(publicPath)}/complete-transcript.txt">read the complete transcript</a>. The page never autoplays media.</p>
       </section>
 
       <section class="proof-grid" aria-label="Auditable demo proof">
@@ -345,7 +451,7 @@ function renderEvidence(passport, publicPath, scene) {
       <!-- auditable-demo-evidence:end -->`;
 }
 
-function renderHomepageDemo(publicPath, scene) {
+function renderHomepageDemo(publicPath, scene, roles) {
   const duration = formatDuration(scene.durationMs);
   return `      <!-- auditable-demo-home:start -->
       <article class="demo-carousel-slide" aria-label="Agent Work Lab demonstration" data-demo-slide data-demo-title="Agent Work Lab">
@@ -354,10 +460,9 @@ function renderHomepageDemo(publicPath, scene) {
             <span class="hero-demo-status">Qualified replay</span>
             <span>Exact installed artifact · ${escapeHtml(duration)} seconds</span>
           </div>
-          <video data-autoplay-demo controls muted loop playsinline preload="metadata" aria-label="Exact installed Kungfu Agent Work Lab autoplay demonstration" aria-describedby="hero-demo-note" poster="${escapeAttr(publicPath)}/poster.png">
-            <source src="${escapeAttr(publicPath)}/demo.mp4" type="video/mp4">
-            <source src="${escapeAttr(publicPath)}/demo.webm" type="video/webm">
-            <p><a href="${escapeAttr(publicPath)}/demo.mp4">Download the MP4 replay.</a></p>
+          <video data-autoplay-demo controls muted loop playsinline preload="metadata" aria-label="Exact installed Kungfu Agent Work Lab autoplay demonstration" aria-describedby="hero-demo-note" poster="${escapeAttr(publicPath)}/${escapeAttr(roles.get("evidence-poster").path)}">
+            ${renderVideoSources(publicPath, roles)}
+            <p><a href="${escapeAttr(publicPath)}/${escapeAttr(roles.get("responsive-primary-video").path)}">Download the 720p MP4 replay.</a></p>
           </video>
           <figcaption>
             <span class="hero-demo-copy"><strong id="hero-demo-title">One Work. Two fresh Agent processes.</strong><span id="hero-demo-note">A bounded offline replay—not provider or durability proof.</span></span>
@@ -368,7 +473,7 @@ function renderHomepageDemo(publicPath, scene) {
       <!-- auditable-demo-home:end -->`;
 }
 
-function renderAdditionalEvidence(passport, demo, publicPath, scene) {
+function renderAdditionalEvidence(passport, demo, publicPath, scene, roles) {
   const claims = passport.authority.claims
     .map((claim) => `<li>${escapeHtml(claim)}</li>`)
     .join("");
@@ -382,12 +487,11 @@ function renderAdditionalEvidence(passport, demo, publicPath, scene) {
           <h2 id="demo-${escapeAttr(demo.id)}-heading">${escapeHtml(demo.commandLabel)}</h2>
           <p class="lead">This ${formatDuration(scene.durationMs)}-second animation is selected by the exact demo id <code>${escapeHtml(demo.id)}</code>. It passed its own Gate and Passport; catalog membership alone grants no authority.</p>
         </div>
-        <video controls playsinline preload="metadata" aria-label="${escapeAttr(demo.commandLabel)} exact installed-artifact demonstration" poster="${escapeAttr(publicPath)}/poster.png">
-          <source src="${escapeAttr(publicPath)}/demo.mp4" type="video/mp4">
-          <source src="${escapeAttr(publicPath)}/demo.webm" type="video/webm">
-          <p><a href="${escapeAttr(publicPath)}/demo.mp4">Download the MP4 recording.</a></p>
+        <video controls playsinline preload="metadata" aria-label="${escapeAttr(demo.commandLabel)} exact installed-artifact demonstration" poster="${escapeAttr(publicPath)}/${escapeAttr(roles.get("evidence-poster").path)}">
+          ${renderVideoSources(publicPath, roles)}
+          <p><a href="${escapeAttr(publicPath)}/${escapeAttr(roles.get("responsive-primary-video").path)}">Download the 720p MP4 recording.</a></p>
         </video>
-        <p class="fallback">Static fallback: <a href="${escapeAttr(publicPath)}/poster.png">open the exact poster</a>. Text alternative: <a href="${escapeAttr(publicPath)}/complete-transcript.txt">read the complete transcript</a>.</p>
+        <p class="fallback">Static fallback: <a href="${escapeAttr(publicPath)}/${escapeAttr(roles.get("evidence-poster").path)}">open the exact poster</a>. Text alternative: <a href="${escapeAttr(publicPath)}/complete-transcript.txt">read the complete transcript</a>.</p>
       </section>
 
       <section class="coordinates">
@@ -458,7 +562,7 @@ function normalizeSources(source) {
   return { featuredDemoId: source.featuredDemoId, demos, collection: true };
 }
 
-function siteProjection(passport, demo, publicPath) {
+function siteProjection(passport, demo, publicPath, roles) {
   return {
     schema: "kungfu.site.auditable-demo/v2",
     status: "qualified",
@@ -472,6 +576,20 @@ function siteProjection(passport, demo, publicPath) {
     rendererImage: passport.toolchain.rendererImage,
     workflowUrl: passport.workflow.url,
     publicEvidencePath: publicPath,
+    mediaProfile: passport.media.profile,
+    mediaQualificationRoot: passport.media.qualificationRoot,
+    renditions: Object.fromEntries(
+      [...roles.entries()].map(([role, rendition]) => [
+        role,
+        {
+          path: rendition.path,
+          mimeType: rendition.mimeType,
+          width: rendition.width,
+          height: rendition.height,
+          root: rendition.root,
+        },
+      ]),
+    ),
     claims: passport.authority.claims,
     nonClaims: passport.authority.nonClaims,
   };
@@ -502,7 +620,7 @@ export function importAuditableDemo({
       demo.publication.readmeFeatured === (entry.id === normalizedSource.featuredDemoId),
       `demo ${entry.id} README feature status drifts from the source descriptor`,
     );
-    const scene = verifyMedia(mediaDirectory, passport);
+    const { scene, roles } = verifyMedia(mediaDirectory, passport);
     const rootName = passport.root.value.slice(7);
     const publicPath =
       demo.id === "agent-work-lab" && demo.publication.readmeFeatured
@@ -519,8 +637,8 @@ export function importAuditableDemo({
       path.join(evidenceDirectory, "passport.json"),
       Buffer.from(stableJson(passport)),
     );
-    const projection = siteProjection(passport, demo, publicPath);
-    imports.push({ passport, demo, scene, publicPath, projection });
+    const projection = siteProjection(passport, demo, publicPath, roles);
+    imports.push({ passport, demo, scene, roles, publicPath, projection });
     if (normalizedSource.collection) {
       expected.set(
         path.join(outputRoot, "auditable-demos", `${demo.id}.json`),
@@ -568,12 +686,13 @@ export function importAuditableDemo({
     featured.passport,
     featured.publicPath,
     featured.scene,
+    featured.roles,
   );
   const additional = imports
     .filter(({ demo }) => demo.id !== featured.demo.id)
     .sort((left, right) => left.demo.id.localeCompare(right.demo.id))
-    .map(({ passport, demo, publicPath, scene }) =>
-      renderAdditionalEvidence(passport, demo, publicPath, scene),
+    .map(({ passport, demo, publicPath, scene, roles }) =>
+      renderAdditionalEvidence(passport, demo, publicPath, scene, roles),
     )
     .join("");
   if (additional) {
@@ -592,7 +711,11 @@ export function importAuditableDemo({
     Buffer.from(
       replaceHomepageDemo(
         homepageBefore,
-        renderHomepageDemo(featured.publicPath, featured.scene),
+        renderHomepageDemo(
+          featured.publicPath,
+          featured.scene,
+          featured.roles,
+        ),
       ),
     ),
   );
