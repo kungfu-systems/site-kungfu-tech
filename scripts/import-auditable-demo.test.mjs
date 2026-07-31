@@ -168,6 +168,10 @@ function fixture() {
     path.join(outputRoot, "how-tested/auditable-demo/index.html"),
     "<main>\n      <!-- auditable-demo-evidence:start -->\n      fixture\n      <!-- auditable-demo-evidence:end -->\n</main>\n",
   );
+  fs.writeFileSync(
+    path.join(outputRoot, "index.html"),
+    "<main>\n      <!-- auditable-demo-home:start -->\n      fixture\n      <!-- auditable-demo-home:end -->\n</main>\n",
+  );
   return { repoRoot, sourcePath, outputRoot, passport };
 }
 
@@ -213,6 +217,11 @@ test("imports exact media and a source-bound public projection", () => {
       fs.readFileSync(path.join(input.outputRoot, "how-tested/auditable-demo/index.html"), "utf8"),
       /kungfu agent-work-lab autoplay/u,
     );
+    const homepage = fs.readFileSync(path.join(input.outputRoot, "index.html"), "utf8");
+    assert.match(homepage, /data-autoplay-demo controls muted loop playsinline/u);
+    assert.match(homepage, /Exact installed artifact · 18\.5 seconds/u);
+    assert.match(homepage, new RegExp(`${result.publicPath}/demo\\.webm`, "u"));
+    assert.match(homepage, new RegExp(`${result.publicPath}/complete-transcript\\.txt`, "u"));
     assert.equal(importAuditableDemo({ ...input, checkOnly: true }).changed, false);
   } finally {
     fs.rmSync(input.repoRoot, { recursive: true, force: true });

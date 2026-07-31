@@ -29,9 +29,31 @@
 
     .hero {
       display: grid;
-      gap: 28px;
+      grid-template-columns: minmax(0, 0.82fr) minmax(520px, 1.18fr);
+      column-gap: clamp(32px, 5vw, 64px);
+      row-gap: 24px;
+      align-items: center;
       min-width: 0;
-      padding-top: 22px;
+      min-height: min(720px, calc(100vh - 138px));
+      padding: 34px 0 24px;
+    }
+
+    .hero-copy {
+      display: grid;
+      gap: 24px;
+      align-content: center;
+      min-width: 0;
+      grid-column: 1;
+      grid-row: 1;
+    }
+
+    .hero-details {
+      display: grid;
+      gap: 20px;
+      align-content: center;
+      min-width: 0;
+      grid-column: 1;
+      grid-row: 2;
     }
 
     .eyebrow {
@@ -44,26 +66,26 @@
     }
 
     h1 {
-      max-width: 1040px;
+      max-width: 620px;
       margin: 0;
-      font-size: clamp(46px, 7vw, 86px);
-      line-height: 0.98;
+      font-size: clamp(46px, 5.5vw, 72px);
+      line-height: 0.96;
       letter-spacing: 0;
     }
 
     .tagline {
-      max-width: 780px;
+      max-width: 600px;
       margin: 0;
-      font-size: clamp(22px, 2.6vw, 34px);
-      line-height: 1.18;
+      font-size: clamp(21px, 2.2vw, 29px);
+      line-height: 1.2;
       color: var(--fg);
     }
 
     .summary {
-      max-width: 760px;
+      max-width: 590px;
       margin: 0;
       color: var(--muted);
-      font-size: 18px;
+      font-size: 17px;
     }
 
     .brand-principle {
@@ -112,6 +134,95 @@
       background: var(--accent);
       color: #ffffff;
     }
+
+    .hero-demo {
+      grid-column: 2;
+      grid-row: 1 / span 2;
+      align-self: center;
+      min-width: 0;
+      margin: 0;
+      overflow: hidden;
+      border: 1px solid #344054;
+      background: #0b1020;
+      color: #e5edf7;
+      box-shadow: 0 28px 70px rgba(11, 16, 32, 0.26);
+    }
+
+    .hero-demo-bar {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 8px 16px;
+      align-items: center;
+      min-height: 42px;
+      padding: 9px 13px;
+      border-bottom: 1px solid #344054;
+      color: #a8b8cc;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .hero-demo-status {
+      display: inline-flex;
+      gap: 8px;
+      align-items: center;
+      color: #67e8a5;
+    }
+
+    .hero-demo-status::before {
+      width: 8px;
+      height: 8px;
+      background: currentColor;
+      border-radius: 50%;
+      box-shadow: 0 0 0 4px rgba(103, 232, 165, 0.12);
+      content: "";
+    }
+
+    .hero-demo video {
+      display: block;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      background: #0b1020;
+    }
+
+    .hero-demo figcaption {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 12px 18px;
+      align-items: center;
+      padding: 15px;
+      border-top: 1px solid #344054;
+      background: #121a28;
+    }
+
+    .hero-demo-copy {
+      display: grid;
+      gap: 2px;
+    }
+
+    .hero-demo-copy strong {
+      color: #ffffff;
+      font-size: 15px;
+    }
+
+    .hero-demo-copy span {
+      color: #a8b8cc;
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .hero-demo-links {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      gap: 8px 14px;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .hero-demo-links a { color: #67e8a5; }
 
     .continuity-demo {
       display: grid;
@@ -400,12 +511,41 @@
 
     .security { color: var(--accent-2); }
 
+    @media (max-width: 1040px) {
+      .hero {
+        grid-template-columns: 1fr;
+        min-height: 0;
+      }
+
+      .hero-copy {
+        max-width: 760px;
+        grid-column: 1;
+        grid-row: 1;
+      }
+
+      .hero-demo {
+        grid-column: 1;
+        grid-row: 2;
+      }
+
+      .hero-details {
+        max-width: 760px;
+        grid-column: 1;
+        grid-row: 3;
+      }
+
+      h1 { max-width: 760px; }
+    }
+
     @media (max-width: 820px) {
       main { width: min(100% - 28px, 640px); gap: 32px; padding: 28px 0 40px; }
-      .hero { gap: 20px; padding-top: 14px; }
+      .hero { gap: 28px; padding: 14px 0 8px; }
+      .hero-copy { gap: 20px; }
       h1 { font-size: 40px; line-height: 1.02; }
       .tagline { font-size: 20px; }
       .summary { font-size: 16px; }
+      .hero-demo figcaption { grid-template-columns: 1fr; }
+      .hero-demo-links { justify-content: flex-start; }
       .continuity-heading { align-items: flex-start; flex-direction: column; }
       .continuity-grid { grid-template-columns: 1fr; }
       .continuity-path { min-height: 0; }
@@ -429,6 +569,7 @@
 
     @media (prefers-reduced-motion: reduce) {
       .continuity-transfer::after { top: 50%; animation: none; opacity: 1; transform: translateY(-50%); }
+      .hero-demo-status::before { box-shadow: none; }
     }
 
     @media (max-width: 820px) and (prefers-reduced-motion: reduce) {
@@ -470,19 +611,39 @@
     <!-- shared-header:end -->
 
     <section class="hero" aria-label="Kungfu homepage">
-      <p class="eyebrow">Coming soon · continuity for long-running agent work</p>
-      <h1>Your agent shouldn't start over when the chat ends.</h1>
-      <p class="tagline">Kungfu helps a fresh agent continue the same work without asking you to explain it all again.</p>
-      <div class="brand-principle" aria-label="Kungfu brand principle">
-        <strong><span class="brand-signature">Kungfu UNGFU™</span> · Never Guess. Facts Unfold.</strong>
-        <a href="/why-kungfu/">Why Kungfu?</a>
+      <div class="hero-copy">
+        <p class="eyebrow">Coming soon · watch the exact 19-second replay</p>
+        <h1>Your agent shouldn't start over when the chat ends.</h1>
+        <p class="tagline">Kungfu helps a fresh agent continue the same work without asking you to explain it all again.</p>
       </div>
-      <p class="summary">Use Codex, Claude, Copilot, or your own execution surface. Kungfu keeps durable work facts between sessions; it is not another agent.</p>
-      <div class="hero-actions" aria-label="Primary actions">
-        <a href="/agent-supply-chain/">Explore the Agent Supply Chain</a>
-        <a class="primary-builder-action" href="/agent-builders/">For Agent Builders</a>
-        <a href="/how-tested/auditable-demo/">Watch the exact artifact proof</a>
-        <a href="#continuity-demo">See the handoff</a>
+      <!-- auditable-demo-home:start -->
+      <figure class="hero-demo" aria-labelledby="hero-demo-title">
+        <div class="hero-demo-bar">
+          <span class="hero-demo-status">Qualified replay</span>
+          <span>Exact installed artifact · 19 seconds</span>
+        </div>
+        <video data-autoplay-demo controls muted loop playsinline preload="metadata" aria-label="Exact installed Kungfu Agent Work Lab autoplay demonstration" aria-describedby="hero-demo-note" poster="/evidence/auditable-demo/bca0cebcabb4c93e5f0a726052ae0259707ef660b3fe0524c5953e5219bf88b8/poster.png">
+          <source src="/evidence/auditable-demo/bca0cebcabb4c93e5f0a726052ae0259707ef660b3fe0524c5953e5219bf88b8/demo.webm" type="video/webm">
+          <source src="/evidence/auditable-demo/bca0cebcabb4c93e5f0a726052ae0259707ef660b3fe0524c5953e5219bf88b8/demo.mp4" type="video/mp4">
+          <p><a href="/evidence/auditable-demo/bca0cebcabb4c93e5f0a726052ae0259707ef660b3fe0524c5953e5219bf88b8/demo.mp4">Download the MP4 replay.</a></p>
+        </video>
+        <figcaption>
+          <span class="hero-demo-copy"><strong id="hero-demo-title">One Work. Two fresh Agent processes.</strong><span id="hero-demo-note">A bounded offline replay—not provider or durability proof.</span></span>
+          <span class="hero-demo-links"><a href="/how-tested/auditable-demo/">How this was tested</a><a href="/evidence/auditable-demo/bca0cebcabb4c93e5f0a726052ae0259707ef660b3fe0524c5953e5219bf88b8/complete-transcript.txt">Transcript</a></span>
+        </figcaption>
+      </figure>
+      <!-- auditable-demo-home:end -->
+      <div class="hero-details">
+        <div class="brand-principle" aria-label="Kungfu brand principle">
+          <strong><span class="brand-signature">Kungfu UNGFU™</span> · Never Guess. Facts Unfold.</strong>
+          <a href="/why-kungfu/">Why Kungfu?</a>
+        </div>
+        <p class="summary">Use Codex, Claude, Copilot, or your own execution surface. Kungfu keeps durable work facts between sessions; it is not another agent.</p>
+        <div class="hero-actions" aria-label="Primary actions">
+          <a href="/install/">Get Kungfu</a>
+          <a href="/agent-supply-chain/">Explore the Agent Supply Chain</a>
+          <a class="primary-builder-action" href="/agent-builders/">For Agent Builders</a>
+        </div>
       </div>
     </section>
 
@@ -599,6 +760,28 @@
       });
     </script>
     <!-- shared-footer:end -->
+    <script>
+      const heroDemo = document.querySelector("[data-autoplay-demo]");
+      const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+      const syncHeroDemo = () => {
+        if (!heroDemo) return;
+        if (reducedMotion.matches || document.visibilityState !== "visible") {
+          heroDemo.pause();
+          if (reducedMotion.matches) heroDemo.currentTime = 0;
+          return;
+        }
+        heroDemo.play().catch(() => {
+          // The poster and native controls remain available when autoplay is blocked.
+        });
+      };
+      if (typeof reducedMotion.addEventListener === "function") {
+        reducedMotion.addEventListener("change", syncHeroDemo);
+      } else {
+        reducedMotion.addListener(syncHeroDemo);
+      }
+      document.addEventListener("visibilitychange", syncHeroDemo);
+      syncHeroDemo();
+    </script>
   </main>
 </body>
 </html>

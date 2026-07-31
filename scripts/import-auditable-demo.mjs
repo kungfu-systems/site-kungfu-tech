@@ -313,9 +313,36 @@ function renderEvidence(passport, publicPath, scene) {
       <!-- auditable-demo-evidence:end -->`;
 }
 
+function renderHomepageDemo(publicPath, scene) {
+  const duration = formatDuration(scene.durationMs);
+  return `      <!-- auditable-demo-home:start -->
+      <figure class="hero-demo" aria-labelledby="hero-demo-title">
+        <div class="hero-demo-bar">
+          <span class="hero-demo-status">Qualified replay</span>
+          <span>Exact installed artifact · ${escapeHtml(duration)} seconds</span>
+        </div>
+        <video data-autoplay-demo controls muted loop playsinline preload="metadata" aria-label="Exact installed Kungfu Agent Work Lab autoplay demonstration" aria-describedby="hero-demo-note" poster="${escapeAttr(publicPath)}/poster.png">
+          <source src="${escapeAttr(publicPath)}/demo.webm" type="video/webm">
+          <source src="${escapeAttr(publicPath)}/demo.mp4" type="video/mp4">
+          <p><a href="${escapeAttr(publicPath)}/demo.mp4">Download the MP4 replay.</a></p>
+        </video>
+        <figcaption>
+          <span class="hero-demo-copy"><strong id="hero-demo-title">One Work. Two fresh Agent processes.</strong><span id="hero-demo-note">A bounded offline replay—not provider or durability proof.</span></span>
+          <span class="hero-demo-links"><a href="/how-tested/auditable-demo/">How this was tested</a><a href="${escapeAttr(publicPath)}/complete-transcript.txt">Transcript</a></span>
+        </figcaption>
+      </figure>
+      <!-- auditable-demo-home:end -->`;
+}
+
 function replaceEvidence(page, rendered) {
   const pattern = /      <!-- auditable-demo-evidence:start -->[\s\S]*?      <!-- auditable-demo-evidence:end -->/mu;
   invariant(pattern.test(page), "page is missing auditable-demo evidence markers");
+  return page.replace(pattern, rendered);
+}
+
+function replaceHomepageDemo(page, rendered) {
+  const pattern = /      <!-- auditable-demo-home:start -->[\s\S]*?      <!-- auditable-demo-home:end -->/mu;
+  invariant(pattern.test(page), "homepage is missing auditable-demo markers");
   return page.replace(pattern, rendered);
 }
 
@@ -338,6 +365,7 @@ export function importAuditableDemo({
   const publicPath = `/evidence/auditable-demo/${rootName}`;
   const evidenceDirectory = path.join(outputRoot, publicPath);
   const pagePath = path.join(outputRoot, "how-tested/auditable-demo/index.html");
+  const homepagePath = path.join(outputRoot, "index.html");
   const projectionPath = path.join(outputRoot, "auditable-demo.json");
   const expected = new Map();
   for (const member of EXPECTED_MEDIA_MEMBERS) {
@@ -364,6 +392,11 @@ export function importAuditableDemo({
   );
   const pageBefore = readRegular(pagePath, "auditable demo page").toString("utf8");
   expected.set(pagePath, Buffer.from(replaceEvidence(pageBefore, renderEvidence(passport, publicPath, scene))));
+  const homepageBefore = readRegular(homepagePath, "homepage").toString("utf8");
+  expected.set(
+    homepagePath,
+    Buffer.from(replaceHomepageDemo(homepageBefore, renderHomepageDemo(publicPath, scene))),
+  );
 
   const drift = [];
   for (const [target, bytes] of expected) {

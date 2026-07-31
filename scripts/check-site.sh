@@ -120,7 +120,25 @@ grep -q 'Continuation unsupported' public/index.html
 grep -q 'Continuation oracle passed' public/index.html
 grep -q 'prefers-reduced-motion: reduce' public/index.html
 grep -q 'href="/how-tested/continuity/"' public/index.html
-grep -q 'href="/how-tested/auditable-demo/">Watch the exact artifact proof</a>' public/index.html
+grep -q 'href="/how-tested/auditable-demo/">How this was tested</a>' public/index.html
+grep -q 'One Work. Two fresh Agent processes.' public/index.html
+grep -q 'Exact installed artifact · 19 seconds' public/index.html
+grep -q 'data-autoplay-demo controls muted loop playsinline' public/index.html
+grep -q 'window.matchMedia("(prefers-reduced-motion: reduce)")' public/index.html
+node - <<'NODE'
+const fs = require("node:fs");
+const html = fs.readFileSync("public/index.html", "utf8");
+const projection = JSON.parse(fs.readFileSync("public/auditable-demo.json", "utf8"));
+for (const member of ["poster.png", "demo.webm", "demo.mp4", "complete-transcript.txt"]) {
+  const expected = `${projection.publicEvidencePath}/${member}`;
+  if (!html.includes(expected)) throw new Error(`homepage demo is not source-bound to ${expected}`);
+}
+const [videoTag = ""] = html.match(/<video\b[^>]*data-autoplay-demo[^>]*>/iu) || [];
+if (!videoTag) throw new Error("homepage is missing its auditable demo video");
+if (/\sautoplay(?=\s|=|>|\/)/iu.test(videoTag.replace(/"[^"]*"|'[^']*'/gu, ""))) {
+  throw new Error("homepage media must defer autoplay to the reduced-motion-aware controller");
+}
+NODE
 grep -q 'prefers-reduced-motion: reduce' public/how-tested/auditable-demo/index.html
 grep -q 'Watch the artifact explain itself.' public/how-tested/auditable-demo/index.html
 grep -q 'Authority boundary' public/how-tested/auditable-demo/index.html
@@ -597,6 +615,9 @@ if [ -d dist ]; then
   test -f dist/trust/index.html
   test -f dist/legal/index.html
   grep -q "Your agent shouldn't start over when the chat ends." dist/index.html
+  grep -q 'One Work. Two fresh Agent processes.' dist/index.html
+  grep -q 'data-autoplay-demo controls muted loop playsinline' dist/index.html
+  grep -q 'A bounded offline replay—not provider or durability proof.' dist/index.html
   grep -q 'How continuity was tested' dist/how-tested/continuity/index.html
   grep -q 'Watch the artifact explain itself.' dist/how-tested/auditable-demo/index.html
   grep -q 'Kungfu does not compete for your Hub.' dist/agent-builders/index.html
