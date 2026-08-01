@@ -506,20 +506,30 @@ grep -q 'Capabilities we would welcome' public/capital/index.html
 grep -q 'Public protocol, commercial company' public/capital/index.html
 grep -q 'class="investor-link" href="/capital/investor-perspective/"' public/capital/index.html
 grep -q 'Understand the investment thesis—and the risks capital must be able to carry.' public/capital/index.html
+grep -q 'See how Agent Work creates the current product path, how Machine Life extends the long-term horizon' public/capital/index.html
 grep -q 'These principles do not establish or alter entity structure' public/capital/index.html
 grep -q 'They are not channels for financing proposals or transaction instructions.' public/capital/index.html
 grep -q 'This page states no financing amount, valuation, security type, price, allocation, timetable, subscription process, or transaction terms.' public/capital/index.html
 grep -q 'shared-header:start' public/capital/investor-perspective/index.html
 grep -q 'shared-footer:start' public/capital/investor-perspective/index.html
 grep -q 'How an open protocol can create commercial value.' public/capital/investor-perspective/index.html
-grep -q 'The protocol stays open. The company wins by making the ecosystem useful.' public/capital/investor-perspective/index.html
+grep -q 'The protocol stays open. The company can win by making the ecosystem useful.' public/capital/investor-perspective/index.html
 grep -q 'From Agent Work to Machine Life.' public/capital/investor-perspective/index.html
 grep -q 'href="/whitepaper/kungfu-white-paper/"' public/capital/investor-perspective/index.html
 grep -q 'href="/whitepaper/kfd-machine-life-roadmap/"' public/capital/investor-perspective/index.html
 grep -q 'Machine Life is a functional, falsifiable research horizon—not a claim that biological life, sentience, unrestricted autonomy, or a completed self-sustaining Kungfu organism already exists.' public/capital/investor-perspective/index.html
+grep -q 'It is not present revenue, adoption, or valuation proof.' public/capital/investor-perspective/index.html
 assert_before public/capital/investor-perspective/index.html 'From Agent Work to Machine Life.' 'The underwriting question'
+grep -q 'If KFD earns public credibility, company value can grow from it.' public/capital/investor-perspective/index.html
 grep -q 'It is not a claim that independent Hubs, broad adoption, or resulting demand already exist.' public/capital/investor-perspective/index.html
 grep -q 'Ecosystem scale × Kungfu Origin' public/capital/investor-perspective/index.html
+grep -q 'Why Kungfu Origin can lead without owning KFD.' public/capital/investor-perspective/index.html
+grep -q 'Where the thesis stands today.' public/capital/investor-perspective/index.html
+grep -q 'Capital should change the rate of execution, not the source of legitimacy.' public/capital/investor-perspective/index.html
+grep -q 'preserving the option not to raise is more valuable.' public/capital/investor-perspective/index.html
+assert_before public/capital/investor-perspective/index.html 'Why Kungfu Origin can lead without owning KFD.' 'Evidence before narrative'
+assert_before public/capital/investor-perspective/index.html 'Where the thesis stands today.' 'Why capital'
+assert_before public/capital/investor-perspective/index.html 'Why capital' 'Cross-border reality'
 grep -q "Kungfu's founder and current steward is a citizen of the People's Republic of China." public/capital/investor-perspective/index.html
 grep -q 'Kungfu Origin Technology Limited is incorporated in Hong Kong.' public/capital/investor-perspective/index.html
 grep -q 'These facts do not, by themselves, establish that any particular investment' public/capital/investor-perspective/index.html
