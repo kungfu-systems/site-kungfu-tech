@@ -8,9 +8,9 @@ import { gunzipSync } from "node:zlib";
 const require = createRequire(import.meta.url);
 
 export const WHITEPAPER_PACKAGE = "@kungfu-tech/paper-kungfu-product-white-paper";
-export const WHITEPAPER_VERSION = "0.1.0-alpha.12";
+export const WHITEPAPER_VERSION = "0.1.0-alpha.13";
 export const MACHINE_LIFE_PACKAGE = "@kungfu-tech/paper-kfd-machine-life-roadmap";
-export const MACHINE_LIFE_VERSION = "0.1.0-alpha.5";
+export const MACHINE_LIFE_VERSION = "0.1.0-alpha.6";
 export const KFD_PACKAGE = "@kungfu-tech/kfd";
 export const KFD_VERSION = "1.0.0-alpha.47";
 export const BUILDCHAIN_PACKAGE = "@kungfu-tech/buildchain";
@@ -120,6 +120,7 @@ function loadBrandPaperSource({
   contract,
   readerRoute,
   pdfRoute,
+  pdfAliases,
   manifestRoute,
   llmsRoute,
   requireWhitePaperDisplayPlan = false,
@@ -155,6 +156,10 @@ function loadBrandPaperSource({
   assert(
     siteHref(bundle.routes.pdfUrl) === pdfRoute,
     "brand bundle PDF route mismatch",
+  );
+  assert(
+    JSON.stringify((bundle.routes.pdfAliases || []).map(siteHref)) === JSON.stringify(pdfAliases),
+    "brand bundle PDF aliases mismatch",
   );
   assert(publicationManifest.contract === "kungfu-buildchain-publication-artifact-manifest", "publication manifest contract mismatch");
   assert(publicationManifest.publication?.version === version, "publication manifest version mismatch");
@@ -217,6 +222,7 @@ function loadBrandPaperSource({
       index: siteHref(bundle.routes.indexUrl),
       reader: siteHref(bundle.routes.canonicalUrl),
       pdf: siteHref(bundle.routes.pdfUrl),
+      pdfAliases: (bundle.routes.pdfAliases || []).map(siteHref),
       evidence: bundle.routes.evidenceUrl,
       manifest: manifestRoute,
       llms: llmsRoute,
@@ -231,7 +237,8 @@ export function loadWhitepaperSource(repoRoot = process.cwd()) {
     version: WHITEPAPER_VERSION,
     contract: WHITEPAPER_CONTRACT,
     readerRoute: "/whitepaper/kungfu-real-world-agent-work/",
-    pdfRoute: "/whitepaper/kungfu-real-world-agent-work.pdf",
+    pdfRoute: "/whitepaper/kungfu-white-paper.pdf",
+    pdfAliases: ["/whitepaper/kungfu-real-world-agent-work.pdf"],
     manifestRoute: "/whitepaper/manifest.json",
     llmsRoute: "/whitepaper/llms.txt",
     requireWhitePaperDisplayPlan: true,
@@ -245,7 +252,8 @@ export function loadMachineLifeSource(repoRoot = process.cwd()) {
     version: MACHINE_LIFE_VERSION,
     contract: MACHINE_LIFE_CONTRACT,
     readerRoute: "/whitepaper/kfd-machine-life-roadmap/",
-    pdfRoute: "/whitepaper/kfd-machine-life-roadmap.pdf",
+    pdfRoute: "/whitepaper/kungfu-machine-life.pdf",
+    pdfAliases: ["/whitepaper/kfd-machine-life-roadmap.pdf"],
     manifestRoute: "/whitepaper/kfd-machine-life-roadmap/manifest.json",
     llmsRoute: "/whitepaper/kfd-machine-life-roadmap/llms.txt",
   });
