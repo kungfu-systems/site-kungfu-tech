@@ -60,20 +60,54 @@ function fixture() {
       policy: {
         evidenceClass: "exact-installed-artifact-agent-work-lab-autoplay/v1",
         visualClassification: "bounded-pty-replay",
-        runtimeTextAuthority: "terminal-capture.json",
+        runtimeTextAuthority: "rendition-set.json",
       },
       inputs: {
-        terminalCapture: { root: `sha256:${"9".repeat(64)}` },
+        renditionSet: {
+          schema: "kungfu.auditable-demo.rendition-set/v1",
+          root: `sha256:${"8".repeat(64)}`,
+        },
+        renditions: [
+          {
+            role: "primary",
+            terminalCapture: {
+              root: `sha256:${"9".repeat(64)}`,
+              dimensions: { columns: 150, rows: 36 },
+            },
+          },
+          {
+            role: "responsive",
+            terminalCapture: {
+              root: `sha256:${"a".repeat(64)}`,
+              dimensions: { columns: 100, rows: 28 },
+            },
+          },
+        ],
       },
       derivation: {
-        policy: "single-frame-set-deterministic-renditions/v1",
+        authority: "rendition-set.json",
+        policy: "independent-native-frame-sets/v1",
+        sourceFrameSets: [
+          {
+            role: "primary",
+            width: 1920,
+            height: 1080,
+            captureRoot: `sha256:${"9".repeat(64)}`,
+          },
+          {
+            role: "responsive",
+            width: 1280,
+            height: 720,
+            captureRoot: `sha256:${"a".repeat(64)}`,
+          },
+        ],
         renditions: {
-          "demo.mp4": { width: 1920, height: 1080 },
-          "demo.webm": { width: 1920, height: 1080 },
-          "demo-720p.mp4": { width: 1280, height: 720 },
-          "demo-720p.webm": { width: 1280, height: 720 },
-          "demo.gif": { width: 1280, height: 720 },
-          "poster.png": { width: 1920, height: 1080 },
+          "demo.mp4": { width: 1920, height: 1080, operation: "native-frame-set-encode" },
+          "demo.webm": { width: 1920, height: 1080, operation: "native-frame-set-encode" },
+          "demo-720p.mp4": { width: 1280, height: 720, operation: "native-frame-set-encode" },
+          "demo-720p.webm": { width: 1280, height: 720, operation: "native-frame-set-encode" },
+          "demo.gif": { width: 1280, height: 720, operation: "native-frame-set-encode" },
+          "poster.png": { width: 1920, height: 1080, operation: "native-frame-set-encode" },
         },
       },
     })),
@@ -407,6 +441,19 @@ test("imports exact media and a source-bound public projection", () => {
       ],
       [1920, 1080],
     );
+    assert.equal(
+      projection.renditionAuthority.policy,
+      "independent-native-frame-sets/v1",
+    );
+    assert.deepEqual(
+      projection.renditionAuthority.frameSets.map(
+        ({ role, width, height }) => [role, width, height],
+      ),
+      [
+        ["primary", 1920, 1080],
+        ["responsive", 1280, 720],
+      ],
+    );
     const evidencePage = fs.readFileSync(
       path.join(input.outputRoot, "how-tested/auditable-demo/index.html"),
       "utf8",
@@ -523,6 +570,50 @@ test("rejects media drift before publication", () => {
   try {
     fs.appendFileSync(path.join(input.repoRoot, "site/auditable-demo/media/demo.mp4"), "tampered");
     assert.throws(() => importAuditableDemo(input), /checksum mismatch for demo\.mp4/u);
+  } finally {
+    fs.rmSync(input.repoRoot, { recursive: true, force: true });
+  }
+});
+
+test("rejects a responsive rendition derived by scaling the primary frame set", () => {
+  const input = fixture();
+  try {
+    const manifestPath = path.join(
+      input.repoRoot,
+      "site/auditable-demo/media/manifest.json",
+    );
+    const manifest = JSON.parse(fs.readFileSync(manifestPath, "utf8"));
+    manifest.derivation.renditions["demo-720p.mp4"].operation =
+      "lanczos-downscale-from-source-frames";
+    fs.writeFileSync(manifestPath, stableJson(manifest));
+    rebindMedia(input.repoRoot);
+    assert.throws(
+      () => importAuditableDemo(input),
+      /renderer derivation is missing for role responsive-primary-video/u,
+    );
+  } finally {
+    fs.rmSync(input.repoRoot, { recursive: true, force: true });
+  }
+});
+
+test("rejects native renditions that reuse one terminal capture root", () => {
+  const input = fixture();
+  try {
+    const manifestPath = path.join(
+      input.repoRoot,
+      "site/auditable-demo/media/manifest.json",
+    );
+    const manifest = JSON.parse(fs.readFileSync(manifestPath, "utf8"));
+    manifest.inputs.renditions[1].terminalCapture.root =
+      manifest.inputs.renditions[0].terminalCapture.root;
+    manifest.derivation.sourceFrameSets[1].captureRoot =
+      manifest.inputs.renditions[0].terminalCapture.root;
+    fs.writeFileSync(manifestPath, stableJson(manifest));
+    rebindMedia(input.repoRoot);
+    assert.throws(
+      () => importAuditableDemo(input),
+      /two distinct native terminal captures/u,
+    );
   } finally {
     fs.rmSync(input.repoRoot, { recursive: true, force: true });
   }

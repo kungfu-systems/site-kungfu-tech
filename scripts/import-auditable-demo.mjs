@@ -338,27 +338,58 @@ function verifyMedia(mediaDirectory, passport) {
     "scene duration is invalid",
   );
   const manifest = readJson(path.join(mediaDirectory, "manifest.json"), "renderer manifest");
+  const nativeInputs = manifest.inputs?.renditions;
+  const nativeFrameSets = manifest.derivation?.sourceFrameSets;
   invariant(
     manifest.schema === "build-images.auditable-demo-render/v1"
       && manifest.renderer?.image === passport.toolchain.rendererImage
       && manifest.policy?.evidenceClass === passport.authority.evidenceClass
       && manifest.policy?.visualClassification === "bounded-pty-replay"
-      && manifest.policy?.runtimeTextAuthority === "terminal-capture.json"
-      && DIGEST.test(manifest.inputs?.terminalCapture?.root || "")
-      && manifest.derivation?.policy ===
-        "single-frame-set-deterministic-renditions/v1",
-    "renderer manifest does not prove the qualified PTY replay",
+      && manifest.policy?.runtimeTextAuthority === "rendition-set.json"
+      && manifest.inputs?.renditionSet?.schema === "kungfu.auditable-demo.rendition-set/v1"
+      && DIGEST.test(manifest.inputs?.renditionSet?.root || "")
+      && manifest.derivation?.authority === "rendition-set.json"
+      && manifest.derivation?.policy === "independent-native-frame-sets/v1",
+    "renderer manifest does not prove the qualified native PTY replay",
+  );
+  invariant(
+    Array.isArray(nativeInputs)
+      && nativeInputs.length === 2
+      && nativeInputs[0]?.role === "primary"
+      && nativeInputs[0]?.terminalCapture?.dimensions?.columns === 150
+      && nativeInputs[0]?.terminalCapture?.dimensions?.rows === 36
+      && DIGEST.test(nativeInputs[0]?.terminalCapture?.root || "")
+      && nativeInputs[1]?.role === "responsive"
+      && nativeInputs[1]?.terminalCapture?.dimensions?.columns === 100
+      && nativeInputs[1]?.terminalCapture?.dimensions?.rows === 28
+      && DIGEST.test(nativeInputs[1]?.terminalCapture?.root || "")
+      && nativeInputs[0].terminalCapture.root !== nativeInputs[1].terminalCapture.root,
+    "renderer inputs do not bind two distinct native terminal captures",
+  );
+  invariant(
+    Array.isArray(nativeFrameSets)
+      && nativeFrameSets.length === 2
+      && nativeFrameSets[0]?.role === "primary"
+      && nativeFrameSets[0]?.width === 1920
+      && nativeFrameSets[0]?.height === 1080
+      && nativeFrameSets[0]?.captureRoot === nativeInputs[0].terminalCapture.root
+      && nativeFrameSets[1]?.role === "responsive"
+      && nativeFrameSets[1]?.width === 1280
+      && nativeFrameSets[1]?.height === 720
+      && nativeFrameSets[1]?.captureRoot === nativeInputs[1].terminalCapture.root,
+    "renderer derivation does not bind the required native frame sets",
   );
   for (const rendition of roles.values()) {
     const derivation = manifest.derivation?.renditions?.[rendition.path];
     invariant(
       derivation
         && derivation.width === rendition.width
-        && derivation.height === rendition.height,
+        && derivation.height === rendition.height
+        && derivation.operation === "native-frame-set-encode",
       `renderer derivation is missing for role ${rendition.role}`,
     );
   }
-  return { scene, roles };
+  return { scene, roles, nativeFrameSets };
 }
 
 function formatDuration(durationMs) {
@@ -562,7 +593,7 @@ function normalizeSources(source) {
   return { featuredDemoId: source.featuredDemoId, demos, collection: true };
 }
 
-function siteProjection(passport, demo, publicPath, roles) {
+function siteProjection(passport, demo, publicPath, roles, nativeFrameSets) {
   return {
     schema: "kungfu.site.auditable-demo/v2",
     status: "qualified",
@@ -578,6 +609,15 @@ function siteProjection(passport, demo, publicPath, roles) {
     publicEvidencePath: publicPath,
     mediaProfile: passport.media.profile,
     mediaQualificationRoot: passport.media.qualificationRoot,
+    renditionAuthority: {
+      policy: "independent-native-frame-sets/v1",
+      frameSets: nativeFrameSets.map(({ role, width, height, captureRoot }) => ({
+        role,
+        width,
+        height,
+        captureRoot,
+      })),
+    },
     renditions: Object.fromEntries(
       [...roles.entries()].map(([role, rendition]) => [
         role,
@@ -620,7 +660,7 @@ export function importAuditableDemo({
       demo.publication.readmeFeatured === (entry.id === normalizedSource.featuredDemoId),
       `demo ${entry.id} README feature status drifts from the source descriptor`,
     );
-    const { scene, roles } = verifyMedia(mediaDirectory, passport);
+    const { scene, roles, nativeFrameSets } = verifyMedia(mediaDirectory, passport);
     const rootName = passport.root.value.slice(7);
     const publicPath =
       demo.id === "agent-work-lab" && demo.publication.readmeFeatured
@@ -637,7 +677,7 @@ export function importAuditableDemo({
       path.join(evidenceDirectory, "passport.json"),
       Buffer.from(stableJson(passport)),
     );
-    const projection = siteProjection(passport, demo, publicPath, roles);
+    const projection = siteProjection(passport, demo, publicPath, roles, nativeFrameSets);
     imports.push({ passport, demo, scene, roles, publicPath, projection });
     if (normalizedSource.collection) {
       expected.set(
