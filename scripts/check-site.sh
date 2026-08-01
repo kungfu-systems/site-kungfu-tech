@@ -7,6 +7,7 @@ cd "$repo_root"
 node --test scripts/import-bootstrap-publication.test.mjs
 node --test scripts/consume-installer-publication-bundle.test.mjs
 node --test scripts/import-auditable-demo.test.mjs
+node --test scripts/structured-markdown.test.mjs
 node --test scripts/check-copyable-code.test.mjs
 node scripts/consume-installer-publication-bundle.mjs \
   --source site/installer-publication-source.json \

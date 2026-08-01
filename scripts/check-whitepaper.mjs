@@ -159,6 +159,14 @@ assert(llms.includes(`${MACHINE_LIFE_PACKAGE}@${MACHINE_LIFE_VERSION}`), "llms.t
 assert(machineLifeLlms.includes(`${MACHINE_LIFE_PACKAGE}@${MACHINE_LIFE_VERSION}`), "Machine Life llms.txt must identify its exact source package");
 assert(machineLifeLlms.includes(machineLifeSource.pdfArtifact.sha256), "Machine Life llms.txt must expose the local PDF digest");
 assert(machineLifeLlms.includes(machineLifeSource.routes.evidence), "Machine Life llms.txt must preserve the external evidence surface");
+assert(machineLifeHtml.includes("<th><strong>Approach</strong></th>"), "Machine Life comparison table must preserve its four-column source header");
+assert(!machineLifeHtml.includes("| Item | Status | Responsibility |"), "Machine Life reader must not expose an unparsed table scaffold");
+assert(!machineLifeHtml.match(/ML(?:Indigo|White|Panel|PaperSoft)/), "Machine Life reader must remove publication-only table style tokens");
+assert(!machineLifeHtml.match(/\s[.,;:]<\/td>/), "Machine Life table cells must not retain conversion whitespace before punctuation");
+assert(
+  machineLifeHtml.match(/<\/table>\s*<p>An agent can be intelligent without being a persistent subject\./),
+  "Machine Life comparison prose must remain outside the preceding table",
+);
 assert(llms.includes(`${KFD_PACKAGE}@${KFD_VERSION}`), "llms.txt must identify the KFD source package");
 assert(llms.includes(`${BUILDCHAIN_PACKAGE}@${BUILDCHAIN_VERSION}`), "llms.txt must identify the Buildchain source package");
 assert(readerHtml.includes(source.bundle.hero.lead), "white paper reader must render the upstream lead");
