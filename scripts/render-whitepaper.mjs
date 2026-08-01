@@ -37,6 +37,12 @@ function writeText(relativePath, content) {
   fs.writeFileSync(outputPath, content);
 }
 
+function copyPaperPdf(source) {
+  for (const route of [source.routes.pdf, ...source.routes.pdfAliases]) {
+    fs.copyFileSync(source.pdfPath, path.join(distRoot, route.slice(1)));
+  }
+}
+
 function stripSectionTitle(source, section) {
   const lines = section.markdown.replace(/\r\n/g, "\n").split("\n");
   if (lines[0]?.replace(/^#\s+/, "").trim() === section.title.trim()) lines.shift();
@@ -313,9 +319,8 @@ writeText("whitepaper/kfd-machine-life-roadmap/manifest.json", `${JSON.stringify
 writeText("whitepaper/catalog.json", `${JSON.stringify(catalogManifest, null, 2)}\n`);
 writeText("whitepaper/llms.txt", renderLlms(whitepaperManifest));
 writeText("whitepaper/kfd-machine-life-roadmap/llms.txt", renderLlms(machineLifeManifest));
-fs.copyFileSync(whitepaperSource.pdfPath, path.join(distRoot, "whitepaper", "kungfu-real-world-agent-work.pdf"));
-fs.copyFileSync(whitepaperSource.pdfPath, path.join(distRoot, "whitepaper", "kungfu-white-paper.pdf"));
-fs.copyFileSync(machineLifeSource.pdfPath, path.join(distRoot, "whitepaper", "kfd-machine-life-roadmap.pdf"));
+copyPaperPdf(whitepaperSource);
+copyPaperPdf(machineLifeSource);
 
 console.log(`rendered White Paper from ${whitepaperSource.packageInfo.name}@${whitepaperSource.packageInfo.version}`);
 console.log(`rendered Machine Life from ${machineLifeSource.packageInfo.name}@${machineLifeSource.packageInfo.version}`);
