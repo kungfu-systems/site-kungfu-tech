@@ -21,6 +21,7 @@ import {
   WHITEPAPER_PACKAGE,
   WHITEPAPER_ORIGIN,
 } from "./whitepaper-source.mjs";
+import { renderStructuredTables } from "./structured-markdown.mjs";
 
 const repoRoot = process.cwd();
 const distRoot = path.join(repoRoot, "dist");
@@ -49,65 +50,6 @@ function stripSectionTitle(source, section) {
     .replace(/^(#{2,5})(\s+)/gm, "#$1$2")
     .trim();
   return renderStructuredTables(normalized);
-}
-
-function structuredRow(line) {
-  const trimmed = line.trim();
-  if (!trimmed || trimmed.startsWith("|") || /^[-*+]\s+/.test(trimmed)) return null;
-  const cells = trimmed.split("|").map((cell) => cell.trim());
-  return cells.length >= 2 && cells.every(Boolean) ? cells : null;
-}
-
-function renderStructuredTables(sourceMarkdown) {
-  const lines = sourceMarkdown.split("\n");
-  const output = [];
-
-  for (let index = 0; index < lines.length;) {
-    if (!structuredRow(lines[index])) {
-      output.push(lines[index]);
-      index += 1;
-      continue;
-    }
-
-    const rows = [];
-    let cursor = index;
-    while (cursor < lines.length && lines[cursor].trim() !== "" && !/^#{2,6}\s+/.test(lines[cursor])) {
-      const cells = structuredRow(lines[cursor]);
-      if (cells) {
-        rows.push(cells);
-      } else if (rows.length > 0 && !/^[-*+]\s+/.test(lines[cursor].trim())) {
-        const lastCell = rows[rows.length - 1].length - 1;
-        rows[rows.length - 1][lastCell] = `${rows[rows.length - 1][lastCell]} ${lines[cursor].trim()}`;
-      } else {
-        break;
-      }
-      cursor += 1;
-    }
-
-    if (rows.length < 2) {
-      output.push(...lines.slice(index, cursor));
-      index = cursor;
-      continue;
-    }
-
-    const width = Math.max(...rows.map((row) => row.length));
-    const hasSourceHeader = ["Decision", "Surface"].includes(rows[0][0]);
-    const header = hasSourceHeader
-      ? rows.shift()
-      : width === 2
-        ? ["Responsibility", "Meaning"]
-        : ["Item", "Status", "Responsibility"];
-    const escapeCell = (cell = "") => cell.replaceAll("|", "\\|");
-    output.push(
-      `| ${header.map(escapeCell).join(" | ")} |`,
-      `| ${Array.from({ length: width }, () => "---").join(" | ")} |`,
-      ...rows.map((row) => `| ${Array.from({ length: width }, (_, cell) => escapeCell(row[cell])).join(" | ")} |`),
-      "",
-    );
-    index = cursor;
-  }
-
-  return output.join("\n");
 }
 
 function localizeRenderedLinks(html) {
