@@ -21,11 +21,11 @@ importers:
         specifier: 0.1.0-alpha.8
         version: 0.1.0-alpha.8
       '@kungfu-tech/paper-kfd-machine-life-roadmap':
-        specifier: 0.1.0-alpha.6
-        version: 0.1.0-alpha.6
+        specifier: 0.1.0-alpha.7
+        version: 0.1.0-alpha.7
       '@kungfu-tech/paper-kungfu-product-white-paper':
-        specifier: 0.1.0-alpha.13
-        version: 0.1.0-alpha.13
+        specifier: 0.1.0-alpha.14
+        version: 0.1.0-alpha.14
       '@kungfu-tech/paper-kungfu-product-white-paper-agent-supply-chain':
         specifier: npm:@kungfu-tech/paper-kungfu-product-white-paper@0.1.0-alpha.10
         version: '@kungfu-tech/paper-kungfu-product-white-paper@0.1.0-alpha.10'
@@ -53,14 +53,14 @@ packages:
   '@kungfu-tech/paper-kfd-foundation-real-world-agent-work@0.1.0-alpha.8':
     resolution: {integrity: sha512-2eLq7poJ/Zb0l6OJhIwx2iG5GbPz7CD6dW5aKlPwQn/9tEjQpd06+K+NZIwrhiBlqj+EjF36PPgy6+6UldSs8g==}
 
-  '@kungfu-tech/paper-kfd-machine-life-roadmap@0.1.0-alpha.6':
-    resolution: {integrity: sha512-W6Aq6+Py2Pt0zA6wl5A3rMg3BGwJEWUoUsRftRGXdodf4ywgx3JkkLoncz6dIg9mKs2m8uVqlQ9s4OhYt3Cnww==}
+  '@kungfu-tech/paper-kfd-machine-life-roadmap@0.1.0-alpha.7':
+    resolution: {integrity: sha512-7viPMr0Z1S4O6ZnObYO7QcBm/saykXFMQOUckVLqsDV9VWcqtistvNr0/ghGk79cAwU5fVv6gBx8/beHlVhM5w==}
 
   '@kungfu-tech/paper-kungfu-product-white-paper@0.1.0-alpha.10':
     resolution: {integrity: sha512-E72T/WnVn9tLCHGdJVsORZzvwS281hUcWDmr3kIOcQQ0D/SK8Ktf8GlGv/Ov43dy9VtKlqMNm8BgO/P1zCQkMQ==}
 
-  '@kungfu-tech/paper-kungfu-product-white-paper@0.1.0-alpha.13':
-    resolution: {integrity: sha512-6eYBRozmtGrKNkhEIkN12bxfyf4MNjP9V/mEXmwqyTzTRrAm3KRAGpH7gJlZoPVztAmMPpNpxgHob4skBzDWbA==}
+  '@kungfu-tech/paper-kungfu-product-white-paper@0.1.0-alpha.14':
+    resolution: {integrity: sha512-BLML15VzOzG6OJpWhsNnBYjaQPbiH6hBbtSk6R5JD9k9i1Ng14h4R5/Fys6gwZZK3QcMyJ3LidunVG+iFZbPHA==}
 
   '@kungfu-tech/paper-observer-declared-timelines@0.1.0-alpha.9':
     resolution: {integrity: sha512-uixVi6Vic6KILqQoiqisiFv2NOWkOoZrlEhrXSVBPBaMxkg5HtDVqJE0XYiiGz85LIbArQ+DRVKl/E3U/pmH+Q==}
@@ -106,11 +106,11 @@ snapshots:
 
   '@kungfu-tech/paper-kfd-foundation-real-world-agent-work@0.1.0-alpha.8': {}
 
-  '@kungfu-tech/paper-kfd-machine-life-roadmap@0.1.0-alpha.6': {}
+  '@kungfu-tech/paper-kfd-machine-life-roadmap@0.1.0-alpha.7': {}
 
   '@kungfu-tech/paper-kungfu-product-white-paper@0.1.0-alpha.10': {}
 
-  '@kungfu-tech/paper-kungfu-product-white-paper@0.1.0-alpha.13': {}
+  '@kungfu-tech/paper-kungfu-product-white-paper@0.1.0-alpha.14': {}
 
   '@kungfu-tech/paper-observer-declared-timelines@0.1.0-alpha.9': {}
 

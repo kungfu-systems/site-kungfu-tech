@@ -50,15 +50,16 @@ test -f dist/trust/index.html
 test -f dist/legal/index.html
 test -f dist/install/index.html
 test -f dist/whitepaper/index.html
-test -f dist/whitepaper/kungfu-real-world-agent-work/index.html
-test -f dist/whitepaper/kungfu-real-world-agent-work.pdf
 test -f dist/whitepaper/kungfu-white-paper/index.html
 test -f dist/whitepaper/kungfu-white-paper.pdf
-test -f dist/whitepaper/kfd-machine-life-roadmap/index.html
+test -f dist/whitepaper/kungfu-machine-life/index.html
 test -f dist/whitepaper/kungfu-machine-life.pdf
-test -f dist/whitepaper/kfd-machine-life-roadmap.pdf
-test -f dist/whitepaper/kfd-machine-life-roadmap/manifest.json
-test -f dist/whitepaper/kfd-machine-life-roadmap/llms.txt
+test -f dist/whitepaper/kungfu-machine-life/manifest.json
+test -f dist/whitepaper/kungfu-machine-life/llms.txt
+test ! -e dist/whitepaper/kungfu-real-world-agent-work
+test ! -e dist/whitepaper/kungfu-real-world-agent-work.pdf
+test ! -e dist/whitepaper/kfd-machine-life-roadmap
+test ! -e dist/whitepaper/kfd-machine-life-roadmap.pdf
 test -f dist/whitepaper/manifest.json
 test -f dist/whitepaper/catalog.json
 test -f dist/whitepaper/llms.txt
