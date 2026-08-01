@@ -513,6 +513,11 @@ grep -q 'shared-header:start' public/capital/investor-perspective/index.html
 grep -q 'shared-footer:start' public/capital/investor-perspective/index.html
 grep -q 'How an open protocol can create commercial value.' public/capital/investor-perspective/index.html
 grep -q 'The protocol stays open. The company wins by making the ecosystem useful.' public/capital/investor-perspective/index.html
+grep -q 'From Agent Work to Machine Life.' public/capital/investor-perspective/index.html
+grep -q 'href="/whitepaper/kungfu-white-paper/"' public/capital/investor-perspective/index.html
+grep -q 'href="/whitepaper/kfd-machine-life-roadmap/"' public/capital/investor-perspective/index.html
+grep -q 'Machine Life is a functional, falsifiable research horizon—not a claim that biological life, sentience, unrestricted autonomy, or a completed self-sustaining Kungfu organism already exists.' public/capital/investor-perspective/index.html
+assert_before public/capital/investor-perspective/index.html 'From Agent Work to Machine Life.' 'The underwriting question'
 grep -q 'It is not a claim that independent Hubs, broad adoption, or resulting demand already exist.' public/capital/investor-perspective/index.html
 grep -q 'Ecosystem scale × Kungfu Origin' public/capital/investor-perspective/index.html
 grep -q "Kungfu's founder and current steward is a citizen of the People's Republic of China." public/capital/investor-perspective/index.html
