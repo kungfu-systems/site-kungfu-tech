@@ -90,6 +90,8 @@ const expectedMachineLifeManifest = buildMachineLifeManifest(machineLifeSource);
 const expectedCatalogManifest = buildPublicationCatalogManifest(catalog);
 const pdfPath = path.join(distRoot, "whitepaper", "kungfu-white-paper.pdf");
 const machineLifePdfPath = path.join(distRoot, "whitepaper", "kungfu-machine-life.pdf");
+const whitepaperPdfHref = `${source.routes.pdf}?v=${encodeURIComponent(WHITEPAPER_VERSION)}`;
+const machineLifePdfHref = `${machineLifeSource.routes.pdf}?v=${encodeURIComponent(MACHINE_LIFE_VERSION)}`;
 const removedRoutes = [
   "whitepaper/kungfu-real-world-agent-work",
   "whitepaper/kungfu-real-world-agent-work.pdf",
@@ -148,7 +150,7 @@ assert(indexHtml.includes("Future · Machine Life"), "Machine Life card must car
 assert(indexHtml.includes(">Read the White Paper</a>"), "White Paper card must use a distinct primary action");
 assert(indexHtml.includes(">Read Machine Life</a>"), "Machine Life card must use a distinct primary action");
 assert(indexHtml.includes(`href="${machineLifeSource.routes.reader}"`), "Machine Life primary action must use the same-site reader");
-assert(indexHtml.includes(`href="${machineLifeSource.routes.pdf}"`), "Machine Life PDF action must use the same-site artifact");
+assert(indexHtml.includes(`href="${machineLifePdfHref}"`), "Machine Life PDF action must use the versioned same-site artifact");
 assert(!indexHtml.includes('href="https://papers.libkungfu.dev/kfd-machine-life-roadmap/">Read Machine Life</a>'), "Machine Life primary action must not leave kungfu.tech");
 assert(indexHtml.includes('href="https://papers.libkungfu.dev/"'), "publication index must route deeper research to papers.libkungfu.dev");
 assert(!indexHtml.includes('class="paper-source-catalog"'), "publication index must not expose source-contract cards on the main human page");
@@ -175,7 +177,8 @@ assert(
 assert(llms.includes(`${KFD_PACKAGE}@${KFD_VERSION}`), "llms.txt must identify the KFD source package");
 assert(llms.includes(`${BUILDCHAIN_PACKAGE}@${BUILDCHAIN_VERSION}`), "llms.txt must identify the Buildchain source package");
 assert(readerHtml.includes(source.bundle.hero.lead), "white paper reader must render the upstream lead");
-assert(readerHtml.includes(`data="${source.routes.pdf}#page=1&amp;view=FitH"`), "white paper reader must preview the package PDF");
+assert(indexHtml.includes(`href="${whitepaperPdfHref}"`), "white paper PDF action must use the versioned same-site artifact");
+assert(readerHtml.includes(`data="${whitepaperPdfHref}#page=1&amp;view=FitH"`), "white paper reader must preview the versioned package PDF");
 assert(source.routes.reader === "/whitepaper/kungfu-white-paper/", "white paper reader and PDF must share the canonical basename");
 assert(source.routes.pdf === "/whitepaper/kungfu-white-paper.pdf", "white paper PDF must use the canonical public filename");
 assert(source.routes.pdfAliases.length === 0, "white paper must not retain PDF aliases");
@@ -193,7 +196,7 @@ for (const section of source.bundle.homepageSections) {
 }
 
 assert(machineLifeHtml.includes(machineLifeSource.bundle.hero.lead), "Machine Life reader must render the upstream lead");
-assert(machineLifeHtml.includes(`data="${machineLifeSource.routes.pdf}#page=1&amp;view=FitH"`), "Machine Life reader must preview the package PDF");
+assert(machineLifeHtml.includes(`data="${machineLifePdfHref}#page=1&amp;view=FitH"`), "Machine Life reader must preview the versioned package PDF");
 assert(machineLifeHtml.includes(`href="${machineLifeSource.routes.evidence}"`), "Machine Life reader must preserve the publication evidence link");
 assert(machineLifeHtml.includes("Figure available in the primary PDF"), "Machine Life reader must preserve figure boundaries from the source bundle");
 assert(machineLifeSource.bundle.homepageSections.length === 11, "Machine Life source bundle must expose all eleven sections");
