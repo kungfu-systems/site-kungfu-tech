@@ -8,9 +8,9 @@ import { gunzipSync } from "node:zlib";
 const require = createRequire(import.meta.url);
 
 export const WHITEPAPER_PACKAGE = "@kungfu-tech/paper-kungfu-product-white-paper";
-export const WHITEPAPER_VERSION = "0.1.0-alpha.13";
+export const WHITEPAPER_VERSION = "0.1.0-alpha.14";
 export const MACHINE_LIFE_PACKAGE = "@kungfu-tech/paper-kfd-machine-life-roadmap";
-export const MACHINE_LIFE_VERSION = "0.1.0-alpha.6";
+export const MACHINE_LIFE_VERSION = "0.1.0-alpha.7";
 export const KFD_PACKAGE = "@kungfu-tech/kfd";
 export const KFD_VERSION = "1.0.0-alpha.47";
 export const BUILDCHAIN_PACKAGE = "@kungfu-tech/buildchain";
@@ -24,13 +24,13 @@ export const PAPER_RELEASES = [
   {
     package: WHITEPAPER_PACKAGE,
     version: WHITEPAPER_VERSION,
-    slug: "kungfu-real-world-agent-work",
+    slug: "kungfu-white-paper",
     localReader: true,
   },
   {
     package: MACHINE_LIFE_PACKAGE,
     version: MACHINE_LIFE_VERSION,
-    slug: "kfd-machine-life-roadmap",
+    slug: "kungfu-machine-life",
     localReader: true,
   },
   {
@@ -236,9 +236,9 @@ export function loadWhitepaperSource(repoRoot = process.cwd()) {
     packageName: WHITEPAPER_PACKAGE,
     version: WHITEPAPER_VERSION,
     contract: WHITEPAPER_CONTRACT,
-    readerRoute: "/whitepaper/kungfu-real-world-agent-work/",
+    readerRoute: "/whitepaper/kungfu-white-paper/",
     pdfRoute: "/whitepaper/kungfu-white-paper.pdf",
-    pdfAliases: ["/whitepaper/kungfu-real-world-agent-work.pdf"],
+    pdfAliases: [],
     manifestRoute: "/whitepaper/manifest.json",
     llmsRoute: "/whitepaper/llms.txt",
     requireWhitePaperDisplayPlan: true,
@@ -251,11 +251,11 @@ export function loadMachineLifeSource(repoRoot = process.cwd()) {
     packageName: MACHINE_LIFE_PACKAGE,
     version: MACHINE_LIFE_VERSION,
     contract: MACHINE_LIFE_CONTRACT,
-    readerRoute: "/whitepaper/kfd-machine-life-roadmap/",
+    readerRoute: "/whitepaper/kungfu-machine-life/",
     pdfRoute: "/whitepaper/kungfu-machine-life.pdf",
-    pdfAliases: ["/whitepaper/kfd-machine-life-roadmap.pdf"],
-    manifestRoute: "/whitepaper/kfd-machine-life-roadmap/manifest.json",
-    llmsRoute: "/whitepaper/kfd-machine-life-roadmap/llms.txt",
+    pdfAliases: [],
+    manifestRoute: "/whitepaper/kungfu-machine-life/manifest.json",
+    llmsRoute: "/whitepaper/kungfu-machine-life/llms.txt",
   });
 }
 

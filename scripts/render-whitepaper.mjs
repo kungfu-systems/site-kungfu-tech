@@ -38,9 +38,7 @@ function writeText(relativePath, content) {
 }
 
 function copyPaperPdf(source) {
-  for (const route of [source.routes.pdf, ...source.routes.pdfAliases]) {
-    fs.copyFileSync(source.pdfPath, path.join(distRoot, route.slice(1)));
-  }
+  fs.copyFileSync(source.pdfPath, path.join(distRoot, source.routes.pdf.slice(1)));
 }
 
 function stripSectionTitle(source, section) {
@@ -311,14 +309,13 @@ const machineLifeManifest = buildMachineLifeManifest(machineLifeSource);
 const catalogManifest = buildPublicationCatalogManifest(catalog);
 writeText("whitepaper/index.html", renderIndex());
 const whitepaperReader = renderReader(whitepaperSource, "White Paper");
-writeText("whitepaper/kungfu-real-world-agent-work/index.html", whitepaperReader);
 writeText("whitepaper/kungfu-white-paper/index.html", whitepaperReader);
-writeText("whitepaper/kfd-machine-life-roadmap/index.html", renderReader(machineLifeSource, "Machine Life"));
+writeText("whitepaper/kungfu-machine-life/index.html", renderReader(machineLifeSource, "Machine Life"));
 writeText("whitepaper/manifest.json", `${JSON.stringify(whitepaperManifest, null, 2)}\n`);
-writeText("whitepaper/kfd-machine-life-roadmap/manifest.json", `${JSON.stringify(machineLifeManifest, null, 2)}\n`);
+writeText("whitepaper/kungfu-machine-life/manifest.json", `${JSON.stringify(machineLifeManifest, null, 2)}\n`);
 writeText("whitepaper/catalog.json", `${JSON.stringify(catalogManifest, null, 2)}\n`);
 writeText("whitepaper/llms.txt", renderLlms(whitepaperManifest));
-writeText("whitepaper/kfd-machine-life-roadmap/llms.txt", renderLlms(machineLifeManifest));
+writeText("whitepaper/kungfu-machine-life/llms.txt", renderLlms(machineLifeManifest));
 copyPaperPdf(whitepaperSource);
 copyPaperPdf(machineLifeSource);
 

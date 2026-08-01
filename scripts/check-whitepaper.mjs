@@ -78,21 +78,24 @@ for (const [packageName, version] of expectedDependencies) {
 }
 
 const indexHtml = readDist("whitepaper/index.html");
-const readerHtml = readDist("whitepaper/kungfu-real-world-agent-work/index.html");
-const legacyReaderHtml = readDist("whitepaper/kungfu-white-paper/index.html");
-const machineLifeHtml = readDist("whitepaper/kfd-machine-life-roadmap/index.html");
+const readerHtml = readDist("whitepaper/kungfu-white-paper/index.html");
+const machineLifeHtml = readDist("whitepaper/kungfu-machine-life/index.html");
 const llms = readDist("whitepaper/llms.txt");
-const machineLifeLlms = readDist("whitepaper/kfd-machine-life-roadmap/llms.txt");
+const machineLifeLlms = readDist("whitepaper/kungfu-machine-life/llms.txt");
 const manifest = JSON.parse(readDist("whitepaper/manifest.json"));
-const machineLifeManifest = JSON.parse(readDist("whitepaper/kfd-machine-life-roadmap/manifest.json"));
+const machineLifeManifest = JSON.parse(readDist("whitepaper/kungfu-machine-life/manifest.json"));
 const catalogManifest = JSON.parse(readDist("whitepaper/catalog.json"));
 const expectedManifest = buildWhitepaperManifest(source);
 const expectedMachineLifeManifest = buildMachineLifeManifest(machineLifeSource);
 const expectedCatalogManifest = buildPublicationCatalogManifest(catalog);
 const pdfPath = path.join(distRoot, "whitepaper", "kungfu-white-paper.pdf");
-const legacyPdfPath = path.join(distRoot, "whitepaper", "kungfu-real-world-agent-work.pdf");
 const machineLifePdfPath = path.join(distRoot, "whitepaper", "kungfu-machine-life.pdf");
-const legacyMachineLifePdfPath = path.join(distRoot, "whitepaper", "kfd-machine-life-roadmap.pdf");
+const removedRoutes = [
+  "whitepaper/kungfu-real-world-agent-work",
+  "whitepaper/kungfu-real-world-agent-work.pdf",
+  "whitepaper/kfd-machine-life-roadmap",
+  "whitepaper/kfd-machine-life-roadmap.pdf",
+];
 const expectedDisplayOrder = [
   WHITEPAPER_PACKAGE,
   MACHINE_LIFE_PACKAGE,
@@ -109,12 +112,12 @@ assert(machineLifeManifest.evidence.immutableVersionUrl.includes(`/v${MACHINE_LI
 assert(fs.existsSync(pdfPath), "generated white paper PDF is missing");
 assert(sha256File(pdfPath) === source.pdfArtifact.sha256, "generated white paper PDF digest mismatch");
 assert(fs.statSync(pdfPath).size === source.pdfArtifact.bytes, "generated white paper PDF byte count mismatch");
-assert(legacyReaderHtml === readerHtml, "legacy white paper reader alias must match the canonical reader");
-assert(sha256File(legacyPdfPath) === source.pdfArtifact.sha256, "legacy white paper PDF alias digest mismatch");
 assert(fs.existsSync(machineLifePdfPath), "generated Machine Life PDF is missing");
 assert(sha256File(machineLifePdfPath) === machineLifeSource.pdfArtifact.sha256, "generated Machine Life PDF digest mismatch");
 assert(fs.statSync(machineLifePdfPath).size === machineLifeSource.pdfArtifact.bytes, "generated Machine Life PDF byte count mismatch");
-assert(sha256File(legacyMachineLifePdfPath) === machineLifeSource.pdfArtifact.sha256, "legacy Machine Life PDF alias digest mismatch");
+for (const route of removedRoutes) {
+  assert(!fs.existsSync(path.join(distRoot, route)), `removed white paper route must not be generated: ${route}`);
+}
 assert(
   catalog.papers.map((paper) => paper.packageInfo.name).join(",") === expectedDisplayOrder.join(","),
   "publication catalog order must be White Paper, Machine Life, Foundation Model, Observer, Episodes",
@@ -173,9 +176,12 @@ assert(llms.includes(`${KFD_PACKAGE}@${KFD_VERSION}`), "llms.txt must identify t
 assert(llms.includes(`${BUILDCHAIN_PACKAGE}@${BUILDCHAIN_VERSION}`), "llms.txt must identify the Buildchain source package");
 assert(readerHtml.includes(source.bundle.hero.lead), "white paper reader must render the upstream lead");
 assert(readerHtml.includes(`data="${source.routes.pdf}#page=1&amp;view=FitH"`), "white paper reader must preview the package PDF");
-assert(source.routes.reader === "/whitepaper/kungfu-real-world-agent-work/", "white paper reader must follow the alpha.11 canonical route");
+assert(source.routes.reader === "/whitepaper/kungfu-white-paper/", "white paper reader and PDF must share the canonical basename");
 assert(source.routes.pdf === "/whitepaper/kungfu-white-paper.pdf", "white paper PDF must use the canonical public filename");
+assert(source.routes.pdfAliases.length === 0, "white paper must not retain PDF aliases");
+assert(machineLifeSource.routes.reader === "/whitepaper/kungfu-machine-life/", "Machine Life reader and PDF must share the canonical basename");
 assert(machineLifeSource.routes.pdf === "/whitepaper/kungfu-machine-life.pdf", "Machine Life PDF must use the canonical public filename");
+assert(machineLifeSource.routes.pdfAliases.length === 0, "Machine Life must not retain PDF aliases");
 assert(readerHtml.includes("Conversation Is Not Work State"), "white paper reader must preserve the upstream problem model");
 assert(readerHtml.includes("Project, Work, and Agent"), "white paper reader must preserve the upstream first-layer product model");
 assert(readerHtml.includes("Review Before Completion"), "white paper reader must preserve the upstream review boundary");
