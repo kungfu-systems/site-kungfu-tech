@@ -9,6 +9,7 @@ node --test scripts/consume-installer-publication-bundle.test.mjs
 node --test scripts/import-auditable-demo.test.mjs
 node --test scripts/structured-markdown.test.mjs
 node --test scripts/check-copyable-code.test.mjs
+node --test scripts/paper-propagation.test.mjs
 node scripts/consume-installer-publication-bundle.mjs \
   --source site/installer-publication-source.json \
   --output-root public
