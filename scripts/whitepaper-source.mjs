@@ -3,17 +3,18 @@ import crypto from "node:crypto";
 import fs from "node:fs";
 import { createRequire } from "node:module";
 import path from "node:path";
+import { gunzipSync } from "node:zlib";
 
 const require = createRequire(import.meta.url);
 
 export const WHITEPAPER_PACKAGE = "@kungfu-tech/paper-kungfu-product-white-paper";
-export const WHITEPAPER_VERSION = "0.1.0-alpha.11";
+export const WHITEPAPER_VERSION = "0.1.0-alpha.12";
 export const MACHINE_LIFE_PACKAGE = "@kungfu-tech/paper-kfd-machine-life-roadmap";
-export const MACHINE_LIFE_VERSION = "0.1.0-alpha.3";
+export const MACHINE_LIFE_VERSION = "0.1.0-alpha.5";
 export const KFD_PACKAGE = "@kungfu-tech/kfd";
 export const KFD_VERSION = "1.0.0-alpha.47";
 export const BUILDCHAIN_PACKAGE = "@kungfu-tech/buildchain";
-export const BUILDCHAIN_VERSION = "3.0.2-alpha.2";
+export const BUILDCHAIN_VERSION = "3.0.3";
 export const WHITEPAPER_CONTRACT = "kungfu-white-paper-brand-site-bundle";
 export const MACHINE_LIFE_CONTRACT = "kungfu-machine-life-brand-site-bundle";
 export const WHITEPAPER_CONSUMER = "kungfu.tech";
@@ -51,6 +52,40 @@ export const PAPER_RELEASES = [
 
 function readJson(filePath) {
   return JSON.parse(fs.readFileSync(filePath, "utf8"));
+}
+
+function extractTarEntry(archivePath, entryPath) {
+  const archive = gunzipSync(fs.readFileSync(archivePath));
+  for (let offset = 0; offset + 512 <= archive.length;) {
+    const header = archive.subarray(offset, offset + 512);
+    if (header.every((byte) => byte === 0)) break;
+    const readField = (start, end) => header.subarray(start, end).toString("utf8").replace(/\0.*$/, "").trim();
+    const name = [readField(345, 500), readField(0, 100)].filter(Boolean).join("/");
+    const size = Number.parseInt(readField(124, 136) || "0", 8);
+    assert(Number.isSafeInteger(size) && size >= 0, `invalid source bundle entry size: ${name}`);
+    const contentOffset = offset + 512;
+    assert(contentOffset + size <= archive.length, `truncated source bundle entry: ${name}`);
+    if (name === entryPath) return archive.subarray(contentOffset, contentOffset + size);
+    offset = contentOffset + Math.ceil(size / 512) * 512;
+  }
+  throw new Error(`publication source bundle is missing ${entryPath}`);
+}
+
+function readPackageJson(packageRoot, packageVersion, relativePath) {
+  const directPath = path.join(packageRoot, relativePath);
+  if (fs.existsSync(directPath)) return readJson(directPath);
+
+  const registry = readJson(path.join(packageRoot, ".buildchain", "publication", "publication-registry.json"));
+  const version = registry.versions?.find((entry) => entry.version === packageVersion);
+  const metadata = version?.metadata?.find((entry) => entry.path === relativePath);
+  assert(metadata?.sha256, `publication registry does not authenticate ${relativePath}`);
+  const content = extractTarEntry(
+    path.join(packageRoot, ".buildchain", "publication", "source.tar.gz"),
+    relativePath,
+  );
+  const digest = crypto.createHash("sha256").update(content).digest("hex");
+  assert(digest === metadata.sha256, `publication source bundle digest mismatch for ${relativePath}`);
+  return JSON.parse(content.toString("utf8"));
 }
 
 function assert(condition, message) {
@@ -102,7 +137,7 @@ function loadBrandPaperSource({
     "publication manifest primaryArtifact must stay inside the package",
   );
   const pdfPath = path.join(packageRoot, pdfPackagePath);
-  const bundle = readJson(bundlePath);
+  const bundle = readPackageJson(packageRoot, packageInfo.version, "site/brand-site.json");
 
   assert(packageInfo.name === packageName, `unexpected brand paper package: ${packageInfo.name}`);
   assert(packageInfo.version === version, `expected ${packageName}@${version}`);

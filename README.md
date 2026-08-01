@@ -275,17 +275,23 @@ repository does not duplicate the suite or qualification verdict.
 
 The publication catalog is generated from exact npm artifacts:
 
-- `@kungfu-tech/paper-kungfu-product-white-paper@0.1.0-alpha.11`
-- `@kungfu-tech/paper-kfd-machine-life-roadmap@0.1.0-alpha.3`
+- `@kungfu-tech/paper-kungfu-product-white-paper@0.1.0-alpha.12`
+- `@kungfu-tech/paper-kfd-machine-life-roadmap@0.1.0-alpha.5`
 - `@kungfu-tech/paper-kfd-foundation-real-world-agent-work@0.1.0-alpha.8`
 - `@kungfu-tech/paper-observer-declared-timelines@0.1.0-alpha.9`
 - `@kungfu-tech/paper-episodes-to-primitives@0.1.0-alpha.2`
 
 The standalone Agent Supply Chain page retains the exact structured narrative
 snapshot from White Paper `0.1.0-alpha.10`, pinned through an npm alias, because
-the `0.1.0-alpha.11` brand and evidence bundles no longer export that
+the `0.1.0-alpha.12` brand and evidence bundles no longer export that
 presentation contract. White Paper pages, PDF, metadata, and evidence use
-`0.1.0-alpha.11` exclusively.
+`0.1.0-alpha.12` exclusively.
+
+The `0.1.0-alpha.12` npm tarball authenticates its current brand and evidence
+bundles inside the package-owned publication source archive even though those
+files are absent from the top-level package tree. The renderer verifies each
+extracted byte sequence against that version's publication-registry metadata;
+it never falls back to an older unverified presentation bundle.
 
 The human page presents only the two defining papers: the White Paper as
 Kungfu now, and Machine Life as Kungfu's future direction. They use distinct
@@ -298,7 +304,7 @@ The upstream `site/brand-site.json` bundles for the White Paper and Machine Life
 own their selected HTML reader content. Every paper's publication manifest owns its title,
 abstract, PDF digest, source commit, canonical route, and evidence links. The
 catalog also renders source-contract facts from `@kungfu-tech/kfd@1.0.0-alpha.47`
-and `@kungfu-tech/buildchain@3.0.2-alpha.2`. This repository owns only site layout,
+and `@kungfu-tech/buildchain@3.0.3`. This repository owns only site layout,
 navigation, responsive presentation, and machine entry rendering.
 
 Generated routes:
