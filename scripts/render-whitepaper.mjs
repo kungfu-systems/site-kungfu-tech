@@ -41,6 +41,10 @@ function copyPaperPdf(source) {
   fs.copyFileSync(source.pdfPath, path.join(distRoot, source.routes.pdf.slice(1)));
 }
 
+function versionedPdfHref(source) {
+  return `${source.routes.pdf}?v=${encodeURIComponent(source.packageInfo.version)}`;
+}
+
 function stripSectionTitle(source, section) {
   const lines = section.markdown.replace(/\r\n/g, "\n").split("\n");
   if (lines[0]?.replace(/^#\s+/, "").trim() === section.title.trim()) lines.shift();
@@ -161,7 +165,7 @@ function renderIndex() {
         </div>
         <div class="paper-actions">
           <a class="paper-button primary" href="${escapeAttr(paper.routes.reader)}">${escapeHtml(frame.action)}</a>
-          <a class="paper-button" href="${escapeAttr(paper.routes.pdf)}">Open PDF</a>
+          <a class="paper-button" href="${escapeAttr(versionedPdfHref(paper))}">Open PDF</a>
         </div>
       </article>`).join("\n");
   return `<!doctype html>
@@ -204,6 +208,7 @@ ${sharedFooter()}
 
 function renderReader(source, paperLabel) {
   const { bundle, packageInfo, routes } = source;
+  const pdfHref = versionedPdfHref(source);
   const toc = bundle.homepageSections
     .map((section) => `          <a href="#section-${escapeAttr(section.id)}">${escapeHtml(section.title)}</a>`)
     .join("\n");
@@ -233,7 +238,7 @@ ${sharedHeader()}
       <p class="paper-lead">${escapeHtml(bundle.hero.lead)}</p>
       <p class="paper-stance">${escapeHtml(bundle.hero.stance)}</p>
       <div class="paper-actions">
-        <a class="paper-button primary" href="${escapeAttr(routes.pdf)}">Read the PDF</a>
+        <a class="paper-button primary" href="${escapeAttr(pdfHref)}">Read the PDF</a>
         <a class="paper-button" href="${escapeAttr(evidenceUrl)}">${escapeHtml(bundle.hero.secondaryCta.label)}</a>
       </div>
     </header>
@@ -244,10 +249,10 @@ ${sharedHeader()}
           <p class="paper-section-role">Primary publication artifact</p>
           <h2 id="paper-preview-title">Read the original paper</h2>
         </div>
-        <a href="${escapeAttr(routes.pdf)}">Open PDF</a>
+        <a href="${escapeAttr(pdfHref)}">Open PDF</a>
       </div>
-      <object data="${escapeAttr(`${routes.pdf}#page=1&view=FitH`)}" type="application/pdf" aria-label="First page of ${escapeAttr(bundle.hero.title)}">
-        <p>Your browser cannot preview this PDF. <a href="${escapeAttr(routes.pdf)}">Open the paper PDF.</a></p>
+      <object data="${escapeAttr(`${pdfHref}#page=1&view=FitH`)}" type="application/pdf" aria-label="First page of ${escapeAttr(bundle.hero.title)}">
+        <p>Your browser cannot preview this PDF. <a href="${escapeAttr(pdfHref)}">Open the paper PDF.</a></p>
       </object>
     </section>
 
