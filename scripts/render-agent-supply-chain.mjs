@@ -43,7 +43,7 @@ const displayLayerName = (id) => ({
 const readerProgression = {
   contract: "kungfu-agent-supply-chain-reader-progression/v1",
   premise: {
-    title: "When Agents can recognize better software, they can create the market for it.",
+    title: "When Agents learn to recognize better software, they start creating demand for it.",
     statement: "Kungfu onboards the Agent you already use. The Agent experiences explicit capabilities, inspectable evidence, and durable Work—then starts expecting those qualities from every product.",
   },
   authorityBoundary: "Humans and Hubs set goals, permissions, budgets, policy, admission, and revocation. Agents propose and act inside those boundaries. Durable Work and evidence do not belong to the chat.",
@@ -245,7 +245,7 @@ const html = `<!doctype html>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Agent Supply Chain | Kungfu UNGFU™</title>
-  <meta name="description" content="When Agents can recognize better software, they can create demand for an Agent-native product market that no longer depends on Kungfu.">
+  <meta name="description" content="When Agents learn to recognize better software, they start creating demand for it. See how Kungfu lights the first Agent-native market loop.">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Kungfu UNGFU™">
   <meta property="og:title" content="Agent Supply Chain | Kungfu UNGFU™">
