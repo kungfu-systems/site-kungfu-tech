@@ -92,6 +92,18 @@ test -f public/agent-builders/hub-starter/index.html
 test -f public/why-kungfu/index.html
 test -f public/assets/site.css
 test -f public/assets/command-copy.js
+test -s public/assets/fonts/instrument-sans-latin-wght-normal.6219bc4b.woff2
+test -s public/assets/fonts/ibm-plex-mono-latin-400-normal.c36f509c.woff2
+test -s public/assets/fonts/ibm-plex-mono-latin-600-normal.ad4580d8.woff2
+test -s public/assets/fonts/ibm-plex-mono-latin-700-normal.9e1455e6.woff2
+test -s public/assets/fonts/OFL-Instrument-Sans.txt
+test -s public/assets/fonts/OFL-IBM-Plex-Mono.txt
+grep -q -- '--font-display: "Instrument Sans"' public/assets/site.css
+grep -q -- '--font-mono: "IBM Plex Mono"' public/assets/site.css
+if grep -RInE 'fonts\.(googleapis|gstatic)\.com' public scripts site; then
+  echo "error: site typography must remain self-hosted" >&2
+  exit 1
+fi
 test -f public/.well-known/security.txt
 test -f public/.well-known/kungfu-release-status.json
 node -e 'const fs=require("fs"); const s=JSON.parse(fs.readFileSync("public/.well-known/kungfu-release-status.json","utf8")); if(s.schema!=="kungfu.release-status/v1" || s.status!=="unavailable" || s.releasedUseClaim!==false || s.release!==null || s.acquisitionEvidence!==null) throw new Error("pre-release status endpoint is not truthful")'
@@ -750,6 +762,10 @@ if [ -d dist ]; then
   test -f dist/llms.txt
   test -f dist/why-kungfu/index.html
   test -f dist/assets/site.css
+  test -s dist/assets/fonts/instrument-sans-latin-wght-normal.6219bc4b.woff2
+  test -s dist/assets/fonts/ibm-plex-mono-latin-400-normal.c36f509c.woff2
+  test -s dist/assets/fonts/ibm-plex-mono-latin-600-normal.ad4580d8.woff2
+  test -s dist/assets/fonts/ibm-plex-mono-latin-700-normal.9e1455e6.woff2
   test -f dist/.well-known/security.txt
   test -f dist/about/index.html
   test -f dist/about/bootstrapping/index.html
