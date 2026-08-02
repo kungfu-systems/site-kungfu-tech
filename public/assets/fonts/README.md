@@ -10,8 +10,8 @@ Kungfu uses a deliberately small, self-hosted type system:
   familiar reading.
 
 The WOFF2 files are unmodified Google Fonts web subsets. Each filename includes
-the first eight characters of its SHA-256 digest so deployed assets can be
-cached immutably. Their upstream projects are:
+the first eight characters of its SHA-256 digest so a future font update cannot
+reuse a stale asset URL. Their upstream projects are:
 
 - https://github.com/Instrument/instrument-sans
 - https://github.com/IBM/plex
