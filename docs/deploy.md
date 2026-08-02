@@ -16,13 +16,19 @@ Default automation:
 
 - Pull requests run Buildchain v3 web-surface planning, verification, and
   preview apply for `pr-N.preview.kungfu.tech`.
+- Fork pull requests still build and plan, but skip AWS-backed preview apply
+  because GitHub does not provide OIDC identity to fork events.
 - Preview uses the existing `site-kungfu-tech-preview-prefix` CloudFront
   Function as an external directory-index and alias-prefix router. Do not
   replace that viewer-request association with the Buildchain directory-index
   function unless Buildchain also owns the preview alias-prefix routing logic.
+- Preview therefore keeps `directory_index_rewrite = "external"`. Staging and
+  Production use Buildchain-managed directory-index rewrites.
 - Closing or merging a pull request runs preview cleanup for the PR alias.
 - Ordinary pushes to `main` run staging planning, verification, and apply to
   `https://staging.kungfu.tech`.
+- Staging is protected by managed network access, not a Buildchain-managed
+  Basic Auth secret.
 - Release PR pages show the staging review URL. After staging is verified,
   merging the release PR is the production approval event.
 - Release PR merges into `main` run production planning and apply.
@@ -98,3 +104,15 @@ The repository uses the canonical Buildchain `.buildchain/` layout:
 
 Root-level `buildchain.toml` and `buildchain.contract-lock.json` are legacy
 layout files and should not be reintroduced.
+
+Local planning with a reviewed Buildchain checkout:
+
+```bash
+BUILDCHAIN_DIR=/path/to/buildchain
+bash scripts/build-site.sh
+node "$BUILDCHAIN_DIR/scripts/web-surface.mjs" --mode validate --cwd .
+node "$BUILDCHAIN_DIR/scripts/web-surface.mjs" --mode deploy-plan --cwd . --channel preview --source-sha "$(git rev-parse HEAD)"
+node "$BUILDCHAIN_DIR/scripts/web-surface.mjs" --mode deploy-plan --cwd . --channel staging --source-sha "$(git rev-parse HEAD)"
+node "$BUILDCHAIN_DIR/scripts/web-surface.mjs" --mode deploy-plan --cwd . --channel production --source-sha "$(git rev-parse HEAD)"
+node "$BUILDCHAIN_DIR/scripts/web-surface.mjs" --mode cleanup-plan --cwd . --channel preview --pull-number 3 --source-sha "$(git rev-parse HEAD)" --dry-run false
+```

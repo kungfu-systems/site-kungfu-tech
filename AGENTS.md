@@ -16,6 +16,8 @@ Kungfu packages and specifications.
 ## Use the site
 
 - Start at [`README.md`](README.md) for the local build and site policy.
+- Use [`docs/page-contracts/README.md`](docs/page-contracts/README.md) for the
+  product reading sequence and page-specific claim boundaries.
 - Use [`docs/deploy.md`](docs/deploy.md) for the Buildchain release model.
 - Use [`docs/rollback.md`](docs/rollback.md) for content rollback notes.
 
