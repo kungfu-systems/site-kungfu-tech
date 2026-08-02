@@ -31,7 +31,7 @@ const NON_AUTHORITIES = [
   "scan-output",
   "standalone-generation",
 ];
-const EXPECTED_MEDIA_MEMBERS = [
+const LEGACY_MEDIA_MEMBERS = [
   "checksums.sha256",
   "complete-transcript.txt",
   "demo-720p.mp4",
@@ -49,6 +49,39 @@ const EXPECTED_MEDIA_MEMBERS = [
   "renderer-checksums.sha256",
   "scene.json",
 ];
+const DECLARATIVE_EVIDENCE_MEMBERS = [
+  "capture-manifest.json",
+  "demo-720p.mp4",
+  "demo-720p.webm",
+  "demo.gif",
+  "demo.mp4",
+  "demo.webm",
+  "gate-receipt.json",
+  "manifest.json",
+  "media-inspection.json",
+  "media-probe.json",
+  "media-receipt.json",
+  "poster.png",
+  "public-evidence.json",
+  "qualified-gate-receipt.json",
+  "release-passport.json",
+  "renderer-checksums.sha256",
+  "source-coordinate.json",
+];
+const PUBLIC_MEDIA_MEMBERS = [
+  "demo-720p.mp4",
+  "demo-720p.webm",
+  "demo.gif",
+  "demo.mp4",
+  "demo.webm",
+  "gate-receipt.json",
+  "manifest.json",
+  "media-inspection.json",
+  "media-probe.json",
+  "media-receipt.json",
+  "poster.png",
+  "renderer-checksums.sha256",
+];
 
 function invariant(condition, message) {
   if (!condition) throw new Error(`auditable-demo import: ${message}`);
@@ -60,8 +93,10 @@ function sha256(bytes) {
 
 function exactTimestamp(value, label) {
   const parsed = Date.parse(value || "");
+  const canonical = Number.isFinite(parsed) ? new Date(parsed).toISOString() : "";
   invariant(
-    Number.isFinite(parsed) && new Date(parsed).toISOString() === value,
+    Number.isFinite(parsed)
+      && (canonical === value || canonical.replace(/\.000Z$/u, "Z") === value),
     `${label} must be a canonical RFC3339 timestamp`,
   );
   return value;
@@ -102,7 +137,7 @@ function listRegularFiles(directory) {
     .sort();
 }
 
-function verifyPassport(passport) {
+function verifyLegacyPassport(passport) {
   invariant(
     [
       "kungfu.auditable-demo.release-passport/v1",
@@ -226,9 +261,140 @@ function verifyPassport(passport) {
   return { passport, demo };
 }
 
-function verifyMedia(mediaDirectory, passport) {
+function verifyDeclarativePassport(rawPassport, sourceEntry, featuredDemoId) {
   invariant(
-    JSON.stringify(listRegularFiles(mediaDirectory)) === JSON.stringify(EXPECTED_MEDIA_MEMBERS),
+    rawPassport?.schema === "buildchain.declarative-demo-release-passport/v1"
+      && rawPassport.status === "qualified",
+    "declarative Passport schema or status is invalid",
+  );
+  const { passportRoot, ...body } = rawPassport;
+  invariant(
+    DIGEST.test(passportRoot || "")
+      && passportRoot === sha256(Buffer.from(stableJson(body))),
+    "declarative Passport root does not verify",
+  );
+  invariant(
+    rawPassport.product?.id === "kungfu"
+      && rawPassport.product?.binaryName === "kungfu"
+      && rawPassport.demo?.id === sourceEntry.id
+      && typeof rawPassport.demo?.title === "string"
+      && rawPassport.demo.title.length > 0
+      && typeof rawPassport.demo?.claimBoundary === "string"
+      && rawPassport.demo.claimBoundary.length > 0,
+    "declarative Passport product or demo identity is invalid",
+  );
+  const source = rawPassport.source;
+  invariant(
+    source?.schema === "buildchain.github-artifact-coordinate/v1"
+      && source.repository === "kungfu-systems/kungfu"
+      && SHA.test(source.sourceSha || "")
+      && ID.test(source.runId || "")
+      && ID.test(source.runAttempt || "")
+      && ID.test(source.id || "")
+      && ARTIFACT_NAME.test(source.name || "")
+      && source.name === `kungfu-linux-x64-${source.sourceSha}`
+      && DIGEST.test(source.digest || ""),
+    "declarative Passport source coordinate is invalid",
+  );
+  exactTimestamp(source.expiresAt, "source artifact expiry");
+  invariant(
+    DIGEST.test(rawPassport.evidenceRoot || "")
+      && DIGEST.test(rawPassport.scenarioRoot || "")
+      && DIGEST.test(rawPassport.capture?.root || "")
+      && rawPassport.capture?.binary?.platformId === "linux-x64"
+      && Array.isArray(rawPassport.capture.binary.runtimeDependencies)
+      && rawPassport.capture.binary.runtimeDependencies.length === 0
+      && typeof rawPassport.capture?.networkIsolation === "string"
+      && rawPassport.capture.networkIsolation.length > 0
+      && DIGEST.test(rawPassport.gate?.root || "")
+      && DIGEST.test(rawPassport.media?.root || "")
+      && [
+        "responsive-web-delivery-v1",
+        "responsive-long-form-web-delivery-v1",
+      ].includes(rawPassport.media?.profile)
+      && DIGEST.test(rawPassport.media?.qualificationRoot || ""),
+    "declarative Passport evidence chain is invalid",
+  );
+  invariant(
+    SHA.test(rawPassport.toolchain?.buildchainSha || "")
+      && /^ghcr\.io\/kungfu-systems\/build-images\/demo-renderer@sha256:[0-9a-f]{64}$/u
+        .test(rawPassport.toolchain?.rendererImage || ""),
+    "declarative Passport toolchain coordinate is invalid",
+  );
+  invariant(
+    JSON.stringify(rawPassport.authority?.grants) === "[]"
+      && JSON.stringify(rawPassport.authority?.authorizationSources)
+        === JSON.stringify(REQUIRED_AUTHORIZATION_SOURCES)
+      && JSON.stringify(rawPassport.authority?.nonAuthorities)
+        === JSON.stringify(NON_AUTHORITIES.filter((value) => value !== "local-bundle-presence"))
+      && rawPassport.authority?.productSystemRole
+        === "assembly-and-distribution-metadata-only",
+    "declarative Passport identity-neutral authority boundary is invalid",
+  );
+  invariant(
+    typeof sourceEntry.commandLabel === "string"
+      && sourceEntry.commandLabel.startsWith("kungfu ")
+      && DEMO_ID.test(sourceEntry.siteSlug || ""),
+    "declarative demo presentation coordinate is invalid",
+  );
+  const workflowUrl = `https://github.com/${source.repository}/actions/runs/${source.runId}`;
+  const passport = {
+    ...rawPassport,
+    source: {
+      ...source,
+      sha: source.sourceSha,
+      artifact: {
+        ...source,
+        url: `${workflowUrl}/artifacts/${source.id}`,
+      },
+    },
+    workflow: {
+      repository: source.repository,
+      runId: source.runId,
+      runAttempt: source.runAttempt,
+      url: workflowUrl,
+    },
+    root: {
+      algorithm: "sha256",
+      profile: "sorted-object-json-utf8-lf/v1",
+      value: passportRoot,
+    },
+    authority: {
+      ...rawPassport.authority,
+      evidenceClass: "exact-standalone-binary-declarative-demo/v1",
+      claims: [
+        "The exact retained standalone Kungfu Linux artifact completed the declared bounded demo.",
+        "The Gate and responsive media qualification bind two independently captured native PTY renditions.",
+      ],
+      nonClaims: [rawPassport.demo.claimBoundary],
+    },
+  };
+  const demo = {
+    id: rawPassport.demo.id,
+    title: rawPassport.demo.title,
+    catalogRoot: rawPassport.scenarioRoot,
+    descriptorRoot: rawPassport.capture.root,
+    commandLabel: sourceEntry.commandLabel,
+    evidenceClass: passport.authority.evidenceClass,
+    sceneId: rawPassport.demo.id,
+    publication: {
+      readmeFeatured: rawPassport.demo.id === featuredDemoId,
+      siteSlug: sourceEntry.siteSlug,
+    },
+  };
+  return { passport, demo, declarative: true, rawPassport };
+}
+
+function verifyPassport(passport, sourceEntry, featuredDemoId) {
+  if (passport?.schema === "buildchain.declarative-demo-release-passport/v1") {
+    return verifyDeclarativePassport(passport, sourceEntry, featuredDemoId);
+  }
+  return { ...verifyLegacyPassport(passport), declarative: false, rawPassport: passport };
+}
+
+function verifyLegacyMedia(mediaDirectory, passport) {
+  invariant(
+    JSON.stringify(listRegularFiles(mediaDirectory)) === JSON.stringify(LEGACY_MEDIA_MEMBERS),
     "media bundle member set is not exact",
   );
   const checksumBytes = readRegular(path.join(mediaDirectory, "checksums.sha256"), "media checksums");
@@ -248,7 +414,7 @@ function verifyMedia(mediaDirectory, passport) {
     );
   }
   invariant(
-    JSON.stringify(declared.sort()) === JSON.stringify(EXPECTED_MEDIA_MEMBERS.filter((name) => name !== "checksums.sha256")),
+    JSON.stringify(declared.sort()) === JSON.stringify(LEGACY_MEDIA_MEMBERS.filter((name) => name !== "checksums.sha256")),
     "checksums do not cover every media member exactly once",
   );
   const receipt = readJson(path.join(mediaDirectory, "media-receipt.json"), "media receipt");
@@ -278,7 +444,7 @@ function verifyMedia(mediaDirectory, passport) {
       rendition
         && typeof rendition.role === "string"
         && typeof rendition.path === "string"
-        && EXPECTED_MEDIA_MEMBERS.includes(rendition.path)
+        && LEGACY_MEDIA_MEMBERS.includes(rendition.path)
         && rendition.path !== "checksums.sha256"
         && !roles.has(rendition.role)
         && DIGEST.test(rendition.root || ""),
@@ -358,7 +524,228 @@ function verifyMedia(mediaDirectory, passport) {
       `renderer derivation is missing for role ${rendition.role}`,
     );
   }
-  return { scene, roles };
+  return {
+    scene,
+    roles,
+    members: LEGACY_MEDIA_MEMBERS,
+    transcript: null,
+    nativeCaptures: [],
+  };
+}
+
+function verifyDeclarativeEvidence(evidenceDirectory, passport, rawPassport, demo) {
+  invariant(
+    JSON.stringify(listRegularFiles(evidenceDirectory))
+      === JSON.stringify(DECLARATIVE_EVIDENCE_MEMBERS),
+    "declarative evidence member set is not exact",
+  );
+  const sourceCoordinate = readJson(
+    path.join(evidenceDirectory, "source-coordinate.json"),
+    "source coordinate",
+  );
+  invariant(
+    stableJson(sourceCoordinate) === stableJson(rawPassport.source),
+    "source coordinate does not match the declarative Passport",
+  );
+  const capture = readJson(
+    path.join(evidenceDirectory, "capture-manifest.json"),
+    "capture manifest",
+  );
+  const { root: captureRoot, ...captureBody } = capture;
+  invariant(
+    capture.schema === "buildchain.declarative-demo-capture/v1"
+      && capture.status === "qualified"
+      && capture.demo?.id === demo.id
+      && capture.scenarioRoot === rawPassport.scenarioRoot
+      && captureRoot === rawPassport.capture.root
+      && captureRoot === sha256(Buffer.from(stableJson(captureBody)))
+      && JSON.stringify(capture.authority?.grants) === "[]"
+      && JSON.stringify(capture.authority?.nonAuthorities)
+        === JSON.stringify(rawPassport.authority.nonAuthorities),
+    "capture manifest does not bind the declarative Passport",
+  );
+  const publicEvidence = readJson(
+    path.join(evidenceDirectory, "public-evidence.json"),
+    "public evidence",
+  );
+  const evidencePreimage = {
+    schema: "buildchain.declarative-demo-evidence-root/v1",
+    scenarioRoot: rawPassport.scenarioRoot,
+    captureRoot: rawPassport.capture.root,
+    gateRoot: rawPassport.gate.root,
+    mediaRoot: rawPassport.media.root,
+    demoId: demo.id,
+  };
+  invariant(
+    publicEvidence.schema === evidencePreimage.schema
+      && publicEvidence.evidenceRoot === sha256(Buffer.from(stableJson(evidencePreimage)))
+      && publicEvidence.evidenceRoot === rawPassport.evidenceRoot
+      && publicEvidence.passportRoot === rawPassport.passportRoot
+      && stableJson(publicEvidence.source) === stableJson(rawPassport.source)
+      && Array.isArray(publicEvidence.files),
+    "public evidence does not bind the declarative Passport",
+  );
+  const declaredFiles = [...publicEvidence.files]
+    .sort((left, right) => left.path.localeCompare(right.path));
+  invariant(
+    JSON.stringify(declaredFiles.map(({ path: member }) => member))
+      === JSON.stringify(PUBLIC_MEDIA_MEMBERS),
+    "public evidence file set is not exact",
+  );
+  for (const file of declaredFiles) {
+    const bytes = readRegular(path.join(evidenceDirectory, file.path), file.path);
+    invariant(
+      file.root === sha256(bytes) && file.bytes === bytes.length,
+      `public evidence member ${file.path} drifted`,
+    );
+  }
+  const receipt = readJson(
+    path.join(evidenceDirectory, "media-receipt.json"),
+    "media receipt",
+  );
+  invariant(
+    receipt.schema === "buildchain.auditable-demo-media/v2"
+      && receipt.status === "passed"
+      && receipt.sourceSha === rawPassport.source.sourceSha
+      && receipt.qualifiedGateRoot === rawPassport.gate.root
+      && receipt.rendererImage === rawPassport.toolchain.rendererImage
+      && receipt.qualification?.profile?.id === rawPassport.media.profile
+      && receipt.qualificationRoot === rawPassport.media.qualificationRoot
+      && receipt.qualification?.qualificationRoot === receipt.qualificationRoot,
+    "media receipt does not bind the declarative Passport",
+  );
+  const { qualificationRoot, ...qualificationBody } = receipt.qualification;
+  invariant(
+    qualificationRoot === sha256(Buffer.from(stableJson(qualificationBody))),
+    "declarative media qualification root does not verify",
+  );
+  const roles = new Map();
+  for (const rendition of receipt.qualification.renditions || []) {
+    invariant(
+      rendition
+        && typeof rendition.role === "string"
+        && PUBLIC_MEDIA_MEMBERS.includes(rendition.path)
+        && !roles.has(rendition.role)
+        && DIGEST.test(rendition.root || ""),
+      "declarative media role mapping is invalid",
+    );
+    const bytes = readRegular(path.join(evidenceDirectory, rendition.path), rendition.role);
+    invariant(
+      rendition.root === sha256(bytes) && rendition.bytes === bytes.length,
+      `declarative media role ${rendition.role} drifted`,
+    );
+    roles.set(rendition.role, rendition);
+  }
+  const expectedRoles = {
+    "primary-video": ["video/mp4", 1920, 1080],
+    "alternate-video": ["video/webm", 1920, 1080],
+    "responsive-primary-video": ["video/mp4", 1280, 720],
+    "responsive-alternate-video": ["video/webm", 1280, 720],
+    "readme-compatibility": ["image/gif", 1280, 720],
+    "evidence-poster": ["image/png", 1920, 1080],
+  };
+  for (const [role, [mimeType, width, height]] of Object.entries(expectedRoles)) {
+    const rendition = roles.get(role);
+    invariant(
+      rendition?.mimeType === mimeType
+        && rendition.width === width
+        && rendition.height === height,
+      `declarative media role ${role} is missing or invalid`,
+    );
+  }
+  const manifest = readJson(
+    path.join(evidenceDirectory, "manifest.json"),
+    "renderer manifest",
+  );
+  const sourceFrameSets = manifest.derivation?.sourceFrameSets;
+  const inputRenditions = manifest.inputs?.renditions;
+  invariant(
+    manifest.schema === "build-images.auditable-demo-render/v1"
+      && manifest.renderer?.image === rawPassport.toolchain.rendererImage
+      && manifest.policy?.evidenceClass === passport.authority.evidenceClass
+      && manifest.policy?.visualClassification === "bounded-pty-replay"
+      && manifest.policy?.runtimeTextAuthority === "rendition-set.json"
+      && manifest.derivation?.policy === "independent-native-frame-sets/v1"
+      && Array.isArray(sourceFrameSets)
+      && sourceFrameSets.length === 2
+      && Array.isArray(inputRenditions)
+      && inputRenditions.length === 2,
+    "renderer manifest does not prove independent native PTY replay",
+  );
+  const expectedNative = [
+    ["1080p", "primary", 1920, 1080],
+    ["720p", "responsive", 1280, 720],
+  ];
+  for (const [id, role, width, height] of expectedNative) {
+    const frameSet = sourceFrameSets.find((entry) => entry.id === id);
+    const input = inputRenditions.find((entry) => entry.id === id);
+    invariant(
+      frameSet?.role === role
+        && frameSet.width === width
+        && frameSet.height === height
+        && DIGEST.test(frameSet.captureRoot || "")
+        && input?.role === role
+        && input.scene?.path?.schema === "build-images.demo-scene/v1"
+        && input.scene.path.width === width
+        && input.scene.path.height === height
+        && input.terminalCapture?.root === frameSet.captureRoot
+        && input.terminalCapture?.dimensions?.columns
+          === (id === "1080p" ? 150 : 100)
+        && input.terminalCapture?.dimensions?.rows
+          === (id === "1080p" ? 36 : 28)
+        && typeof input.transcript?.path === "string"
+        && input.transcript.path.length > 0
+        && input.transcript.root === sha256(Buffer.from(input.transcript.path)),
+      `renderer native input ${id} is invalid`,
+    );
+  }
+  invariant(
+    sourceFrameSets[0].captureRoot !== sourceFrameSets[1].captureRoot,
+    "720p and 1080p must come from distinct native capture roots",
+  );
+  for (const rendition of roles.values()) {
+    const derivation = manifest.derivation.renditions?.[rendition.path];
+    invariant(
+      derivation?.operation === "native-frame-set-encode"
+        && derivation.width === rendition.width
+        && derivation.height === rendition.height,
+      `native renderer derivation is missing for ${rendition.role}`,
+    );
+  }
+  const primary = inputRenditions.find((entry) => entry.id === "1080p");
+  const responsive = inputRenditions.find((entry) => entry.id === "720p");
+  const scene = primary.scene.path;
+  const maximumDuration = scene.durationClass === "long-form" ? 180000 : 60000;
+  invariant(
+    Number.isInteger(scene.durationMs)
+      && scene.durationMs >= 500
+      && scene.durationMs <= maximumDuration
+      && Math.abs(scene.durationMs - responsive.scene.path.durationMs) <= 1000,
+    "declarative scene duration is invalid",
+  );
+  invariant(
+    primary.transcript.path.includes(`$ ${demo.commandLabel}`),
+    "declared command label is absent from the retained transcript",
+  );
+  return {
+    scene,
+    roles,
+    members: DECLARATIVE_EVIDENCE_MEMBERS,
+    transcript: Buffer.from(primary.transcript.path),
+    nativeCaptures: sourceFrameSets.map(({ id, role, width, height, captureRoot }) => ({
+      id,
+      role,
+      width,
+      height,
+      captureRoot,
+    })),
+  };
+}
+
+function verifyMedia(mediaDirectory, passport, rawPassport, demo, declarative) {
+  return declarative
+    ? verifyDeclarativeEvidence(mediaDirectory, passport, rawPassport, demo)
+    : verifyLegacyMedia(mediaDirectory, passport);
 }
 
 function formatDuration(durationMs) {
@@ -384,13 +771,14 @@ function renderVideoSources(publicPath, roles) {
     .join("\n          ");
 }
 
-function renderEvidence(passport, publicPath, scene, roles) {
+function renderEvidence(passport, demo, publicPath, scene, roles) {
+  const declarative = passport.schema === "buildchain.declarative-demo-release-passport/v1";
   const runUrl = passport.workflow.url;
   const sourceUrl = `https://github.com/${passport.source.repository}/commit/${passport.source.sha}`;
   const artifactLinks = [
     ["Exact source artifact", passport.source.artifact.url],
-    ["Passing Gate artifact", passport.gate.artifact.url],
-    ["Rendered media artifact", passport.media.artifact.url],
+    ...(passport.gate.artifact ? [["Passing Gate artifact", passport.gate.artifact.url]] : []),
+    ...(passport.media.artifact ? [["Rendered media artifact", passport.media.artifact.url]] : []),
     ["GitHub Actions run", runUrl],
     ["Exact source commit", sourceUrl],
   ];
@@ -405,9 +793,9 @@ function renderEvidence(passport, publicPath, scene, roles) {
         <div>
           <p class="eyebrow">Exact installed artifact · bounded Linux proof</p>
           <h1 id="demo-heading">Watch the artifact explain itself.</h1>
-          <p class="lead">No account, hosted session, or hand-authored transcript is required. This ${formatDuration(scene.durationMs)}-second animation replays the bounded PTY output of the installed <code>kungfu agent-work-lab autoplay</code> command after the reusable Buildchain Gate passed.</p>
+          <p class="lead">No account, hosted session, or hand-authored transcript is required. This ${formatDuration(scene.durationMs)}-second animation replays the bounded PTY output of the installed <code>${declarative ? escapeHtml(demo.commandLabel) : "kungfu agent-work-lab autoplay"}</code> command after the reusable Buildchain Gate passed.</p>
         </div>
-        <video controls playsinline preload="metadata" aria-label="Exact installed Kungfu Agent Work Lab autoplay demonstration" poster="${escapeAttr(publicPath)}/${escapeAttr(roles.get("evidence-poster").path)}">
+        <video controls playsinline preload="metadata" aria-label="${declarative ? `${escapeAttr(demo.title)} exact installed-artifact demonstration` : "Exact installed Kungfu Agent Work Lab autoplay demonstration"}" poster="${escapeAttr(publicPath)}/${escapeAttr(roles.get("evidence-poster").path)}">
           ${renderVideoSources(publicPath, roles)}
           <p><a href="${escapeAttr(publicPath)}/${escapeAttr(roles.get("responsive-primary-video").path)}">Download the 720p MP4 recording.</a></p>
         </video>
@@ -415,8 +803,8 @@ function renderEvidence(passport, publicPath, scene, roles) {
       </section>
 
       <section class="proof-grid" aria-label="Auditable demo proof">
-        <article><h2>What ran</h2><p>The installed Linux artifact executed its own <code>kungfu agent-work-lab autoplay</code> launcher in a disposable bounded PTY.</p></article>
-        <article><h2>What passed</h2><p>The exact terminal capture, transcript, public projection, and scene passed an isolated renderer smoke before full media was allowed.</p></article>
+        <article><h2>What ran</h2><p>${declarative ? `The installed Linux artifact executed its own <code>${escapeHtml(demo.commandLabel)}</code> launcher in disposable bounded PTYs.` : "The installed Linux artifact executed its own <code>kungfu agent-work-lab autoplay</code> launcher in a disposable bounded PTY."}</p></article>
+        <article><h2>What passed</h2><p>${declarative ? "Two independent native terminal captures, their retained transcript, and responsive media passed the Buildchain Gate and renderer qualification." : "The exact terminal capture, transcript, public projection, and scene passed an isolated renderer smoke before full media was allowed."}</p></article>
         <article><h2>What is retained</h2><p>Source, Gate, media, toolchain, expiry, run, and canonical Passport roots remain machine-readable.</p></article>
         <article><h2>Authority boundary</h2><p>The capture grants no authority. Authorization still requires the exact Passport, Core policy, Work or Warrant, an explicit capability grant, and runtime isolation.</p></article>
       </section>
@@ -438,8 +826,8 @@ function renderEvidence(passport, publicPath, scene, roles) {
           <div><dt>Buildchain</dt><dd><code>${escapeHtml(passport.toolchain.buildchainSha)}</code></dd></div>
           <div><dt>Renderer</dt><dd><code>${escapeHtml(passport.toolchain.rendererImage)}</code></dd></div>
           <div><dt>Source expires</dt><dd><time datetime="${escapeAttr(passport.source.artifact.expiresAt)}">${escapeHtml(passport.source.artifact.expiresAt)}</time></dd></div>
-          <div><dt>Gate expires</dt><dd><time datetime="${escapeAttr(passport.gate.artifact.expiresAt)}">${escapeHtml(passport.gate.artifact.expiresAt)}</time></dd></div>
-          <div><dt>Media expires</dt><dd><time datetime="${escapeAttr(passport.media.artifact.expiresAt)}">${escapeHtml(passport.media.artifact.expiresAt)}</time></dd></div>
+          ${passport.gate.artifact ? `<div><dt>Gate expires</dt><dd><time datetime="${escapeAttr(passport.gate.artifact.expiresAt)}">${escapeHtml(passport.gate.artifact.expiresAt)}</time></dd></div>` : ""}
+          ${passport.media.artifact ? `<div><dt>Media expires</dt><dd><time datetime="${escapeAttr(passport.media.artifact.expiresAt)}">${escapeHtml(passport.media.artifact.expiresAt)}</time></dd></div>` : ""}
         </dl>
         <nav class="evidence-links" aria-label="Exact evidence links">
           ${artifactLinks.map(([label, href]) => `<a href="${escapeAttr(href)}">${escapeHtml(label)}</a>`).join("\n          ")}
@@ -461,6 +849,17 @@ function homepagePresentation(demo) {
       headline: "One Work survives failed attempts and a fresh Agent.",
       note: "A bounded Mock Agent replay—not hosted-provider or cross-machine proof.",
       evidenceHref: "/how-tested/auditable-demo/#demo-project-work-recovery-heading",
+    };
+  }
+  if (demo.id === "project-tour-08x") {
+    return {
+      articleLabel: "Kungfu Project Tour at 0.8x demonstration",
+      title: "Project Tour",
+      status: "Qualified 0.8x tour",
+      videoLabel: "Exact standalone Kungfu Project Tour at 0.8x demonstration",
+      headline: "Take the guided tour at a readable pace.",
+      note: "Two native PTY captures—not a scaled replay or an authorization grant.",
+      evidenceHref: "/how-tested/auditable-demo/#demo-project-tour-08x-heading",
     };
   }
   return {
@@ -561,6 +960,46 @@ function normalizeSources(source) {
       collection: false,
     };
   }
+  if (source.schema === "kungfu.site.auditable-demo-source/v3") {
+    invariant(
+      DEMO_ID.test(source.featuredDemoId || "")
+        && Array.isArray(source.demos)
+        && source.demos.length >= 1
+        && source.demos.length <= 8,
+      "declarative source descriptor is invalid",
+    );
+    const demos = source.demos.map((entry, index) => {
+      invariant(
+        entry
+          && Object.keys(entry).sort().join(",")
+            === "commandLabel,evidenceDirectory,id,siteSlug"
+          && DEMO_ID.test(entry.id || "")
+          && typeof entry.commandLabel === "string"
+          && entry.commandLabel.startsWith("kungfu ")
+          && typeof entry.evidenceDirectory === "string"
+          && entry.evidenceDirectory.length > 0
+          && DEMO_ID.test(entry.siteSlug || ""),
+        `declarative source demo ${index} is invalid`,
+      );
+      return {
+        ...entry,
+        passport: `${entry.evidenceDirectory}/release-passport.json`,
+        mediaDirectory: entry.evidenceDirectory,
+      };
+    });
+    const ids = demos.map(({ id }) => id);
+    invariant(new Set(ids).size === ids.length, "declarative source demo ids must be unique");
+    invariant(ids.includes(source.featuredDemoId), "declarative featured demo is absent");
+    const homepageDemoId = source.homepageDemoId || source.featuredDemoId;
+    invariant(ids.includes(homepageDemoId), "declarative homepage demo is absent");
+    return {
+      featuredDemoId: source.featuredDemoId,
+      homepageDemoId,
+      demos,
+      collection: true,
+      declarative: true,
+    };
+  }
   invariant(
     source.schema === "kungfu.site.auditable-demo-source/v2"
       && DEMO_ID.test(source.featuredDemoId || "")
@@ -594,10 +1033,11 @@ function normalizeSources(source) {
     homepageDemoId,
     demos,
     collection: true,
+    declarative: false,
   };
 }
 
-function siteProjection(passport, demo, publicPath, roles) {
+function siteProjection(passport, demo, publicPath, roles, nativeCaptures, scene) {
   return {
     schema: "kungfu.site.auditable-demo/v2",
     status: "qualified",
@@ -613,6 +1053,10 @@ function siteProjection(passport, demo, publicPath, roles) {
     publicEvidencePath: publicPath,
     mediaProfile: passport.media.profile,
     mediaQualificationRoot: passport.media.qualificationRoot,
+    ...(nativeCaptures.length > 0 ? {
+      durationClass: scene.durationClass || "standard",
+      nativeCaptures,
+    } : {}),
     renditions: Object.fromEntries(
       [...roles.entries()].map(([role, rendition]) => [
         role,
@@ -648,32 +1092,53 @@ export function importAuditableDemo({
     const mediaDirectory = path.resolve(repoRoot, entry.mediaDirectory);
     invariant(passportPath.startsWith(`${repoRoot}${path.sep}`), "passport path escapes repository");
     invariant(mediaDirectory.startsWith(`${repoRoot}${path.sep}`), "media path escapes repository");
-    const verified = verifyPassport(readJson(passportPath, "passport"));
-    const { passport, demo } = verified;
+    const verified = verifyPassport(
+      readJson(passportPath, "passport"),
+      entry,
+      normalizedSource.featuredDemoId,
+    );
+    const { passport, demo, rawPassport, declarative } = verified;
     invariant(entry.id === demo.id, `source demo id ${entry.id} does not match its Passport`);
     invariant(
       demo.publication.readmeFeatured === (entry.id === normalizedSource.featuredDemoId),
       `demo ${entry.id} README feature status drifts from the source descriptor`,
     );
-    const { scene, roles } = verifyMedia(mediaDirectory, passport);
+    const { scene, roles, members, transcript, nativeCaptures } = verifyMedia(
+      mediaDirectory,
+      passport,
+      rawPassport,
+      demo,
+      declarative,
+    );
     const rootName = passport.root.value.slice(7);
-    const publicPath =
-      demo.id === "agent-work-lab" && demo.publication.readmeFeatured
+    const publicPath = declarative
+      ? `/evidence/auditable-demo/${rootName}/${demo.id}`
+      : demo.id === "agent-work-lab" && demo.publication.readmeFeatured
         ? `/evidence/auditable-demo/${rootName}`
         : `/evidence/auditable-demo/${demo.publication.siteSlug}/${rootName}`;
     const evidenceDirectory = path.join(outputRoot, publicPath);
-    for (const member of EXPECTED_MEDIA_MEMBERS) {
+    for (const member of members) {
       expected.set(
         path.join(evidenceDirectory, member),
         readRegular(path.join(mediaDirectory, member), member),
       );
     }
+    if (transcript) {
+      expected.set(path.join(evidenceDirectory, "complete-transcript.txt"), transcript);
+    }
     expected.set(
       path.join(evidenceDirectory, "passport.json"),
-      Buffer.from(stableJson(passport)),
+      Buffer.from(stableJson(rawPassport)),
     );
-    const projection = siteProjection(passport, demo, publicPath, roles);
-    imports.push({ passport, demo, scene, roles, publicPath, projection });
+    const projection = siteProjection(
+      passport,
+      demo,
+      publicPath,
+      roles,
+      nativeCaptures,
+      scene,
+    );
+    imports.push({ passport, rawPassport, demo, scene, roles, publicPath, projection });
     if (normalizedSource.collection) {
       expected.set(
         path.join(outputRoot, "auditable-demos", `${demo.id}.json`),
@@ -720,6 +1185,7 @@ export function importAuditableDemo({
   const pageBefore = readRegular(pagePath, "auditable demo page").toString("utf8");
   let rendered = renderEvidence(
     featured.passport,
+    featured.demo,
     featured.publicPath,
     featured.scene,
     featured.roles,

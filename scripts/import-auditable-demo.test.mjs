@@ -382,6 +382,255 @@ function addSecondaryDemo(input, {
   return passport;
 }
 
+function declarativeFixture() {
+  const input = fixture();
+  const evidenceDirectory = path.join(input.repoRoot, "site/auditable-demo/media");
+  const commandLabel = "kungfu agent-work-lab autoplay";
+  for (const member of [
+    "checksums.sha256",
+    "complete-transcript.txt",
+    "public-projection.json",
+    "scene.json",
+  ]) {
+    fs.rmSync(path.join(evidenceDirectory, member));
+  }
+  const transcript = `$ ${commandLabel}\nKUNGFU_TUI_DEMO_COMPLETE\n`;
+  const primaryRoot = `sha256:${"a".repeat(64)}`;
+  const responsiveRoot = `sha256:${"b".repeat(64)}`;
+  const scene = (id, width, height) => ({
+    schema: "build-images.demo-scene/v1",
+    id: `agent-work-lab-autoplay-${id}`,
+    title: "Kungfu Agent Work Lab autoplay",
+    commandLabel,
+    width,
+    height,
+    fps: 10,
+    durationMs: 3800,
+    durationClass: "long-form",
+    accent: "#67e8a5",
+    background: "#0b1020",
+  });
+  const renditionRows = [
+    ["demo.mp4", 1920, 1080],
+    ["demo.webm", 1920, 1080],
+    ["demo-720p.mp4", 1280, 720],
+    ["demo-720p.webm", 1280, 720],
+    ["demo.gif", 1280, 720],
+    ["poster.png", 1920, 1080],
+  ];
+  const manifest = {
+    schema: "build-images.auditable-demo-render/v1",
+    renderer: {
+      image: `ghcr.io/kungfu-systems/build-images/demo-renderer@sha256:${"3".repeat(64)}`,
+    },
+    policy: {
+      evidenceClass: "exact-standalone-binary-declarative-demo/v1",
+      visualClassification: "bounded-pty-replay",
+      runtimeTextAuthority: "rendition-set.json",
+    },
+    inputs: {
+      renditions: [
+        {
+          id: "1080p",
+          role: "primary",
+          scene: { path: scene("1080p", 1920, 1080) },
+          terminalCapture: {
+            root: primaryRoot,
+            dimensions: { columns: 150, rows: 36 },
+          },
+          transcript: { path: transcript, root: sha256(Buffer.from(transcript)) },
+        },
+        {
+          id: "720p",
+          role: "responsive",
+          scene: { path: scene("720p", 1280, 720) },
+          terminalCapture: {
+            root: responsiveRoot,
+            dimensions: { columns: 100, rows: 28 },
+          },
+          transcript: { path: transcript, root: sha256(Buffer.from(transcript)) },
+        },
+      ],
+    },
+    derivation: {
+      policy: "independent-native-frame-sets/v1",
+      sourceFrameSets: [
+        { id: "1080p", role: "primary", width: 1920, height: 1080, captureRoot: primaryRoot },
+        { id: "720p", role: "responsive", width: 1280, height: 720, captureRoot: responsiveRoot },
+      ],
+      renditions: Object.fromEntries(
+        renditionRows.map(([member, width, height]) => [member, {
+          operation: "native-frame-set-encode",
+          width,
+          height,
+        }]),
+      ),
+    },
+  };
+  fs.writeFileSync(path.join(evidenceDirectory, "manifest.json"), stableJson(manifest));
+  const mediaReceiptPath = path.join(evidenceDirectory, "media-receipt.json");
+  const mediaReceipt = JSON.parse(fs.readFileSync(mediaReceiptPath, "utf8"));
+  mediaReceipt.qualification.profile.id = "responsive-long-form-web-delivery-v1";
+  const { qualificationRoot: ignoredQualificationRoot, ...qualificationBody } =
+    mediaReceipt.qualification;
+  mediaReceipt.qualification.qualificationRoot = sha256(
+    Buffer.from(stableJson(qualificationBody)),
+  );
+  mediaReceipt.qualificationRoot = mediaReceipt.qualification.qualificationRoot;
+  fs.writeFileSync(mediaReceiptPath, stableJson(mediaReceipt));
+  const source = {
+    schema: "buildchain.github-artifact-coordinate/v1",
+    repository: "kungfu-systems/kungfu",
+    sourceSha: "1".repeat(40),
+    runId: "99",
+    runAttempt: "1",
+    id: "101",
+    nodeId: "fixture",
+    name: `kungfu-linux-x64-${"1".repeat(40)}`,
+    digest: `sha256:${"5".repeat(64)}`,
+    sizeInBytes: 1024,
+    createdAt: "2026-08-01T00:00:00.000Z",
+    expiresAt: "2026-08-15T00:00:00.000Z",
+  };
+  fs.writeFileSync(
+    path.join(evidenceDirectory, "source-coordinate.json"),
+    stableJson(source),
+  );
+  const nonAuthorities = [
+    "first-party-identity",
+    "system-identity",
+    "kfd-compliance",
+    "product-system-metadata",
+    "package-metadata",
+    "registry-history",
+    "scan-output",
+    "standalone-generation",
+  ];
+  const captureBody = {
+    schema: "buildchain.declarative-demo-capture/v1",
+    status: "qualified",
+    demo: {
+      id: "agent-work-lab-autoplay",
+      title: "Kungfu Agent Work Lab autoplay",
+      claimBoundary: "This bounded demo grants no product or runtime authority.",
+    },
+    scenarioRoot: `sha256:${"6".repeat(64)}`,
+    artifact: {
+      platformId: "linux-x64",
+      binaryRoot: `sha256:${"7".repeat(64)}`,
+      metadataRoot: `sha256:${"8".repeat(64)}`,
+      metadataContract: "kungfu.declarative-demo-binary/v1",
+      runtimeDependencies: [],
+    },
+    networkIsolation: "job-container-none",
+    sourceCoordinateRoot: sha256(Buffer.from(stableJson(source))),
+    renditions: [],
+    authority: {
+      classification: "capture-source-evidence",
+      grants: [],
+      nonAuthorities,
+    },
+  };
+  const capture = {
+    ...captureBody,
+    root: sha256(Buffer.from(stableJson(captureBody))),
+  };
+  fs.writeFileSync(
+    path.join(evidenceDirectory, "capture-manifest.json"),
+    stableJson(capture),
+  );
+  fs.writeFileSync(
+    path.join(evidenceDirectory, "qualified-gate-receipt.json"),
+    stableJson({ schema: "buildchain.auditable-demo-gate/v1", status: "passed" }),
+  );
+  const passportBody = {
+    schema: "buildchain.declarative-demo-release-passport/v1",
+    status: "qualified",
+    product: { id: "kungfu", displayName: "Kungfu", binaryName: "kungfu" },
+    demo: capture.demo,
+    evidenceRoot: "",
+    scenarioRoot: capture.scenarioRoot,
+    capture: {
+      root: capture.root,
+      binary: capture.artifact,
+      networkIsolation: capture.networkIsolation,
+    },
+    source,
+    gate: { root: mediaReceipt.qualifiedGateRoot },
+    media: {
+      root: `sha256:${"9".repeat(64)}`,
+      profile: "responsive-long-form-web-delivery-v1",
+      qualificationRoot: mediaReceipt.qualificationRoot,
+    },
+    toolchain: {
+      buildchainSha: "2".repeat(40),
+      rendererImage: manifest.renderer.image,
+    },
+    authority: {
+      grants: [],
+      nonAuthorities,
+      authorizationSources: [
+        "exact-release-passport",
+        "core-policy",
+        "work-or-warrant",
+        "explicit-capability-grant",
+        "runtime-isolation",
+      ],
+      productSystemRole: "assembly-and-distribution-metadata-only",
+    },
+  };
+  const evidencePreimage = {
+    schema: "buildchain.declarative-demo-evidence-root/v1",
+    scenarioRoot: passportBody.scenarioRoot,
+    captureRoot: passportBody.capture.root,
+    gateRoot: passportBody.gate.root,
+    mediaRoot: passportBody.media.root,
+    demoId: passportBody.demo.id,
+  };
+  passportBody.evidenceRoot = sha256(Buffer.from(stableJson(evidencePreimage)));
+  const passport = {
+    ...passportBody,
+    passportRoot: sha256(Buffer.from(stableJson(passportBody))),
+  };
+  fs.writeFileSync(
+    path.join(evidenceDirectory, "release-passport.json"),
+    stableJson(passport),
+  );
+  const publicMembers = renditionRows.map(([member]) => member).sort().concat([
+    "gate-receipt.json",
+    "manifest.json",
+    "media-inspection.json",
+    "media-probe.json",
+    "media-receipt.json",
+    "renderer-checksums.sha256",
+  ]).sort();
+  fs.writeFileSync(
+    path.join(evidenceDirectory, "public-evidence.json"),
+    stableJson({
+      ...evidencePreimage,
+      evidenceRoot: passport.evidenceRoot,
+      passportRoot: passport.passportRoot,
+      source,
+      files: publicMembers.map((member) => {
+        const bytes = fs.readFileSync(path.join(evidenceDirectory, member));
+        return { path: member, root: sha256(bytes), bytes: bytes.length };
+      }),
+    }),
+  );
+  fs.writeFileSync(input.sourcePath, stableJson({
+    schema: "kungfu.site.auditable-demo-source/v3",
+    featuredDemoId: "agent-work-lab-autoplay",
+    homepageDemoId: "agent-work-lab-autoplay",
+    demos: [{
+      id: "agent-work-lab-autoplay",
+      commandLabel,
+      siteSlug: "agent-work-lab",
+      evidenceDirectory: "site/auditable-demo/media",
+    }],
+  }));
+  return { ...input, passport, evidenceDirectory };
+}
+
 test("imports exact media and a source-bound public projection", () => {
   const input = fixture();
   try {
@@ -627,6 +876,68 @@ test("rejects a scene without a bounded exact duration", () => {
     assert.throws(
       () => importAuditableDemo(input),
       /scene duration is invalid/u,
+    );
+  } finally {
+    fs.rmSync(input.repoRoot, { recursive: true, force: true });
+  }
+});
+
+test("imports a declarative long-form demo from two native capture roots", () => {
+  const input = declarativeFixture();
+  try {
+    const result = importAuditableDemo(input);
+    assert.equal(result.changed, true);
+    assert.equal(result.passport.root.value, input.passport.passportRoot);
+    const projection = JSON.parse(
+      fs.readFileSync(path.join(input.outputRoot, "auditable-demo.json"), "utf8"),
+    );
+    assert.equal(projection.demo.id, "agent-work-lab-autoplay");
+    assert.equal(projection.durationClass, "long-form");
+    assert.deepEqual(
+      projection.nativeCaptures.map(({ width, height }) => [width, height]),
+      [[1920, 1080], [1280, 720]],
+    );
+    assert.notEqual(
+      projection.nativeCaptures[0].captureRoot,
+      projection.nativeCaptures[1].captureRoot,
+    );
+    const transcript = fs.readFileSync(
+      path.join(input.outputRoot, result.publicPath, "complete-transcript.txt"),
+      "utf8",
+    );
+    assert.match(transcript, /\$ kungfu agent-work-lab autoplay/u);
+    const page = fs.readFileSync(
+      path.join(input.outputRoot, "how-tested/auditable-demo/index.html"),
+      "utf8",
+    );
+    assert.match(page, /Two independent native terminal captures/u);
+    assertMp4BeforeWebm(page);
+    assert.equal(importAuditableDemo({ ...input, checkOnly: true }).changed, false);
+  } finally {
+    fs.rmSync(input.repoRoot, { recursive: true, force: true });
+  }
+});
+
+test("rejects declarative evidence that collapses both native renditions", () => {
+  const input = declarativeFixture();
+  try {
+    const manifestPath = path.join(input.evidenceDirectory, "manifest.json");
+    const manifest = JSON.parse(fs.readFileSync(manifestPath, "utf8"));
+    manifest.derivation.sourceFrameSets[1].captureRoot =
+      manifest.derivation.sourceFrameSets[0].captureRoot;
+    manifest.inputs.renditions[1].terminalCapture.root =
+      manifest.inputs.renditions[0].terminalCapture.root;
+    fs.writeFileSync(manifestPath, stableJson(manifest));
+    const publicEvidencePath = path.join(input.evidenceDirectory, "public-evidence.json");
+    const publicEvidence = JSON.parse(fs.readFileSync(publicEvidencePath, "utf8"));
+    const manifestBytes = fs.readFileSync(manifestPath);
+    const manifestEntry = publicEvidence.files.find(({ path: member }) => member === "manifest.json");
+    manifestEntry.root = sha256(manifestBytes);
+    manifestEntry.bytes = manifestBytes.length;
+    fs.writeFileSync(publicEvidencePath, stableJson(publicEvidence));
+    assert.throws(
+      () => importAuditableDemo(input),
+      /distinct native capture roots/u,
     );
   } finally {
     fs.rmSync(input.repoRoot, { recursive: true, force: true });

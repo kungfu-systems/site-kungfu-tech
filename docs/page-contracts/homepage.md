@@ -55,12 +55,14 @@ the Agent Work Lab replay and weakened the primary demonstration path.
 transcript, duration, public evidence path, and responsive media bindings from
 the retained Passport and closed media bundle.
 
-The same qualified frame set supplies source-resolution 1080p MP4/WebM for
-desktop and exact 1280x720 MP4/WebM for constrained screens. `<source media>`
-selection is derived from Passport rendition roles, never inferred from file
-names. The 720p GIF remains the README compatibility rendition. Only the active
-slide may play; playback remains muted and user-controllable and falls back to
-the exact poster when blocked by the browser.
+The qualified evidence supplies native 1920x1080 MP4/WebM for desktop and
+independently captured native 1280x720 MP4/WebM for constrained screens.
+`<source media>` selection is derived from qualified rendition roles, never
+inferred from file names. The importer verifies that the two frame sets have
+different capture roots and that every video was encoded from its declared
+native frame set. The 720p GIF remains the README compatibility rendition.
+Only the active slide may play; playback remains muted and user-controllable
+and falls back to the exact poster when blocked by the browser.
 
 The importer accepts:
 
@@ -68,13 +70,18 @@ The importer accepts:
 - `kungfu.site.auditable-demo-source/v2` for a collection with one featured
   demo, an optional independent homepage demo, and one to eight exact
   `demo id -> Passport + media directory` bindings.
+- `kungfu.site.auditable-demo-source/v3` for Buildchain's declarative
+  standalone-binary evidence directories. Each entry binds one demo id,
+  display command, site slug, generic Release Passport, long-form duration
+  policy when declared, and two independent native capture roots.
 
 Each collection entry is independently verified and materialized under its
 Passport root. `/auditable-demo.json` remains the featured compatibility
 projection; `/auditable-demos.json` and
 `/auditable-demos/<demo-id>.json` expose the collection. Additional videos may
-appear on `/how-tested/auditable-demo/`, and `homepageDemoId` may select one for
-the reel without replacing the Agent Work Lab compatibility projection.
+appear on `/how-tested/auditable-demo/`, including the Project Tour at 0.8x,
+and `homepageDemoId` may select one for the reel without replacing the Agent
+Work Lab compatibility projection.
 
 Demo identity selects presentation only and grants no publication or runtime
 authority. Every projection retains the selected media profile, qualification
