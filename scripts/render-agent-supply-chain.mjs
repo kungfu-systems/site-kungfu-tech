@@ -47,6 +47,12 @@ const readerProgression = {
     statement: "Kungfu onboards the Agent you already use. The Agent experiences explicit capabilities, inspectable evidence, and durable Work—then starts expecting those qualities from every product.",
   },
   authorityBoundary: "Humans and Hubs set goals, permissions, budgets, policy, admission, and revocation. Agents propose and act inside those boundaries. Durable Work and evidence do not belong to the chat.",
+  activationBoundary: {
+    contract: "kungfu-agent-mediated-distribution-boundary/v1",
+    title: "Agent-first activation starts after a product is chosen. Agent-mediated distribution changes who can help choose it.",
+    activation: "A person or upstream channel discovers and selects the product. The Agent compresses the path from that choice to first value.",
+    distribution: "The product becomes legible enough for an Agent to evaluate and recommend. A human or Hub still authorizes adoption.",
+  },
   agentNativeLoop: {
     contract: "kungfu-agent-native-product-loop/v1",
     title: "Kungfu lights the first loop inside work.",
@@ -109,11 +115,12 @@ const readerProgression = {
         statement: "After one useful handoff, the Agent can recognize—and ask for—the same qualities in every product it encounters.",
       },
     ],
-    aha: "The Agent is no longer just using software. It is creating demand for a new kind of software.",
+    aha: "The Agent is no longer just an operator. It becomes a distribution channel.",
+    ahaSupport: "The product—not the Agent—becomes the system of record for the Work.",
   },
   marketFlywheel: {
     contract: "kungfu-agent-native-market-flywheel/v1",
-    title: "Kungfu can leave. The loop keeps running.",
+    title: "Kungfu can leave the center. The loop keeps running.",
     statement: "Kungfu does not need to own the loop. It only needs to make the first difference legible.",
     ignitionRole: "Kungfu solves one real problem and onboards the first Agent. It is the spark, not a permanent dependency.",
     steps: [
@@ -126,8 +133,8 @@ const readerProgression = {
       {
         id: "demand-signal",
         label: "Demand signal",
-        title: "Agents recommend what they can assess.",
-        statement: "Selection during real work turns one useful experience into visible demand for Agent-native products.",
+        title: "Agents recommend. Humans or Hubs authorize.",
+        statement: "A bounded recommendation during real work turns one useful experience into visible demand without granting the Agent adoption authority.",
       },
       {
         id: "builder-response",
@@ -149,6 +156,7 @@ const readerProgression = {
       },
     ],
     returnStatement: "Next product → next Agent → the same expectation compounds.",
+    selfStartBoundary: "Every product still needs a first introduction and explicit authorization. What compounds is what happens after the first useful, trusted use.",
   },
   conceptQuestions: [
     { layerId: "kfd-3", question: "How does an Agent know what a product can do?", linkLabel: "Explore KFD-3" },
@@ -260,6 +268,11 @@ const html = `<!doctype html>
     .section-heading { max-width: 900px; margin: 0 0 28px; }
     .section-heading h2 { margin: 0; font-size: clamp(28px, 4vw, 46px); }
     .section-heading p { max-width: 760px; margin: 14px 0 0; color: var(--muted); font-size: 18px; }
+    .distribution-contrast { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 18px; }
+    .contrast-card { padding: 22px 24px; border: 1px solid var(--line); background: var(--surface); }
+    .contrast-card.distribution { border-color: var(--accent); background: var(--panel); }
+    .contrast-card h3 { margin: 8px 0 10px; font-size: 22px; }
+    .contrast-card p:last-child { margin: 0; color: var(--muted); }
     .ignition-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
     .ignition-stage { position: relative; min-height: 230px; padding: 24px; border: 1px solid var(--line); background: var(--surface); }
     .ignition-stage:nth-child(2) { background: var(--panel); }
@@ -269,6 +282,7 @@ const html = `<!doctype html>
     .loop-boundary { margin: 18px 0 0; padding: 16px 18px; border-left: 3px solid var(--warn); background: var(--panel-soft); color: var(--muted); }
     .aha { margin-top: 24px; padding: clamp(30px, 5vw, 58px); background: var(--fg); color: var(--bg); }
     .aha p { max-width: 980px; margin: 0; font-size: clamp(31px, 5vw, 58px); font-weight: 750; line-height: 1.02; letter-spacing: -.03em; }
+    .aha .aha-support { max-width: 840px; margin-top: 24px; color: var(--bg); font-size: clamp(20px, 2.5vw, 30px); font-weight: 550; line-height: 1.15; opacity: .76; }
     .flywheel-shell { display: grid; grid-template-columns: minmax(190px, .45fr) minmax(0, 2fr); gap: 18px; align-items: stretch; }
     .ignition-source { position: relative; display: grid; align-content: center; padding: 26px; border: 1px dashed var(--accent); background: var(--panel-soft); }
     .ignition-source::after { content: "→"; position: absolute; top: 50%; right: -25px; z-index: 3; width: 32px; color: var(--accent); font-size: 26px; font-weight: 800; text-align: center; }
@@ -285,6 +299,7 @@ const html = `<!doctype html>
     .flywheel li:not(:last-child)::after { content: "→"; position: absolute; z-index: 2; top: 50%; right: -17px; width: 24px; color: var(--accent); font-size: 20px; font-weight: 800; text-align: center; }
     .loop-return { margin: 14px 0 0; padding-top: 14px; border-top: 1px solid var(--accent); color: var(--accent); font-size: 14px; font-weight: 750; text-align: right; }
     .flywheel-boundary { margin: 18px 0 0; padding: 16px 18px; border-left: 3px solid var(--warn); background: var(--panel-soft); color: var(--muted); }
+    .boundary-line { display: block; margin-top: 8px; }
     .concept-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
     .concept-card { padding: 26px; border: 1px solid var(--line); background: var(--surface); }
     .concept-card h3 { margin: 8px 0 12px; font-size: 25px; }
@@ -315,7 +330,7 @@ const html = `<!doctype html>
     .action { display: inline-flex; padding: 10px 14px; border: 1px solid var(--accent); color: var(--accent); text-decoration: none; font-weight: 700; }
     .action.primary { background: var(--accent); color: white; }
     @media (max-width: 980px) { .ignition-grid { grid-template-columns: repeat(3, 1fr); } .flywheel-shell { grid-template-columns: 1fr; } .ignition-source::after { content: "↓"; top: auto; right: 50%; bottom: -26px; transform: translateX(50%); } .flywheel { grid-template-columns: repeat(2, 1fr); } .flywheel li:not(:last-child)::after { display: none; } .layer-card { grid-template-columns: minmax(150px, .65fr) 1.5fr; } .layer-proof { grid-column: 1 / -1; } }
-    @media (max-width: 640px) { main { width: min(100% - 28px, 640px); } .hero { min-height: 0; padding: 50px 0 62px; } .chapter { padding: 56px 0; } .ignition-grid, .flywheel, .concept-grid, .layer-card, .maturity-grid, .decision-grid { grid-template-columns: 1fr; } .ignition-stage, .flywheel li { min-height: 0; } .ignition-stage:not(:last-child)::after { display: none; } .loop-panel { padding: 14px; } .loop-panel-header { display: grid; } .layer-proof { grid-column: auto; } }
+    @media (max-width: 640px) { main { width: min(100% - 28px, 640px); } .hero { min-height: 0; padding: 50px 0 62px; } .chapter { padding: 56px 0; } .distribution-contrast, .ignition-grid, .flywheel, .concept-grid, .layer-card, .maturity-grid, .decision-grid { grid-template-columns: 1fr; } .ignition-stage, .flywheel li { min-height: 0; } .ignition-stage:not(:last-child)::after { display: none; } .loop-panel { padding: 14px; } .loop-panel-header { display: grid; } .layer-proof { grid-column: auto; } }
   </style>
 </head>
 <body>
@@ -334,9 +349,21 @@ ${renderHeader(layout)}
         <h2 id="loop-heading">${escapeHtml(readerProgression.ignition.title)}</h2>
         <p>${escapeHtml(readerProgression.ignition.statement)}</p>
       </div>
+      <div class="distribution-contrast" aria-label="Activation and distribution boundary">
+        <article class="contrast-card">
+          <p class="eyebrow">Agent-assisted activation</p>
+          <h3>The product has already been chosen.</h3>
+          <p>${escapeHtml(readerProgression.activationBoundary.activation)}</p>
+        </article>
+        <article class="contrast-card distribution">
+          <p class="eyebrow">Agent-mediated distribution</p>
+          <h3>The Agent can help make the choice.</h3>
+          <p>${escapeHtml(readerProgression.activationBoundary.distribution)}</p>
+        </article>
+      </div>
       <div class="ignition-grid" aria-label="How Kungfu ignites the first Agent-native market loop">${ignitionStages}
       </div>
-      <aside class="aha" aria-label="The Agent-native market insight"><p>${escapeHtml(readerProgression.ignition.aha)}</p></aside>
+      <aside class="aha" aria-label="The Agent-native market insight"><p>${escapeHtml(readerProgression.ignition.aha)}</p><p class="aha-support">${escapeHtml(readerProgression.ignition.ahaSupport)}</p></aside>
       <p class="loop-boundary"><strong>Maturity and authority boundary.</strong> ${escapeHtml(readerProgression.agentNativeLoop.boundary)}</p>
     </section>
     <section class="chapter" aria-labelledby="flywheel-heading">
@@ -357,7 +384,7 @@ ${renderHeader(layout)}
           <p class="loop-return">↩ ${escapeHtml(readerProgression.marketFlywheel.returnStatement)}</p>
         </div>
       </div>
-      <p class="flywheel-boundary"><strong>Enabled, not claimed.</strong> ${escapeHtml(readerProgression.flywheelBoundary)}</p>
+      <p class="flywheel-boundary"><strong>Self-accelerating is not self-starting.</strong> ${escapeHtml(readerProgression.marketFlywheel.selfStartBoundary)}<span class="boundary-line"><strong>Enabled, not claimed.</strong> ${escapeHtml(readerProgression.flywheelBoundary)}</span></p>
     </section>
     <section class="chapter" aria-labelledby="questions-heading">
       <div class="section-heading">
@@ -425,9 +452,16 @@ ${readerProgression.premise.statement}
 
 ${readerProgression.ignition.title}
 
+Activation boundary: ${readerProgression.activationBoundary.title}
+
+- Agent-assisted activation: ${readerProgression.activationBoundary.activation}
+- Agent-mediated distribution: ${readerProgression.activationBoundary.distribution}
+
 ${readerProgression.ignition.stages.map((stage, index) => `${index + 1}. ${stage.label}: ${stage.title} ${stage.statement}`).join("\n")}
 
 Aha: ${readerProgression.ignition.aha}
+
+System of record: ${readerProgression.ignition.ahaSupport}
 
 ## The self-running market
 
@@ -440,6 +474,8 @@ Ignition role: ${readerProgression.marketFlywheel.ignitionRole}
 ${readerProgression.marketFlywheel.steps.map((step, index) => `${index + 1}. ${step.label}: ${step.title} ${step.statement}`).join("\n")}
 
 Return: ${readerProgression.marketFlywheel.returnStatement}
+
+Self-start boundary: ${readerProgression.marketFlywheel.selfStartBoundary}
 
 Boundary: ${readerProgression.flywheelBoundary}
 

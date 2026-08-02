@@ -787,14 +787,22 @@ if [ -d dist ]; then
   grep -q 'Kungfu does not compete for your Hub.' dist/agent-builders/index.html
   grep -q 'When Agents can recognize better software, they can create the market for it.' dist/agent-supply-chain/index.html
   grep -q 'One useful product can change what an Agent expects.' dist/agent-supply-chain/index.html
+  grep -q 'Agent-assisted activation' dist/agent-supply-chain/index.html
+  grep -q 'The product has already been chosen.' dist/agent-supply-chain/index.html
+  grep -q 'Agent-mediated distribution' dist/agent-supply-chain/index.html
+  grep -q 'The Agent can help make the choice.' dist/agent-supply-chain/index.html
   grep -q 'One useful product' dist/agent-supply-chain/index.html
   grep -q 'One onboarded Agent' dist/agent-supply-chain/index.html
   grep -q 'One new expectation' dist/agent-supply-chain/index.html
-  grep -q 'The Agent is no longer just using software. It is creating demand for a new kind of software.' dist/agent-supply-chain/index.html
-  grep -q 'Kungfu can leave. The loop keeps running.' dist/agent-supply-chain/index.html
+  grep -q 'The Agent is no longer just an operator. It becomes a distribution channel.' dist/agent-supply-chain/index.html
+  grep -q 'The product—not the Agent—becomes the system of record for the Work.' dist/agent-supply-chain/index.html
+  grep -q 'Kungfu can leave the center. The loop keeps running.' dist/agent-supply-chain/index.html
   grep -q 'Ignition only' dist/agent-supply-chain/index.html
   grep -q 'No Kungfu dependency inside the cycle' dist/agent-supply-chain/index.html
+  grep -q 'Agents recommend. Humans or Hubs authorize.' dist/agent-supply-chain/index.html
   grep -q 'Each new Agent-native product can restart the same loop without routing through Kungfu.' dist/agent-supply-chain/index.html
+  grep -q 'Self-accelerating is not self-starting.' dist/agent-supply-chain/index.html
+  grep -q 'Every product still needs a first introduction and explicit authorization.' dist/agent-supply-chain/index.html
   grep -q 'Once you see the loop, the infrastructure stops looking abstract.' dist/agent-supply-chain/index.html
   grep -q 'How does an Agent know what a product can do?' dist/agent-supply-chain/index.html
   grep -q 'How does it assess what the product claims?' dist/agent-supply-chain/index.html
@@ -807,12 +815,14 @@ if [ -d dist ]; then
   grep -q 'Enabled, not claimed.' dist/agent-supply-chain/index.html
   grep -q '04 · The evidence behind the thesis' dist/agent-supply-chain/index.html
   grep -q 'Five responsibilities. Independent owners.' dist/agent-supply-chain/index.html
-  assert_before dist/agent-supply-chain/index.html 'One useful product can change what an Agent expects.' 'The Agent is no longer just using software. It is creating demand for a new kind of software.'
-  assert_before dist/agent-supply-chain/index.html 'The Agent is no longer just using software. It is creating demand for a new kind of software.' 'Kungfu can leave. The loop keeps running.'
-  assert_before dist/agent-supply-chain/index.html 'Kungfu can leave. The loop keeps running.' 'Once you see the loop, the infrastructure stops looking abstract.'
+  assert_before dist/agent-supply-chain/index.html 'One useful product can change what an Agent expects.' 'Agent-assisted activation'
+  assert_before dist/agent-supply-chain/index.html 'Agent-mediated distribution' 'The Agent is no longer just an operator. It becomes a distribution channel.'
+  assert_before dist/agent-supply-chain/index.html 'The Agent is no longer just an operator. It becomes a distribution channel.' 'Kungfu can leave the center. The loop keeps running.'
+  assert_before dist/agent-supply-chain/index.html 'Kungfu can leave the center. The loop keeps running.' 'Once you see the loop, the infrastructure stops looking abstract.'
   assert_before dist/agent-supply-chain/index.html 'Once you see the loop, the infrastructure stops looking abstract.' 'Five responsibilities. Independent owners.'
   grep -q 'kungfu-agent-supply-chain-public-narrative/v1' dist/agent-supply-chain.json
   grep -q 'kungfu-agent-supply-chain-reader-progression/v1' dist/agent-supply-chain.json
+  grep -q 'kungfu-agent-mediated-distribution-boundary/v1' dist/agent-supply-chain.json
   grep -q 'kungfu-agent-native-product-loop/v1' dist/agent-supply-chain.json
   grep -q 'kungfu-agent-native-market-ignition/v1' dist/agent-supply-chain.json
   grep -q 'kungfu-agent-native-market-flywheel/v1' dist/agent-supply-chain.json
@@ -849,7 +859,10 @@ if [ -d dist ]; then
   grep -q 'two public strategic axes' dist/llms.txt
   grep -q 'When Agents can recognize better software, they can create the market for it.' dist/llms.txt
   grep -q 'How Kungfu ignites the first loop' dist/llms.txt
+  grep -q 'Agent-first activation starts after a product is chosen.' dist/llms.txt
+  grep -q 'The product—not the Agent—becomes the system of record for the Work.' dist/llms.txt
   grep -q 'The self-running market' dist/llms.txt
+  grep -q 'Every product still needs a first introduction and explicit authorization.' dist/llms.txt
   grep -q 'The infrastructure questions' dist/llms.txt
   grep -q 'KFD-3 \[proved-now\]' dist/llms.txt
   grep -q 'KFD-2 \[proved-now\]' dist/llms.txt
