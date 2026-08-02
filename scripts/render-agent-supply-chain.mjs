@@ -261,7 +261,7 @@ const html = `<!doctype html>
     main { width: min(1180px, calc(100% - 40px)); margin: 0 auto; padding: 34px 0 64px; }
     .hero { display: grid; gap: 20px; min-height: 540px; align-content: center; padding: 64px 0 76px; }
     .eyebrow, .loop-order, .layer-order { margin: 0; color: var(--accent); font-size: 13px; font-weight: 700; text-transform: uppercase; }
-    h1 { max-width: 980px; margin: 0; font-size: clamp(48px, 8vw, 92px); line-height: .96; }
+    h1 { max-width: 1060px; margin: 0; font-size: clamp(48px, 8vw, 92px); line-height: .96; }
     .lead { max-width: 900px; margin: 0; color: var(--muted); font-size: 20px; }
     .claim-boundary { margin-top: 24px; padding: 18px; border-left: 4px solid var(--accent); background: var(--panel-soft); color: var(--fg); }
     .chapter { padding: 74px 0; border-top: 1px solid var(--line); }

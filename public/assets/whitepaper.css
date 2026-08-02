@@ -394,7 +394,7 @@
 .paper-prose code,
 .paper-source-facts code,
 .paper-listing-facts code {
-  font-family: "SFMono-Regular", Consolas, monospace;
+  font-family: var(--font-mono);
   font-size: 0.86em;
   overflow-wrap: anywhere;
 }

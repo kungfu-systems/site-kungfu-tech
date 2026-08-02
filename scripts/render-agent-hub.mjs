@@ -76,7 +76,7 @@ const html = `<!doctype html>
     h1 { max-width: 920px; margin: 0; font-size: clamp(46px, 8vw, 86px); line-height: .96; }
     .lead { max-width: 820px; margin: 0; color: var(--muted); font-size: 20px; }
     .command-block { margin: 8px 0 0; }
-    .command { overflow-x: auto; padding: 20px; border: 1px solid var(--line); border-left: 5px solid var(--accent); background: var(--panel); color: var(--fg); font: 700 15px/1.6 "SFMono-Regular", Consolas, monospace; white-space: pre-wrap; overflow-wrap: anywhere; }
+    .command { overflow-x: auto; padding: 20px; border: 1px solid var(--line); border-left: 5px solid var(--accent); background: var(--panel); color: var(--fg); font: 700 15px/1.6 var(--font-mono); white-space: pre-wrap; overflow-wrap: anywhere; }
     .actions { display: flex; flex-wrap: wrap; gap: 12px; }
     .actions a { padding: 10px 14px; border: 1px solid var(--line); font-weight: 700; text-decoration: none; }
     .actions a:first-child { border-color: var(--accent); background: var(--accent); color: white; }
