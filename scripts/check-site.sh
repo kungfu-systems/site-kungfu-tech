@@ -785,29 +785,40 @@ if [ -d dist ]; then
   grep -q 'How continuity was tested' dist/how-tested/continuity/index.html
   grep -q 'Watch the artifact explain itself.' dist/how-tested/auditable-demo/index.html
   grep -q 'Kungfu does not compete for your Hub.' dist/agent-builders/index.html
-  grep -q 'The next software user is an Agent. Your Work should survive every Agent.' dist/agent-supply-chain/index.html
-  grep -q 'Agent-native means the product can teach, advise, act, and hand off.' dist/agent-supply-chain/index.html
-  grep -q 'Existing Agent' dist/agent-supply-chain/index.html
-  grep -q 'Versioned Brief' dist/agent-supply-chain/index.html
-  grep -q 'Work advisory' dist/agent-supply-chain/index.html
-  grep -q 'Preview + confirm' dist/agent-supply-chain/index.html
-  grep -q 'Change the Agent, not the Work.' dist/agent-supply-chain/index.html
-  grep -q 'Human sets boundary' dist/agent-supply-chain/index.html
-  grep -q 'Agent-native software can earn selection while work is underway.' dist/agent-supply-chain/index.html
-  grep -q 'Advisable' dist/agent-supply-chain/index.html
-  grep -q 'Useful Agent-first software can create its own demand signal.' dist/agent-supply-chain/index.html
+  grep -q 'When Agents can recognize better software, they can create the market for it.' dist/agent-supply-chain/index.html
+  grep -q 'One useful product can change what an Agent expects.' dist/agent-supply-chain/index.html
+  grep -q 'One useful product' dist/agent-supply-chain/index.html
+  grep -q 'One onboarded Agent' dist/agent-supply-chain/index.html
+  grep -q 'One new expectation' dist/agent-supply-chain/index.html
+  grep -q 'The Agent is no longer just using software. It is creating demand for a new kind of software.' dist/agent-supply-chain/index.html
+  grep -q 'Kungfu can leave. The loop keeps running.' dist/agent-supply-chain/index.html
+  grep -q 'Ignition only' dist/agent-supply-chain/index.html
+  grep -q 'No Kungfu dependency inside the cycle' dist/agent-supply-chain/index.html
+  grep -q 'Each new Agent-native product can restart the same loop without routing through Kungfu.' dist/agent-supply-chain/index.html
+  grep -q 'Once you see the loop, the infrastructure stops looking abstract.' dist/agent-supply-chain/index.html
+  grep -q 'How does an Agent know what a product can do?' dist/agent-supply-chain/index.html
+  grep -q 'How does it assess what the product claims?' dist/agent-supply-chain/index.html
+  grep -q 'How do builders ship those qualities in an exact release?' dist/agent-supply-chain/index.html
+  grep -q 'How can bounded Work move across independently governed Agent Hubs?' dist/agent-supply-chain/index.html
+  grep -q 'Explore KFD-3' dist/agent-supply-chain/index.html
+  grep -q 'Explore KFD-2' dist/agent-supply-chain/index.html
+  grep -q 'Explore Buildchain' dist/agent-supply-chain/index.html
+  grep -q 'Explore Agent Hub' dist/agent-supply-chain/index.html
   grep -q 'Enabled, not claimed.' dist/agent-supply-chain/index.html
-  grep -q '03 · The trustable mechanism' dist/agent-supply-chain/index.html
+  grep -q '04 · The evidence behind the thesis' dist/agent-supply-chain/index.html
   grep -q 'Five responsibilities. Independent owners.' dist/agent-supply-chain/index.html
-  assert_before dist/agent-supply-chain/index.html 'Agent-native means the product can teach, advise, act, and hand off.' 'Agent-native software can earn selection while work is underway.'
-  assert_before dist/agent-supply-chain/index.html 'Agent-native software can earn selection while work is underway.' 'Useful Agent-first software can create its own demand signal.'
-  assert_before dist/agent-supply-chain/index.html 'Useful Agent-first software can create its own demand signal.' 'Five responsibilities. Independent owners.'
-  assert_before dist/agent-supply-chain/index.html 'Agent-native software can earn selection while work is underway.' 'Five responsibilities. Independent owners.'
+  assert_before dist/agent-supply-chain/index.html 'One useful product can change what an Agent expects.' 'The Agent is no longer just using software. It is creating demand for a new kind of software.'
+  assert_before dist/agent-supply-chain/index.html 'The Agent is no longer just using software. It is creating demand for a new kind of software.' 'Kungfu can leave. The loop keeps running.'
+  assert_before dist/agent-supply-chain/index.html 'Kungfu can leave. The loop keeps running.' 'Once you see the loop, the infrastructure stops looking abstract.'
+  assert_before dist/agent-supply-chain/index.html 'Once you see the loop, the infrastructure stops looking abstract.' 'Five responsibilities. Independent owners.'
   grep -q 'kungfu-agent-supply-chain-public-narrative/v1' dist/agent-supply-chain.json
   grep -q 'kungfu-agent-supply-chain-reader-progression/v1' dist/agent-supply-chain.json
   grep -q 'kungfu-agent-native-product-loop/v1' dist/agent-supply-chain.json
+  grep -q 'kungfu-agent-native-market-ignition/v1' dist/agent-supply-chain.json
+  grep -q 'kungfu-agent-native-market-flywheel/v1' dist/agent-supply-chain.json
   grep -q '"id": "work-advisory"' dist/agent-supply-chain.json
-  grep -q "\"title\": \"The user's existing Agent becomes the first product guide.\"" dist/agent-supply-chain.json
+  grep -q '"id": "builder-response"' dist/agent-supply-chain.json
+  grep -q '"id": "buildchain-supply"' dist/agent-supply-chain.json
   if grep -q 'Kungfu manages the Agent\|When Kungfu launches an Agent' dist/agent-supply-chain/index.html dist/agent-supply-chain.json; then
     echo "error: Agent Supply Chain still contains the retired managed-Agent bootstrap" >&2
     exit 1
@@ -836,9 +847,10 @@ if [ -d dist ]; then
     exit 1
   fi
   grep -q 'two public strategic axes' dist/llms.txt
-  grep -q 'The next software user is an Agent.' dist/llms.txt
-  grep -q 'How the first Agent understands the stack' dist/llms.txt
-  grep -q 'compact, version-matched Brief' dist/llms.txt
+  grep -q 'When Agents can recognize better software, they can create the market for it.' dist/llms.txt
+  grep -q 'How Kungfu ignites the first loop' dist/llms.txt
+  grep -q 'The self-running market' dist/llms.txt
+  grep -q 'The infrastructure questions' dist/llms.txt
   grep -q 'KFD-3 \[proved-now\]' dist/llms.txt
   grep -q 'KFD-2 \[proved-now\]' dist/llms.txt
   grep -q 'npm:@kungfu-tech/kfd@1.0.0-alpha.41' dist/llms.txt
