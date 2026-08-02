@@ -299,7 +299,7 @@ grep -q 'Never Guess. Facts Unfold.' public/index.html
 grep -q 'href="/why-kungfu/"' public/index.html
 grep -q 'Keep the same Work across Codex, Claude, OpenCode, or your own execution surface.' public/index.html
 grep -q 'class="primary-builder-action" href="/agent-builders/">For Agent Builders</a>' public/index.html
-grep -q 'href="/agent-supply-chain/">Explore the Agent Supply Chain</a>' public/index.html
+grep -q 'href="/agent-supply-chain/#agent-native-loop">See the Agent-native loop</a>' public/index.html
 grep -q 'href="/agent-hub/">Run the installed Agent Hub proof</a>' public/index.html
 grep -q 'href="/agent-hub/">Verify Kungfu' public/index.html
 grep -q 'KFD-3</span><i aria-hidden="true">→</i>' public/index.html
@@ -838,7 +838,7 @@ if [ -d dist ]; then
   grep -q 'two public strategic axes' dist/llms.txt
   grep -q 'The next software user is an Agent.' dist/llms.txt
   grep -q 'How the first Agent understands the stack' dist/llms.txt
-  grep -q 'compact, versioned Skill envelope' dist/llms.txt
+  grep -q 'compact, version-matched Brief' dist/llms.txt
   grep -q 'KFD-3 \[proved-now\]' dist/llms.txt
   grep -q 'KFD-2 \[proved-now\]' dist/llms.txt
   grep -q 'npm:@kungfu-tech/kfd@1.0.0-alpha.41' dist/llms.txt
