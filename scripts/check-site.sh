@@ -795,8 +795,9 @@ if [ -d dist ]; then
   grep -q 'One onboarded Agent' dist/agent-supply-chain/index.html
   grep -q 'One new expectation' dist/agent-supply-chain/index.html
   grep -q 'The Agent is no longer just an operator. It becomes a distribution channel.' dist/agent-supply-chain/index.html
-  grep -q 'The product—not the Agent—becomes the system of record for the Work.' dist/agent-supply-chain/index.html
-  grep -q 'Kungfu can leave the center. The loop keeps running.' dist/agent-supply-chain/index.html
+  grep -q 'Because the Work stays with the product—not the chat—every new Agent can inspect it, continue it, and recognize the difference.' dist/agent-supply-chain/index.html
+  grep -q 'Kungfu can leave the center. The loop keeps compounding.' dist/agent-supply-chain/index.html
+  grep -q '02 · The self-accelerating market' dist/agent-supply-chain/index.html
   grep -q 'Ignition only' dist/agent-supply-chain/index.html
   grep -q 'No Kungfu dependency inside the cycle' dist/agent-supply-chain/index.html
   grep -q 'Agents recommend. Humans or Hubs authorize.' dist/agent-supply-chain/index.html
@@ -815,10 +816,10 @@ if [ -d dist ]; then
   grep -q 'Enabled, not claimed.' dist/agent-supply-chain/index.html
   grep -q '04 · The evidence behind the thesis' dist/agent-supply-chain/index.html
   grep -q 'Five responsibilities. Independent owners.' dist/agent-supply-chain/index.html
-  assert_before dist/agent-supply-chain/index.html 'One useful product can change what an Agent expects.' 'Agent-assisted activation'
+  assert_before dist/agent-supply-chain/index.html 'Change what good software feels like.' 'Agent-assisted activation'
   assert_before dist/agent-supply-chain/index.html 'Agent-mediated distribution' 'The Agent is no longer just an operator. It becomes a distribution channel.'
-  assert_before dist/agent-supply-chain/index.html 'The Agent is no longer just an operator. It becomes a distribution channel.' 'Kungfu can leave the center. The loop keeps running.'
-  assert_before dist/agent-supply-chain/index.html 'Kungfu can leave the center. The loop keeps running.' 'Once you see the loop, the infrastructure stops looking abstract.'
+  assert_before dist/agent-supply-chain/index.html 'The Agent is no longer just an operator. It becomes a distribution channel.' 'Kungfu can leave the center. The loop keeps compounding.'
+  assert_before dist/agent-supply-chain/index.html 'Kungfu can leave the center. The loop keeps compounding.' 'Once you see the loop, the infrastructure stops looking abstract.'
   assert_before dist/agent-supply-chain/index.html 'Once you see the loop, the infrastructure stops looking abstract.' 'Five responsibilities. Independent owners.'
   grep -q 'kungfu-agent-supply-chain-public-narrative/v1' dist/agent-supply-chain.json
   grep -q 'kungfu-agent-supply-chain-reader-progression/v1' dist/agent-supply-chain.json
@@ -860,9 +861,13 @@ if [ -d dist ]; then
   grep -q 'When Agents can recognize better software, they can create the market for it.' dist/llms.txt
   grep -q 'How Kungfu ignites the first loop' dist/llms.txt
   grep -q 'Agent-first activation starts after a product is chosen.' dist/llms.txt
-  grep -q 'The product—not the Agent—becomes the system of record for the Work.' dist/llms.txt
-  grep -q 'The self-running market' dist/llms.txt
+  grep -q 'Because the Work stays with the product—not the chat—every new Agent can inspect it, continue it, and recognize the difference.' dist/llms.txt
+  grep -q 'The self-accelerating market' dist/llms.txt
   grep -q 'Every product still needs a first introduction and explicit authorization.' dist/llms.txt
+  if grep -q 'self-running market' dist/agent-supply-chain/index.html dist/llms.txt; then
+    echo "error: Agent Supply Chain still uses the overstated self-running market label" >&2
+    exit 1
+  fi
   grep -q 'The infrastructure questions' dist/llms.txt
   grep -q 'KFD-3 \[proved-now\]' dist/llms.txt
   grep -q 'KFD-2 \[proved-now\]' dist/llms.txt

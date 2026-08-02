@@ -116,11 +116,11 @@ const readerProgression = {
       },
     ],
     aha: "The Agent is no longer just an operator. It becomes a distribution channel.",
-    ahaSupport: "The product—not the Agent—becomes the system of record for the Work.",
+    ahaSupport: "Because the Work stays with the product—not the chat—every new Agent can inspect it, continue it, and recognize the difference.",
   },
   marketFlywheel: {
     contract: "kungfu-agent-native-market-flywheel/v1",
-    title: "Kungfu can leave the center. The loop keeps running.",
+    title: "Kungfu can leave the center. The loop keeps compounding.",
     statement: "Kungfu does not need to own the loop. It only needs to make the first difference legible.",
     ignitionRole: "Kungfu solves one real problem and onboards the first Agent. It is the spark, not a permanent dependency.",
     steps: [
@@ -268,7 +268,7 @@ const html = `<!doctype html>
     .section-heading { max-width: 900px; margin: 0 0 28px; }
     .section-heading h2 { margin: 0; font-size: clamp(28px, 4vw, 46px); }
     .section-heading p { max-width: 760px; margin: 14px 0 0; color: var(--muted); font-size: 18px; }
-    .distribution-contrast { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 18px; }
+    .distribution-contrast { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 18px; }
     .contrast-card { padding: 22px 24px; border: 1px solid var(--line); background: var(--surface); }
     .contrast-card.distribution { border-color: var(--accent); background: var(--panel); }
     .contrast-card h3 { margin: 8px 0 10px; font-size: 22px; }
@@ -349,6 +349,8 @@ ${renderHeader(layout)}
         <h2 id="loop-heading">${escapeHtml(readerProgression.ignition.title)}</h2>
         <p>${escapeHtml(readerProgression.ignition.statement)}</p>
       </div>
+      <div class="ignition-grid" aria-label="How Kungfu ignites the first Agent-native market loop">${ignitionStages}
+      </div>
       <div class="distribution-contrast" aria-label="Activation and distribution boundary">
         <article class="contrast-card">
           <p class="eyebrow">Agent-assisted activation</p>
@@ -361,14 +363,12 @@ ${renderHeader(layout)}
           <p>${escapeHtml(readerProgression.activationBoundary.distribution)}</p>
         </article>
       </div>
-      <div class="ignition-grid" aria-label="How Kungfu ignites the first Agent-native market loop">${ignitionStages}
-      </div>
       <aside class="aha" aria-label="The Agent-native market insight"><p>${escapeHtml(readerProgression.ignition.aha)}</p><p class="aha-support">${escapeHtml(readerProgression.ignition.ahaSupport)}</p></aside>
       <p class="loop-boundary"><strong>Maturity and authority boundary.</strong> ${escapeHtml(readerProgression.agentNativeLoop.boundary)}</p>
     </section>
     <section class="chapter" aria-labelledby="flywheel-heading">
       <div class="section-heading">
-        <p class="eyebrow">02 · The self-running market</p>
+        <p class="eyebrow">02 · The self-accelerating market</p>
         <h2 id="flywheel-heading">${escapeHtml(readerProgression.marketFlywheel.title)}</h2>
         <p>${escapeHtml(readerProgression.marketFlywheel.statement)}</p>
       </div>
@@ -380,7 +380,7 @@ ${renderHeader(layout)}
         </aside>
         <div class="loop-panel">
           <div class="loop-panel-header"><strong>The loop after Kungfu</strong><span>No Kungfu dependency inside the cycle</span></div>
-          <ol class="flywheel" aria-label="Self-running Agent-native market flywheel">${flywheelNodes}</ol>
+          <ol class="flywheel" aria-label="Self-accelerating Agent-native market flywheel">${flywheelNodes}</ol>
           <p class="loop-return">↩ ${escapeHtml(readerProgression.marketFlywheel.returnStatement)}</p>
         </div>
       </div>
@@ -390,7 +390,7 @@ ${renderHeader(layout)}
       <div class="section-heading">
         <p class="eyebrow">03 · The inevitable questions</p>
         <h2 id="questions-heading">Once you see the loop, the infrastructure stops looking abstract.</h2>
-        <p>The names arrive after the need. Each part of the stack answers a question the self-running market makes unavoidable.</p>
+        <p>The names arrive after the need. Each part of the stack answers a question the self-accelerating market makes unavoidable.</p>
       </div>
       <div class="concept-grid">${conceptCards}
       </div>
@@ -452,18 +452,18 @@ ${readerProgression.premise.statement}
 
 ${readerProgression.ignition.title}
 
+${readerProgression.ignition.stages.map((stage, index) => `${index + 1}. ${stage.label}: ${stage.title} ${stage.statement}`).join("\n")}
+
 Activation boundary: ${readerProgression.activationBoundary.title}
 
 - Agent-assisted activation: ${readerProgression.activationBoundary.activation}
 - Agent-mediated distribution: ${readerProgression.activationBoundary.distribution}
 
-${readerProgression.ignition.stages.map((stage, index) => `${index + 1}. ${stage.label}: ${stage.title} ${stage.statement}`).join("\n")}
-
 Aha: ${readerProgression.ignition.aha}
 
-System of record: ${readerProgression.ignition.ahaSupport}
+Continuity basis: ${readerProgression.ignition.ahaSupport}
 
-## The self-running market
+## The self-accelerating market
 
 ${readerProgression.marketFlywheel.title}
 
