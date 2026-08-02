@@ -221,7 +221,7 @@ if (html.includes('class="hero-copy"')
 const heroActions = html.match(/<div class="hero-actions"[\s\S]*?<\/div>/u)?.[0] || "";
 if (!heroActions
   || heroActions.includes('href="/install/"')
-  || !heroActions.includes('href="/agent-supply-chain/"')
+  || !heroActions.includes('href="/agent-supply-chain/#agent-native-loop"')
   || !heroActions.includes('href="/agent-builders/"')
   || html.includes("Copilot")
   || /\.hero-actions a:first-child\s*\{/u.test(html)) {
@@ -736,6 +736,8 @@ if [ -d dist ]; then
   node scripts/fingerprint-site-assets.mjs --root dist --check
   node scripts/check-copyable-code.mjs --root dist
   test -f dist/index.html
+  test -s dist/favicon.ico
+  node -e 'const b = require("node:fs").readFileSync("dist/favicon.ico"); if (b.length < 6 || b.readUInt16LE(0) !== 0 || b.readUInt16LE(2) !== 1 || b.readUInt16LE(4) < 1) process.exit(1)'
   test -f dist/how-tested/continuity/index.html
   test -f dist/how-tested/auditable-demo/index.html
   test -f dist/auditable-demo.json
@@ -783,28 +785,33 @@ if [ -d dist ]; then
   grep -q 'How continuity was tested' dist/how-tested/continuity/index.html
   grep -q 'Watch the artifact explain itself.' dist/how-tested/auditable-demo/index.html
   grep -q 'Kungfu does not compete for your Hub.' dist/agent-builders/index.html
-  grep -q 'The next software user is an Agent.' dist/agent-supply-chain/index.html
-  grep -q 'Software distribution is becoming Agent-mediated.' dist/agent-supply-chain/index.html
+  grep -q 'The next software user is an Agent. Your Work should survive every Agent.' dist/agent-supply-chain/index.html
+  grep -q 'Agent-native means the product can teach, advise, act, and hand off.' dist/agent-supply-chain/index.html
+  grep -q 'Existing Agent' dist/agent-supply-chain/index.html
+  grep -q 'Versioned Brief' dist/agent-supply-chain/index.html
+  grep -q 'Work advisory' dist/agent-supply-chain/index.html
+  grep -q 'Preview + confirm' dist/agent-supply-chain/index.html
+  grep -q 'Change the Agent, not the Work.' dist/agent-supply-chain/index.html
   grep -q 'Human sets boundary' dist/agent-supply-chain/index.html
-  grep -q 'Agent-first software can earn distribution through use.' dist/agent-supply-chain/index.html
-  grep -q '03 · The bootstrap' dist/agent-supply-chain/index.html
-  grep -q 'Kungfu gives the first Agent a way to understand the stack.' dist/agent-supply-chain/index.html
-  grep -q 'The envelope points. The Agent inspects.' dist/agent-supply-chain/index.html
-  grep -q 'One seed, not two miracles.' dist/agent-supply-chain/index.html
-  grep -q 'The envelope does not create demand or assume prior KFD knowledge' dist/agent-supply-chain/index.html
+  grep -q 'Agent-native software can earn selection while work is underway.' dist/agent-supply-chain/index.html
+  grep -q 'Advisable' dist/agent-supply-chain/index.html
   grep -q 'Useful Agent-first software can create its own demand signal.' dist/agent-supply-chain/index.html
   grep -q 'Enabled, not claimed.' dist/agent-supply-chain/index.html
-  grep -q '05 · The complete mechanism' dist/agent-supply-chain/index.html
+  grep -q '03 · The trustable mechanism' dist/agent-supply-chain/index.html
   grep -q 'Five responsibilities. Independent owners.' dist/agent-supply-chain/index.html
-  assert_before dist/agent-supply-chain/index.html 'Agent-first software can earn distribution through use.' 'Kungfu gives the first Agent a way to understand the stack.'
-  assert_before dist/agent-supply-chain/index.html 'Kungfu gives the first Agent a way to understand the stack.' 'Useful Agent-first software can create its own demand signal.'
+  assert_before dist/agent-supply-chain/index.html 'Agent-native means the product can teach, advise, act, and hand off.' 'Agent-native software can earn selection while work is underway.'
+  assert_before dist/agent-supply-chain/index.html 'Agent-native software can earn selection while work is underway.' 'Useful Agent-first software can create its own demand signal.'
   assert_before dist/agent-supply-chain/index.html 'Useful Agent-first software can create its own demand signal.' 'Five responsibilities. Independent owners.'
-  assert_before dist/agent-supply-chain/index.html 'Software distribution is becoming Agent-mediated.' 'Five responsibilities. Independent owners.'
-  assert_before dist/agent-supply-chain/index.html 'Agent-first software can earn distribution through use.' 'Five responsibilities. Independent owners.'
+  assert_before dist/agent-supply-chain/index.html 'Agent-native software can earn selection while work is underway.' 'Five responsibilities. Independent owners.'
   grep -q 'kungfu-agent-supply-chain-public-narrative/v1' dist/agent-supply-chain.json
   grep -q 'kungfu-agent-supply-chain-reader-progression/v1' dist/agent-supply-chain.json
-  grep -q '"title": "Kungfu gives the first Agent a way to understand the stack."' dist/agent-supply-chain.json
-  grep -q '"discovery": "When Kungfu launches an Agent' dist/agent-supply-chain.json
+  grep -q 'kungfu-agent-native-product-loop/v1' dist/agent-supply-chain.json
+  grep -q '"id": "work-advisory"' dist/agent-supply-chain.json
+  grep -q "\"title\": \"The user's existing Agent becomes the first product guide.\"" dist/agent-supply-chain.json
+  if grep -q 'Kungfu manages the Agent\|When Kungfu launches an Agent' dist/agent-supply-chain/index.html dist/agent-supply-chain.json; then
+    echo "error: Agent Supply Chain still contains the retired managed-Agent bootstrap" >&2
+    exit 1
+  fi
   grep -q '"label": "KFD-3"' dist/agent-supply-chain.json
   grep -q '"label": "KFD-2"' dist/agent-supply-chain.json
   grep -q '30-day assessment' dist/agent-supply-chain/index.html
