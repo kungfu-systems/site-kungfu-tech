@@ -16,12 +16,14 @@ The route deliberately connects the homepage's human handoff pain to an
 Agent-native market mechanism before revealing the complete five-layer
 architecture. Its first movement shows how Kungfu earns one useful adoption,
 onboards the Agent the user already has, and changes what that Agent expects
-from every product that follows. It distinguishes Agent-assisted activation,
-where a product has already been chosen, from Agent-mediated distribution,
-where an assessable product lets the Agent help make the choice. The Agent may
-recommend; a human or Hub still authorizes adoption, and the product—not the
-Agent—remains the system of record for the Work. Its central visual must then
-distinguish Kungfu as an ignition source from the self-accelerating loop:
+from every product that follows. Only after that concrete sequence is legible
+does it name the distinction between Agent-assisted activation, where a product
+has already been chosen, and Agent-mediated distribution, where an assessable
+product lets the Agent help make the choice. The Agent may recommend; a human
+or Hub still authorizes adoption. Product-owned Work lets each new Agent inspect
+and continue the same facts instead of inheriting a chat. Its central visual
+must then distinguish Kungfu as an ignition source from the self-accelerating
+loop:
 builders receive the resulting demand signal, Buildchain helps more products
 ship KFD-3 declarations and KFD-2 evidence, and those products reach more Agents
 without requiring Kungfu at the center. Only after that causal thesis is
