@@ -24,6 +24,7 @@ node scripts/render-agent-hub.mjs
 node scripts/fingerprint-site-assets.mjs --root dist
 
 test -f dist/index.html
+test -s dist/favicon.ico
 test -f dist/404.html
 test -f dist/how-tested/continuity/index.html
 test -f dist/how-tested/auditable-demo/index.html
