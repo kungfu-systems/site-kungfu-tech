@@ -451,22 +451,46 @@ function renderEvidence(passport, publicPath, scene, roles) {
       <!-- auditable-demo-evidence:end -->`;
 }
 
-function renderHomepageDemo(publicPath, scene, roles) {
+function homepagePresentation(demo) {
+  if (demo.id === "project-work-recovery") {
+    return {
+      articleLabel: "Project Work recovery demonstration",
+      title: "The Work survives",
+      status: "Qualified project recovery",
+      videoLabel: "Exact installed Kungfu Project Work recovery demonstration",
+      headline: "One Work survives failed attempts and a fresh Agent.",
+      note: "A bounded Mock Agent replay—not hosted-provider or cross-machine proof.",
+      evidenceHref: "/how-tested/auditable-demo/#demo-project-work-recovery-heading",
+    };
+  }
+  return {
+    articleLabel: "Agent Work Lab demonstration",
+    title: "Agent Work Lab",
+    status: "Qualified replay",
+    videoLabel: "Exact installed Kungfu Agent Work Lab autoplay demonstration",
+    headline: "One Work. Two fresh Agent processes.",
+    note: "A bounded offline replay—not provider or durability proof.",
+    evidenceHref: "/how-tested/auditable-demo/",
+  };
+}
+
+function renderHomepageDemo(demo, publicPath, scene, roles) {
   const duration = formatDuration(scene.durationMs);
+  const presentation = homepagePresentation(demo);
   return `      <!-- auditable-demo-home:start -->
-      <article class="demo-carousel-slide" aria-label="Agent Work Lab demonstration" data-demo-slide data-demo-title="Agent Work Lab">
+      <article class="demo-carousel-slide" aria-label="${escapeAttr(presentation.articleLabel)}" data-demo-slide data-demo-title="${escapeAttr(presentation.title)}">
         <figure class="hero-demo" aria-labelledby="hero-demo-title">
           <div class="hero-demo-bar">
-            <span class="hero-demo-status">Qualified replay</span>
+            <span class="hero-demo-status">${escapeHtml(presentation.status)}</span>
             <span>Exact installed artifact · ${escapeHtml(duration)} seconds</span>
           </div>
-          <video data-autoplay-demo controls muted loop playsinline preload="metadata" aria-label="Exact installed Kungfu Agent Work Lab autoplay demonstration" aria-describedby="hero-demo-note" poster="${escapeAttr(publicPath)}/${escapeAttr(roles.get("evidence-poster").path)}">
+          <video data-autoplay-demo controls muted loop playsinline preload="metadata" aria-label="${escapeAttr(presentation.videoLabel)}" aria-describedby="hero-demo-note" poster="${escapeAttr(publicPath)}/${escapeAttr(roles.get("evidence-poster").path)}">
             ${renderVideoSources(publicPath, roles)}
             <p><a href="${escapeAttr(publicPath)}/${escapeAttr(roles.get("responsive-primary-video").path)}">Download the 720p MP4 replay.</a></p>
           </video>
           <figcaption>
-            <span class="hero-demo-copy"><strong id="hero-demo-title">One Work. Two fresh Agent processes.</strong><span id="hero-demo-note">A bounded offline replay—not provider or durability proof.</span></span>
-            <span class="hero-demo-links"><a href="/how-tested/auditable-demo/">How this was tested</a><a href="${escapeAttr(publicPath)}/complete-transcript.txt">Transcript</a></span>
+            <span class="hero-demo-copy"><strong id="hero-demo-title">${escapeHtml(presentation.headline)}</strong><span id="hero-demo-note">${escapeHtml(presentation.note)}</span></span>
+            <span class="hero-demo-links"><a href="${escapeAttr(presentation.evidenceHref)}">How this was tested</a><a href="${escapeAttr(publicPath)}/complete-transcript.txt">Transcript</a></span>
           </figcaption>
         </figure>
       </article>
@@ -528,6 +552,7 @@ function normalizeSources(source) {
   if (source.schema === "kungfu.site.auditable-demo-source/v1") {
     return {
       featuredDemoId: "agent-work-lab",
+      homepageDemoId: "agent-work-lab",
       demos: [{
         id: "agent-work-lab",
         passport: source.passport,
@@ -559,7 +584,17 @@ function normalizeSources(source) {
   const ids = demos.map(({ id }) => id);
   invariant(new Set(ids).size === ids.length, "source descriptor demo ids must be unique");
   invariant(ids.includes(source.featuredDemoId), "featured demo id is not declared");
-  return { featuredDemoId: source.featuredDemoId, demos, collection: true };
+  const homepageDemoId = source.homepageDemoId || source.featuredDemoId;
+  invariant(
+    DEMO_ID.test(homepageDemoId) && ids.includes(homepageDemoId),
+    "homepage demo id is not declared",
+  );
+  return {
+    featuredDemoId: source.featuredDemoId,
+    homepageDemoId,
+    demos,
+    collection: true,
+  };
 }
 
 function siteProjection(passport, demo, publicPath, roles) {
@@ -669,6 +704,7 @@ export function importAuditableDemo({
         schema: "kungfu.site.auditable-demo-collection/v1",
         status: "qualified",
         featuredDemoId: featured.demo.id,
+        homepageDemoId: normalizedSource.homepageDemoId,
         demos: imports
           .map(({ projection }) => ({
             id: projection.demo.id,
@@ -706,15 +742,20 @@ export function importAuditableDemo({
     Buffer.from(replaceEvidence(pageBefore, rendered)),
   );
   const homepageBefore = readRegular(homepagePath, "homepage").toString("utf8");
+  const homepageDemo = imports.find(
+    ({ demo }) => demo.id === normalizedSource.homepageDemoId,
+  );
+  invariant(homepageDemo, "homepage demo did not import");
   expected.set(
     homepagePath,
     Buffer.from(
       replaceHomepageDemo(
         homepageBefore,
         renderHomepageDemo(
-          featured.publicPath,
-          featured.scene,
-          featured.roles,
+          homepageDemo.demo,
+          homepageDemo.publicPath,
+          homepageDemo.scene,
+          homepageDemo.roles,
         ),
       ),
     ),

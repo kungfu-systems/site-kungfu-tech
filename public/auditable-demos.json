@@ -9,6 +9,7 @@
     }
   ],
   "featuredDemoId": "agent-work-lab",
+  "homepageDemoId": "agent-work-lab",
   "schema": "kungfu.site.auditable-demo-collection/v1",
   "status": "qualified"
 }
