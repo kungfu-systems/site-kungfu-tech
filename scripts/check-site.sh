@@ -785,7 +785,7 @@ if [ -d dist ]; then
   grep -q 'How continuity was tested' dist/how-tested/continuity/index.html
   grep -q 'Watch the artifact explain itself.' dist/how-tested/auditable-demo/index.html
   grep -q 'Kungfu does not compete for your Hub.' dist/agent-builders/index.html
-  grep -q 'When Agents can recognize better software, they can create the market for it.' dist/agent-supply-chain/index.html
+  grep -q 'When Agents learn to recognize better software, they start creating demand for it.' dist/agent-supply-chain/index.html
   grep -q 'One useful product can change what an Agent expects.' dist/agent-supply-chain/index.html
   grep -q 'Agent-assisted activation' dist/agent-supply-chain/index.html
   grep -q 'The product has already been chosen.' dist/agent-supply-chain/index.html
@@ -858,7 +858,11 @@ if [ -d dist ]; then
     exit 1
   fi
   grep -q 'two public strategic axes' dist/llms.txt
-  grep -q 'When Agents can recognize better software, they can create the market for it.' dist/llms.txt
+  grep -q 'When Agents learn to recognize better software, they start creating demand for it.' dist/llms.txt
+  if grep -q 'When Agents can recognize better software, they can create the market for it.' dist/agent-supply-chain/index.html dist/llms.txt; then
+    echo "error: Agent Supply Chain still contains the retired market-creation headline" >&2
+    exit 1
+  fi
   grep -q 'How Kungfu ignites the first loop' dist/llms.txt
   grep -q 'Agent-first activation starts after a product is chosen.' dist/llms.txt
   grep -q 'Because the Work stays with the product—not the chat—every new Agent can inspect it, continue it, and recognize the difference.' dist/llms.txt
