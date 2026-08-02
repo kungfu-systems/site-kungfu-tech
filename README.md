@@ -16,13 +16,17 @@ The route deliberately connects the homepage's human handoff pain to an
 Agent-native market mechanism before revealing the complete five-layer
 architecture. Its first movement shows how Kungfu earns one useful adoption,
 onboards the Agent the user already has, and changes what that Agent expects
-from every product that follows. Its central visual must distinguish Kungfu as
-an ignition source from the self-running loop: Agents recognize and recommend
-assessable products, builders receive a demand signal, Buildchain helps more
-products ship KFD-3 declarations and KFD-2 evidence, and those products reach
-more Agents without requiring Kungfu inside the cycle. Only after that causal
-thesis is legible does the route introduce KFD-3, KFD-2, Buildchain, and Agent
-Hub as answers to questions the reader now has, followed by the upstream-owned
+from every product that follows. It distinguishes Agent-assisted activation,
+where a product has already been chosen, from Agent-mediated distribution,
+where an assessable product lets the Agent help make the choice. The Agent may
+recommend; a human or Hub still authorizes adoption, and the product—not the
+Agent—remains the system of record for the Work. Its central visual must then
+distinguish Kungfu as an ignition source from the self-accelerating loop:
+builders receive the resulting demand signal, Buildchain helps more products
+ship KFD-3 declarations and KFD-2 evidence, and those products reach more Agents
+without requiring Kungfu at the center. Only after that causal thesis is
+legible does the route introduce KFD-3, KFD-2, Buildchain, and Agent Hub as
+answers to questions the reader now has, followed by the upstream-owned
 five-layer responsibilities and evidence.
 
 The page still preserves the exact Kungfu product loop in its machine contract:
@@ -31,9 +35,11 @@ a versioned Brief, recommends durable Work only when bounded signals justify
 it, previews the minimal action, asks once for confirmation, and leaves
 product-owned state and receipts for the next Agent. The ignition and market
 flywheel must preserve the cold-start and maturity boundaries: Kungfu still has
-to earn the first adoption by solving a concrete problem, and the loop is a
-causal adoption thesis rather than proof of external adoption or a released
-multi-Hub market. The site owns this reading progression and its visual
+to earn the first adoption by solving a concrete problem, every product still
+needs an introduction and explicit authorization, and the loop is a causal
+adoption thesis rather than proof of external adoption or a released multi-Hub
+market. Self-accelerating does not mean self-starting. The site owns this
+reading progression and its visual
 composition. The white-paper package continues to own the cross-product layer
 facts, evidence coordinates, maturity classes, known limits, and adoption
 boundaries. Human-facing KFD names are always rendered in uppercase; lowercase
