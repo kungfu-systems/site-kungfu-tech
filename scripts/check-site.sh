@@ -115,21 +115,23 @@ if grep -RInE '^    \\.(site-header|brand|mark|site-nav|site-footer|nav-menu)\\b
   echo "error: shared header/footer CSS must live in public/assets/site.css" >&2
   exit 1
 fi
-grep -q "Your agent shouldn't start over when the chat ends." public/index.html
-grep -q 'fresh agent continue the same work' public/index.html
+grep -q "Your agents don't hand off the&nbsp;work. You&nbsp;do." public/index.html
+grep -q 'Every switch means copying context, re-explaining decisions, chasing updates, and checking what got lost.' public/index.html
+grep -q 'Kungfu keeps the same work moving, no matter which agent takes over.' public/index.html
 grep -q 'prefers-reduced-motion: reduce' public/index.html
-grep -q 'href="/how-tested/auditable-demo/">How this was tested</a>' public/index.html
-grep -q 'One Work. Two fresh Agent processes.' public/index.html
-grep -q 'Exact installed artifact · 19 seconds' public/index.html
+grep -Eq 'href="/how-tested/auditable-demo/(#demo-project-work-recovery-heading)?">How this was tested</a>' public/index.html
+grep -Eq 'One Work\. (Two fresh Agent processes\.|survives failed attempts and a fresh Agent\.)' public/index.html
+grep -Eq 'Exact installed artifact · [0-9]+(\.[0-9]+)? seconds' public/index.html
 grep -q 'class="demo-showcase"' public/index.html
 grep -q 'data-demo-carousel' public/index.html
 grep -q 'data-carousel-track' public/index.html
-grep -q 'data-demo-title="Core idea" data-active' public/index.html
+grep -q 'data-demo-title="The pain" data-active' public/index.html
 grep -q 'data-carousel-counter>01 / 02<' public/index.html
-grep -q 'data-carousel-status>01 / 02 · Core idea<' public/index.html
+grep -q 'data-carousel-status>01 / 02 · The pain<' public/index.html
 grep -q 'data-carousel-previous' public/index.html
 grep -q 'data-carousel-next' public/index.html
-grep -q 'class="demo-carousel-phase">Coming soon</span>' public/index.html
+grep -q 'class="demo-carousel-phase">Pain → Proof</span>' public/index.html
+grep -q 'data-carousel-proof>Watch the Work survive →</button>' public/index.html
 grep -q 'position: absolute' public/index.html
 grep -q 'right: 10px' public/index.html
 grep -q 'bottom: 10px' public/index.html
@@ -148,7 +150,7 @@ grep -q 'transition: opacity 720ms ease' public/index.html
 grep -q 'container-type: inline-size' public/index.html
 grep -q 'calc(177.777dvh - 380px)' public/index.html
 grep -q '5.8cqw' public/index.html
-grep -q 'Use Codex, Claude, OpenCode, or your own execution surface.' public/index.html
+grep -q 'Use the best Agent when it matters. Use a cheaper one when it does not.' public/index.html
 grep -q 'class="hero-actions" aria-label="Explore Kungfu"' public/index.html
 grep -q 'class="brand-motto">Never Guess. Facts Unfold.</span>' public/index.html
 grep -q 'window.setTimeout' public/index.html
@@ -206,11 +208,11 @@ if (/class="continuity-demo"|Same task\. New chat\. No re-explanation\./u.test(h
 }
 const slides = html.match(/<article\b[^>]*data-demo-slide[^>]*>/giu) || [];
 if (slides.length !== 2 || slides.some((slide) => !/\bdata-demo-title="[^"]+"/u.test(slide))) {
-  throw new Error("homepage carousel requires the core idea and one titled exact demonstration");
+  throw new Error("homepage carousel requires the human pain and one titled exact demonstration");
 }
-if (!/data-demo-title="Core idea"[^>]*data-active/u.test(slides[0])
-  || !/data-demo-title="Agent Work Lab"/u.test(slides[1])) {
-  throw new Error("homepage carousel must open on the core idea before the Agent Work Lab replay");
+if (!/data-demo-title="The pain"[^>]*data-active/u.test(slides[0])
+  || !/data-demo-title="(?:Agent Work Lab|The Work survives)"/u.test(slides[1])) {
+  throw new Error("homepage carousel must open on the human pain before one exact proof replay");
 }
 if (html.includes('class="hero-copy"')
   || html.indexOf('class="brand-principle"') < html.indexOf('<!-- auditable-demo-home:end -->')) {
@@ -295,7 +297,7 @@ fi
 grep -q 'kungfu.site.auditable-demo/v2' public/auditable-demo.json
 grep -q 'Never Guess. Facts Unfold.' public/index.html
 grep -q 'href="/why-kungfu/"' public/index.html
-grep -q 'durable work facts between sessions' public/index.html
+grep -q 'Keep the same Work across Codex, Claude, OpenCode, or your own execution surface.' public/index.html
 grep -q 'class="primary-builder-action" href="/agent-builders/">For Agent Builders</a>' public/index.html
 grep -q 'href="/agent-supply-chain/">Explore the Agent Supply Chain</a>' public/index.html
 grep -q 'href="/agent-hub/">Run the installed Agent Hub proof</a>' public/index.html
@@ -306,7 +308,7 @@ grep -q 'Build and own your Hub. Kungfu stays beneath it.' public/index.html
 grep -q 'it does not compete for the Hub' public/index.html
 grep -q 'Your Hub stays yours' public/index.html
 grep -q '7eeb5bd1b45492f4da27eaacbe63eddfd6245176/examples/opencode-kungfu/quickstart' public/index.html
-grep -q 'Coming soon' public/index.html
+grep -q 'Coming soon' public/install/index.html
 grep -q 'being prepared' public/index.html
 if grep -q 'class="control-pane"\|class="triangle"\|Cost, state, and proof' public/index.html; then
   echo "error: homepage still contains the retired Cost / State / Proof first-screen treatment" >&2
@@ -763,16 +765,17 @@ if [ -d dist ]; then
   test -f dist/services/index.html
   test -f dist/trust/index.html
   test -f dist/legal/index.html
-  grep -q "Your agent shouldn't start over when the chat ends." dist/index.html
-  grep -q 'One Work. Two fresh Agent processes.' dist/index.html
+  grep -q "Your agents don't hand off the&nbsp;work. You&nbsp;do." dist/index.html
+  grep -q 'Every switch means copying context, re-explaining decisions, chasing updates, and checking what got lost.' dist/index.html
+  grep -Eq 'One Work\. (Two fresh Agent processes\.|survives failed attempts and a fresh Agent\.)' dist/index.html
   grep -q 'data-demo-carousel' dist/index.html
-  grep -q 'data-demo-title="Core idea" data-active' dist/index.html
-  grep -q 'data-demo-slide data-demo-title="Agent Work Lab"' dist/index.html
-  grep -q '01 / 02 · Core idea' dist/index.html
+  grep -q 'data-demo-title="The pain" data-active' dist/index.html
+  grep -Eq 'data-demo-slide data-demo-title="(Agent Work Lab|The Work survives)"' dist/index.html
+  grep -q '01 / 02 · The pain' dist/index.html
   grep -q 'data-carousel-previous' dist/index.html
   grep -q 'data-carousel-next' dist/index.html
   grep -q 'data-autoplay-demo controls muted loop playsinline' dist/index.html
-  grep -q 'A bounded offline replay—not provider or durability proof.' dist/index.html
+  grep -Eq 'A bounded (offline replay—not provider or durability proof|Mock Agent replay—not hosted-provider or cross-machine proof)\.' dist/index.html
   if grep -q 'class="continuity-demo"\|Same task. New chat. No re-explanation.' dist/index.html; then
     echo "error: dist homepage still contains the retired static continuity card" >&2
     exit 1

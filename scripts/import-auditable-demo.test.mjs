@@ -268,7 +268,7 @@ function fixture() {
   );
   fs.writeFileSync(
     path.join(outputRoot, "index.html"),
-    "<main>\n<div data-demo-carousel><div data-carousel-track>\n<article data-demo-slide data-demo-title=\"Core idea\" data-active>core</article>\n      <!-- auditable-demo-home:start -->\n      fixture\n      <!-- auditable-demo-home:end -->\n</div></div>\n</main>\n",
+    "<main>\n<div data-demo-carousel><div data-carousel-track>\n<article data-demo-slide data-demo-title=\"The pain\" data-active>pain</article>\n      <!-- auditable-demo-home:start -->\n      fixture\n      <!-- auditable-demo-home:end -->\n</div></div>\n</main>\n",
   );
   return { repoRoot, sourcePath, outputRoot, passport };
 }
@@ -288,7 +288,12 @@ function rebindMedia(repoRoot) {
   fs.writeFileSync(passportPath, stableJson(passport));
 }
 
-function addSecondaryDemo(input) {
+function addSecondaryDemo(input, {
+  id = "status-snapshot",
+  commandLabel = "kungfu status --snapshot --no-interaction",
+  evidenceClass = "exact-installed-artifact-status-snapshot/v1",
+  homepage = false,
+} = {}) {
   const secondaryRoot = path.join(input.repoRoot, "site/auditable-demo-secondary");
   const secondaryMedia = path.join(secondaryRoot, "media");
   fs.mkdirSync(secondaryRoot, { recursive: true });
@@ -297,14 +302,13 @@ function addSecondaryDemo(input) {
     secondaryMedia,
     { recursive: true },
   );
-  const evidenceClass = "exact-installed-artifact-status-snapshot/v1";
   const manifestPath = path.join(secondaryMedia, "manifest.json");
   const manifest = JSON.parse(fs.readFileSync(manifestPath, "utf8"));
   manifest.policy.evidenceClass = evidenceClass;
   fs.writeFileSync(manifestPath, stableJson(manifest));
   fs.writeFileSync(
     path.join(secondaryMedia, "complete-transcript.txt"),
-    "kungfu status --snapshot --no-interaction\nqualified\n",
+    `${commandLabel}\nqualified\n`,
   );
   const members = fs
     .readdirSync(secondaryMedia)
@@ -322,20 +326,20 @@ function addSecondaryDemo(input) {
   delete payload.root;
   payload.schema = "kungfu.auditable-demo.release-passport/v2";
   payload.demo = {
-    id: "status-snapshot",
+    id,
     catalogRoot: `sha256:${"a".repeat(64)}`,
     descriptorRoot: `sha256:${"b".repeat(64)}`,
-    commandLabel: "kungfu status --snapshot --no-interaction",
+    commandLabel,
     evidenceClass,
-    sceneId: "kungfu-status-snapshot",
+    sceneId: `kungfu-${id}`,
     publication: {
       readmeFeatured: false,
-      siteSlug: "status-snapshot",
+      siteSlug: id,
     },
   };
   payload.authority.evidenceClass = evidenceClass;
-  payload.authority.claims = ["exact status snapshot artifact ran"];
-  payload.authority.nonClaims = ["general runtime health"];
+  payload.authority.claims = [`exact ${id} artifact ran`];
+  payload.authority.nonClaims = ["general production behavior"];
   payload.gate.artifact.id = "202";
   payload.gate.artifact.url =
     `${payload.workflow.url}/artifacts/${payload.gate.artifact.id}`;
@@ -361,6 +365,7 @@ function addSecondaryDemo(input) {
   fs.writeFileSync(input.sourcePath, stableJson({
     schema: "kungfu.site.auditable-demo-source/v2",
     featuredDemoId: "agent-work-lab",
+    ...(homepage ? { homepageDemoId: id } : {}),
     demos: [
       {
         id: "agent-work-lab",
@@ -368,7 +373,7 @@ function addSecondaryDemo(input) {
         mediaDirectory: "site/auditable-demo/media",
       },
       {
-        id: "status-snapshot",
+        id,
         passport: "site/auditable-demo-secondary/passport.json",
         mediaDirectory: "site/auditable-demo-secondary/media",
       },
@@ -436,9 +441,9 @@ test("imports exact media and a source-bound public projection", () => {
     const homepage = fs.readFileSync(path.join(input.outputRoot, "index.html"), "utf8");
     assert.match(homepage, /data-demo-carousel/u);
     assert.match(homepage, /data-carousel-track/u);
-    assert.match(homepage, /data-demo-title="Core idea" data-active/u);
+    assert.match(homepage, /data-demo-title="The pain" data-active/u);
     assert.match(homepage, /data-demo-slide data-demo-title="Agent Work Lab"/u);
-    assert.ok(homepage.indexOf('data-demo-title="Core idea"') < homepage.indexOf('data-demo-title="Agent Work Lab"'));
+    assert.ok(homepage.indexOf('data-demo-title="The pain"') < homepage.indexOf('data-demo-title="Agent Work Lab"'));
     assert.match(homepage, /data-autoplay-demo controls muted loop playsinline/u);
     assert.match(homepage, /Exact installed artifact · 18\.5 seconds/u);
     assert.match(
@@ -471,6 +476,7 @@ test("imports a demo-id collection while preserving the Agent Work Lab route", (
       ),
     );
     assert.equal(collection.featuredDemoId, "agent-work-lab");
+    assert.equal(collection.homepageDemoId, "agent-work-lab");
     assert.deepEqual(
       collection.demos.map(({ id }) => id),
       ["agent-work-lab", "status-snapshot"],
@@ -494,6 +500,56 @@ test("imports a demo-id collection while preserving the Agent Work Lab route", (
     assert.match(page, /Watch the artifact explain itself\./u);
     assert.match(page, /kungfu status --snapshot --no-interaction/u);
     assertMp4BeforeWebm(page);
+    assert.equal(importAuditableDemo({ ...input, checkOnly: true }).changed, false);
+  } finally {
+    fs.rmSync(input.repoRoot, { recursive: true, force: true });
+  }
+});
+
+test("can feature Project Work recovery on the homepage without replacing the canonical demo route", () => {
+  const input = fixture();
+  try {
+    const recovery = addSecondaryDemo(input, {
+      id: "project-work-recovery",
+      commandLabel: "kungfu agent-work-lab project-tour",
+      evidenceClass: "exact-installed-artifact-project-work-recovery/v1",
+      homepage: true,
+    });
+    const result = importAuditableDemo(input);
+    assert.equal(result.passport.root.value, input.passport.root.value);
+    const collection = JSON.parse(
+      fs.readFileSync(
+        path.join(input.outputRoot, "auditable-demos.json"),
+        "utf8",
+      ),
+    );
+    assert.equal(collection.featuredDemoId, "agent-work-lab");
+    assert.equal(collection.homepageDemoId, "project-work-recovery");
+    const homepage = fs.readFileSync(
+      path.join(input.outputRoot, "index.html"),
+      "utf8",
+    );
+    assert.match(homepage, /data-demo-title="The Work survives"/u);
+    assert.match(homepage, /Qualified project recovery/u);
+    assert.match(
+      homepage,
+      /One Work survives failed attempts and a fresh Agent\./u,
+    );
+    assert.match(homepage, /not hosted-provider or cross-machine proof/u);
+    assert.match(
+      homepage,
+      new RegExp(
+        `/evidence/auditable-demo/project-work-recovery/${recovery.root.value.slice(7)}/demo\\.mp4`,
+        "u",
+      ),
+    );
+    const canonical = JSON.parse(
+      fs.readFileSync(
+        path.join(input.outputRoot, "auditable-demo.json"),
+        "utf8",
+      ),
+    );
+    assert.equal(canonical.demo.id, "agent-work-lab");
     assert.equal(importAuditableDemo({ ...input, checkOnly: true }).changed, false);
   } finally {
     fs.rmSync(input.repoRoot, { recursive: true, force: true });

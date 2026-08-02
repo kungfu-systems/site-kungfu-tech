@@ -4,11 +4,11 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Kungfu UNGFU™ — Continuity for Agent Work</title>
-  <meta name="description" content="Kungfu helps fresh agents continue the same work after the chat ends, without asking you to explain it all again.">
+  <meta name="description" content="Your agents don't hand off the work. You do. Kungfu keeps the same work moving, no matter which agent takes over.">
   <meta name="application-name" content="Kungfu UNGFU™">
   <meta property="og:site_name" content="Kungfu UNGFU™">
   <meta property="og:title" content="Kungfu UNGFU™ — Continuity for Agent Work">
-  <meta property="og:description" content="Kungfu helps fresh agents continue the same work after the chat ends, without asking you to explain it all again.">
+  <meta property="og:description" content="Your agents don't hand off the work. You do. Kungfu keeps the same work moving, no matter which agent takes over.">
   <meta property="og:url" content="https://kungfu.tech/">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Kungfu UNGFU™ — Continuity for Agent Work">
@@ -338,7 +338,25 @@
       font-weight: 700;
     }
 
-    .hero-demo-links a { color: var(--accent); }
+    .hero-demo-links a,
+    .hero-demo-proof-link {
+      color: var(--accent);
+    }
+
+    .hero-demo-proof-link {
+      padding: 0;
+      border: 0;
+      background: transparent;
+      cursor: pointer;
+      font: inherit;
+      text-decoration: underline;
+      text-underline-offset: 0.18em;
+    }
+
+    .hero-demo-proof-link:focus-visible {
+      outline: 3px solid var(--accent);
+      outline-offset: 3px;
+    }
 
     .builder-entry {
       display: grid;
@@ -571,20 +589,20 @@
       <section class="demo-showcase" aria-label="Product demonstrations" data-demo-carousel>
         <div class="demo-carousel-viewport" role="region" aria-roledescription="carousel" aria-label="Kungfu product demonstrations" tabindex="0" data-carousel-viewport>
           <div class="demo-carousel-track" data-carousel-track>
-            <article class="demo-carousel-slide" aria-label="Kungfu core idea" data-demo-slide data-demo-title="Core idea" data-active>
+            <article class="demo-carousel-slide" aria-label="The human handoff problem" data-demo-slide data-demo-title="The pain" data-active>
               <div class="hero-demo">
                 <div class="hero-demo-bar">
                   <span class="hero-demo-status">Continuity for Agent Work</span>
-                  <span>Core idea · 01</span>
+                  <span>The pain · 01</span>
                 </div>
                 <div class="claim-demo-canvas">
-                  <p class="claim-demo-kicker">Kungfu UNGFU™</p>
-                  <h1 class="claim-demo-title">Your agent shouldn't start over when the chat ends.</h1>
-                  <p class="claim-demo-tagline">Kungfu helps a fresh agent continue the same work without asking you to explain it all again.</p>
+                  <p class="claim-demo-kicker">One Work. Fresh Agents.</p>
+                  <h1 class="claim-demo-title">Your agents don't hand off the&nbsp;work. You&nbsp;do.</h1>
+                  <p class="claim-demo-tagline">Every switch means copying context, re-explaining decisions, chasing updates, and checking what got lost. Kungfu keeps the same work moving, no matter which agent takes over.</p>
                 </div>
                 <div class="hero-demo-caption">
-                  <span class="hero-demo-copy"><strong>One Work. Fresh Agents.</strong><span>Continuity first; tools and execution surfaces stay yours.</span></span>
-                  <span class="hero-demo-links"><a href="/why-kungfu/">Why Kungfu?</a></span>
+                  <span class="hero-demo-copy"><strong>Agents change. The Work stays.</strong><span>Change the execution surface—not the Work.</span></span>
+                  <span class="hero-demo-links"><button class="hero-demo-proof-link" type="button" data-carousel-proof>Watch the Work survive →</button></span>
                 </div>
               </div>
             </article>
@@ -611,9 +629,9 @@
       <!-- auditable-demo-home:end -->
           </div>
           <div class="demo-carousel-controls" aria-label="Demonstration carousel controls">
-            <span class="demo-carousel-phase">Coming soon</span>
+            <span class="demo-carousel-phase">Pain → Proof</span>
             <span class="demo-carousel-status" aria-hidden="true" data-carousel-counter>01 / 02</span>
-            <span class="sr-only" aria-live="polite" data-carousel-status>01 / 02 · Core idea</span>
+            <span class="sr-only" aria-live="polite" data-carousel-status>01 / 02 · The pain</span>
             <button class="demo-carousel-button" type="button" aria-label="Previous demonstration" data-carousel-previous disabled><span aria-hidden="true">←</span></button>
             <button class="demo-carousel-button" type="button" aria-label="Next demonstration" data-carousel-next><span aria-hidden="true">→</span></button>
           </div>
@@ -624,7 +642,7 @@
           <strong><span class="brand-signature">Kungfu UNGFU™</span><span class="brand-motto">Never Guess. Facts Unfold.</span></strong>
           <a href="/why-kungfu/">Why Kungfu?</a>
         </div>
-        <p class="summary">Use Codex, Claude, OpenCode, or your own execution surface. Kungfu keeps durable work facts between sessions; it is not another agent.</p>
+        <p class="summary">Use the best Agent when it matters. Use a cheaper one when it does not. Keep the same Work across Codex, Claude, OpenCode, or your own execution surface.</p>
         <div class="hero-actions" aria-label="Explore Kungfu">
           <a href="/agent-supply-chain/">Explore the Agent Supply Chain</a>
           <a class="primary-builder-action" href="/agent-builders/">For Agent Builders</a>
@@ -722,6 +740,7 @@
         const demoNext = demoCarousel.querySelector("[data-carousel-next]");
         const demoCounter = demoCarousel.querySelector("[data-carousel-counter]");
         const demoStatus = demoCarousel.querySelector("[data-carousel-status]");
+        const demoProof = demoCarousel.querySelector("[data-carousel-proof]");
         const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
         let activeDemoIndex = 0;
         let touchStartX = null;
@@ -789,6 +808,7 @@
 
         demoPrevious.addEventListener("click", () => showDemo(activeDemoIndex - 1));
         demoNext.addEventListener("click", () => showDemo(activeDemoIndex + 1));
+        demoProof?.addEventListener("click", () => showDemo(1));
         demoViewport.addEventListener("keydown", (event) => {
           if (event.target.closest("a, button, video")) return;
           if (event.key === "ArrowLeft") {

@@ -71,17 +71,17 @@ Header and footer content is generated from `site/shared-layout.json`. Update
 that file first, then run the build so every page receives the same navigation
 and footer.
 
-The homepage opens with a full-width two-slide reel. Slide 1 presents the core
-continuity claim in the same 16:9 frame as the media; after five seconds it
-cross-fades once to the exact Agent Work Lab replay on slide 2. Any user click,
+The homepage opens with a full-width two-slide reel. Slide 1 names the human
+handoff burden in the same 16:9 frame as the media; after five seconds it
+cross-fades once to the exact proof replay on slide 2. Its explicit proof action
+performs the same transition immediately. Any user click,
 arrow-key action, or touch swipe permanently cancels that automatic handoff for
 the page visit. Reduced-motion visitors get no automatic transition and retain
 manual previous/next controls. The reel sits directly below the shared header;
-its temporary Coming Soon label, visible slide counter, and previous/next
-buttons share one overlay in the card's bottom-right corner. The accessible
-live status retains the full slide title. Alpha activation removes only the
-temporary label; it must not reintroduce a separate controls row or change the
-reel geometry. The caption reserves a stable safety gap before the overlay and
+its Pain to Proof label, visible slide counter, and previous/next buttons share
+one overlay in the card's bottom-right corner. The accessible live status
+retains the full slide title. It must not reintroduce a separate controls row or
+change the reel geometry. The caption reserves a stable safety gap before the overlay and
 shares its vertical center, keeping links such as Why Kungfu and Transcript
 visually separate from the controls. Later demonstrations must be added as
 independently source-bound slides rather than fake placeholders or hand-pinned
@@ -100,7 +100,10 @@ width and the dynamic viewport height. The height cap reserves only the shared
 header, card chrome, and a small bottom margin. This keeps the complete card
 inside the first browser viewport even when a 4K monitor uses
 macOS display scaling or the browser chrome reduces the CSS-pixel height, while
-allowing the media to use substantially more horizontal space. Claim typography
+allowing the media to use substantially more horizontal space. The claim keeps
+the problem human-first while the supporting copy connects Agent choice to cost:
+the best Agent can be used where it matters and a cheaper one where it does not,
+without replacing the Work. Claim typography
 uses carousel container units so the words shrink with the card rather than
 overflowing it. The surrounding showcase always spans the full page-content
 width, so a height-constrained inner reel remains centered without making the
@@ -112,8 +115,7 @@ The supporting row renders the brand principle as three deliberate lines on the
 left, centers the execution-surface explanation as a block while keeping its
 text left-aligned, and stacks the Agent Supply Chain and Agent Builders links as
 two right-aligned rows.
-Installation remains a single primary action in the shared header until the
-temporary carousel phase label is replaced at Alpha.
+Installation remains a single primary action in the shared header.
 The adjacent language must preserve each slide's evidence and non-authority
 boundaries rather than presenting a demonstration as provider, durability, or
 production proof. Do not restore the retired static continuity comparison card:
@@ -122,14 +124,16 @@ demonstration path.
 
 The auditable-demo importer accepts the current single-source
 `kungfu.site.auditable-demo-source/v1` descriptor and the collection form
-`kungfu.site.auditable-demo-source/v2`. The v2 form names one featured demo and
-one to eight exact `demo id -> Passport + media directory` bindings. Every
+`kungfu.site.auditable-demo-source/v2`. The v2 form names one featured demo, an
+optional independent homepage demo, and one to eight exact
+`demo id -> Passport + media directory` bindings. Every
 entry is independently verified and materialized under its Passport root;
 `/auditable-demo.json` remains the featured compatibility projection, while
 `/auditable-demos.json` and `/auditable-demos/<demo-id>.json` expose the
-collection. Additional videos appear on `/how-tested/auditable-demo/` without
-replacing the existing Agent Work Lab hero. Demo identity selects presentation
-only and grants no publication or runtime authority. Every site projection
+collection. Additional videos appear on `/how-tested/auditable-demo/`; a
+`homepageDemoId` may place one of them in the Pain to Proof reel without
+replacing the Agent Work Lab compatibility projection. Demo identity selects
+presentation only and grants no publication or runtime authority. Every site projection
 retains the selected media profile, qualification root, and exact role-to-file
 coordinates so responsive delivery cannot silently diverge from the qualified
 bundle.
