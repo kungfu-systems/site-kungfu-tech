@@ -1,11 +1,19 @@
 {
-  "schema": "kungfu.site.auditable-demo-source/v2",
-  "featuredDemoId": "agent-work-lab",
+  "schema": "kungfu.site.auditable-demo-source/v3",
+  "featuredDemoId": "agent-work-lab-autoplay",
+  "homepageDemoId": "agent-work-lab-autoplay",
   "demos": [
     {
-      "id": "agent-work-lab",
-      "passport": "site/auditable-demo/passport.json",
-      "mediaDirectory": "site/auditable-demo/media"
+      "id": "agent-work-lab-autoplay",
+      "commandLabel": "kungfu agent-work-lab autoplay",
+      "siteSlug": "agent-work-lab",
+      "evidenceDirectory": "site/auditable-demo-v3/agent-work-lab-autoplay"
+    },
+    {
+      "id": "project-tour-08x",
+      "commandLabel": "kungfu agent-work-lab project-tour --speed 0.8",
+      "siteSlug": "project-tour-08x",
+      "evidenceDirectory": "site/auditable-demo-v3/project-tour-08x"
     }
   ]
 }
