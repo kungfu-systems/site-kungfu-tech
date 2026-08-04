@@ -288,6 +288,38 @@ function rebindMedia(repoRoot) {
   fs.writeFileSync(passportPath, stableJson(passport));
 }
 
+function setDurationPolicy(input, {
+  durationMs,
+  durationClass,
+  profile,
+}) {
+  const mediaDirectory = path.join(input.repoRoot, "site/auditable-demo/media");
+  const scenePath = path.join(mediaDirectory, "scene.json");
+  const scene = JSON.parse(fs.readFileSync(scenePath, "utf8"));
+  scene.durationMs = durationMs;
+  if (durationClass === undefined) delete scene.durationClass;
+  else scene.durationClass = durationClass;
+  fs.writeFileSync(scenePath, stableJson(scene));
+
+  const receiptPath = path.join(mediaDirectory, "media-receipt.json");
+  const receipt = JSON.parse(fs.readFileSync(receiptPath, "utf8"));
+  receipt.qualification.profile.id = profile;
+  const { qualificationRoot: ignoredQualificationRoot, ...qualificationBody } =
+    receipt.qualification;
+  receipt.qualification.qualificationRoot = sha256(
+    Buffer.from(stableJson(qualificationBody)),
+  );
+  receipt.qualificationRoot = receipt.qualification.qualificationRoot;
+  fs.writeFileSync(receiptPath, stableJson(receipt));
+
+  const passportPath = path.join(input.repoRoot, "site/auditable-demo/passport.json");
+  const passport = JSON.parse(fs.readFileSync(passportPath, "utf8"));
+  passport.media.profile = profile;
+  passport.media.qualificationRoot = receipt.qualificationRoot;
+  fs.writeFileSync(passportPath, stableJson(passport));
+  rebindMedia(input.repoRoot);
+}
+
 function addSecondaryDemo(input, {
   id = "status-snapshot",
   commandLabel = "kungfu status --snapshot --no-interaction",
@@ -918,6 +950,38 @@ test("imports a declarative long-form demo from two native capture roots", () =>
   }
 });
 
+test("accepts an explicitly bounded long-form scene and media profile", () => {
+  const input = fixture();
+  try {
+    setDurationPolicy(input, {
+      durationMs: 90_500,
+      durationClass: "long-form",
+      profile: "responsive-long-form-web-delivery-v1",
+    });
+    const result = importAuditableDemo(input);
+    const projection = JSON.parse(
+      fs.readFileSync(
+        path.join(input.outputRoot, "auditable-demo.json"),
+        "utf8",
+      ),
+    );
+    assert.equal(
+      projection.mediaProfile,
+      "responsive-long-form-web-delivery-v1",
+    );
+    assert.match(
+      fs.readFileSync(
+        path.join(input.outputRoot, "how-tested/auditable-demo/index.html"),
+        "utf8",
+      ),
+      /90\.5-second animation/u,
+    );
+    assert.equal(result.changed, true);
+  } finally {
+    fs.rmSync(input.repoRoot, { recursive: true, force: true });
+  }
+});
+
 test("rejects declarative evidence that collapses both native renditions", () => {
   const input = declarativeFixture();
   try {
@@ -938,6 +1002,40 @@ test("rejects declarative evidence that collapses both native renditions", () =>
     assert.throws(
       () => importAuditableDemo(input),
       /distinct native capture roots/u,
+    );
+  } finally {
+    fs.rmSync(input.repoRoot, { recursive: true, force: true });
+  }
+});
+
+test("rejects long-form duration under the standard media profile", () => {
+  const input = fixture();
+  try {
+    setDurationPolicy(input, {
+      durationMs: 90_500,
+      durationClass: "long-form",
+      profile: "responsive-web-delivery-v1",
+    });
+    assert.throws(
+      () => importAuditableDemo(input),
+      /scene duration class and media profile do not match/u,
+    );
+  } finally {
+    fs.rmSync(input.repoRoot, { recursive: true, force: true });
+  }
+});
+
+test("rejects a long-form scene above the 180-second ceiling", () => {
+  const input = fixture();
+  try {
+    setDurationPolicy(input, {
+      durationMs: 180_001,
+      durationClass: "long-form",
+      profile: "responsive-long-form-web-delivery-v1",
+    });
+    assert.throws(
+      () => importAuditableDemo(input),
+      /scene duration is invalid/u,
     );
   } finally {
     fs.rmSync(input.repoRoot, { recursive: true, force: true });

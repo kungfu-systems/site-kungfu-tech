@@ -13,6 +13,14 @@ const ID = /^[1-9][0-9]*$/u;
 const DEMO_ID = /^[a-z0-9]+(?:-[a-z0-9]+)*$/u;
 const ARTIFACT_NAME = /^[A-Za-z0-9][A-Za-z0-9._-]{0,255}$/u;
 const EVIDENCE_CLASS = /^[a-z0-9][a-z0-9._/-]*\/v[1-9][0-9]*$/u;
+const MEDIA_PROFILE_BY_DURATION_CLASS = {
+  standard: "responsive-web-delivery-v1",
+  "long-form": "responsive-long-form-web-delivery-v1",
+};
+const MAXIMUM_DURATION_MS_BY_CLASS = {
+  standard: 60_000,
+  "long-form": 180_000,
+};
 const REQUIRED_AUTHORIZATION_SOURCES = [
   "exact-release-passport",
   "core-policy",
@@ -188,7 +196,9 @@ function verifyLegacyPassport(passport) {
   invariant(
     passport.media?.status === "rendered"
       && DIGEST.test(passport.media?.root || "")
-      && passport.media?.profile === "responsive-web-delivery-v1"
+      && Object.values(MEDIA_PROFILE_BY_DURATION_CLASS).includes(
+        passport.media?.profile,
+      )
       && DIGEST.test(passport.media?.qualificationRoot || ""),
     "media is not rendered and responsively qualified",
   );
@@ -494,14 +504,22 @@ function verifyLegacyMedia(mediaDirectory, passport) {
     );
   }
   const scene = readJson(path.join(mediaDirectory, "scene.json"), "scene");
+  const durationClass = scene.durationClass ?? "standard";
+  const maximumDurationMs = MAXIMUM_DURATION_MS_BY_CLASS[durationClass];
   invariant(
     scene.schema === "build-images.demo-scene/v1"
       && scene.width === 1920
       && scene.height === 1080
+      && Number.isInteger(maximumDurationMs)
       && Number.isInteger(scene.durationMs)
       && scene.durationMs >= 500
-      && scene.durationMs <= 60000,
+      && scene.durationMs <= maximumDurationMs,
     "scene duration is invalid",
+  );
+  invariant(
+    passport.media.profile ===
+      MEDIA_PROFILE_BY_DURATION_CLASS[durationClass],
+    "scene duration class and media profile do not match",
   );
   const manifest = readJson(path.join(mediaDirectory, "manifest.json"), "renderer manifest");
   invariant(
