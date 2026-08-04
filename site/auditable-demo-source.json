@@ -10,10 +10,16 @@
       "evidenceDirectory": "site/auditable-demo-v3/agent-work-lab-autoplay"
     },
     {
-      "id": "project-tour-08x",
-      "commandLabel": "kungfu agent-work-lab project-tour --speed 0.8",
-      "siteSlug": "project-tour-08x",
-      "evidenceDirectory": "site/auditable-demo-v3/project-tour-08x"
+      "id": "project-tour-episode-1",
+      "commandLabel": "kungfu agent-work-lab project-tour --episode 1 --speed 1",
+      "siteSlug": "project-tour-episode-1",
+      "evidenceDirectory": "site/auditable-demo-v3/project-tour-episode-1"
+    },
+    {
+      "id": "project-tour-episode-2",
+      "commandLabel": "kungfu agent-work-lab project-tour --episode 2 --speed 1",
+      "siteSlug": "project-tour-episode-2",
+      "evidenceDirectory": "site/auditable-demo-v3/project-tour-episode-2"
     }
   ]
 }
