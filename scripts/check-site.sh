@@ -201,8 +201,12 @@ for (const [media, file] of [
     throw new Error(`homepage is missing qualified responsive source ${media} -> ${file}`);
   }
 }
+const qualifiedMediaProfiles = new Set([
+  "responsive-web-delivery-v1",
+  "responsive-long-form-web-delivery-v1",
+]);
 if (projection.schema !== "kungfu.site.auditable-demo/v2"
-  || projection.mediaProfile !== "responsive-web-delivery-v1"
+  || !qualifiedMediaProfiles.has(projection.mediaProfile)
   || !/^sha256:[0-9a-f]{64}$/u.test(projection.mediaQualificationRoot || "")) {
   throw new Error("auditable demo projection is missing responsive qualification authority");
 }

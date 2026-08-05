@@ -806,6 +806,14 @@ function renderEvidence(passport, demo, publicPath, scene, roles) {
   const nonClaims = passport.authority.nonClaims
     .map((claim) => `<li>${escapeHtml(claim)}</li>`)
     .join("");
+  const artifactExpiryRows = [
+    passport.gate.artifact
+      ? `<div><dt>Gate expires</dt><dd><time datetime="${escapeAttr(passport.gate.artifact.expiresAt)}">${escapeHtml(passport.gate.artifact.expiresAt)}</time></dd></div>`
+      : "",
+    passport.media.artifact
+      ? `<div><dt>Media expires</dt><dd><time datetime="${escapeAttr(passport.media.artifact.expiresAt)}">${escapeHtml(passport.media.artifact.expiresAt)}</time></dd></div>`
+      : "",
+  ].filter(Boolean).join("\n          ");
   return `      <!-- auditable-demo-evidence:start -->
       <section class="demo-player" aria-labelledby="demo-heading">
         <div>
@@ -843,9 +851,7 @@ function renderEvidence(passport, demo, publicPath, scene, roles) {
           <div><dt>Passport root</dt><dd><code>${escapeHtml(passport.root.value)}</code></dd></div>
           <div><dt>Buildchain</dt><dd><code>${escapeHtml(passport.toolchain.buildchainSha)}</code></dd></div>
           <div><dt>Renderer</dt><dd><code>${escapeHtml(passport.toolchain.rendererImage)}</code></dd></div>
-          <div><dt>Source expires</dt><dd><time datetime="${escapeAttr(passport.source.artifact.expiresAt)}">${escapeHtml(passport.source.artifact.expiresAt)}</time></dd></div>
-          ${passport.gate.artifact ? `<div><dt>Gate expires</dt><dd><time datetime="${escapeAttr(passport.gate.artifact.expiresAt)}">${escapeHtml(passport.gate.artifact.expiresAt)}</time></dd></div>` : ""}
-          ${passport.media.artifact ? `<div><dt>Media expires</dt><dd><time datetime="${escapeAttr(passport.media.artifact.expiresAt)}">${escapeHtml(passport.media.artifact.expiresAt)}</time></dd></div>` : ""}
+          <div><dt>Source expires</dt><dd><time datetime="${escapeAttr(passport.source.artifact.expiresAt)}">${escapeHtml(passport.source.artifact.expiresAt)}</time></dd></div>${artifactExpiryRows ? `\n          ${artifactExpiryRows}` : ""}
         </dl>
         <nav class="evidence-links" aria-label="Exact evidence links">
           ${artifactLinks.map(([label, href]) => `<a href="${escapeAttr(href)}">${escapeHtml(label)}</a>`).join("\n          ")}

@@ -1,15 +1,29 @@
 {
   "demos": [
     {
-      "id": "agent-work-lab",
-      "mediaRoot": "sha256:8353070c7b204bccb9e51e124cd07de215ef64db742a70333614c4fe065c59aa",
-      "passportRoot": "sha256:835bde89ae8cee57661dfc2f4ba96bbf6d2be1546d89f42fd0c18a331a7308da",
-      "projectionPath": "/auditable-demos/agent-work-lab.json",
+      "id": "agent-work-lab-autoplay",
+      "mediaRoot": "sha256:65d866bba80cb5fc8919049d3a9f6ad1a3d8ac783036ae00773823b7f3934fa3",
+      "passportRoot": "sha256:f69ede6927b8cea9ca25d2f552987a8eeeac1354809b5ae3f1fa0851db1b0aa1",
+      "projectionPath": "/auditable-demos/agent-work-lab-autoplay.json",
       "siteSlug": "agent-work-lab"
+    },
+    {
+      "id": "project-tour-episode-1",
+      "mediaRoot": "sha256:0aa5b03b3e18ed1f5cddee9f642232a7874bb0cea084c6fba9ce6a58216dcac3",
+      "passportRoot": "sha256:9a62d7a4bd5f038465535db410e1c5daf068f16a3ef4049dc24a5ff7aa3a387e",
+      "projectionPath": "/auditable-demos/project-tour-episode-1.json",
+      "siteSlug": "project-tour-episode-1"
+    },
+    {
+      "id": "project-tour-episode-2",
+      "mediaRoot": "sha256:ce9a49c4b0e7e1192e8ebf9721b68444fdd6355c17ebca8a9cc08e726621df4c",
+      "passportRoot": "sha256:462f8f63643ec8c7a76b13f9c34cf07dcbafc4d3cadfc91186e449f1e260d64e",
+      "projectionPath": "/auditable-demos/project-tour-episode-2.json",
+      "siteSlug": "project-tour-episode-2"
     }
   ],
-  "featuredDemoId": "agent-work-lab",
-  "homepageDemoId": "agent-work-lab",
+  "featuredDemoId": "agent-work-lab-autoplay",
+  "homepageDemoId": "agent-work-lab-autoplay",
   "schema": "kungfu.site.auditable-demo-collection/v1",
   "status": "qualified"
 }

@@ -1,0 +1,96 @@
+{
+  "buildchainSha": "f63d43720ebb7d5099080b14c70cf04254057d80",
+  "claims": [
+    "The exact retained standalone Kungfu Linux artifact completed the declared bounded demo.",
+    "The Gate and responsive media qualification bind two independently captured native PTY renditions."
+  ],
+  "demo": {
+    "catalogRoot": "sha256:84b3e06ea8fafb08da41cd3a66040ca7834fd3b3a476e63d71ec8da09c7b370d",
+    "commandLabel": "kungfu agent-work-lab project-tour --episode 1 --speed 1",
+    "descriptorRoot": "sha256:b530f0d9bc1af75160645800138c78bf97acfbc6a528a11add6a4021a8fb7884",
+    "evidenceClass": "exact-standalone-binary-declarative-demo/v1",
+    "id": "project-tour-episode-1",
+    "publication": {
+      "readmeFeatured": false,
+      "siteSlug": "project-tour-episode-1"
+    },
+    "sceneId": "project-tour-episode-1",
+    "title": "Kungfu Project Tour episode 1 at 1x"
+  },
+  "durationClass": "long-form",
+  "evidenceClass": "exact-standalone-binary-declarative-demo/v1",
+  "gateRoot": "sha256:a39d0170657230f99eee93b305332ba7219a58f71457d7f60470ab51545bccb0",
+  "mediaProfile": "responsive-long-form-web-delivery-v1",
+  "mediaQualificationRoot": "sha256:46b3d22c8d42e8614492ac96bc02b356d74f6920248b76b5cda7e40f55a5e6e5",
+  "mediaRoot": "sha256:0aa5b03b3e18ed1f5cddee9f642232a7874bb0cea084c6fba9ce6a58216dcac3",
+  "nativeCaptures": [
+    {
+      "captureRoot": "sha256:9167c265c4700cd02e69a796d7fed6900d62e9a33207db2b108b512bad84ed94",
+      "height": 1080,
+      "id": "1080p",
+      "role": "primary",
+      "width": 1920
+    },
+    {
+      "captureRoot": "sha256:a85040a0f6abfe4d7ff14bd69e8fe5830f7b7b84fae2f928284b92d0a63b91b4",
+      "height": 720,
+      "id": "720p",
+      "role": "responsive",
+      "width": 1280
+    }
+  ],
+  "nonClaims": [
+    "This exact standalone Kungfu artifact proves only the bounded disposable Project Tour episode 1 observed at 1x in two independently captured native PTYs; Mock Agent output and terminal observations grant no Work, release, capability, or production authority."
+  ],
+  "passportRoot": "sha256:9a62d7a4bd5f038465535db410e1c5daf068f16a3ef4049dc24a5ff7aa3a387e",
+  "publicEvidencePath": "/evidence/auditable-demo/9a62d7a4bd5f038465535db410e1c5daf068f16a3ef4049dc24a5ff7aa3a387e/project-tour-episode-1",
+  "rendererImage": "ghcr.io/kungfu-systems/build-images/demo-renderer@sha256:c200589be9dda6f730f1cb3deb5b48a60af9144e7a3e4216b7ef70c8e9274000",
+  "renditions": {
+    "alternate-video": {
+      "height": 1080,
+      "mimeType": "video/webm",
+      "path": "demo.webm",
+      "root": "sha256:64ee7e86f0b09cc3ba7af99ac3bfcabd28cf152e5f0a51d8caf572e48d00f0db",
+      "width": 1920
+    },
+    "evidence-poster": {
+      "height": 1080,
+      "mimeType": "image/png",
+      "path": "poster.png",
+      "root": "sha256:749832c27a80e41e5596bcd341362452aab2db5cabac07ffe4824ba3701a23c6",
+      "width": 1920
+    },
+    "primary-video": {
+      "height": 1080,
+      "mimeType": "video/mp4",
+      "path": "demo.mp4",
+      "root": "sha256:1077941e2601905e70a08dffb8cc954a2a14ebb324895b349fbc5415bdf2808e",
+      "width": 1920
+    },
+    "readme-compatibility": {
+      "height": 720,
+      "mimeType": "image/gif",
+      "path": "demo.gif",
+      "root": "sha256:4a9a83806e25c9865b0abe5d7a50293553f1054558a716dea67370d5080416e8",
+      "width": 1280
+    },
+    "responsive-alternate-video": {
+      "height": 720,
+      "mimeType": "video/webm",
+      "path": "demo-720p.webm",
+      "root": "sha256:1091db522217b8557e1a635ff9c4ff899adeb4a3cd7c45b35469eb1c858ef579",
+      "width": 1280
+    },
+    "responsive-primary-video": {
+      "height": 720,
+      "mimeType": "video/mp4",
+      "path": "demo-720p.mp4",
+      "root": "sha256:8b55992aea1430d52ad3b2828f23a531a1bbb41d9c7283ae53d8ed1a00780ea4",
+      "width": 1280
+    }
+  },
+  "schema": "kungfu.site.auditable-demo/v2",
+  "sourceSha": "383cdbedc8a2217d2197abcd37a7508bc2bfa8e6",
+  "status": "qualified",
+  "workflowUrl": "https://github.com/kungfu-systems/kungfu/actions/runs/30960668222"
+}
