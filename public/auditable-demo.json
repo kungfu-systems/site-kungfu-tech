@@ -1,87 +1,96 @@
 {
-  "buildchainSha": "0e4ac58013ff3e09abb18da9896fad5f5b823ef7",
+  "buildchainSha": "f63d43720ebb7d5099080b14c70cf04254057d80",
   "claims": [
-    "The exact retained Linux artifact executed its installed kungfu agent-work-lab autoplay command in a bounded PTY.",
-    "The autoplay completion sentinel passed with exit status zero.",
-    "The exact terminal capture, transcript, public projection, and scene passed the Buildchain Gate and bound the rendered media."
+    "The exact retained standalone Kungfu Linux artifact completed the declared bounded demo.",
+    "The Gate and responsive media qualification bind two independently captured native PTY renditions."
   ],
   "demo": {
-    "catalogRoot": "sha256:6e26482a9b01f3aa922cd73709395919a51a403ca854d057e89add3c9aa6a698",
+    "catalogRoot": "sha256:84b3e06ea8fafb08da41cd3a66040ca7834fd3b3a476e63d71ec8da09c7b370d",
     "commandLabel": "kungfu agent-work-lab autoplay",
-    "descriptorRoot": "sha256:06d9c13f6f418e0d681ab706153623e8670936ece56514446361b6e54adbc761",
-    "evidenceClass": "exact-installed-artifact-agent-work-lab-autoplay/v1",
-    "id": "agent-work-lab",
+    "descriptorRoot": "sha256:fc0921d5b2ae18ef7f458c755b95250f2d0c9c1bc2a5986f2df595d04bfbdec6",
+    "evidenceClass": "exact-standalone-binary-declarative-demo/v1",
+    "id": "agent-work-lab-autoplay",
     "publication": {
       "readmeFeatured": true,
       "siteSlug": "agent-work-lab"
     },
-    "sceneId": "kungfu-agent-work-lab-autoplay"
+    "sceneId": "agent-work-lab-autoplay",
+    "title": "Kungfu Agent Work Lab autoplay"
   },
-  "evidenceClass": "exact-installed-artifact-agent-work-lab-autoplay/v1",
-  "gateRoot": "sha256:9e73aac549a32458ad132ad8166836aa7ab03885210117a15a5d382ef2687c33",
-  "mediaProfile": "responsive-web-delivery-v1",
-  "mediaQualificationRoot": "sha256:7a6e2bc21fabf90aa1ce440d42f21b9f91c775e899a7463663dea6c72bae9deb",
-  "mediaRoot": "sha256:8353070c7b204bccb9e51e124cd07de215ef64db742a70333614c4fe065c59aa",
-  "nonClaims": [
-    "cross-run continuity",
-    "provider migration",
-    "macOS execution",
-    "durability",
-    "performance",
-    "FO10",
-    "authorization from first-party or System identity",
-    "authorization from KFD compliance or Product System metadata",
-    "authorization from local bundle presence, package metadata, registry history, scan output, or standalone generation"
+  "durationClass": "long-form",
+  "evidenceClass": "exact-standalone-binary-declarative-demo/v1",
+  "gateRoot": "sha256:2ea69fd3d89e3ef7f8f3ed0770733d58685079604f06d8d90bd78faccff9fd55",
+  "mediaProfile": "responsive-long-form-web-delivery-v1",
+  "mediaQualificationRoot": "sha256:435b3abc729fd4534800c22dff6f8c41e9616cccbcf42c22bcec4ef2d8d0b230",
+  "mediaRoot": "sha256:65d866bba80cb5fc8919049d3a9f6ad1a3d8ac783036ae00773823b7f3934fa3",
+  "nativeCaptures": [
+    {
+      "captureRoot": "sha256:a1856e47d648f60ff672696717a64ed070d36ea1551cd50285505720ad767880",
+      "height": 1080,
+      "id": "1080p",
+      "role": "primary",
+      "width": 1920
+    },
+    {
+      "captureRoot": "sha256:f6bf58481f20a392bdd5e438eafb1be2064c477805bf92cd0bd29944aa498acb",
+      "height": 720,
+      "id": "720p",
+      "role": "responsive",
+      "width": 1280
+    }
   ],
-  "passportRoot": "sha256:835bde89ae8cee57661dfc2f4ba96bbf6d2be1546d89f42fd0c18a331a7308da",
-  "publicEvidencePath": "/evidence/auditable-demo/835bde89ae8cee57661dfc2f4ba96bbf6d2be1546d89f42fd0c18a331a7308da",
-  "rendererImage": "ghcr.io/kungfu-systems/build-images/demo-renderer@sha256:b70a2f5631665f685280bc9d7434c5ed5cf48b760b728873734d0c47bff72b25",
+  "nonClaims": [
+    "This exact standalone Kungfu artifact proves only the bounded offline Agent Work Lab autoplay observed in two independently captured native PTYs; it grants no Work, release, capability, or production authority."
+  ],
+  "passportRoot": "sha256:f69ede6927b8cea9ca25d2f552987a8eeeac1354809b5ae3f1fa0851db1b0aa1",
+  "publicEvidencePath": "/evidence/auditable-demo/f69ede6927b8cea9ca25d2f552987a8eeeac1354809b5ae3f1fa0851db1b0aa1/agent-work-lab-autoplay",
+  "rendererImage": "ghcr.io/kungfu-systems/build-images/demo-renderer@sha256:c200589be9dda6f730f1cb3deb5b48a60af9144e7a3e4216b7ef70c8e9274000",
   "renditions": {
     "alternate-video": {
       "height": 1080,
       "mimeType": "video/webm",
       "path": "demo.webm",
-      "root": "sha256:0a46d5947221bf9997f56ebf452da9236b23b46a4bfcceaadba4bdb068e8c1a4",
+      "root": "sha256:75eaf5abd6c014292fbcf891853ecf9323ff4b88e1d0dd05b8ee2ce94fd4f3d0",
       "width": 1920
     },
     "evidence-poster": {
       "height": 1080,
       "mimeType": "image/png",
       "path": "poster.png",
-      "root": "sha256:d93fbd2bb4e05a7ea16dc4167d7e2d9a3a70a5464483ee4e49e7877f4e02802b",
+      "root": "sha256:a015950c02a948dc0412e8820617c5b9a2a421ff603fb696f177bb32dd7676d8",
       "width": 1920
     },
     "primary-video": {
       "height": 1080,
       "mimeType": "video/mp4",
       "path": "demo.mp4",
-      "root": "sha256:74ffa1dfc662e07b461459c80d075a1d3c7ac7026563d1a14cf7fc98c1481a04",
+      "root": "sha256:043015d9ffb0d6630ee38e9730747a3489d2eba739eff644c3dfe671c144d95c",
       "width": 1920
     },
     "readme-compatibility": {
       "height": 720,
       "mimeType": "image/gif",
       "path": "demo.gif",
-      "root": "sha256:daf9d7f933f23d8e96833e105fac93c5a9eeeba051ea9392c11afdbd7bcbff38",
+      "root": "sha256:95282c7dff3f39ce0a2e346370368a49b6000df4e0f528fb646748b50ae2d506",
       "width": 1280
     },
     "responsive-alternate-video": {
       "height": 720,
       "mimeType": "video/webm",
       "path": "demo-720p.webm",
-      "root": "sha256:e993909e111c9fee2b94bc4b8071e4dde8106d817f5abb4e2dc4eb955de292cf",
+      "root": "sha256:8c3c4a40f8397328247f6ecf526e4f429e255fb3e5b7e6bda994a3e99b82b61f",
       "width": 1280
     },
     "responsive-primary-video": {
       "height": 720,
       "mimeType": "video/mp4",
       "path": "demo-720p.mp4",
-      "root": "sha256:fa78887fedb32308f7af7d29f2d33dd180912ad143e7f9d1f1dd90b6757d56c0",
+      "root": "sha256:7771af756de380dea3157e7bd0bd9f1a1682c7bb4c8185e7ea3f0fb42872d6de",
       "width": 1280
     }
   },
   "schema": "kungfu.site.auditable-demo/v2",
-  "sourceSha": "7777de45e3fa53c6654d39990314efc2bc9ae99a",
+  "sourceSha": "383cdbedc8a2217d2197abcd37a7508bc2bfa8e6",
   "status": "qualified",
-  "workflowUrl": "https://github.com/kungfu-systems/kungfu/actions/runs/30646944258"
+  "workflowUrl": "https://github.com/kungfu-systems/kungfu/actions/runs/30960668222"
 }
