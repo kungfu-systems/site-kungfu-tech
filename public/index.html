@@ -140,27 +140,27 @@
     }
 
     .demo-carousel-controls {
-      position: absolute;
+      position: relative;
       z-index: 4;
-      right: 10px;
-      bottom: 10px;
-      display: flex;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
       gap: 6px;
       align-items: center;
+      box-sizing: border-box;
+      width: 100%;
       padding: 4px;
-      border: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
       background: rgba(255, 253, 252, 0.94);
-      box-shadow: 0 10px 28px rgba(31, 41, 55, 0.16);
     }
 
     .demo-chapter-nav {
       display: flex;
       gap: 4px;
       align-items: center;
+      justify-self: center;
     }
 
-    .demo-chapter-button,
-    .demo-proof-action {
+    .demo-chapter-button {
       min-height: 34px;
       padding: 6px 9px;
       border: 1px solid var(--line);
@@ -176,29 +176,27 @@
       color: var(--on-accent);
     }
 
-    .demo-chapter-button:focus-visible,
-    .demo-proof-action:focus-visible {
+    .demo-chapter-button:focus-visible {
       outline: 3px solid var(--accent);
       outline-offset: 2px;
     }
 
     .demo-carousel-phase {
-      margin: 0 4px;
+      justify-self: start;
+      margin: 0 0 0 4px;
       color: var(--accent);
       font-size: 11px;
       font-weight: 750;
       letter-spacing: 0.05em;
+      text-align: left;
       text-transform: uppercase;
       white-space: nowrap;
     }
 
-    .demo-carousel-status {
-      min-width: 50px;
-      color: var(--muted);
-      font-size: 12px;
-      font-weight: 700;
-      text-align: center;
-      text-transform: uppercase;
+    .demo-carousel-arrows {
+      display: flex;
+      gap: 4px;
+      justify-self: end;
     }
 
     .demo-carousel-button {
@@ -214,15 +212,13 @@
       font-size: 22px;
     }
 
+    .demo-carousel-playback {
+      font-size: 17px;
+    }
+
     .demo-carousel-button:focus-visible {
       outline: 3px solid var(--accent);
       outline-offset: 2px;
-    }
-
-    .demo-carousel-button:disabled {
-      color: var(--muted);
-      cursor: default;
-      opacity: 0.45;
     }
 
     .demo-carousel-viewport {
@@ -244,6 +240,8 @@
       min-width: 0;
       isolation: isolate;
     }
+
+    .demo-carousel-track .hero-demo-bar { display: none; }
 
     .demo-carousel-slide {
       z-index: 0;
@@ -325,6 +323,21 @@
         linear-gradient(135deg, rgba(255, 253, 248, 0.96), rgba(227, 236, 232, 0.96));
     }
 
+    .proof-chapter {
+      display: grid;
+    }
+
+    .proof-chapter > [data-proof-prelude],
+    .proof-chapter > [data-proof-media] {
+      grid-area: 1 / 1;
+      min-width: 0;
+    }
+
+    .proof-chapter[data-proof-transitioning] > [data-proof-prelude],
+    .proof-chapter[data-proof-transitioning] > [data-proof-media] {
+      will-change: opacity, transform;
+    }
+
     .proof-question {
       max-width: 1080px;
       margin: 0;
@@ -367,7 +380,7 @@
       gap: 12px 18px;
       align-items: center;
       min-height: 70px;
-      padding: 10px 15px 72px;
+      padding: 10px 15px;
       border-top: 1px solid var(--line);
       background: rgba(255, 253, 252, 0.68);
     }
@@ -596,10 +609,10 @@
       main { width: min(100% - 28px, 640px); gap: 32px; padding: 28px 0 40px; }
       .hero { gap: 14px; margin-top: -32px; padding: 0 0 8px; }
       .summary { font-size: 16px; }
-      .demo-carousel-controls { right: 8px; bottom: 8px; left: 8px; }
       .demo-carousel-phase { font-size: 10px; }
-      .demo-carousel-controls { flex-wrap: wrap; justify-content: flex-end; }
-      .demo-chapter-nav { order: -1; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); width: 100%; }
+      .demo-carousel-controls { grid-template-columns: minmax(0, 1fr) auto; }
+      .demo-chapter-nav { grid-row: 2; grid-column: 1 / -1; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); width: 100%; }
+      .demo-carousel-arrows { grid-row: 1; grid-column: 2; }
       .demo-chapter-button { min-width: 0; min-height: 30px; padding: 5px 4px; font-size: 9px; white-space: normal; }
       .hero-details { padding: 20px; }
       .claim-demo-canvas { gap: 8px; padding: 18px 20px; }
@@ -612,7 +625,7 @@
       .hero-demo-bar > span { min-width: 0; max-width: 58%; }
       .hero-demo-bar > span:last-child { max-width: 38%; text-align: right; }
       .hero-demo figcaption,
-      .hero-demo-caption { grid-template-columns: 1fr; padding: 10px 15px 116px; }
+      .hero-demo-caption { grid-template-columns: 1fr; padding: 10px 15px; }
       .hero-demo-links { justify-content: flex-start; }
       .builder-entry, .trust { grid-template-columns: 1fr; gap: 16px; }
       .builder-entry, .trust { padding: 20px; }
@@ -660,6 +673,21 @@
     <section class="hero" aria-label="Kungfu homepage">
       <section class="demo-showcase" aria-label="Product demonstrations" data-demo-carousel>
         <div class="demo-carousel-viewport" role="region" aria-roledescription="carousel" aria-label="Kungfu product demonstrations" tabindex="0" data-carousel-viewport>
+          <div class="demo-carousel-controls" aria-label="Demonstration carousel controls">
+            <span class="demo-carousel-phase">The problem · then 3 proofs</span>
+            <div class="demo-chapter-nav" role="tablist" aria-label="Reel chapters">
+              <button class="demo-chapter-button" type="button" role="tab" aria-controls="reel-problem" aria-selected="true" data-carousel-chapter="0">Problem</button>
+              <button class="demo-chapter-button" type="button" role="tab" aria-controls="reel-proof-1" aria-selected="false" data-carousel-chapter="1">New Agent</button>
+              <button class="demo-chapter-button" type="button" role="tab" aria-controls="reel-proof-2" aria-selected="false" data-carousel-chapter="2">Failure</button>
+              <button class="demo-chapter-button" type="button" role="tab" aria-controls="reel-proof-3" aria-selected="false" data-carousel-chapter="3">Approval</button>
+            </div>
+            <span class="sr-only" aria-live="polite" data-carousel-status>The problem · 1 of 4</span>
+            <div class="demo-carousel-arrows" aria-label="Scene playback controls">
+              <button class="demo-carousel-button" type="button" aria-label="Previous scene" data-carousel-previous><span aria-hidden="true">←</span></button>
+              <button class="demo-carousel-button demo-carousel-playback" type="button" aria-label="Pause scene playback" aria-pressed="true" data-carousel-playback><span aria-hidden="true" data-playback-icon>Ⅱ</span></button>
+              <button class="demo-carousel-button" type="button" aria-label="Next scene" data-carousel-next><span aria-hidden="true">→</span></button>
+            </div>
+          </div>
           <div class="demo-carousel-track" data-carousel-track>
             <article id="reel-problem" class="demo-carousel-slide" role="tabpanel" aria-label="The human handoff problem" data-demo-slide data-demo-title="The pain" data-active>
               <div class="hero-demo">
@@ -783,21 +811,6 @@
       </article>
       <!-- auditable-demo-home:end -->
           </div>
-          <div class="demo-carousel-controls" aria-label="Demonstration carousel controls">
-            <span class="demo-carousel-phase">Problem → Three proofs</span>
-            <div class="demo-chapter-nav" role="tablist" aria-label="Reel chapters">
-              <button class="demo-chapter-button" type="button" role="tab" aria-controls="reel-problem" aria-selected="true" data-carousel-chapter="0">Problem</button>
-              <button class="demo-chapter-button" type="button" role="tab" aria-controls="reel-proof-1" aria-selected="false" data-carousel-chapter="1">1 · Continuity</button>
-              <button class="demo-chapter-button" type="button" role="tab" aria-controls="reel-proof-2" aria-selected="false" data-carousel-chapter="2">2 · Failure</button>
-              <button class="demo-chapter-button" type="button" role="tab" aria-controls="reel-proof-3" aria-selected="false" data-carousel-chapter="3">3 · Settlement</button>
-            </div>
-            <span class="demo-carousel-status" aria-hidden="true" data-carousel-counter>Problem · 0 / 3</span>
-            <span class="sr-only" aria-live="polite" data-carousel-status>Problem · The pain</span>
-            <button class="demo-proof-action" type="button" data-proof-toggle hidden>Pause proof</button>
-            <button class="demo-proof-action" type="button" data-proof-skip hidden>Skip proof</button>
-            <button class="demo-carousel-button" type="button" aria-label="Previous chapter" data-carousel-previous disabled><span aria-hidden="true">←</span></button>
-            <button class="demo-carousel-button" type="button" aria-label="Next chapter" data-carousel-next><span aria-hidden="true">→</span></button>
-          </div>
         </div>
       </section>
       <div class="hero-details">
@@ -895,7 +908,13 @@
     </script>
     <!-- shared-footer:end -->
     <script type="module">
-      import { boundedChapter, mediaPolicy, passiveTransition } from "/assets/proof-reel-state.js";
+      import {
+        adjacentScene,
+        boundedChapter,
+        mediaPolicy,
+        passiveTransition,
+        PROOF_SCENE_TRANSITION_DURATION_MS,
+      } from "/assets/proof-reel-state.js";
 
       const demoCarousel = document.querySelector("[data-demo-carousel]");
       if (demoCarousel) {
@@ -904,24 +923,33 @@
         const chapterButtons = Array.from(demoCarousel.querySelectorAll("[data-carousel-chapter]"));
         const demoPrevious = demoCarousel.querySelector("[data-carousel-previous]");
         const demoNext = demoCarousel.querySelector("[data-carousel-next]");
-        const demoCounter = demoCarousel.querySelector("[data-carousel-counter]");
+        const demoPlayback = demoCarousel.querySelector("[data-carousel-playback]");
+        const demoPlaybackIcon = demoCarousel.querySelector("[data-playback-icon]");
         const demoStatus = demoCarousel.querySelector("[data-carousel-status]");
         const demoProof = demoCarousel.querySelector("[data-carousel-proof]");
-        const proofToggle = demoCarousel.querySelector("[data-proof-toggle]");
-        const proofSkip = demoCarousel.querySelector("[data-proof-skip]");
         const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
         let activeDemoIndex = 0;
         let touchStartX = null;
         let autoAdvanceTimer = null;
-        let autoAdvanceEnabled = true;
+        let autoAdvanceEnabled = !reducedMotion.matches;
+        let sceneTransitionSerial = 0;
+        let activeSceneAnimations = [];
 
-        const clearAutoAdvance = ({ cancel = false } = {}) => {
+        const clearAutoAdvance = () => {
           if (autoAdvanceTimer !== null) window.clearTimeout(autoAdvanceTimer);
           autoAdvanceTimer = null;
-          if (cancel) autoAdvanceEnabled = false;
         };
 
         const activeProofVideo = () => demoSlides[activeDemoIndex]?.querySelector("[data-proof-video]");
+
+        const updatePlaybackControl = () => {
+          demoPlayback.setAttribute("aria-pressed", String(autoAdvanceEnabled));
+          demoPlayback.setAttribute(
+            "aria-label",
+            autoAdvanceEnabled ? "Pause scene playback" : "Play scene sequence",
+          );
+          demoPlaybackIcon.textContent = autoAdvanceEnabled ? "Ⅱ" : "▶";
+        };
 
         const syncProofMedia = () => {
           demoSlides.forEach((slide, index) => {
@@ -952,6 +980,24 @@
           media.inert = !showMedia;
         };
 
+        const cancelSceneTransition = () => {
+          sceneTransitionSerial += 1;
+          activeSceneAnimations.forEach((animation) => animation.cancel());
+          activeSceneAnimations = [];
+          demoSlides.forEach((slide) => {
+            if (!slide.hasAttribute("data-proof-transitioning")) return;
+            slide.removeAttribute("data-proof-transitioning");
+            setProofState(slide, slide.dataset.proofState === "media" ? "media" : "prelude");
+          });
+        };
+
+        const setSceneAnimationsPlaying = (playing) => {
+          activeSceneAnimations.forEach((animation) => {
+            if (playing) animation.play();
+            else animation.pause();
+          });
+        };
+
         const queuePassiveProgress = () => {
           clearAutoAdvance();
           const activeSlide = demoSlides[activeDemoIndex];
@@ -959,17 +1005,38 @@
             activeChapter: activeDemoIndex,
             proofState: activeSlide?.dataset.proofState || "chapter",
             automationEnabled: autoAdvanceEnabled,
-            reducedMotion: reducedMotion.matches,
+            reducedMotion: false,
             visible: document.visibilityState === "visible",
           });
           if (!transition) return;
           autoAdvanceTimer = window.setTimeout(() => {
             if (transition.action.type === "select-chapter") {
-              showDemo(transition.action.chapter, { userInitiated: false });
+              showDemo(transition.action.chapter);
             } else {
-              enterProof(activeSlide, { userInitiated: false, play: transition.action.play });
+              enterProof(activeSlide, { play: transition.action.play });
             }
           }, transition.delayMs);
+        };
+
+        const setPlayback = (enabled, { syncVideo = true } = {}) => {
+          autoAdvanceEnabled = enabled;
+          clearAutoAdvance();
+          updatePlaybackControl();
+          setSceneAnimationsPlaying(enabled);
+          const video = activeProofVideo();
+          const mediaActive = Boolean(
+            video && demoSlides[activeDemoIndex]?.dataset.proofState === "media",
+          );
+          if (!enabled) {
+            if (mediaActive) video.pause();
+            return;
+          }
+          if (syncVideo && mediaActive && document.visibilityState === "visible") {
+            video.play().catch(() => {
+              // Native controls remain available if autoplay is unavailable.
+            });
+          }
+          queuePassiveProgress();
         };
 
         const renderDemoCarousel = () => {
@@ -979,59 +1046,123 @@
             slide.inert = !active;
             slide.setAttribute("aria-hidden", String(!active));
           });
-          const title = demoSlides[activeDemoIndex]?.dataset.demoTitle || "Demonstration";
-          const progress = activeDemoIndex === 0 ? "Problem · 0 / 3" : `${title} · ${activeDemoIndex} / 3`;
-          demoCounter.textContent = progress;
-          demoStatus.textContent = `${progress} · ${demoSlides[activeDemoIndex]?.dataset.proofState || "chapter"}`;
-          demoPrevious.disabled = activeDemoIndex === 0;
-          demoNext.disabled = activeDemoIndex === demoSlides.length - 1;
+          const title = chapterButtons[activeDemoIndex]?.textContent.trim() || "Demonstration";
+          demoStatus.textContent = `${title} · ${activeDemoIndex + 1} of ${demoSlides.length} · ${demoSlides[activeDemoIndex]?.dataset.proofState || "chapter"}`;
           chapterButtons.forEach((button, index) => {
             const selected = index === activeDemoIndex;
             button.setAttribute("aria-selected", String(selected));
             button.tabIndex = selected ? 0 : -1;
           });
-          const video = activeProofVideo();
-          const mediaActive = Boolean(video && demoSlides[activeDemoIndex].dataset.proofState === "media");
-          proofToggle.hidden = !mediaActive;
-          proofSkip.hidden = activeDemoIndex === 0 || activeDemoIndex === demoSlides.length - 1;
-          if (video) proofToggle.textContent = video.paused ? "Play proof" : "Pause proof";
+          updatePlaybackControl();
           syncProofMedia();
           queuePassiveProgress();
         };
 
-        const showDemo = (index, { userInitiated = true } = {}) => {
-          clearAutoAdvance({ cancel: userInitiated });
+        const showDemo = (index) => {
+          clearAutoAdvance();
           const boundedIndex = boundedChapter(index, demoSlides.length);
+          cancelSceneTransition();
           if (boundedIndex === activeDemoIndex) {
             if (boundedIndex > 0) setProofState(demoSlides[boundedIndex], "prelude");
             renderDemoCarousel();
             return;
           }
           const previousVideo = activeProofVideo();
+          activeDemoIndex = boundedIndex;
           if (previousVideo) {
             previousVideo.pause();
             previousVideo.currentTime = 0;
           }
-          activeDemoIndex = boundedIndex;
           if (boundedIndex > 0) setProofState(demoSlides[boundedIndex], "prelude");
           renderDemoCarousel();
         };
 
-        const enterProof = (slide, { userInitiated = true, play = true } = {}) => {
-          clearAutoAdvance({ cancel: userInitiated });
+        const enterProof = async (slide, { play = autoAdvanceEnabled, animate = true } = {}) => {
+          clearAutoAdvance();
           if (slide !== demoSlides[activeDemoIndex]) return;
-          setProofState(slide, "media");
-          renderDemoCarousel();
+          cancelSceneTransition();
+          const prelude = slide.querySelector("[data-proof-prelude]");
+          const media = slide.querySelector("[data-proof-media]");
           const video = slide.querySelector("[data-proof-video]");
+          const canAnimate = animate
+            && !reducedMotion.matches
+            && typeof prelude?.animate === "function"
+            && typeof media?.animate === "function";
+          if (!canAnimate) {
+            setProofState(slide, "media");
+            renderDemoCarousel();
+            if (play && video && document.visibilityState === "visible") {
+              video.play().catch(() => {
+                // Native controls, poster, transcript, evidence, and Passport remain available.
+              });
+            }
+            return;
+          }
+
+          const transitionId = sceneTransitionSerial;
+          slide.dataset.proofState = "media";
+          slide.setAttribute("data-proof-transitioning", "");
+          prelude.hidden = false;
+          prelude.inert = true;
+          media.hidden = false;
+          media.inert = true;
+          renderDemoCarousel();
           if (play && video && document.visibilityState === "visible") {
             video.play().catch(() => {
               // Native controls, poster, transcript, evidence, and Passport remain available.
             });
           }
+          const timing = {
+            duration: PROOF_SCENE_TRANSITION_DURATION_MS,
+            easing: "cubic-bezier(0.22, 1, 0.36, 1)",
+            fill: "both",
+          };
+          activeSceneAnimations = [
+            prelude.animate([
+              { opacity: 1, transform: "scale(1)", offset: 0 },
+              { opacity: 0, transform: "scale(0.985)", offset: 0.58 },
+              { opacity: 0, transform: "scale(0.985)", offset: 1 },
+            ], timing),
+            media.animate([
+              { opacity: 0, transform: "scale(1.015)", offset: 0 },
+              { opacity: 0, transform: "scale(1.015)", offset: 0.16 },
+              { opacity: 1, transform: "scale(1)", offset: 1 },
+            ], timing),
+          ];
+          try {
+            await Promise.all(activeSceneAnimations.map((animation) => animation.finished));
+          } catch {
+            return;
+          }
+          if (transitionId !== sceneTransitionSerial) return;
+          const completedAnimations = activeSceneAnimations;
+          activeSceneAnimations = [];
+          slide.removeAttribute("data-proof-transitioning");
+          setProofState(slide, "media");
+          completedAnimations.forEach((animation) => animation.cancel());
         };
 
-        demoPrevious.addEventListener("click", () => showDemo(activeDemoIndex - 1));
-        demoNext.addEventListener("click", () => showDemo(activeDemoIndex + 1));
+        const showScene = (scene, { play = autoAdvanceEnabled } = {}) => {
+          showDemo(scene.activeChapter);
+          if (scene.proofState === "media") {
+            enterProof(demoSlides[scene.activeChapter], { play });
+          }
+        };
+
+        const stepScene = (direction) => {
+          const activeSlide = demoSlides[activeDemoIndex];
+          showScene(
+            adjacentScene({
+              activeChapter: activeDemoIndex,
+              proofState: activeSlide?.dataset.proofState || "chapter",
+            }, direction, demoSlides.length),
+            { play: autoAdvanceEnabled },
+          );
+        };
+
+        demoPrevious.addEventListener("click", () => stepScene(-1));
+        demoPlayback.addEventListener("click", () => setPlayback(!autoAdvanceEnabled));
+        demoNext.addEventListener("click", () => stepScene(1));
         demoProof?.addEventListener("click", () => showDemo(1));
         chapterButtons.forEach((button) => {
           button.addEventListener("click", () => showDemo(Number(button.dataset.carouselChapter)));
@@ -1051,23 +1182,15 @@
         demoCarousel.querySelectorAll("[data-proof-start]").forEach((button) => {
           button.addEventListener("click", () => enterProof(button.closest("[data-demo-slide]")));
         });
-        proofToggle.addEventListener("click", () => {
-          clearAutoAdvance({ cancel: true });
-          const video = activeProofVideo();
-          if (!video) return;
-          if (video.paused) video.play().catch(() => {});
-          else video.pause();
-        });
-        proofSkip.addEventListener("click", () => showDemo(activeDemoIndex + 1));
         demoViewport.addEventListener("keydown", (event) => {
           if (event.target.closest("a, button, video")) return;
           if (event.key === "ArrowLeft") {
             event.preventDefault();
-            showDemo(activeDemoIndex - 1);
+            stepScene(-1);
           }
           if (event.key === "ArrowRight") {
             event.preventDefault();
-            showDemo(activeDemoIndex + 1);
+            stepScene(1);
           }
         });
         demoViewport.addEventListener("touchstart", (event) => {
@@ -1078,34 +1201,57 @@
           const distance = event.changedTouches[0].clientX - touchStartX;
           touchStartX = null;
           if (Math.abs(distance) < 48) return;
-          showDemo(activeDemoIndex + (distance < 0 ? 1 : -1));
+          stepScene(distance < 0 ? 1 : -1);
         }, { passive: true });
         demoCarousel.querySelectorAll("[data-proof-video]").forEach((video) => {
-          const syncToggle = () => {
-            if (video === activeProofVideo()) proofToggle.textContent = video.paused ? "Play proof" : "Pause proof";
-          };
-          video.addEventListener("play", syncToggle);
-          video.addEventListener("pause", syncToggle);
-          video.addEventListener("ended", syncToggle);
-          video.addEventListener("pointerdown", () => clearAutoAdvance({ cancel: true }));
-          video.addEventListener("keydown", () => clearAutoAdvance({ cancel: true }));
+          video.addEventListener("ended", () => {
+            if (video === activeProofVideo() && autoAdvanceEnabled) stepScene(1);
+          });
+          video.addEventListener("play", () => {
+            if (video !== activeProofVideo()
+              || demoSlides[activeDemoIndex]?.dataset.proofState !== "media"
+              || autoAdvanceEnabled) return;
+            setPlayback(true, { syncVideo: false });
+          });
+          video.addEventListener("pause", () => {
+            if (video !== activeProofVideo()
+              || demoSlides[activeDemoIndex]?.dataset.proofState !== "media"
+              || document.visibilityState !== "visible"
+              || video.ended
+              || !autoAdvanceEnabled) return;
+            setPlayback(false, { syncVideo: false });
+          });
         });
         if (typeof reducedMotion.addEventListener === "function") {
           reducedMotion.addEventListener("change", () => {
-            clearAutoAdvance();
-            if (reducedMotion.matches) activeProofVideo()?.pause();
-            renderDemoCarousel();
+            if (reducedMotion.matches) {
+              cancelSceneTransition();
+              setPlayback(false);
+            }
           });
         } else {
           reducedMotion.addListener(() => {
-            clearAutoAdvance();
-            if (reducedMotion.matches) activeProofVideo()?.pause();
-            renderDemoCarousel();
+            if (reducedMotion.matches) {
+              cancelSceneTransition();
+              setPlayback(false);
+            }
           });
         }
         document.addEventListener("visibilitychange", () => {
-          if (document.visibilityState !== "visible") clearAutoAdvance();
+          if (document.visibilityState !== "visible") {
+            clearAutoAdvance();
+            setSceneAnimationsPlaying(false);
+          } else if (autoAdvanceEnabled) {
+            setSceneAnimationsPlaying(true);
+          }
           renderDemoCarousel();
+          const video = activeProofVideo();
+          if (document.visibilityState === "visible"
+            && autoAdvanceEnabled
+            && video
+            && demoSlides[activeDemoIndex]?.dataset.proofState === "media") {
+            video.play().catch(() => {});
+          }
         });
         demoSlides.forEach((slide, index) => {
           if (index > 0) setProofState(slide, "prelude");

@@ -141,17 +141,35 @@ grep -q 'class="demo-showcase"' public/index.html
 grep -q 'data-demo-carousel' public/index.html
 grep -q 'data-carousel-track' public/index.html
 grep -q 'data-demo-title="The pain" data-active' public/index.html
-grep -q 'data-carousel-counter>Problem · 0 / 3<' public/index.html
-grep -q 'data-carousel-status>Problem · The pain<' public/index.html
+grep -q 'data-carousel-status>The problem · 1 of 4<' public/index.html
 grep -q 'data-carousel-previous' public/index.html
+grep -q 'data-carousel-playback' public/index.html
 grep -q 'data-carousel-next' public/index.html
-grep -q 'class="demo-carousel-phase">Problem → Three proofs</span>' public/index.html
+grep -q 'class="demo-carousel-arrows" aria-label="Scene playback controls"' public/index.html
+grep -q 'aria-label="Previous scene" data-carousel-previous' public/index.html
+grep -q 'aria-label="Pause scene playback" aria-pressed="true" data-carousel-playback' public/index.html
+grep -q 'data-playback-icon>Ⅱ</span>' public/index.html
+grep -q 'aria-label="Next scene" data-carousel-next' public/index.html
+grep -q 'PROOF_SCENE_TRANSITION_DURATION_MS' public/index.html
+grep -q 'data-proof-transitioning' public/index.html
+grep -q 'scale(0.985)' public/index.html
+grep -q 'scale(1.015)' public/index.html
+grep -q 'PROBLEM_AUTOMATION_DELAY_MS = 7000' public/assets/proof-reel-state.js
+grep -q 'PROOF_PRELUDE_DELAY_MS = 5000' public/assets/proof-reel-state.js
+grep -q 'class="demo-carousel-phase">The problem · then 3 proofs</span>' public/index.html
+grep -q 'data-carousel-chapter="1">New Agent</button>' public/index.html
+grep -q 'data-carousel-chapter="2">Failure</button>' public/index.html
+grep -q 'data-carousel-chapter="3">Approval</button>' public/index.html
+if grep -q 'data-proof-toggle\|data-proof-skip\|Pause proof\|Skip proof\|data-carousel-previous disabled' public/index.html; then
+  echo "error: homepage duplicates native video and chapter navigation controls" >&2
+  exit 1
+fi
 grep -q 'data-carousel-proof>Watch the Work survive →</button>' public/index.html
-grep -q 'position: absolute' public/index.html
-grep -q 'right: 10px' public/index.html
-grep -q 'bottom: 10px' public/index.html
+grep -q '.demo-carousel-track .hero-demo-bar { display: none; }' public/index.html
+grep -q 'width: 100%;' public/index.html
+grep -q 'border-bottom: 1px solid var(--line);' public/index.html
 grep -q 'min-height: 70px' public/index.html
-grep -q 'padding: 10px 15px 72px' public/index.html
+grep -q 'padding: 10px 15px;' public/index.html
 grep -q 'linear-gradient(135deg, #fffdf8 0%, #f0eee8 56%, #e3ece8 100%)' public/index.html
 grep -q -- '--bg: #f5f2ec;' public/assets/site.css
 grep -q -- '--panel: #fffdfc;' public/assets/site.css
@@ -169,7 +187,7 @@ grep -q 'Use the best Agent when it matters. Use a cheaper one when it does not.
 grep -q 'class="hero-actions" aria-label="Explore Kungfu"' public/index.html
 grep -q 'class="brand-motto">Never Guess. Facts Unfold.</span>' public/index.html
 grep -q 'window.setTimeout' public/index.html
-grep -q 'PROBLEM_AUTOMATION_DELAY_MS = 5000' public/assets/proof-reel-state.js
+grep -q 'PROBLEM_AUTOMATION_DELAY_MS = 7000' public/assets/proof-reel-state.js
 grep -q 'event.key === "ArrowLeft"' public/index.html
 grep -q 'event.key === "ArrowRight"' public/index.html
 grep -q 'addEventListener("touchstart"' public/index.html
@@ -264,12 +282,17 @@ if (!/\.builder-entry h2,\s*\.trust h2 \{[\s\S]*?font-size: clamp\(28px, 4vw, 44
   throw new Error("homepage stewardship card does not share the builder title scale, padding, and vertical alignment");
 }
 if (html.includes('class="demo-showcase-heading"')
-  || html.indexOf('class="demo-carousel-controls"') < html.indexOf('data-carousel-track')) {
-  throw new Error("homepage carousel controls must remain overlaid inside the demonstration card");
+  || (html.match(/class="demo-carousel-controls"/gu) || []).length !== 1
+  || html.indexOf('class="demo-carousel-controls"') > html.indexOf('data-carousel-track')
+  || !/\.demo-carousel-controls \{[\s\S]*?position: relative;[\s\S]*?grid-template-columns: minmax\(0, 1fr\) auto minmax\(0, 1fr\);[\s\S]*?width: 100%;[\s\S]*?border-bottom: 1px solid var\(--line\);/u.test(html)
+  || !/\.demo-carousel-arrows \{[\s\S]*?justify-self: end;/u.test(html)
+  || !/data-carousel-previous[\s\S]*?data-carousel-playback[\s\S]*?data-carousel-next/u.test(html)
+  || !html.includes(".demo-carousel-track .hero-demo-bar { display: none; }")) {
+  throw new Error("homepage carousel controls must replace the in-slide status bar at the top of the demonstration card");
 }
 if (!html.includes("min-height: 70px")
-  || !html.includes("padding: 10px 15px 72px")) {
-  throw new Error("homepage caption does not preserve control spacing and vertical alignment");
+  || !html.includes("padding: 10px 15px;")) {
+  throw new Error("homepage caption does not preserve compact spacing below the top controls");
 }
 if (!html.includes("@media (min-width: 1800px) and (min-height: 1200px)")
   || !html.includes("@media (min-width: 3000px) and (min-height: 1800px)")) {
@@ -803,8 +826,9 @@ if [ -d dist ]; then
   grep -q 'data-demo-slide data-demo-title="Continuity"' dist/index.html
   grep -q 'data-demo-slide data-demo-title="Failure retention"' dist/index.html
   grep -q 'data-demo-slide data-demo-title="Review and settlement"' dist/index.html
-  grep -q 'Problem · The pain' dist/index.html
+  grep -q 'The problem · 1 of 4' dist/index.html
   grep -q 'data-carousel-previous' dist/index.html
+  grep -q 'data-carousel-playback' dist/index.html
   grep -q 'data-carousel-next' dist/index.html
   grep -q 'data-proof-video data-passive-proof controls muted playsinline preload="none"' dist/index.html
   grep -q 'exact standalone Kungfu artifact proves only' dist/index.html
