@@ -897,6 +897,120 @@ function homepagePresentation(demo) {
   };
 }
 
+export function loadPresentationContract(repoRoot, source, demos) {
+  if (!source.presentation) return null;
+  const descriptor = source.presentation;
+  invariant(
+    descriptor
+      && Object.keys(descriptor).sort().join(",")
+        === "contractPath,contractSha256,repository,sourcePath,sourceSha"
+      && descriptor.repository === "kungfu-systems/kungfu"
+      && SHA.test(descriptor.sourceSha || "")
+      && descriptor.sourcePath === ".buildchain/auditable-demo.json"
+      && /^[0-9a-f]{64}$/u.test(descriptor.contractSha256 || "")
+      && typeof descriptor.contractPath === "string"
+      && descriptor.contractPath.length > 0,
+    "presentation source coordinate is invalid",
+  );
+  const contractPath = path.resolve(repoRoot, descriptor.contractPath);
+  invariant(contractPath.startsWith(`${repoRoot}${path.sep}`), "presentation contract path escapes repository");
+  const contractBytes = readRegular(contractPath, "presentation contract", 1024 * 1024);
+  invariant(
+    sha256(contractBytes) === `sha256:${descriptor.contractSha256}`,
+    "presentation contract digest does not verify",
+  );
+  const contract = JSON.parse(contractBytes.toString("utf8"));
+  invariant(
+    contract.schema === "buildchain.declarative-binary-demo/v1"
+      && contract.product?.id === "kungfu"
+      && contract.presentation?.schema === "buildchain.declarative-demo-presentation/v1"
+      && Array.isArray(contract.presentation.proofs)
+      && contract.presentation.proofs.length === 3,
+    "presentation contract schema or proof count is invalid",
+  );
+  const demoIds = demos.map(({ id }) => id);
+  const proofIds = contract.presentation.proofs.map((proof, index) => {
+    invariant(
+      proof
+        && Object.keys(proof).sort().join(",")
+          === (index < 2
+            ? "demoId,label,question,summary,transitionAfter"
+            : "demoId,label,question,summary")
+        && DEMO_ID.test(proof.demoId || "")
+        && [proof.label, proof.question, proof.summary].every(
+          (value) => typeof value === "string" && value.length > 0,
+        )
+        && (index === 2 || (typeof proof.transitionAfter === "string" && proof.transitionAfter.length > 0)),
+      `presentation proof ${index} is invalid`,
+    );
+    const declaredDemo = contract.demos?.find(({ id }) => id === proof.demoId);
+    invariant(
+      declaredDemo?.title === proof.question,
+      `presentation proof ${proof.demoId} question drifts from its demo title`,
+    );
+    return proof.demoId;
+  });
+  invariant(
+    new Set(proofIds).size === proofIds.length
+      && proofIds.every((id) => demoIds.includes(id)),
+    "presentation proof order does not bind the imported demos",
+  );
+  return {
+    source: descriptor,
+    schema: contract.presentation.schema,
+    proofs: contract.presentation.proofs,
+  };
+}
+
+function renderProofChapter(proof, importedDemo, proofIndex) {
+  const { demo, rawPassport, publicPath, scene, roles } = importedDemo;
+  const duration = formatDuration(scene.durationMs);
+  const titleId = `proof-${proofIndex + 1}-title`;
+  const noteId = `proof-${proofIndex + 1}-note`;
+  return `      <article id="reel-proof-${proofIndex + 1}" class="demo-carousel-slide proof-chapter" role="tabpanel" aria-label="${escapeAttr(proof.question)}" data-demo-slide data-demo-title="${escapeAttr(proof.label)}" data-proof-chapter="${proofIndex + 1}" data-proof-demo-id="${escapeAttr(demo.id)}">
+        <section class="proof-panel" data-proof-prelude>
+          <div class="hero-demo-bar">
+            <span class="hero-demo-status">Proof ${proofIndex + 1} of 3 · ${escapeHtml(proof.label)}</span>
+            <span>Prelude · exact contract</span>
+          </div>
+          <div class="proof-prelude-canvas">
+            <p class="claim-demo-kicker">${escapeHtml(proof.label)}</p>
+            <h2 id="${titleId}" class="proof-question">${escapeHtml(proof.question)}</h2>
+            <p class="proof-summary">${escapeHtml(proof.summary)}</p>
+          </div>
+          <div class="hero-demo-caption">
+            <span class="hero-demo-copy"><strong>${escapeHtml(proof.transitionAfter || "The governed completion boundary is now visible.")}</strong><span>Exact media and its retained evidence remain independently inspectable.</span></span>
+            <span class="hero-demo-links"><button class="hero-demo-proof-link" type="button" data-proof-start>${proofIndex === 0 ? "Watch proof" : `Start Project Tour episode ${proofIndex}`} →</button></span>
+          </div>
+        </section>
+        <figure class="hero-demo proof-media" data-proof-media hidden>
+          <div class="hero-demo-bar">
+            <span class="hero-demo-status">Proof ${proofIndex + 1} of 3 · ${escapeHtml(proof.label)}</span>
+            <span>Exact installed artifact · ${escapeHtml(duration)} seconds</span>
+          </div>
+          <video data-proof-video${proofIndex === 0 ? " data-passive-proof" : ""} controls muted playsinline preload="none" aria-label="${escapeAttr(proof.question)} exact installed-artifact demonstration" aria-describedby="${noteId}" poster="${escapeAttr(publicPath)}/${escapeAttr(roles.get("evidence-poster").path)}">
+            ${renderVideoSources(publicPath, roles)}
+            <p><a href="${escapeAttr(publicPath)}/${escapeAttr(roles.get("responsive-primary-video").path)}">Download the 720p MP4 replay.</a></p>
+          </video>
+          <figcaption>
+            <span class="hero-demo-copy"><strong>${escapeHtml(proof.question)}</strong><span id="${noteId}">${escapeHtml(rawPassport.demo.claimBoundary)}</span></span>
+            <span class="hero-demo-links"><a href="/how-tested/auditable-demo/#demo-${escapeAttr(demo.id)}-heading">Evidence</a><a href="${escapeAttr(publicPath)}/complete-transcript.txt">Transcript</a><a href="${escapeAttr(publicPath)}/passport.json">Passport</a></span>
+          </figcaption>
+        </figure>
+      </article>`;
+}
+
+function renderHomepageProofReel(presentation, imports) {
+  const byId = new Map(imports.map((entry) => [entry.demo.id, entry]));
+  return `      <!-- auditable-demo-home:start -->
+${presentation.proofs.map((proof, index) => {
+    const importedDemo = byId.get(proof.demoId);
+    invariant(importedDemo, `presentation proof ${proof.demoId} did not import`);
+    return renderProofChapter(proof, importedDemo, index);
+  }).join("\n")}
+      <!-- auditable-demo-home:end -->`;
+}
+
 function renderHomepageDemo(demo, publicPath, scene, roles) {
   const duration = formatDuration(scene.durationMs);
   const presentation = homepagePresentation(demo);
@@ -1106,6 +1220,11 @@ export function importAuditableDemo({
 }) {
   const source = readJson(sourcePath, "source descriptor");
   const normalizedSource = normalizeSources(source);
+  const presentation = loadPresentationContract(
+    repoRoot,
+    source,
+    normalizedSource.demos,
+  );
   const pagePath = path.join(outputRoot, "how-tested/auditable-demo/index.html");
   const homepagePath = path.join(outputRoot, "index.html");
   const projectionPath = path.join(outputRoot, "auditable-demo.json");
@@ -1194,6 +1313,22 @@ export function importAuditableDemo({
         status: "qualified",
         featuredDemoId: featured.demo.id,
         homepageDemoId: normalizedSource.homepageDemoId,
+        ...(presentation ? {
+          presentation: {
+            schema: presentation.schema,
+            source: presentation.source,
+            proofs: presentation.proofs.map((proof) => {
+              const imported = imports.find(({ demo }) => demo.id === proof.demoId);
+              invariant(imported, `presentation projection ${proof.demoId} did not import`);
+              return {
+                ...proof,
+                projectionPath: `/auditable-demos/${proof.demoId}.json`,
+                passportRoot: imported.projection.passportRoot,
+                mediaRoot: imported.projection.mediaRoot,
+              };
+            }),
+          },
+        } : {}),
         demos: imports
           .map(({ projection }) => ({
             id: projection.demo.id,
@@ -1241,12 +1376,14 @@ export function importAuditableDemo({
     Buffer.from(
       replaceHomepageDemo(
         homepageBefore,
-        renderHomepageDemo(
-          homepageDemo.demo,
-          homepageDemo.publicPath,
-          homepageDemo.scene,
-          homepageDemo.roles,
-        ),
+        presentation
+          ? renderHomepageProofReel(presentation, imports)
+          : renderHomepageDemo(
+            homepageDemo.demo,
+            homepageDemo.publicPath,
+            homepageDemo.scene,
+            homepageDemo.roles,
+          ),
       ),
     ),
   );

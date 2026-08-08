@@ -2,6 +2,13 @@
   "schema": "kungfu.site.auditable-demo-source/v3",
   "featuredDemoId": "agent-work-lab-autoplay",
   "homepageDemoId": "agent-work-lab-autoplay",
+  "presentation": {
+    "contractPath": "site/auditable-demo-presentation.json",
+    "contractSha256": "66c468cab16d747392d76554529360d112d13c0c4adb8f97d30d8b1a1977634c",
+    "repository": "kungfu-systems/kungfu",
+    "sourcePath": ".buildchain/auditable-demo.json",
+    "sourceSha": "ef1fe8d22b9289ce62efc5c6b1fa4d2f40094ce6"
+  },
   "demos": [
     {
       "id": "agent-work-lab-autoplay",

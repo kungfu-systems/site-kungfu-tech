@@ -24,6 +24,47 @@
   ],
   "featuredDemoId": "agent-work-lab-autoplay",
   "homepageDemoId": "agent-work-lab-autoplay",
+  "presentation": {
+    "proofs": [
+      {
+        "demoId": "agent-work-lab-autoplay",
+        "label": "Continuity",
+        "mediaRoot": "sha256:65d866bba80cb5fc8919049d3a9f6ad1a3d8ac783036ae00773823b7f3934fa3",
+        "passportRoot": "sha256:f69ede6927b8cea9ca25d2f552987a8eeeac1354809b5ae3f1fa0851db1b0aa1",
+        "projectionPath": "/auditable-demos/agent-work-lab-autoplay.json",
+        "question": "Can Work survive a new Agent?",
+        "summary": "The first proof isolates continuity: one Work continues across two fresh Agent Sessions without copied chat.",
+        "transitionAfter": "The mechanism exists; the next proof asks whether it still holds under real failure conditions."
+      },
+      {
+        "demoId": "project-tour-episode-1",
+        "label": "Failure retention",
+        "mediaRoot": "sha256:0aa5b03b3e18ed1f5cddee9f642232a7874bb0cea084c6fba9ce6a58216dcac3",
+        "passportRoot": "sha256:9a62d7a4bd5f038465535db410e1c5daf068f16a3ef4049dc24a5ff7aa3a387e",
+        "projectionPath": "/auditable-demos/project-tour-episode-1.json",
+        "question": "Can Work survive failure?",
+        "summary": "Inside a disposable Project, a dropped connection and a crashed replacement process remain as Attempts under the same Work.",
+        "transitionAfter": "Work survival is only the first step. If an Agent can approve its own result, continuity still is not trustworthy."
+      },
+      {
+        "demoId": "project-tour-episode-2",
+        "label": "Review and settlement",
+        "mediaRoot": "sha256:ce9a49c4b0e7e1192e8ebf9721b68444fdd6355c17ebca8a9cc08e726621df4c",
+        "passportRoot": "sha256:462f8f63643ec8c7a76b13f9c34cf07dcbafc4d3cadfc91186e449f1e260d64e",
+        "projectionPath": "/auditable-demos/project-tour-episode-2.json",
+        "question": "Who is allowed to complete Work?",
+        "summary": "The final proof separates Agent exit, independent review, and Kungfu settlement: an Agent can produce a candidate and evidence, but cannot approve its own Work."
+      }
+    ],
+    "schema": "buildchain.declarative-demo-presentation/v1",
+    "source": {
+      "contractPath": "site/auditable-demo-presentation.json",
+      "contractSha256": "66c468cab16d747392d76554529360d112d13c0c4adb8f97d30d8b1a1977634c",
+      "repository": "kungfu-systems/kungfu",
+      "sourcePath": ".buildchain/auditable-demo.json",
+      "sourceSha": "ef1fe8d22b9289ce62efc5c6b1fa4d2f40094ce6"
+    }
+  },
   "schema": "kungfu.site.auditable-demo-collection/v1",
   "status": "qualified"
 }
