@@ -7,6 +7,7 @@ cd "$repo_root"
 node --test scripts/import-bootstrap-publication.test.mjs
 node --test scripts/consume-installer-publication-bundle.test.mjs
 node --test scripts/import-auditable-demo.test.mjs
+node --test scripts/homepage-proof-reel.test.mjs
 node --test scripts/structured-markdown.test.mjs
 node --test scripts/check-copyable-code.test.mjs
 node --test scripts/paper-propagation.test.mjs
@@ -131,24 +132,26 @@ grep -q "Your agents don't hand off the&nbsp;work. You&nbsp;do." public/index.ht
 grep -q 'Every switch means copying context, re-explaining decisions, chasing updates, and checking what got lost.' public/index.html
 grep -q 'Kungfu keeps the same work moving, no matter which agent takes over.' public/index.html
 grep -q 'prefers-reduced-motion: reduce' public/index.html
-grep -Eq 'href="/how-tested/auditable-demo/(#demo-project-work-recovery-heading)?">How this was tested</a>' public/index.html
-grep -Eq 'One Work\. (Two fresh Agent processes\.|survives failed attempts and a fresh Agent\.)' public/index.html
+grep -q 'href="/how-tested/auditable-demo/#demo-agent-work-lab-autoplay-heading">Evidence</a>' public/index.html
+grep -q 'Can Work survive a new Agent?' public/index.html
+grep -q 'Can Work survive failure?' public/index.html
+grep -q 'Who is allowed to complete Work?' public/index.html
 grep -Eq 'Exact installed artifact · [0-9]+(\.[0-9]+)? seconds' public/index.html
 grep -q 'class="demo-showcase"' public/index.html
 grep -q 'data-demo-carousel' public/index.html
 grep -q 'data-carousel-track' public/index.html
 grep -q 'data-demo-title="The pain" data-active' public/index.html
-grep -q 'data-carousel-counter>01 / 02<' public/index.html
-grep -q 'data-carousel-status>01 / 02 · The pain<' public/index.html
+grep -q 'data-carousel-counter>Problem · 0 / 3<' public/index.html
+grep -q 'data-carousel-status>Problem · The pain<' public/index.html
 grep -q 'data-carousel-previous' public/index.html
 grep -q 'data-carousel-next' public/index.html
-grep -q 'class="demo-carousel-phase">Pain → Proof</span>' public/index.html
+grep -q 'class="demo-carousel-phase">Problem → Three proofs</span>' public/index.html
 grep -q 'data-carousel-proof>Watch the Work survive →</button>' public/index.html
 grep -q 'position: absolute' public/index.html
 grep -q 'right: 10px' public/index.html
 grep -q 'bottom: 10px' public/index.html
 grep -q 'min-height: 70px' public/index.html
-grep -q 'padding: 10px 310px 10px 15px' public/index.html
+grep -q 'padding: 10px 15px 72px' public/index.html
 grep -q 'linear-gradient(135deg, #fffdf8 0%, #f0eee8 56%, #e3ece8 100%)' public/index.html
 grep -q -- '--bg: #f5f2ec;' public/assets/site.css
 grep -q -- '--panel: #fffdfc;' public/assets/site.css
@@ -166,12 +169,12 @@ grep -q 'Use the best Agent when it matters. Use a cheaper one when it does not.
 grep -q 'class="hero-actions" aria-label="Explore Kungfu"' public/index.html
 grep -q 'class="brand-motto">Never Guess. Facts Unfold.</span>' public/index.html
 grep -q 'window.setTimeout' public/index.html
-grep -q '}, 5000);' public/index.html
+grep -q 'PROBLEM_AUTOMATION_DELAY_MS = 5000' public/assets/proof-reel-state.js
 grep -q 'event.key === "ArrowLeft"' public/index.html
 grep -q 'event.key === "ArrowRight"' public/index.html
 grep -q 'addEventListener("touchstart"' public/index.html
 grep -q 'addEventListener("touchend"' public/index.html
-grep -q 'data-autoplay-demo controls muted loop playsinline' public/index.html
+grep -q 'data-proof-video data-passive-proof controls muted playsinline preload="none"' public/index.html
 grep -q 'window.matchMedia("(prefers-reduced-motion: reduce)")' public/index.html
 node - <<'NODE'
 const fs = require("node:fs");
@@ -223,12 +226,14 @@ if (/class="continuity-demo"|Same task\. New chat\. No re-explanation\./u.test(h
   throw new Error("homepage still contains the retired static continuity card");
 }
 const slides = html.match(/<article\b[^>]*data-demo-slide[^>]*>/giu) || [];
-if (slides.length !== 2 || slides.some((slide) => !/\bdata-demo-title="[^"]+"/u.test(slide))) {
-  throw new Error("homepage carousel requires the human pain and one titled exact demonstration");
+if (slides.length !== 4 || slides.some((slide) => !/\bdata-demo-title="[^"]+"/u.test(slide))) {
+  throw new Error("homepage reel requires Problem and three titled proof chapters");
 }
 if (!/data-demo-title="The pain"[^>]*data-active/u.test(slides[0])
-  || !/data-demo-title="(?:Agent Work Lab|The Work survives)"/u.test(slides[1])) {
-  throw new Error("homepage carousel must open on the human pain before one exact proof replay");
+  || !/data-demo-title="Continuity"/u.test(slides[1])
+  || !/data-demo-title="Failure retention"/u.test(slides[2])
+  || !/data-demo-title="Review and settlement"/u.test(slides[3])) {
+  throw new Error("homepage reel must open on the human pain before three ordered proof chapters");
 }
 if (html.includes('class="hero-copy"')
   || html.indexOf('class="brand-principle"') < html.indexOf('<!-- auditable-demo-home:end -->')) {
@@ -263,7 +268,7 @@ if (html.includes('class="demo-showcase-heading"')
   throw new Error("homepage carousel controls must remain overlaid inside the demonstration card");
 }
 if (!html.includes("min-height: 70px")
-  || !html.includes("padding: 10px 310px 10px 15px")) {
+  || !html.includes("padding: 10px 15px 72px")) {
   throw new Error("homepage caption does not preserve control spacing and vertical alignment");
 }
 if (!html.includes("@media (min-width: 1800px) and (min-height: 1200px)")
@@ -285,10 +290,10 @@ for (const member of ["poster.png", "demo.webm", "demo.mp4", "complete-transcrip
   const expected = `${projection.publicEvidencePath}/${member}`;
   if (!html.includes(expected)) throw new Error(`homepage demo is not source-bound to ${expected}`);
 }
-const [videoTag = ""] = html.match(/<video\b[^>]*data-autoplay-demo[^>]*>/iu) || [];
-if (!videoTag) throw new Error("homepage is missing its auditable demo video");
-if (/\sautoplay(?=\s|=|>|\/)/iu.test(videoTag.replace(/"[^"]*"|'[^']*'/gu, ""))) {
-  throw new Error("homepage media must defer autoplay to the reduced-motion-aware controller");
+const videoTags = [...html.matchAll(/<video\b[^>]*data-proof-video[^>]*>/giu)].map(([tag]) => tag);
+if (videoTags.length !== 3) throw new Error("homepage is missing its three proof videos");
+if (videoTags.some((videoTag) => /\s(?:autoplay|loop)(?=\s|=|>|\/)/iu.test(videoTag.replace(/"[^"]*"|'[^']*'/gu, "")))) {
+  throw new Error("homepage proof media must remain non-looping and defer autoplay to the reduced-motion-aware controller");
 }
 NODE
 grep -q 'prefers-reduced-motion: reduce' public/how-tested/auditable-demo/index.html
@@ -766,6 +771,7 @@ if [ -d dist ]; then
   test -f dist/llms.txt
   test -f dist/why-kungfu/index.html
   test -f dist/assets/site.css
+  test -f dist/assets/proof-reel-state.js
   test -s dist/assets/fonts/instrument-sans-latin-wght-normal.6219bc4b.woff2
   test -s dist/assets/fonts/ibm-plex-mono-latin-400-normal.c36f509c.woff2
   test -s dist/assets/fonts/ibm-plex-mono-latin-600-normal.ad4580d8.woff2
@@ -789,15 +795,19 @@ if [ -d dist ]; then
   test -f dist/legal/index.html
   grep -q "Your agents don't hand off the&nbsp;work. You&nbsp;do." dist/index.html
   grep -q 'Every switch means copying context, re-explaining decisions, chasing updates, and checking what got lost.' dist/index.html
-  grep -Eq 'One Work\. (Two fresh Agent processes\.|survives failed attempts and a fresh Agent\.)' dist/index.html
+  grep -q 'Can Work survive a new Agent?' dist/index.html
+  grep -q 'Can Work survive failure?' dist/index.html
+  grep -q 'Who is allowed to complete Work?' dist/index.html
   grep -q 'data-demo-carousel' dist/index.html
   grep -q 'data-demo-title="The pain" data-active' dist/index.html
-  grep -Eq 'data-demo-slide data-demo-title="(Agent Work Lab|The Work survives)"' dist/index.html
-  grep -q '01 / 02 · The pain' dist/index.html
+  grep -q 'data-demo-slide data-demo-title="Continuity"' dist/index.html
+  grep -q 'data-demo-slide data-demo-title="Failure retention"' dist/index.html
+  grep -q 'data-demo-slide data-demo-title="Review and settlement"' dist/index.html
+  grep -q 'Problem · The pain' dist/index.html
   grep -q 'data-carousel-previous' dist/index.html
   grep -q 'data-carousel-next' dist/index.html
-  grep -q 'data-autoplay-demo controls muted loop playsinline' dist/index.html
-  grep -Eq 'A bounded (offline replay—not provider or durability proof|Mock Agent replay—not hosted-provider or cross-machine proof)\.' dist/index.html
+  grep -q 'data-proof-video data-passive-proof controls muted playsinline preload="none"' dist/index.html
+  grep -q 'exact standalone Kungfu artifact proves only' dist/index.html
   if grep -q 'class="continuity-demo"\|Same task. New chat. No re-explanation.' dist/index.html; then
     echo "error: dist homepage still contains the retired static continuity card" >&2
     exit 1

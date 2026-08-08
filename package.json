@@ -1,6 +1,7 @@
 {
   "name": "site-kungfu-tech",
   "private": true,
+  "type": "module",
   "packageManager": "pnpm@11.7.0",
   "scripts": {
     "build": "bash scripts/build-site.sh",

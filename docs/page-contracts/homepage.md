@@ -5,27 +5,47 @@ architecture. Its reading order is claim, proof, explanation, and navigation.
 
 ## Pain-to-Proof Reel
 
-The page opens directly below the shared header with one full-width, two-slide
-reel in a 16:9 frame:
+The page opens directly below the shared header with one full-width reel in a
+16:9 frame. It has four semantic chapters:
 
-1. Slide 1 names the human burden of carrying context between Agents. Its
+1. Problem names the human burden of carrying context between Agents. Its
    supporting copy makes the economic consequence explicit: use the best Agent
    where it matters and a cheaper one where it does not, without replacing the
    Work.
-2. Slide 2 replays the exact Agent Work Lab proof. The replay demonstrates
-   continuity across Agents; it does not independently prove provider support,
-   durability, release status, or Production qualification.
+2. Continuity asks whether Work can survive a new Agent and binds the compact
+   Agent Work Lab proof.
+3. Failure retention asks whether Work can survive failure and binds Project
+   Tour episode 1.
+4. Review and settlement asks who may complete Work and binds Project Tour
+   episode 2.
 
-After five seconds, the reel cross-fades once from the pain claim to the proof.
-The explicit proof action performs the same transition immediately. A click,
-arrow-key action, or touch swipe permanently cancels automatic progression for
-that page visit. Reduced-motion visitors receive no automatic transition and
-retain manual previous and next controls.
+The three proof labels, questions, summaries, transitions, and demo order come
+from the exact, SHA-256-bound Kungfu
+`buildchain.declarative-demo-presentation/v1` contract snapshot. The importer
+verifies the complete source contract bytes and binds every proof to an imported
+demo, Passport, and media root. Homepage code owns only layout, timing, and
+interaction; it does not own a second copy of the product narrative.
 
-The Pain to Proof label, visible slide counter, and controls share one overlay
-in the card's bottom-right corner. The accessible live status retains the full
-slide title. The caption reserves a stable safety gap before the overlay and
-keeps supporting links visually separate from the controls. Do not add a
+Each proof chapter has two internal states, prelude and animation. Those states
+do not change semantic chapter progress. Direct chapter navigation always lands
+on the requested prelude. After five seconds, the reel may move from Problem to
+the Continuity prelude, then start only the compact Continuity animation after
+a short reading interval. Project Tour episodes 1 and 2 always require an
+explicit start. Any click, chapter navigation, arrow-key action, touch swipe, or
+media interaction permanently cancels queued automatic progression for that
+page visit.
+
+All proof videos are non-looping. Only the active proof may play; leaving a
+chapter pauses and resets its media. Inactive media uses `preload="none"`, and
+only an active animation may advance to metadata loading. Reduced-motion
+visitors receive no timed chapter or animation transition and retain complete
+manual chapter, previous, next, play or pause, skip, and native media controls.
+
+The Problem to Three proofs label, stable proof counter, direct chapter tabs,
+and playback controls share one overlay in the card's bottom-right corner. The
+accessible live status retains the full chapter title and internal state. The
+caption reserves a stable safety gap before the overlay and keeps transcript,
+evidence, and Passport links visually separate from the controls. Do not add a
 second controls row or change the reel geometry.
 
 ## Layout
@@ -51,9 +71,10 @@ the Agent Work Lab replay and weakened the primary demonstration path.
 
 ## Auditable Media
 
-`scripts/import-auditable-demo.mjs` generates the Agent Work Lab poster,
-transcript, duration, public evidence path, and responsive media bindings from
-the retained Passport and closed media bundle.
+`scripts/import-auditable-demo.mjs` generates all three proof chapters, posters,
+transcripts, durations, public evidence paths, Passport links, and responsive
+media bindings from the retained Passports, closed media bundles, and exact
+presentation contract snapshot.
 
 The qualified evidence supplies native 1920x1080 MP4/WebM for desktop and
 independently captured native 1280x720 MP4/WebM for constrained screens.
@@ -79,9 +100,10 @@ Each collection entry is independently verified and materialized under its
 Passport root. `/auditable-demo.json` remains the featured compatibility
 projection; `/auditable-demos.json` and
 `/auditable-demos/<demo-id>.json` expose the collection. Additional videos may
-appear on `/how-tested/auditable-demo/`, including the Project Tour at 0.8x,
-and `homepageDemoId` may select one for the reel without replacing the Agent
-Work Lab compatibility projection.
+appear on `/how-tested/auditable-demo/`. A v3 source may bind a presentation
+contract, in which case its ordered proofs replace the legacy single
+`homepageDemoId` projection without replacing the Agent Work Lab compatibility
+route.
 
 Demo identity selects presentation only and grants no publication or runtime
 authority. Every projection retains the selected media profile, qualification

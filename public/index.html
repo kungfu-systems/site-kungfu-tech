@@ -153,6 +153,35 @@
       box-shadow: 0 10px 28px rgba(31, 41, 55, 0.16);
     }
 
+    .demo-chapter-nav {
+      display: flex;
+      gap: 4px;
+      align-items: center;
+    }
+
+    .demo-chapter-button,
+    .demo-proof-action {
+      min-height: 34px;
+      padding: 6px 9px;
+      border: 1px solid var(--line);
+      background: var(--panel);
+      color: var(--fg);
+      cursor: pointer;
+      font: 700 11px/1.15 var(--font-body);
+    }
+
+    .demo-chapter-button[aria-selected="true"] {
+      border-color: var(--accent);
+      background: var(--accent);
+      color: var(--on-accent);
+    }
+
+    .demo-chapter-button:focus-visible,
+    .demo-proof-action:focus-visible {
+      outline: 3px solid var(--accent);
+      outline-offset: 2px;
+    }
+
     .demo-carousel-phase {
       margin: 0 4px;
       color: var(--accent);
@@ -285,6 +314,36 @@
         linear-gradient(135deg, rgba(255, 253, 248, 0.90) 0%, rgba(240, 238, 232, 0.92) 58%, rgba(227, 236, 232, 0.95) 100%);
     }
 
+    .proof-prelude-canvas {
+      display: grid;
+      aspect-ratio: 16 / 9;
+      gap: clamp(12px, 2.2cqw, 28px);
+      align-content: center;
+      padding: clamp(24px, 6cqw, 96px);
+      background:
+        radial-gradient(circle at 82% 20%, rgba(11, 111, 104, 0.16), transparent 30%),
+        linear-gradient(135deg, rgba(255, 253, 248, 0.96), rgba(227, 236, 232, 0.96));
+    }
+
+    .proof-question {
+      max-width: 1080px;
+      margin: 0;
+      font-size: clamp(30px, 5.3cqw, 78px);
+      line-height: 0.98;
+      letter-spacing: -0.025em;
+    }
+
+    .proof-summary {
+      max-width: 900px;
+      margin: 0;
+      color: var(--muted);
+      font-size: clamp(15px, 1.7cqw, 24px);
+      line-height: 1.3;
+    }
+
+    .proof-panel[hidden],
+    .proof-media[hidden] { display: none; }
+
     .claim-demo-kicker {
       margin: 0;
       color: var(--accent);
@@ -308,7 +367,7 @@
       gap: 12px 18px;
       align-items: center;
       min-height: 70px;
-      padding: 10px 310px 10px 15px;
+      padding: 10px 15px 72px;
       border-top: 1px solid var(--line);
       background: rgba(255, 253, 252, 0.68);
     }
@@ -517,6 +576,11 @@
           radial-gradient(circle at 10% 90%, rgba(157, 170, 224, 0.10), transparent 32%),
           linear-gradient(135deg, rgba(32, 42, 46, 0.92) 0%, rgba(24, 32, 36, 0.94) 58%, rgba(16, 20, 23, 0.96) 100%);
       }
+      .proof-prelude-canvas {
+        background:
+          radial-gradient(circle at 82% 20%, rgba(66, 200, 185, 0.18), transparent 30%),
+          linear-gradient(135deg, rgba(32, 42, 46, 0.96), rgba(16, 20, 23, 0.98));
+      }
       .hero-demo figcaption,
       .hero-demo-caption { background: rgba(24, 32, 36, 0.76); }
     }
@@ -532,15 +596,23 @@
       main { width: min(100% - 28px, 640px); gap: 32px; padding: 28px 0 40px; }
       .hero { gap: 14px; margin-top: -32px; padding: 0 0 8px; }
       .summary { font-size: 16px; }
-      .demo-carousel-controls { right: 8px; bottom: 8px; }
+      .demo-carousel-controls { right: 8px; bottom: 8px; left: 8px; }
       .demo-carousel-phase { font-size: 10px; }
+      .demo-carousel-controls { flex-wrap: wrap; justify-content: flex-end; }
+      .demo-chapter-nav { order: -1; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); width: 100%; }
+      .demo-chapter-button { min-width: 0; min-height: 30px; padding: 5px 4px; font-size: 9px; white-space: normal; }
       .hero-details { padding: 20px; }
       .claim-demo-canvas { gap: 8px; padding: 18px 20px; }
+      .proof-prelude-canvas { gap: 8px; padding: 18px 20px; }
       .claim-demo-kicker { font-size: 10px; }
-      .claim-demo-title { font-size: clamp(24px, 8vw, 32px); line-height: 0.98; }
+      .claim-demo-title { max-width: 100%; font-size: clamp(24px, 7vw, 28px); line-height: 0.98; }
+      .proof-question { font-size: clamp(24px, 8vw, 34px); }
+      .proof-summary { font-size: 13px; }
       .claim-demo-tagline { font-size: 13px; line-height: 1.25; }
+      .hero-demo-bar > span { min-width: 0; max-width: 58%; }
+      .hero-demo-bar > span:last-child { max-width: 38%; text-align: right; }
       .hero-demo figcaption,
-      .hero-demo-caption { grid-template-columns: 1fr; padding: 10px 15px 62px; }
+      .hero-demo-caption { grid-template-columns: 1fr; padding: 10px 15px 116px; }
       .hero-demo-links { justify-content: flex-start; }
       .builder-entry, .trust { grid-template-columns: 1fr; gap: 16px; }
       .builder-entry, .trust { padding: 20px; }
@@ -589,7 +661,7 @@
       <section class="demo-showcase" aria-label="Product demonstrations" data-demo-carousel>
         <div class="demo-carousel-viewport" role="region" aria-roledescription="carousel" aria-label="Kungfu product demonstrations" tabindex="0" data-carousel-viewport>
           <div class="demo-carousel-track" data-carousel-track>
-            <article class="demo-carousel-slide" aria-label="The human handoff problem" data-demo-slide data-demo-title="The pain" data-active>
+            <article id="reel-problem" class="demo-carousel-slide" role="tabpanel" aria-label="The human handoff problem" data-demo-slide data-demo-title="The pain" data-active>
               <div class="hero-demo">
                 <div class="hero-demo-bar">
                   <span class="hero-demo-status">Continuity for Agent Work</span>
@@ -607,13 +679,28 @@
               </div>
             </article>
       <!-- auditable-demo-home:start -->
-      <article class="demo-carousel-slide" aria-label="Agent Work Lab demonstration" data-demo-slide data-demo-title="Agent Work Lab">
-        <figure class="hero-demo" aria-labelledby="hero-demo-title">
+      <article id="reel-proof-1" class="demo-carousel-slide proof-chapter" role="tabpanel" aria-label="Can Work survive a new Agent?" data-demo-slide data-demo-title="Continuity" data-proof-chapter="1" data-proof-demo-id="agent-work-lab-autoplay">
+        <section class="proof-panel" data-proof-prelude>
           <div class="hero-demo-bar">
-            <span class="hero-demo-status">Qualified replay</span>
+            <span class="hero-demo-status">Proof 1 of 3 · Continuity</span>
+            <span>Prelude · exact contract</span>
+          </div>
+          <div class="proof-prelude-canvas">
+            <p class="claim-demo-kicker">Continuity</p>
+            <h2 id="proof-1-title" class="proof-question">Can Work survive a new Agent?</h2>
+            <p class="proof-summary">The first proof isolates continuity: one Work continues across two fresh Agent Sessions without copied chat.</p>
+          </div>
+          <div class="hero-demo-caption">
+            <span class="hero-demo-copy"><strong>The mechanism exists; the next proof asks whether it still holds under real failure conditions.</strong><span>Exact media and its retained evidence remain independently inspectable.</span></span>
+            <span class="hero-demo-links"><button class="hero-demo-proof-link" type="button" data-proof-start>Watch proof →</button></span>
+          </div>
+        </section>
+        <figure class="hero-demo proof-media" data-proof-media hidden>
+          <div class="hero-demo-bar">
+            <span class="hero-demo-status">Proof 1 of 3 · Continuity</span>
             <span>Exact installed artifact · 21.6 seconds</span>
           </div>
-          <video data-autoplay-demo controls muted loop playsinline preload="metadata" aria-label="Exact installed Kungfu Agent Work Lab autoplay demonstration" aria-describedby="hero-demo-note" poster="/evidence/auditable-demo/f69ede6927b8cea9ca25d2f552987a8eeeac1354809b5ae3f1fa0851db1b0aa1/agent-work-lab-autoplay/poster.png">
+          <video data-proof-video data-passive-proof controls muted playsinline preload="none" aria-label="Can Work survive a new Agent? exact installed-artifact demonstration" aria-describedby="proof-1-note" poster="/evidence/auditable-demo/f69ede6927b8cea9ca25d2f552987a8eeeac1354809b5ae3f1fa0851db1b0aa1/agent-work-lab-autoplay/poster.png">
             <source media="(max-width: 767px)" src="/evidence/auditable-demo/f69ede6927b8cea9ca25d2f552987a8eeeac1354809b5ae3f1fa0851db1b0aa1/agent-work-lab-autoplay/demo-720p.mp4" type="video/mp4">
           <source media="(max-width: 767px)" src="/evidence/auditable-demo/f69ede6927b8cea9ca25d2f552987a8eeeac1354809b5ae3f1fa0851db1b0aa1/agent-work-lab-autoplay/demo-720p.webm" type="video/webm">
           <source media="(min-width: 768px)" src="/evidence/auditable-demo/f69ede6927b8cea9ca25d2f552987a8eeeac1354809b5ae3f1fa0851db1b0aa1/agent-work-lab-autoplay/demo.mp4" type="video/mp4">
@@ -621,19 +708,95 @@
             <p><a href="/evidence/auditable-demo/f69ede6927b8cea9ca25d2f552987a8eeeac1354809b5ae3f1fa0851db1b0aa1/agent-work-lab-autoplay/demo-720p.mp4">Download the 720p MP4 replay.</a></p>
           </video>
           <figcaption>
-            <span class="hero-demo-copy"><strong id="hero-demo-title">One Work. Two fresh Agent processes.</strong><span id="hero-demo-note">A bounded offline replay—not provider or durability proof.</span></span>
-            <span class="hero-demo-links"><a href="/how-tested/auditable-demo/">How this was tested</a><a href="/evidence/auditable-demo/f69ede6927b8cea9ca25d2f552987a8eeeac1354809b5ae3f1fa0851db1b0aa1/agent-work-lab-autoplay/complete-transcript.txt">Transcript</a></span>
+            <span class="hero-demo-copy"><strong>Can Work survive a new Agent?</strong><span id="proof-1-note">This exact standalone Kungfu artifact proves only the bounded offline Agent Work Lab autoplay observed in two independently captured native PTYs; it grants no Work, release, capability, or production authority.</span></span>
+            <span class="hero-demo-links"><a href="/how-tested/auditable-demo/#demo-agent-work-lab-autoplay-heading">Evidence</a><a href="/evidence/auditable-demo/f69ede6927b8cea9ca25d2f552987a8eeeac1354809b5ae3f1fa0851db1b0aa1/agent-work-lab-autoplay/complete-transcript.txt">Transcript</a><a href="/evidence/auditable-demo/f69ede6927b8cea9ca25d2f552987a8eeeac1354809b5ae3f1fa0851db1b0aa1/agent-work-lab-autoplay/passport.json">Passport</a></span>
+          </figcaption>
+        </figure>
+      </article>
+      <article id="reel-proof-2" class="demo-carousel-slide proof-chapter" role="tabpanel" aria-label="Can Work survive failure?" data-demo-slide data-demo-title="Failure retention" data-proof-chapter="2" data-proof-demo-id="project-tour-episode-1">
+        <section class="proof-panel" data-proof-prelude>
+          <div class="hero-demo-bar">
+            <span class="hero-demo-status">Proof 2 of 3 · Failure retention</span>
+            <span>Prelude · exact contract</span>
+          </div>
+          <div class="proof-prelude-canvas">
+            <p class="claim-demo-kicker">Failure retention</p>
+            <h2 id="proof-2-title" class="proof-question">Can Work survive failure?</h2>
+            <p class="proof-summary">Inside a disposable Project, a dropped connection and a crashed replacement process remain as Attempts under the same Work.</p>
+          </div>
+          <div class="hero-demo-caption">
+            <span class="hero-demo-copy"><strong>Work survival is only the first step. If an Agent can approve its own result, continuity still is not trustworthy.</strong><span>Exact media and its retained evidence remain independently inspectable.</span></span>
+            <span class="hero-demo-links"><button class="hero-demo-proof-link" type="button" data-proof-start>Start Project Tour episode 1 →</button></span>
+          </div>
+        </section>
+        <figure class="hero-demo proof-media" data-proof-media hidden>
+          <div class="hero-demo-bar">
+            <span class="hero-demo-status">Proof 2 of 3 · Failure retention</span>
+            <span>Exact installed artifact · 123.8 seconds</span>
+          </div>
+          <video data-proof-video controls muted playsinline preload="none" aria-label="Can Work survive failure? exact installed-artifact demonstration" aria-describedby="proof-2-note" poster="/evidence/auditable-demo/9a62d7a4bd5f038465535db410e1c5daf068f16a3ef4049dc24a5ff7aa3a387e/project-tour-episode-1/poster.png">
+            <source media="(max-width: 767px)" src="/evidence/auditable-demo/9a62d7a4bd5f038465535db410e1c5daf068f16a3ef4049dc24a5ff7aa3a387e/project-tour-episode-1/demo-720p.mp4" type="video/mp4">
+          <source media="(max-width: 767px)" src="/evidence/auditable-demo/9a62d7a4bd5f038465535db410e1c5daf068f16a3ef4049dc24a5ff7aa3a387e/project-tour-episode-1/demo-720p.webm" type="video/webm">
+          <source media="(min-width: 768px)" src="/evidence/auditable-demo/9a62d7a4bd5f038465535db410e1c5daf068f16a3ef4049dc24a5ff7aa3a387e/project-tour-episode-1/demo.mp4" type="video/mp4">
+          <source media="(min-width: 768px)" src="/evidence/auditable-demo/9a62d7a4bd5f038465535db410e1c5daf068f16a3ef4049dc24a5ff7aa3a387e/project-tour-episode-1/demo.webm" type="video/webm">
+            <p><a href="/evidence/auditable-demo/9a62d7a4bd5f038465535db410e1c5daf068f16a3ef4049dc24a5ff7aa3a387e/project-tour-episode-1/demo-720p.mp4">Download the 720p MP4 replay.</a></p>
+          </video>
+          <figcaption>
+            <span class="hero-demo-copy"><strong>Can Work survive failure?</strong><span id="proof-2-note">This exact standalone Kungfu artifact proves only the bounded disposable Project Tour episode 1 observed at 1x in two independently captured native PTYs; Mock Agent output and terminal observations grant no Work, release, capability, or production authority.</span></span>
+            <span class="hero-demo-links"><a href="/how-tested/auditable-demo/#demo-project-tour-episode-1-heading">Evidence</a><a href="/evidence/auditable-demo/9a62d7a4bd5f038465535db410e1c5daf068f16a3ef4049dc24a5ff7aa3a387e/project-tour-episode-1/complete-transcript.txt">Transcript</a><a href="/evidence/auditable-demo/9a62d7a4bd5f038465535db410e1c5daf068f16a3ef4049dc24a5ff7aa3a387e/project-tour-episode-1/passport.json">Passport</a></span>
+          </figcaption>
+        </figure>
+      </article>
+      <article id="reel-proof-3" class="demo-carousel-slide proof-chapter" role="tabpanel" aria-label="Who is allowed to complete Work?" data-demo-slide data-demo-title="Review and settlement" data-proof-chapter="3" data-proof-demo-id="project-tour-episode-2">
+        <section class="proof-panel" data-proof-prelude>
+          <div class="hero-demo-bar">
+            <span class="hero-demo-status">Proof 3 of 3 · Review and settlement</span>
+            <span>Prelude · exact contract</span>
+          </div>
+          <div class="proof-prelude-canvas">
+            <p class="claim-demo-kicker">Review and settlement</p>
+            <h2 id="proof-3-title" class="proof-question">Who is allowed to complete Work?</h2>
+            <p class="proof-summary">The final proof separates Agent exit, independent review, and Kungfu settlement: an Agent can produce a candidate and evidence, but cannot approve its own Work.</p>
+          </div>
+          <div class="hero-demo-caption">
+            <span class="hero-demo-copy"><strong>The governed completion boundary is now visible.</strong><span>Exact media and its retained evidence remain independently inspectable.</span></span>
+            <span class="hero-demo-links"><button class="hero-demo-proof-link" type="button" data-proof-start>Start Project Tour episode 2 →</button></span>
+          </div>
+        </section>
+        <figure class="hero-demo proof-media" data-proof-media hidden>
+          <div class="hero-demo-bar">
+            <span class="hero-demo-status">Proof 3 of 3 · Review and settlement</span>
+            <span>Exact installed artifact · 147.2 seconds</span>
+          </div>
+          <video data-proof-video controls muted playsinline preload="none" aria-label="Who is allowed to complete Work? exact installed-artifact demonstration" aria-describedby="proof-3-note" poster="/evidence/auditable-demo/462f8f63643ec8c7a76b13f9c34cf07dcbafc4d3cadfc91186e449f1e260d64e/project-tour-episode-2/poster.png">
+            <source media="(max-width: 767px)" src="/evidence/auditable-demo/462f8f63643ec8c7a76b13f9c34cf07dcbafc4d3cadfc91186e449f1e260d64e/project-tour-episode-2/demo-720p.mp4" type="video/mp4">
+          <source media="(max-width: 767px)" src="/evidence/auditable-demo/462f8f63643ec8c7a76b13f9c34cf07dcbafc4d3cadfc91186e449f1e260d64e/project-tour-episode-2/demo-720p.webm" type="video/webm">
+          <source media="(min-width: 768px)" src="/evidence/auditable-demo/462f8f63643ec8c7a76b13f9c34cf07dcbafc4d3cadfc91186e449f1e260d64e/project-tour-episode-2/demo.mp4" type="video/mp4">
+          <source media="(min-width: 768px)" src="/evidence/auditable-demo/462f8f63643ec8c7a76b13f9c34cf07dcbafc4d3cadfc91186e449f1e260d64e/project-tour-episode-2/demo.webm" type="video/webm">
+            <p><a href="/evidence/auditable-demo/462f8f63643ec8c7a76b13f9c34cf07dcbafc4d3cadfc91186e449f1e260d64e/project-tour-episode-2/demo-720p.mp4">Download the 720p MP4 replay.</a></p>
+          </video>
+          <figcaption>
+            <span class="hero-demo-copy"><strong>Who is allowed to complete Work?</strong><span id="proof-3-note">This exact standalone Kungfu artifact proves only the bounded disposable Project Tour episode 2 observed at 1x in two independently captured native PTYs; Mock Agent output and terminal observations grant no Work, release, capability, or production authority.</span></span>
+            <span class="hero-demo-links"><a href="/how-tested/auditable-demo/#demo-project-tour-episode-2-heading">Evidence</a><a href="/evidence/auditable-demo/462f8f63643ec8c7a76b13f9c34cf07dcbafc4d3cadfc91186e449f1e260d64e/project-tour-episode-2/complete-transcript.txt">Transcript</a><a href="/evidence/auditable-demo/462f8f63643ec8c7a76b13f9c34cf07dcbafc4d3cadfc91186e449f1e260d64e/project-tour-episode-2/passport.json">Passport</a></span>
           </figcaption>
         </figure>
       </article>
       <!-- auditable-demo-home:end -->
           </div>
           <div class="demo-carousel-controls" aria-label="Demonstration carousel controls">
-            <span class="demo-carousel-phase">Pain → Proof</span>
-            <span class="demo-carousel-status" aria-hidden="true" data-carousel-counter>01 / 02</span>
-            <span class="sr-only" aria-live="polite" data-carousel-status>01 / 02 · The pain</span>
-            <button class="demo-carousel-button" type="button" aria-label="Previous demonstration" data-carousel-previous disabled><span aria-hidden="true">←</span></button>
-            <button class="demo-carousel-button" type="button" aria-label="Next demonstration" data-carousel-next><span aria-hidden="true">→</span></button>
+            <span class="demo-carousel-phase">Problem → Three proofs</span>
+            <div class="demo-chapter-nav" role="tablist" aria-label="Reel chapters">
+              <button class="demo-chapter-button" type="button" role="tab" aria-controls="reel-problem" aria-selected="true" data-carousel-chapter="0">Problem</button>
+              <button class="demo-chapter-button" type="button" role="tab" aria-controls="reel-proof-1" aria-selected="false" data-carousel-chapter="1">1 · Continuity</button>
+              <button class="demo-chapter-button" type="button" role="tab" aria-controls="reel-proof-2" aria-selected="false" data-carousel-chapter="2">2 · Failure</button>
+              <button class="demo-chapter-button" type="button" role="tab" aria-controls="reel-proof-3" aria-selected="false" data-carousel-chapter="3">3 · Settlement</button>
+            </div>
+            <span class="demo-carousel-status" aria-hidden="true" data-carousel-counter>Problem · 0 / 3</span>
+            <span class="sr-only" aria-live="polite" data-carousel-status>Problem · The pain</span>
+            <button class="demo-proof-action" type="button" data-proof-toggle hidden>Pause proof</button>
+            <button class="demo-proof-action" type="button" data-proof-skip hidden>Skip proof</button>
+            <button class="demo-carousel-button" type="button" aria-label="Previous chapter" data-carousel-previous disabled><span aria-hidden="true">←</span></button>
+            <button class="demo-carousel-button" type="button" aria-label="Next chapter" data-carousel-next><span aria-hidden="true">→</span></button>
           </div>
         </div>
       </section>
@@ -731,43 +894,82 @@
       });
     </script>
     <!-- shared-footer:end -->
-    <script>
+    <script type="module">
+      import { boundedChapter, mediaPolicy, passiveTransition } from "/assets/proof-reel-state.js";
+
       const demoCarousel = document.querySelector("[data-demo-carousel]");
       if (demoCarousel) {
         const demoViewport = demoCarousel.querySelector("[data-carousel-viewport]");
         const demoSlides = Array.from(demoCarousel.querySelectorAll("[data-demo-slide]"));
+        const chapterButtons = Array.from(demoCarousel.querySelectorAll("[data-carousel-chapter]"));
         const demoPrevious = demoCarousel.querySelector("[data-carousel-previous]");
         const demoNext = demoCarousel.querySelector("[data-carousel-next]");
         const demoCounter = demoCarousel.querySelector("[data-carousel-counter]");
         const demoStatus = demoCarousel.querySelector("[data-carousel-status]");
         const demoProof = demoCarousel.querySelector("[data-carousel-proof]");
+        const proofToggle = demoCarousel.querySelector("[data-proof-toggle]");
+        const proofSkip = demoCarousel.querySelector("[data-proof-skip]");
         const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
         let activeDemoIndex = 0;
         let touchStartX = null;
         let autoAdvanceTimer = null;
         let autoAdvanceEnabled = true;
 
-        const clearAutoAdvance = () => {
+        const clearAutoAdvance = ({ cancel = false } = {}) => {
           if (autoAdvanceTimer !== null) window.clearTimeout(autoAdvanceTimer);
           autoAdvanceTimer = null;
+          if (cancel) autoAdvanceEnabled = false;
         };
 
-        const syncDemoPlayback = () => {
+        const activeProofVideo = () => demoSlides[activeDemoIndex]?.querySelector("[data-proof-video]");
+
+        const syncProofMedia = () => {
           demoSlides.forEach((slide, index) => {
-            const video = slide.querySelector("[data-autoplay-demo]");
+            const video = slide.querySelector("[data-proof-video]");
             if (!video) return;
-            const shouldPlay = index === activeDemoIndex
-              && !reducedMotion.matches
-              && document.visibilityState === "visible";
-            if (!shouldPlay) {
-              video.pause();
-              if (index !== activeDemoIndex || reducedMotion.matches) video.currentTime = 0;
-              return;
-            }
-            video.play().catch(() => {
-              // The exact poster and native controls remain when autoplay is blocked.
+            const policy = mediaPolicy({
+              active: index === activeDemoIndex,
+              proofState: slide.dataset.proofState,
+              visible: document.visibilityState === "visible",
             });
+            video.preload = policy.preload;
+            if (policy.pause) {
+              video.pause();
+              if (policy.reset) video.currentTime = 0;
+            }
           });
+        };
+
+        const setProofState = (slide, state) => {
+          const prelude = slide.querySelector("[data-proof-prelude]");
+          const media = slide.querySelector("[data-proof-media]");
+          if (!prelude || !media) return;
+          slide.dataset.proofState = state;
+          const showMedia = state === "media";
+          prelude.hidden = showMedia;
+          prelude.inert = showMedia;
+          media.hidden = !showMedia;
+          media.inert = !showMedia;
+        };
+
+        const queuePassiveProgress = () => {
+          clearAutoAdvance();
+          const activeSlide = demoSlides[activeDemoIndex];
+          const transition = passiveTransition({
+            activeChapter: activeDemoIndex,
+            proofState: activeSlide?.dataset.proofState || "chapter",
+            automationEnabled: autoAdvanceEnabled,
+            reducedMotion: reducedMotion.matches,
+            visible: document.visibilityState === "visible",
+          });
+          if (!transition) return;
+          autoAdvanceTimer = window.setTimeout(() => {
+            if (transition.action.type === "select-chapter") {
+              showDemo(transition.action.chapter, { userInitiated: false });
+            } else {
+              enterProof(activeSlide, { userInitiated: false, play: transition.action.play });
+            }
+          }, transition.delayMs);
         };
 
         const renderDemoCarousel = () => {
@@ -777,38 +979,86 @@
             slide.inert = !active;
             slide.setAttribute("aria-hidden", String(!active));
           });
-          const current = String(activeDemoIndex + 1).padStart(2, "0");
-          const total = String(demoSlides.length).padStart(2, "0");
           const title = demoSlides[activeDemoIndex]?.dataset.demoTitle || "Demonstration";
-          demoCounter.textContent = `${current} / ${total}`;
-          demoStatus.textContent = `${current} / ${total} · ${title}`;
+          const progress = activeDemoIndex === 0 ? "Problem · 0 / 3" : `${title} · ${activeDemoIndex} / 3`;
+          demoCounter.textContent = progress;
+          demoStatus.textContent = `${progress} · ${demoSlides[activeDemoIndex]?.dataset.proofState || "chapter"}`;
           demoPrevious.disabled = activeDemoIndex === 0;
           demoNext.disabled = activeDemoIndex === demoSlides.length - 1;
-          syncDemoPlayback();
-          clearAutoAdvance();
-          if (autoAdvanceEnabled
-            && activeDemoIndex === 0
-            && demoSlides.length > 1
-            && !reducedMotion.matches
-            && document.visibilityState === "visible") {
-            autoAdvanceTimer = window.setTimeout(() => {
-              showDemo(1, { userInitiated: false });
-            }, 5000);
-          }
+          chapterButtons.forEach((button, index) => {
+            const selected = index === activeDemoIndex;
+            button.setAttribute("aria-selected", String(selected));
+            button.tabIndex = selected ? 0 : -1;
+          });
+          const video = activeProofVideo();
+          const mediaActive = Boolean(video && demoSlides[activeDemoIndex].dataset.proofState === "media");
+          proofToggle.hidden = !mediaActive;
+          proofSkip.hidden = activeDemoIndex === 0 || activeDemoIndex === demoSlides.length - 1;
+          if (video) proofToggle.textContent = video.paused ? "Play proof" : "Pause proof";
+          syncProofMedia();
+          queuePassiveProgress();
         };
 
         const showDemo = (index, { userInitiated = true } = {}) => {
-          if (userInitiated) autoAdvanceEnabled = false;
-          clearAutoAdvance();
-          const boundedIndex = Math.max(0, Math.min(index, demoSlides.length - 1));
-          if (boundedIndex === activeDemoIndex) return;
+          clearAutoAdvance({ cancel: userInitiated });
+          const boundedIndex = boundedChapter(index, demoSlides.length);
+          if (boundedIndex === activeDemoIndex) {
+            if (boundedIndex > 0) setProofState(demoSlides[boundedIndex], "prelude");
+            renderDemoCarousel();
+            return;
+          }
+          const previousVideo = activeProofVideo();
+          if (previousVideo) {
+            previousVideo.pause();
+            previousVideo.currentTime = 0;
+          }
           activeDemoIndex = boundedIndex;
+          if (boundedIndex > 0) setProofState(demoSlides[boundedIndex], "prelude");
           renderDemoCarousel();
+        };
+
+        const enterProof = (slide, { userInitiated = true, play = true } = {}) => {
+          clearAutoAdvance({ cancel: userInitiated });
+          if (slide !== demoSlides[activeDemoIndex]) return;
+          setProofState(slide, "media");
+          renderDemoCarousel();
+          const video = slide.querySelector("[data-proof-video]");
+          if (play && video && document.visibilityState === "visible") {
+            video.play().catch(() => {
+              // Native controls, poster, transcript, evidence, and Passport remain available.
+            });
+          }
         };
 
         demoPrevious.addEventListener("click", () => showDemo(activeDemoIndex - 1));
         demoNext.addEventListener("click", () => showDemo(activeDemoIndex + 1));
         demoProof?.addEventListener("click", () => showDemo(1));
+        chapterButtons.forEach((button) => {
+          button.addEventListener("click", () => showDemo(Number(button.dataset.carouselChapter)));
+          button.addEventListener("keydown", (event) => {
+            if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return;
+            event.preventDefault();
+            const current = Number(button.dataset.carouselChapter);
+            const target = event.key === "Home"
+              ? 0
+              : event.key === "End"
+                ? chapterButtons.length - 1
+                : (current + (event.key === "ArrowRight" ? 1 : -1) + chapterButtons.length) % chapterButtons.length;
+            chapterButtons[target].focus();
+            showDemo(target);
+          });
+        });
+        demoCarousel.querySelectorAll("[data-proof-start]").forEach((button) => {
+          button.addEventListener("click", () => enterProof(button.closest("[data-demo-slide]")));
+        });
+        proofToggle.addEventListener("click", () => {
+          clearAutoAdvance({ cancel: true });
+          const video = activeProofVideo();
+          if (!video) return;
+          if (video.paused) video.play().catch(() => {});
+          else video.pause();
+        });
+        proofSkip.addEventListener("click", () => showDemo(activeDemoIndex + 1));
         demoViewport.addEventListener("keydown", (event) => {
           if (event.target.closest("a, button, video")) return;
           if (event.key === "ArrowLeft") {
@@ -830,12 +1080,36 @@
           if (Math.abs(distance) < 48) return;
           showDemo(activeDemoIndex + (distance < 0 ? 1 : -1));
         }, { passive: true });
+        demoCarousel.querySelectorAll("[data-proof-video]").forEach((video) => {
+          const syncToggle = () => {
+            if (video === activeProofVideo()) proofToggle.textContent = video.paused ? "Play proof" : "Pause proof";
+          };
+          video.addEventListener("play", syncToggle);
+          video.addEventListener("pause", syncToggle);
+          video.addEventListener("ended", syncToggle);
+          video.addEventListener("pointerdown", () => clearAutoAdvance({ cancel: true }));
+          video.addEventListener("keydown", () => clearAutoAdvance({ cancel: true }));
+        });
         if (typeof reducedMotion.addEventListener === "function") {
-          reducedMotion.addEventListener("change", renderDemoCarousel);
+          reducedMotion.addEventListener("change", () => {
+            clearAutoAdvance();
+            if (reducedMotion.matches) activeProofVideo()?.pause();
+            renderDemoCarousel();
+          });
         } else {
-          reducedMotion.addListener(renderDemoCarousel);
+          reducedMotion.addListener(() => {
+            clearAutoAdvance();
+            if (reducedMotion.matches) activeProofVideo()?.pause();
+            renderDemoCarousel();
+          });
         }
-        document.addEventListener("visibilitychange", renderDemoCarousel);
+        document.addEventListener("visibilitychange", () => {
+          if (document.visibilityState !== "visible") clearAutoAdvance();
+          renderDemoCarousel();
+        });
+        demoSlides.forEach((slide, index) => {
+          if (index > 0) setProofState(slide, "prelude");
+        });
         renderDemoCarousel();
       }
     </script>
