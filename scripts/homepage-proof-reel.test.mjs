@@ -6,8 +6,11 @@ import fs from "node:fs";
 import test from "node:test";
 import { loadPresentationContract } from "./import-auditable-demo.mjs";
 import {
+  adjacentScene,
   CONTINUITY_PRELUDE_DELAY_MS,
   PROBLEM_AUTOMATION_DELAY_MS,
+  PROOF_PRELUDE_DELAY_MS,
+  PROOF_SCENE_TRANSITION_DURATION_MS,
   mediaPolicy,
   passiveTransition,
   transitionReel,
@@ -52,7 +55,9 @@ test("homepage renders four semantic chapters from the rooted three-proof contra
   }
 });
 
-test("passive progression is bounded to Problem and the compact Continuity prelude", () => {
+test("passive progression advances every text scene without overriding user or motion preferences", () => {
+  assert.equal(PROBLEM_AUTOMATION_DELAY_MS, 7000);
+  assert.equal(PROOF_PRELUDE_DELAY_MS, 5000);
   assert.deepEqual(
     passiveTransition({
       activeChapter: 0,
@@ -74,19 +79,64 @@ test("passive progression is bounded to Problem and the compact Continuity prelu
     { delayMs: CONTINUITY_PRELUDE_DELAY_MS, action: { type: "enter-proof", play: true } },
   );
   for (const activeChapter of [2, 3]) {
-    assert.equal(passiveTransition({ activeChapter, proofState: "prelude", automationEnabled: true, reducedMotion: false, visible: true }), null);
+    assert.deepEqual(
+      passiveTransition({ activeChapter, proofState: "prelude", automationEnabled: true, reducedMotion: false, visible: true }),
+      { delayMs: CONTINUITY_PRELUDE_DELAY_MS, action: { type: "enter-proof", play: true } },
+    );
   }
   assert.equal(passiveTransition({ activeChapter: 0, proofState: "chapter", automationEnabled: true, reducedMotion: true, visible: true }), null);
+  assert.equal(passiveTransition({ activeChapter: 2, proofState: "media", automationEnabled: true, reducedMotion: false, visible: true }), null);
 });
 
-test("navigation and media interaction cancel automation and keep chapter progress stable", () => {
+test("scene navigation walks text and video scenes in both directions and wraps", () => {
+  const forward = [
+    { activeChapter: 0, proofState: "chapter" },
+    { activeChapter: 1, proofState: "prelude" },
+    { activeChapter: 1, proofState: "media" },
+    { activeChapter: 2, proofState: "prelude" },
+    { activeChapter: 2, proofState: "media" },
+    { activeChapter: 3, proofState: "prelude" },
+    { activeChapter: 3, proofState: "media" },
+    { activeChapter: 0, proofState: "chapter" },
+  ];
+  for (let index = 0; index < forward.length - 1; index += 1) {
+    assert.deepEqual(adjacentScene(forward[index], 1), forward[index + 1]);
+    assert.deepEqual(adjacentScene(forward[index + 1], -1), forward[index]);
+  }
+});
+
+test("browser controls and video completion delegate to scene navigation", () => {
+  const page = html();
+  assert.match(page, /demoPrevious\.addEventListener\("click", \(\) => stepScene\(-1\)\)/u);
+  assert.match(page, /demoPlayback\.addEventListener\("click", \(\) => setPlayback\(!autoAdvanceEnabled\)\)/u);
+  assert.match(page, /demoNext\.addEventListener\("click", \(\) => stepScene\(1\)\)/u);
+  assert.match(page, /video\.addEventListener\("ended", \(\) => \{[\s\S]*?autoAdvanceEnabled\) stepScene\(1\)/u);
+  assert.match(page, /aria-label="Previous scene" data-carousel-previous/u);
+  assert.match(page, /aria-label="Pause scene playback" aria-pressed="true" data-carousel-playback/u);
+  assert.match(page, /aria-label="Next scene" data-carousel-next/u);
+});
+
+test("proof text crossfades into media with a short motion-safe transition", () => {
+  const page = html();
+  assert.equal(PROOF_SCENE_TRANSITION_DURATION_MS, 480);
+  assert.match(page, /!reducedMotion\.matches[\s\S]*?typeof prelude\?\.animate === "function"/u);
+  assert.match(page, /prelude\.animate\(\[[\s\S]*?scale\(0\.985\)/u);
+  assert.match(page, /media\.animate\(\[[\s\S]*?scale\(1\.015\)[\s\S]*?scale\(1\)/u);
+  assert.match(page, /setSceneAnimationsPlaying\(enabled\)/u);
+  assert.match(page, /data-proof-transitioning/u);
+  assert.match(page, /const previousVideo = activeProofVideo\(\);\s*activeDemoIndex = boundedIndex;\s*if \(previousVideo\)/u);
+});
+
+test("navigation preserves explicit playback while play and pause own automation", () => {
   const initial = { activeChapter: 0, proofState: "chapter", automationEnabled: true };
   const continuity = transitionReel(initial, { type: "select-chapter", chapter: 1, userInitiated: true });
-  assert.deepEqual(continuity, { activeChapter: 1, proofState: "prelude", automationEnabled: false });
+  assert.deepEqual(continuity, { activeChapter: 1, proofState: "prelude", automationEnabled: true });
   const media = transitionReel(continuity, { type: "enter-proof", play: true, userInitiated: true });
-  assert.deepEqual(media, { activeChapter: 1, proofState: "media", automationEnabled: false });
+  assert.deepEqual(media, { activeChapter: 1, proofState: "media", automationEnabled: true });
   assert.equal(media.activeChapter, continuity.activeChapter);
-  assert.equal(transitionReel(media, { type: "pause", userInitiated: true }).automationEnabled, false);
+  const paused = transitionReel(media, { type: "pause" });
+  assert.equal(paused.automationEnabled, false);
+  assert.equal(transitionReel(paused, { type: "play" }).automationEnabled, true);
 });
 
 test("inactive media never plays, resets, and remains non-eager", () => {
