@@ -1,8 +1,9 @@
 # Installation and Release Status Contract
 
-The committed `/install/` route remains a truthful Coming Soon surface until a
-separately reviewed publication transaction proves that installers are
-available.
+The committed `/install/` route reflects the current reviewed publication
+transaction. It presents Kungfu v4.0.0-alpha.1 as the first public v4 Alpha,
+with exact acquisition evidence, while preserving the boundary that an Alpha
+is neither stable nor generally available.
 
 `site/installer-publication-source.json` is the only site-owned publication pin
 consumed by the build. While it declares `unavailable`, local and deployment
@@ -22,8 +23,8 @@ site read-back, and installed-product qualification. The second preserves the
 boundary that this evidence is not a trademark registration, legal conclusion,
 or first-use-date claim.
 
-Before Alpha activation, the endpoint must return `unavailable`; it must never
-infer a release from source files or a candidate manifest.
+When no reviewed publication is active, the endpoint must return `unavailable`;
+it must never infer a release from source files or a candidate manifest.
 
 ## Activation Boundary
 

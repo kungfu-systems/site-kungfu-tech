@@ -352,8 +352,8 @@ grep -q 'Build and own your Hub. Kungfu stays beneath it.' public/index.html
 grep -q 'it does not compete for the Hub' public/index.html
 grep -q 'Your Hub stays yours' public/index.html
 grep -q '7eeb5bd1b45492f4da27eaacbe63eddfd6245176/examples/opencode-kungfu/quickstart' public/index.html
-grep -q 'Coming soon' public/install/index.html
-grep -q 'being prepared' public/index.html
+grep -q 'Alpha available' public/install/index.html
+grep -q 'its first public v4 Alpha' public/index.html
 if grep -q 'class="control-pane"\|class="triangle"\|Cost, state, and proof' public/index.html; then
   echo "error: homepage still contains the retired Cost / State / Proof first-screen treatment" >&2
   exit 1
@@ -465,7 +465,7 @@ if grep -Fq 'building infrastructure for durable agent work while using agents t
 fi
 grep -q 'With gratitude to Douglas Engelbart' public/about/bootstrapping/index.html
 grep -q 'The product is not a smarter Session. It is a machine-readable common reality that survives Sessions.' public/about/bootstrapping/index.html
-grep -q 'Kungfu v4 is coming soon.' public/about/bootstrapping/index.html
+grep -q 'Kungfu v4.0.0-alpha.1 is now publicly released as the first v4 Alpha.' public/about/bootstrapping/index.html
 if grep -q 'docs/concepts/bootstrapping-agent-work.md' public/about/bootstrapping/index.html; then
   echo "error: preview thesis must not point readers to the unsynchronized repository essay" >&2
   exit 1
@@ -596,7 +596,7 @@ grep -q 'contains no financing terms' public/capital/investor-perspective/index.
 grep -q 'href="/capital/"' public/capital/investor-perspective/index.html
 grep -q 'shared-header:start' public/services/index.html
 grep -q 'shared-footer:start' public/services/index.html
-grep -q 'not generally released yet' public/services/index.html
+grep -q 'Kungfu v4.0.0-alpha.1 is publicly released as the first v4 Alpha.' public/services/index.html
 grep -q 'Commercial services will build around an open, local-first core.' public/services/index.html
 grep -q 'shared-header:start' public/trust/index.html
 grep -q 'shared-footer:start' public/trust/index.html
@@ -621,7 +621,9 @@ if grep -qi 'Mission Control\\|Agent Qualification Lab\\|Work graph' public/inst
   echo "Get Kungfu must describe stable user value without internal product-route names" >&2
   exit 1
 fi
-grep -q 'No public GUI download is released today.' public/install/index.html
+grep -q 'Desktop Alpha artifacts for macOS, Windows, and Linux are available' public/install/index.html
+grep -q 'This is the first public Alpha, not a stable or generally available release.' public/install/index.html
+grep -q 'Kungfu v4.0.0-alpha.1 is publicly released as the first v4 Alpha.' public/about/index.html
 grep -q '<h2>Command Line</h2>' public/install/index.html
 grep -q 'id="command-line"' public/install/index.html
 grep -q 'bootstrap-publication:start' public/install/index.html
@@ -932,7 +934,7 @@ if [ -d dist ]; then
   grep -q 'npm:@kungfu-tech/kfd@1.0.0-alpha.41' dist/llms.txt
   grep -q 'Never Guess. Facts Unfold.' dist/index.html
   grep -q 'The name did not begin as an acronym.' dist/why-kungfu/index.html
-  grep -q 'being prepared' dist/index.html
+  grep -q 'its first public v4 Alpha' dist/index.html
   grep -q 'Kungfu Origin Technology Limited' dist/index.html
   grep -q 'libkungfu.dev' dist/about/index.html
   grep -q 'One human organized the work. Agents executed it.' dist/about/bootstrapping/evidence/index.html
