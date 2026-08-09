@@ -9,6 +9,7 @@ site = "kungfu-tech"
 url_pattern = "https://{alias}.preview.kungfu.tech"
 visibility = "ephemeral"
 requires_auth = false
+access_control = "managed-network"
 noindex = true
 
 [channels.staging]
