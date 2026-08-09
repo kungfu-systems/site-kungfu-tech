@@ -27,67 +27,51 @@
       color: var(--muted);
       font-size: 20px;
     }
-    .edition-grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 16px;
-      margin: 0 0 44px;
-    }
-    .edition-card {
-      display: grid;
-      align-content: start;
-      gap: 14px;
-      min-height: 260px;
-      padding: 24px;
-      border: 1px solid var(--line);
-      background: var(--surface);
-    }
-    .edition-heading {
+    .section-heading {
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 12px;
     }
-    .edition-heading p,
-    .edition-card h2,
-    .edition-card p {
-      margin: 0;
-    }
-    .edition-label {
+    .section-heading h2,
+    .section-heading p { margin: 0; }
+    .eyebrow {
       color: var(--accent);
       font-size: 13px;
       font-weight: 750;
       letter-spacing: 0.04em;
       text-transform: uppercase;
     }
-    .edition-status {
-      padding: 4px 8px;
+    .version-chip {
+      padding: 5px 9px;
       border: 1px solid var(--line);
       color: var(--muted);
       font-size: 12px;
       font-weight: 700;
       white-space: nowrap;
     }
-    .edition-card h2 {
-      font-size: clamp(28px, 4vw, 40px);
-    }
-    .edition-platforms {
-      padding-top: 12px;
-      border-top: 1px solid var(--line);
-      font-size: 14px;
-    }
-    .edition-card a {
-      align-self: end;
-      font-weight: 700;
-    }
     .state {
-      margin: 0 0 36px;
-      padding: 20px 22px;
+      margin: 0;
+      padding: 16px 20px;
       border: 1px solid var(--line);
       background: var(--surface);
     }
     .state strong { display: block; margin-bottom: 8px; }
     .state p { margin: 0; color: var(--muted); }
+    .release-summary {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      border-bottom: 0;
+    }
+    .status-dot {
+      width: 10px;
+      height: 10px;
+      flex: 0 0 auto;
+      border-radius: 50%;
+      background: var(--ok);
+      box-shadow: 0 0 0 5px color-mix(in srgb, var(--ok) 14%, transparent);
+    }
     .grid {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -104,9 +88,14 @@
     h2 { margin: 0 0 12px; font-size: 22px; line-height: 1.16; }
     p { margin: 0 0 12px; color: var(--muted); }
     p:last-child { margin-bottom: 0; }
+    .section-heading h2 {
+      margin-top: 2px;
+      font-size: clamp(28px, 4vw, 40px);
+    }
+    .section-lead { max-width: 760px; margin: 12px 0 20px; }
     code {
       overflow-wrap: anywhere;
-      color: var(--text);
+      color: var(--fg);
     }
     .command {
       display: block;
@@ -116,11 +105,113 @@
       white-space: pre-wrap;
     }
     .command-block { margin: 12px 0; }
+    .command-line-section { padding: 30px; }
+    .command-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 14px;
+    }
+    .command-card {
+      display: grid;
+      grid-template-columns: 160px minmax(0, 1fr);
+      grid-template-rows: auto auto;
+      align-items: center;
+      column-gap: 18px;
+      min-width: 0;
+      padding: 18px;
+      border: 1px solid var(--line);
+      background: var(--bg);
+    }
+    .command-platform {
+      margin: 0;
+      color: var(--fg);
+      font-weight: 750;
+    }
+    .command-card > p:last-child {
+      grid-column: 1;
+      margin-top: 4px;
+      font-size: 13px;
+      line-height: 1.4;
+    }
+    .command-card .command-block {
+      grid-column: 2;
+      grid-row: 1 / span 2;
+      margin: 0;
+    }
+    .desktop-downloads { padding: 30px; }
+    .platform-tabs {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+      margin: 20px 0 12px;
+    }
+    .platform-tabs button {
+      min-height: 46px;
+      padding: 9px 14px;
+      border: 1px solid var(--line);
+      background: var(--bg);
+      color: var(--fg);
+      cursor: pointer;
+      font: 700 14px/1.2 var(--font-body);
+    }
+    .platform-tabs button[aria-selected="true"] {
+      border-color: var(--accent);
+      background: var(--accent);
+      color: var(--on-accent);
+    }
+    .platform-tabs button:focus-visible,
+    .download-button:focus-visible {
+      outline: 3px solid color-mix(in srgb, var(--accent) 38%, transparent);
+      outline-offset: 2px;
+    }
+    .desktop-download-panel {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      min-height: 96px;
+      padding: 18px 20px;
+      border: 1px solid var(--line);
+      background: var(--bg);
+    }
+    .desktop-download-panel[hidden] { display: none; }
+    .desktop-download-panel strong { font-size: 18px; }
+    .desktop-download-panel p { margin: 2px 0 0; font-size: 14px; }
+    .download-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 44px;
+      padding: 10px 16px;
+      border: 1px solid var(--accent);
+      background: var(--accent);
+      color: var(--on-accent);
+      font-weight: 750;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+    .download-button:hover { border-color: var(--fg); background: var(--fg); color: var(--bg); }
+    .alpha-note {
+      margin-top: 14px;
+      padding-top: 14px;
+      border-top: 1px solid var(--line);
+      font-size: 14px;
+    }
+    .release-evidence { font-size: 14px; }
+    .release-evidence .section-heading { margin-bottom: 16px; }
     @media (max-width: 760px) {
       main { width: min(100% - 28px, 640px); padding-top: 36px; }
-      .edition-grid,
+      .command-grid,
       .grid { grid-template-columns: 1fr; }
       section.wide { grid-column: auto; }
+      .section-heading { align-items: flex-start; }
+      .platform-tabs { grid-template-columns: 1fr; }
+      .command-card { grid-template-columns: 1fr; }
+      .command-card > p:last-child,
+      .command-card .command-block { grid-column: 1; grid-row: auto; }
+      .command-card .command-block { margin: 12px 0; }
+      .desktop-download-panel { align-items: stretch; flex-direction: column; }
+      .download-button { width: 100%; }
     }
   </style>
 </head>
@@ -158,73 +249,108 @@
     <!-- shared-header:end -->
 
     <h1>Get Kungfu.</h1>
-    <p class="lead">Kungfu is one product across desktop and command line. Each delivery surface states its own actual availability and release evidence—an unavailable interface never borrows another interface's claim.</p>
-
-    <div class="edition-grid" aria-label="Kungfu delivery surfaces">
-      <article class="edition-card">
-        <div class="edition-heading">
-          <p class="edition-label">Visual workspace</p>
-          <span class="edition-status">Alpha available</span>
-        </div>
-        <h2>Desktop GUI</h2>
-        <p>A native visual workspace for Agent Work Management, durable continuity, and human-Agent collaboration. Desktop Alpha artifacts for macOS, Windows, and Linux are available from the <a href="https://github.com/kungfu-systems/kungfu/releases/tag/v4.0.0-alpha.1">v4.0.0-alpha.1 release</a>.</p>
-        <p class="edition-platforms">This is the first public Alpha, not a stable or generally available release. Inspect the release evidence and current limits before adoption.</p>
-      </article>
-
-      <article class="edition-card">
-        <div class="edition-heading">
-          <p class="edition-label">Terminal and automation</p>
-          <span class="edition-status">Current status below</span>
-        </div>
-        <h2>Command Line</h2>
-        <p>The standalone Kungfu CLI is a thin, auditable projection of the signed Buildchain release channel. It does not invent a second latest pointer or silently change channels.</p>
-        <a href="#command-line">Check Command Line availability</a>
-      </article>
-    </div>
+    <p class="lead">Install the standalone CLI first, or choose a qualified Desktop GUI download for your platform. Every route remains bound to the same signed Alpha release.</p>
 
     <!-- bootstrap-publication:start -->
-    <div class="state" id="command-line">
-      <strong>Signed Alpha 4.0.0-alpha.1 is publicly available.</strong>
-      <p>The canonical channel, immutable installers, release artifacts, and public read-back bind source <code>ad7c7db6df076f969c5939728bcbe70ccd4771b3</code> and channel root <code>sha256:6cc17282c81e82af34dbd07a9ea9f4263f6784dc99a77c4fb92758304815ad21</code>.</p>
+    <div class="state release-summary">
+      <span class="status-dot" aria-hidden="true"></span>
+      <div>
+        <strong>Alpha 4.0.0-alpha.1 is ready to install.</strong>
+        <p>Current signed release · 3 desktop platforms · standalone CLI</p>
+      </div>
     </div>
 
     <div class="grid">
-      <section class="wide release-acquisition" data-ungfu-release-acquisition data-version="4.0.0-alpha.1" data-channel="alpha">
-        <h2>Kungfu UNGFU™</h2>
-        <p>Downloadable software for durable AI-agent work, inspection, and development workflows.</p>
-        <p>Version <strong>4.0.0-alpha.1</strong> · Channel <strong>alpha</strong></p>
-        <p><a href="https://kungfu.tech/install.sh"><code>https://kungfu.tech/install.sh</code></a> installs the signed Alpha after local channel and artifact verification.</p>
-        <p><a href="/evidence/ungfu/alpha/4.0.0-alpha.1/6cc17282c81e82af34dbd07a9ea9f4263f6784dc99a77c4fb92758304815ad21/acquisition.html">Rendered acquisition evidence</a> · <a href="/evidence/ungfu/alpha/4.0.0-alpha.1/6cc17282c81e82af34dbd07a9ea9f4263f6784dc99a77c4fb92758304815ad21/index.json">machine-readable index</a></p>
-      </section>
-
-      <section>
-        <h2>macOS and Linux</h2>
-        <p>Convenience install from the revalidated canonical route:</p>
-        <div class="command-block">
-          <code class="command">curl --fail --proto '=https' --tlsv1.2 https://kungfu.tech/install.sh | sh</code>
-          <button class="copy-button" type="button" data-copy-command aria-label="Copy macOS and Linux install command" aria-live="polite">Copy</button>
+      <section class="wide release-acquisition command-line-section" id="command-line" data-ungfu-release-acquisition data-version="4.0.0-alpha.1" data-channel="alpha">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Start here</p>
+            <h2>Command Line</h2>
+          </div>
+          <span class="version-chip">4.0.0-alpha.1 · alpha</span>
         </div>
-        <p>For higher assurance, download the immutable script below, compare its digest, inspect it, then execute it.</p>
-      </section>
+        <p class="section-lead">Install the standalone Kungfu CLI from the signed release channel. Choose the command for your operating system.</p>
+        <div class="command-grid">
+          <article class="command-card">
+            <p class="command-platform">macOS &amp; Linux</p>
+            <div class="command-block">
+              <code class="command">curl -fsSL https://kungfu.tech/install.sh | sh</code>
+              <button class="copy-button" type="button" data-copy-command aria-label="Copy macOS and Linux install command" aria-live="polite">Copy</button>
+            </div>
+            <p>Per-user install. No <code>sudo</code> and no shell-profile edits.</p>
+          </article>
 
-      <section>
-        <h2>Windows PowerShell</h2>
-        <p>Convenience install from the revalidated canonical route:</p>
-        <div class="command-block">
-          <code class="command">irm https://kungfu.tech/install.ps1 | iex</code>
-          <button class="copy-button" type="button" data-copy-command aria-label="Copy Windows PowerShell install command" aria-live="polite">Copy</button>
+          <article class="command-card">
+            <p class="command-platform">Windows PowerShell</p>
+            <div class="command-block">
+              <code class="command">irm https://kungfu.tech/install.ps1 | iex</code>
+              <button class="copy-button" type="button" data-copy-command aria-label="Copy Windows PowerShell install command" aria-live="polite">Copy</button>
+            </div>
+            <p>Per-user install. No Administrator rights or registry edits.</p>
+          </article>
         </div>
-        <p>The qualified Windows Alpha archive may be unsigned: trust comes from signed release-channel evidence, an immutable URL, and a published SHA-256 digest. Authenticode is not a qualification requirement for this Alpha.</p>
       </section>
 
-      <section class="wide">
-        <h2>Inspect and pin before execution</h2>
+      <section class="wide desktop-downloads">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Visual workspace</p>
+            <h2>Desktop GUI</h2>
+          </div>
+          <span class="version-chip">Alpha available</span>
+        </div>
+        <p class="section-lead">Choose your platform and download the qualified GUI artifact directly from the Kungfu GitHub Release.</p>
+        <div class="platform-tabs" role="tablist" aria-label="Choose a desktop platform">
+          <button type="button" role="tab" aria-selected="true" aria-controls="desktop-panel-darwin-arm64" tabindex="0" data-desktop-platform="darwin-arm64">macOS</button>
+          <button type="button" role="tab" aria-selected="false" aria-controls="desktop-panel-linux-x64" tabindex="-1" data-desktop-platform="linux-x64">Linux</button>
+          <button type="button" role="tab" aria-selected="false" aria-controls="desktop-panel-win32-x64" tabindex="-1" data-desktop-platform="win32-x64">Windows</button>
+        </div>
+        <div class="desktop-download-panels">
+        <div class="desktop-download-panel" id="desktop-panel-darwin-arm64" role="tabpanel" data-desktop-panel="darwin-arm64">
+          <div>
+            <strong>macOS · Apple silicon</strong>
+            <p>Kungfu-Episodes-4.0.0-alpha.1-macos-arm64.zip · 255 MiB</p>
+          </div>
+          <a class="download-button" href="https://github.com/kungfu-systems/kungfu/releases/download/v4.0.0-alpha.1/Kungfu-Episodes-4.0.0-alpha.1-macos-arm64.zip">Download for macOS</a>
+        </div>
+        <div class="desktop-download-panel" id="desktop-panel-linux-x64" role="tabpanel" data-desktop-panel="linux-x64" hidden>
+          <div>
+            <strong>Linux · x64</strong>
+            <p>Kungfu Episodes-4.0.0-alpha.1.AppImage · 296 MiB</p>
+          </div>
+          <a class="download-button" href="https://github.com/kungfu-systems/kungfu/releases/download/v4.0.0-alpha.1/Kungfu%20Episodes-4.0.0-alpha.1.AppImage">Download for Linux</a>
+        </div>
+        <div class="desktop-download-panel" id="desktop-panel-win32-x64" role="tabpanel" data-desktop-panel="win32-x64" hidden>
+          <div>
+            <strong>Windows · x64</strong>
+            <p>Kungfu Episodes Setup 4.0.0-alpha.1.exe · 293 MiB</p>
+          </div>
+          <a class="download-button" href="https://github.com/kungfu-systems/kungfu/releases/download/v4.0.0-alpha.1/Kungfu%20Episodes%20Setup%204.0.0-alpha.1.exe">Download for Windows</a>
+        </div>
+        </div>
+        <p class="alpha-note">This is an Alpha, not a stable or generally available release. Existing package-manager installations remain under their current owner.</p>
+      </section>
+
+      <section class="wide release-evidence">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Release evidence</p>
+            <h2>Inspect and verify</h2>
+          </div>
+          <a href="/evidence/ungfu/alpha/4.0.0-alpha.1/6cc17282c81e82af34dbd07a9ea9f4263f6784dc99a77c4fb92758304815ad21/acquisition.html">Rendered evidence</a>
+        </div>
+        <p>Kungfu UNGFU™ · Downloadable software for durable AI-agent work, inspection, and development workflows.</p>
+        <p>Source: <code>ad7c7db6df076f969c5939728bcbe70ccd4771b3</code> · Channel root: <code>sha256:6cc17282c81e82af34dbd07a9ea9f4263f6784dc99a77c4fb92758304815ad21</code></p>
         <p>Channel: <a href="/.well-known/kungfu/alpha.json"><code>/.well-known/kungfu/alpha.json</code></a> · <code>sha256:150cea40c9874fd59077cc30a6a8600d8a101f00e444107c1ddda5d33b246a15</code></p>
         <p>Immutable channel: <a href="/channels/alpha/6cc17282c81e82af34dbd07a9ea9f4263f6784dc99a77c4fb92758304815ad21/index.json"><code>/channels/alpha/6cc17282c81e82af34dbd07a9ea9f4263f6784dc99a77c4fb92758304815ad21/index.json</code></a></p>
         <p>Release Passport: <code>buildchain:release-passport/ad7c7db6df076f969c5939728bcbe70ccd4771b3</code> · <code>sha256:da44593e19c21d1dc2d62f7af567e9f86a96e1e87d0ec53da6c6365a047ae7d3</code></p>
         <p>Qualified targets: <code>darwin/arm64, linux/x64, win32/x64</code></p>
+        <p>macOS GUI: <a href="https://github.com/kungfu-systems/kungfu/releases/download/v4.0.0-alpha.1/Kungfu-Episodes-4.0.0-alpha.1-macos-arm64.zip"><code>Kungfu-Episodes-4.0.0-alpha.1-macos-arm64.zip</code></a> · 266995130 bytes · <code>sha256:1e30b69bc9ef697e629a0eeb487580c97a3ac74614a39f34678df5fb0596dac7</code></p>
+        <p>Linux GUI: <a href="https://github.com/kungfu-systems/kungfu/releases/download/v4.0.0-alpha.1/Kungfu%20Episodes-4.0.0-alpha.1.AppImage"><code>Kungfu Episodes-4.0.0-alpha.1.AppImage</code></a> · 310885182 bytes · <code>sha256:126b24b8bf473065a17da2d132083d862018e44159e56a708f0815cac681645a</code></p>
+        <p>Windows GUI: <a href="https://github.com/kungfu-systems/kungfu/releases/download/v4.0.0-alpha.1/Kungfu%20Episodes%20Setup%204.0.0-alpha.1.exe"><code>Kungfu Episodes Setup 4.0.0-alpha.1.exe</code></a> · 307297205 bytes · <code>sha256:5d12cd827b654d6c68829ce7157e70c7fadc3b23d9a0752b3bb56da27307ff19</code></p>
         <p><a href="/installers/v1/alpha/4.0.0-alpha.1/6cc17282c81e82af34dbd07a9ea9f4263f6784dc99a77c4fb92758304815ad21/install.sh"><code>install.sh</code></a> · 9630 bytes · <code>sha256:2ec93b8ae69f49e4104fcbe3c1ea37d432423ceadcc95a736058a85d11241cc8</code></p>
         <p><a href="/installers/v1/alpha/4.0.0-alpha.1/6cc17282c81e82af34dbd07a9ea9f4263f6784dc99a77c4fb92758304815ad21/install.ps1"><code>install.ps1</code></a> · 6280 bytes · <code>sha256:62cf594eb7ed69d488f2f9ce2beed8015e2b1f589b1b5af71c0d1929635fbe68</code></p>
+        <p><a href="/evidence/ungfu/alpha/4.0.0-alpha.1/6cc17282c81e82af34dbd07a9ea9f4263f6784dc99a77c4fb92758304815ad21/index.json">Machine-readable evidence index</a></p>
       </section>
         <!-- bootstrap-publication:end -->
 
@@ -272,6 +398,44 @@
       });
     </script>
     <!-- shared-footer:end -->
+    <script>
+      (() => {
+        const tablist = document.querySelector("[aria-label='Choose a desktop platform']");
+        if (!tablist) return;
+        const tabs = Array.from(tablist.querySelectorAll("[data-desktop-platform]"));
+        const panels = Array.from(document.querySelectorAll("[data-desktop-panel]"));
+        const activate = (tab, focus = false) => {
+          const platform = tab.dataset.desktopPlatform;
+          tabs.forEach((item) => {
+            const selected = item === tab;
+            item.setAttribute("aria-selected", String(selected));
+            item.tabIndex = selected ? 0 : -1;
+          });
+          panels.forEach((panel) => {
+            panel.hidden = panel.dataset.desktopPanel !== platform;
+          });
+          if (focus) tab.focus();
+        };
+        tabs.forEach((tab, index) => {
+          tab.addEventListener("click", () => activate(tab));
+          tab.addEventListener("keydown", (event) => {
+            let next = null;
+            if (event.key === "ArrowRight" || event.key === "ArrowDown") {
+              next = tabs[(index + 1) % tabs.length];
+            } else if (event.key === "ArrowLeft" || event.key === "ArrowUp") {
+              next = tabs[(index - 1 + tabs.length) % tabs.length];
+            } else if (event.key === "Home") {
+              next = tabs[0];
+            } else if (event.key === "End") {
+              next = tabs[tabs.length - 1];
+            }
+            if (!next) return;
+            event.preventDefault();
+            activate(next, true);
+          });
+        });
+      })();
+    </script>
     <script src="/assets/command-copy.js" defer></script>
   </main>
 </body>

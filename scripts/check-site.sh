@@ -186,6 +186,11 @@ grep -q '5.8cqw' public/index.html
 grep -q 'Use the best Agent when it matters. Use a cheaper one when it does not.' public/index.html
 grep -q 'class="hero-actions" aria-label="Explore Kungfu"' public/index.html
 grep -q 'class="brand-motto">Never Guess. Facts Unfold.</span>' public/index.html
+grep -q 'class="hero-install-strip" href="/install/"' public/index.html
+grep -q '<strong>Download Kungfu</strong><span>Public Alpha · Desktop + standalone CLI</span>' public/index.html
+grep -q 'aria-label="Available platforms"><span>macOS</span><span>Linux</span><span>Windows</span>' public/index.html
+assert_before public/index.html 'class="hero-details"' 'class="hero-install-strip"'
+assert_before public/index.html 'class="hero-install-strip"' 'class="builder-entry"'
 grep -q 'window.setTimeout' public/index.html
 grep -q 'PROBLEM_AUTOMATION_DELAY_MS = 7000' public/assets/proof-reel-state.js
 grep -q 'event.key === "ArrowLeft"' public/index.html
@@ -616,24 +621,31 @@ grep -q 'https://kungfu.tech/install.ps1' public/install/index.html
 grep -q '<title>Get Kungfu | Kungfu UNGFU™</title>' public/install/index.html
 grep -q '<h1>Get Kungfu.</h1>' public/install/index.html
 grep -q '<h2>Desktop GUI</h2>' public/install/index.html
-grep -q 'Agent Work Management' public/install/index.html
 if grep -qi 'Mission Control\\|Agent Qualification Lab\\|Work graph' public/install/index.html; then
   echo "Get Kungfu must describe stable user value without internal product-route names" >&2
   exit 1
 fi
-grep -q 'Desktop Alpha artifacts for macOS, Windows, and Linux are available' public/install/index.html
-grep -q 'This is the first public Alpha, not a stable or generally available release.' public/install/index.html
+grep -q 'Choose your platform and download the qualified GUI artifact directly' public/install/index.html
+grep -q 'data-desktop-platform="darwin-arm64"' public/install/index.html
+grep -q 'data-desktop-platform="linux-x64"' public/install/index.html
+grep -q 'data-desktop-platform="win32-x64"' public/install/index.html
+grep -q 'Download for macOS' public/install/index.html
+grep -q 'Download for Linux' public/install/index.html
+grep -q 'Download for Windows' public/install/index.html
+grep -q 'This is an Alpha, not a stable or generally available release.' public/install/index.html
 grep -q 'Kungfu v4.0.0-alpha.1 is publicly released as the first v4 Alpha.' public/about/index.html
 grep -q '<h2>Command Line</h2>' public/install/index.html
+grep -q 'curl -fsSL https://kungfu.tech/install.sh | sh' public/install/index.html
 grep -q 'id="command-line"' public/install/index.html
 grep -q 'bootstrap-publication:start' public/install/index.html
 grep -q 'bootstrap-publication:end' public/install/index.html
+node -e 'const fs=require("fs"); const p=fs.readFileSync("public/install/index.html","utf8"); const cli=p.indexOf("<h2>Command Line</h2>"); const gui=p.indexOf("<h2>Desktop GUI</h2>"); const evidence=p.indexOf("<h2>Inspect and verify</h2>"); if(!(cli>=0 && cli<gui && gui<evidence)) throw new Error("install page acquisition order drifted")'
 if [ -f public/installer-publication.json ]; then
-  grep -q 'is publicly available.' public/install/index.html
+  grep -q 'is ready to install.' public/install/index.html
   grep -q 'data-ungfu-release-acquisition' public/install/index.html
   grep -q 'Kungfu UNGFU™' public/install/index.html
   grep -q 'Downloadable software for durable AI-agent work, inspection, and development workflows.' public/install/index.html
-  grep -q 'href="https://kungfu.tech/install.sh"' public/install/index.html
+  grep -q 'curl -fsSL https://kungfu.tech/install.sh | sh' public/install/index.html
   grep -q 'Qualified targets:' public/install/index.html
   test -f public/.well-known/kungfu/alpha.json
   test -f public/manifest.json
@@ -797,6 +809,11 @@ if [ -d dist ]; then
   test -f dist/why-kungfu/index.html
   test -f dist/assets/site.css
   test -f dist/assets/proof-reel-state.js
+  grep -Eq 'from "/assets/proof-reel-state\.[0-9a-f]{12}\.js"' dist/index.html
+  if grep -q 'from "/assets/proof-reel-state.js"' dist/index.html; then
+    echo "error: built homepage imports the mutable proof reel state module" >&2
+    exit 1
+  fi
   test -s dist/assets/fonts/instrument-sans-latin-wght-normal.6219bc4b.woff2
   test -s dist/assets/fonts/ibm-plex-mono-latin-400-normal.c36f509c.woff2
   test -s dist/assets/fonts/ibm-plex-mono-latin-600-normal.ad4580d8.woff2

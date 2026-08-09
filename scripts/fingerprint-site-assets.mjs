@@ -17,20 +17,27 @@ const assets = [
   { name: "site", extension: "css", attribute: "href", label: "site CSS" },
   { name: "whitepaper", extension: "css", attribute: "href", label: "whitepaper CSS" },
   { name: "command-copy", extension: "js", attribute: "src", label: "command copy JS" },
-].map(({ name, extension, attribute, label }) => {
+  { name: "proof-reel-state", extension: "js", moduleImport: true, label: "proof reel state JS" },
+].map(({ name, extension, attribute, moduleImport, label }) => {
   const sourcePath = path.join(assetDirectory, `${name}.${extension}`);
   const sourceBytes = fs.readFileSync(sourcePath);
   const fingerprint = crypto.createHash("sha256").update(sourceBytes).digest("hex").slice(0, 12);
   const fingerprintedName = `${name}.${fingerprint}.${extension}`;
+  const expectedUrl = `/assets/${fingerprintedName}`;
+  const expectedReference = moduleImport
+    ? `from "${expectedUrl}"`
+    : `${attribute}="${expectedUrl}"`;
   return {
     name,
-    attribute,
     label,
     sourcePath,
     sourceBytes,
     fingerprintedPath: path.join(assetDirectory, fingerprintedName),
-    expectedUrl: `/assets/${fingerprintedName}`,
-    pattern: new RegExp(`${attribute}="/assets/${name}(?:\\.[0-9a-f]{12})?\\.${extension}"`, "g"),
+    expectedUrl,
+    expectedReference,
+    pattern: moduleImport
+      ? new RegExp(`from "/assets/${name}(?:\\.[0-9a-f]{12})?\\.${extension}"`, "g")
+      : new RegExp(`${attribute}="/assets/${name}(?:\\.[0-9a-f]{12})?\\.${extension}"`, "g"),
   };
 });
 
@@ -63,7 +70,7 @@ for (const asset of assets) {
       const html = fs.readFileSync(htmlPath, "utf8");
       const links = html.match(asset.pattern) ?? [];
       linkedPages += links.length;
-      if (links.some((link) => link !== `${asset.attribute}="${asset.expectedUrl}"`)) {
+      if (links.some((link) => link !== asset.expectedReference)) {
         throw new Error(`stale ${asset.label} reference: ${htmlPath}`);
       }
     }
@@ -74,7 +81,7 @@ for (const asset of assets) {
       const links = before.match(asset.pattern) ?? [];
       linkedPages += links.length;
       if (links.length === 0) continue;
-      const after = before.replace(asset.pattern, `${asset.attribute}="${asset.expectedUrl}"`);
+      const after = before.replace(asset.pattern, asset.expectedReference);
       fs.writeFileSync(htmlPath, after);
     }
   }

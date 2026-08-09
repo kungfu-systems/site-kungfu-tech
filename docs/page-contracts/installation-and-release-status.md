@@ -41,12 +41,20 @@ Kungfu's publication workflow must not check out, mutate, commit, push, or
 deploy this repository.
 
 After the site-owned consumer verifies and imports a signed Alpha publication,
-it may replace only the bounded publication block with:
+it may replace only the bounded publication block. The human route presents
+the shortest useful acquisition path first:
 
-- the adjacent **Kungfu UNGFU™** mark;
-- a plain downloadable-software description;
-- the exact version and channel; and
-- a working installer action.
+- the exact version and channel;
+- the macOS/Linux and Windows command-line installers, with copy actions;
+- platform-selectable Desktop GUI downloads derived from the verified signed
+  channel rather than handwritten release links; and
+- the **Kungfu UNGFU™** mark, acquisition description, SHA-256 values, Release
+  Passport, and immutable evidence below the primary installation actions.
+
+The macOS/Linux convenience command stays compact as
+`curl -fsSL https://kungfu.tech/install.sh | sh`. The fetched installer still
+owns release-channel signature, platform, artifact, and digest verification;
+shortening the invocation must not weaken those checks.
 
 The same import writes immutable acquisition HTML and JSON under
 `/evidence/ungfu/alpha/<version>/<channel-root>/`, plus a mutable discovery

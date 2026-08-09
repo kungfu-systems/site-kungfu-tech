@@ -73,6 +73,16 @@ function fixture(root, { sourceCharacter = "a", version = "4.0.0-alpha.1" } = {}
         manifest: {
           productVersion: version,
           sourceCommit,
+          artifacts: [
+            {
+              kind: "desktop",
+              url:
+                `https://github.com/kungfu-systems/kungfu/releases/download/v${version}/Kungfu%20Episodes-${version}.AppImage`,
+              size: 2048,
+              digest: `sha256:${"7".repeat(64)}`,
+              signature: "fixture-desktop-signature",
+            },
+          ],
         },
         manifestRoot: `sha256:${"4".repeat(64)}`,
         artifactRoot: `sha256:${"5".repeat(64)}`,
@@ -206,19 +216,25 @@ test("imports signed channel and installers into mutable and immutable routes", 
       path.join(outputRoot, "install", "index.html"),
       "utf8",
     );
-    assert.match(page, /Signed Alpha 4\.0\.0-alpha\.1 is publicly available/);
+    assert.match(page, /Alpha 4\.0\.0-alpha\.1 is ready to install/);
     assert.match(page, /data-ungfu-release-acquisition/);
     assert.match(page, /Kungfu UNGFU™/);
     assert.match(
       page,
       /Downloadable software for durable AI-agent work, inspection, and development workflows\./,
     );
-    assert.match(page, /Version <strong>4\.0\.0-alpha\.1<\/strong>/);
-    assert.match(page, /Channel <strong>alpha<\/strong>/);
+    assert.match(page, /4\.0\.0-alpha\.1 · alpha/);
     assert.match(
       page,
-      /href="https:\/\/kungfu\.tech\/install\.sh"/,
+      /curl -fsSL https:\/\/kungfu\.tech\/install\.sh \| sh/,
     );
+    assert.match(page, /Choose your platform/);
+    assert.match(page, /Download for Linux/);
+    assert.match(
+      page,
+      /Kungfu Episodes-4\.0\.0-alpha\.1\.AppImage/,
+    );
+    assert.match(page, /Linux GUI:[\s\S]*sha256:777777/);
     assert.equal((page.match(/data-copy-command/g) || []).length, 2);
     assert.equal((page.match(/class="command-block"/g) || []).length, 2);
     assert.match(
@@ -396,8 +412,12 @@ test("the committed page remains truthful for the configured publication", () =>
   );
   assert.equal(status.schema, "kungfu.release-status/v1");
   if (source.status === "available") {
-    assert.match(page, /is publicly available\./);
+    assert.match(page, /is ready to install\./);
     assert.match(page, /data-ungfu-release-acquisition/);
+    assert.match(page, /curl -fsSL https:\/\/kungfu\.tech\/install\.sh \| sh/);
+    assert.match(page, /Download for macOS/);
+    assert.match(page, /Download for Linux/);
+    assert.match(page, /Download for Windows/);
     assert.equal(
       fs.existsSync(
         "public/.well-known/kungfu/ungfu-release-acquisition.json",
