@@ -147,10 +147,32 @@ export function validateInstallerPublicationSource(source) {
 }
 
 async function responseBytes(fetchImpl, url, label) {
-  const response = await fetchImpl(url, {
+  let response = await fetchImpl(url, {
     redirect: "manual",
     cache: "no-store",
   });
+  if ([301, 302, 303, 307, 308].includes(response.status)) {
+    const location = response.headers?.get?.("location") || "";
+    let redirect;
+    try {
+      redirect = new URL(location);
+    } catch {
+      throw new Error(`${label} returned an invalid redirect`);
+    }
+    if (
+      redirect.protocol !== "https:" ||
+      redirect.hostname !== "release-assets.githubusercontent.com" ||
+      redirect.username ||
+      redirect.password ||
+      redirect.hash
+    ) {
+      throw new Error(`${label} redirect is not an official GitHub release asset`);
+    }
+    response = await fetchImpl(redirect.href, {
+      redirect: "manual",
+      cache: "no-store",
+    });
+  }
   if (response.status !== 200) {
     throw new Error(`${label} fetch failed: HTTP ${response.status}`);
   }

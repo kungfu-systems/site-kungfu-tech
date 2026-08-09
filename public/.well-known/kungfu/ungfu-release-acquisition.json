@@ -1,0 +1,63 @@
+{
+  "schemaVersion": 1,
+  "contract": "kungfu-site-ungfu-acquisition-evidence",
+  "id": "ungfu-public-acquisition",
+  "state": "released-publication",
+  "release": {
+    "sourceSha": "ad7c7db6df076f969c5939728bcbe70ccd4771b3",
+    "tag": "v4.0.0-alpha.1",
+    "channel": "alpha",
+    "version": "4.0.0-alpha.1",
+    "deploymentCoordinate": "github-release:kungfu-systems/kungfu@v4.0.0-alpha.1",
+    "channelPayloadRoot": "sha256:6cc17282c81e82af34dbd07a9ea9f4263f6784dc99a77c4fb92758304815ad21",
+    "channelFileDigest": "sha256:150cea40c9874fd59077cc30a6a8600d8a101f00e444107c1ddda5d33b246a15",
+    "releasePassport": {
+      "ref": "buildchain:release-passport/ad7c7db6df076f969c5939728bcbe70ccd4771b3",
+      "root": "sha256:da44593e19c21d1dc2d62f7af567e9f86a96e1e87d0ec53da6c6365a047ae7d3"
+    },
+    "artifactRoots": [
+      {
+        "name": "darwin/arm64",
+        "sha256": "sha256:360880cc7b0826924d078dc27a97f062a8731029f5a724c9cbe2bfa1d9ca0c09",
+        "manifestRoot": "sha256:cb0a959822e2da8da86f36dd45da660c9bdc71d39e719eb8abbfafbdc23ce740",
+        "artifactRoot": "sha256:e418a269bd38208942fd90accd39f818c7eecb65b5bff1176a2ac2fe455c4e55"
+      },
+      {
+        "name": "linux/x64",
+        "sha256": "sha256:cd8310b8e6a4baf346f5248adf78496bc7e87502a7f2ec8d51bcbb689fef1023",
+        "manifestRoot": "sha256:5eab2c849bc05d26a887c257c861221d477f7860ceaae14c69baaeed2a924c68",
+        "artifactRoot": "sha256:097e01ee2bb647bc20c17a0f7b182787244b063f2de60d4b853a00769ff5898f"
+      },
+      {
+        "name": "win32/x64",
+        "sha256": "sha256:bdae85d3aa517668ef48ba5a24a1bcbddb65eafb8f19887b13743fcb4027557a",
+        "manifestRoot": "sha256:19b75bf6f91654a13b4f79ffcad6b0775c6ff273b3c64f5790da7100fc512399",
+        "artifactRoot": "sha256:f445caa50c2f5443bcda8d6b0d1a006636056fd243d5bfc097fed31f27f28966"
+      },
+      {
+        "name": "install.sh",
+        "sha256": "sha256:2ec93b8ae69f49e4104fcbe3c1ea37d432423ceadcc95a736058a85d11241cc8"
+      },
+      {
+        "name": "install.ps1",
+        "sha256": "sha256:62cf594eb7ed69d488f2f9ce2beed8015e2b1f589b1b5af71c0d1929635fbe68"
+      }
+    ]
+  },
+  "acquisition": {
+    "id": "install-page",
+    "kind": "public-release-download",
+    "exactMark": "Kungfu UNGFU™",
+    "softwareDescription": "Downloadable software for durable AI-agent work, inspection, and development workflows.",
+    "publicUrl": "https://kungfu.tech/install/",
+    "acquisitionUrl": "https://kungfu.tech/install.sh",
+    "renderedEvidence": "https://kungfu.tech/evidence/ungfu/alpha/4.0.0-alpha.1/6cc17282c81e82af34dbd07a9ea9f4263f6784dc99a77c4fb92758304815ad21/acquisition.html",
+    "evidenceIndex": "https://kungfu.tech/evidence/ungfu/alpha/4.0.0-alpha.1/6cc17282c81e82af34dbd07a9ea9f4263f6784dc99a77c4fb92758304815ad21/index.json"
+  },
+  "legalBoundary": {
+    "firstUseDateClaim": null,
+    "legalConclusion": "not-made",
+    "registrationStatusClaim": "none",
+    "counselReviewRequired": true
+  }
+}

@@ -378,38 +378,16 @@ test("fails before projection when channel bytes or signature drift", () => {
   }
 });
 
-test("the committed page remains truthful before a signed publication", () => {
+test("the committed page remains truthful for the configured publication", () => {
+  const source = JSON.parse(
+    fs.readFileSync("site/installer-publication-source.json", "utf8"),
+  );
   const page = fs.readFileSync(
     path.resolve("public/install/index.html"),
     "utf8",
   );
-  assert.match(page, /Public installer not released yet\./);
-  assert.match(page, /machine-readable <code>unavailable<\/code> result/);
   assert.equal((page.match(/data-copy-command/g) || []).length, 2);
   assert.match(page, /src="\/assets\/command-copy\.js" defer/);
-  assert.doesNotMatch(page, /data-ungfu-release-acquisition/);
-  const unavailable = {
-    schema: "kungfu.bootstrap-installer-availability/v1",
-    status: "unavailable",
-    reason: "no-qualified-cli-publication",
-    documentationUrl: "https://kungfu.tech/install/",
-  };
-  assert.equal(
-    fs.readFileSync("public/install.sh", "utf8").includes(
-      JSON.stringify(unavailable),
-    ),
-    true,
-  );
-  assert.equal(
-    fs.readFileSync("public/install.ps1", "utf8").includes(
-      JSON.stringify(unavailable),
-    ),
-    true,
-  );
-  assert.equal(
-    fs.existsSync("public/.well-known/kungfu/ungfu-release-acquisition.json"),
-    false,
-  );
   const status = JSON.parse(
     fs.readFileSync(
       "public/.well-known/kungfu-release-status.json",
@@ -417,8 +395,49 @@ test("the committed page remains truthful before a signed publication", () => {
     ),
   );
   assert.equal(status.schema, "kungfu.release-status/v1");
-  assert.equal(status.status, "unavailable");
-  assert.equal(status.releasedUseClaim, false);
-  assert.equal(status.release, null);
-  assert.equal(status.acquisitionEvidence, null);
+  if (source.status === "available") {
+    assert.match(page, /is publicly available\./);
+    assert.match(page, /data-ungfu-release-acquisition/);
+    assert.equal(
+      fs.existsSync(
+        "public/.well-known/kungfu/ungfu-release-acquisition.json",
+      ),
+      true,
+    );
+    assert.equal(status.status, "current-release");
+    assert.equal(status.releasedUseClaim, true);
+    assert.equal(status.release.sourceSha, source.buildchainSeal.sourceCommit);
+  } else {
+    assert.match(page, /Public installer not released yet\./);
+    assert.match(page, /machine-readable <code>unavailable<\/code> result/);
+    assert.doesNotMatch(page, /data-ungfu-release-acquisition/);
+    const unavailable = {
+      schema: "kungfu.bootstrap-installer-availability/v1",
+      status: "unavailable",
+      reason: "no-qualified-cli-publication",
+      documentationUrl: "https://kungfu.tech/install/",
+    };
+    assert.equal(
+      fs.readFileSync("public/install.sh", "utf8").includes(
+        JSON.stringify(unavailable),
+      ),
+      true,
+    );
+    assert.equal(
+      fs.readFileSync("public/install.ps1", "utf8").includes(
+        JSON.stringify(unavailable),
+      ),
+      true,
+    );
+    assert.equal(
+      fs.existsSync(
+        "public/.well-known/kungfu/ungfu-release-acquisition.json",
+      ),
+      false,
+    );
+    assert.equal(status.status, "unavailable");
+    assert.equal(status.releasedUseClaim, false);
+    assert.equal(status.release, null);
+    assert.equal(status.acquisitionEvidence, null);
+  }
 });
