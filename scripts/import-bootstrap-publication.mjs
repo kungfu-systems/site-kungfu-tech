@@ -370,13 +370,18 @@ function desktopDownloads(channel, publication, version) {
     if (!encodedName || encodedName.includes("/")) {
       throw new Error(`desktop download asset name is invalid: ${identity}`);
     }
+    // GitHub normalizes spaces in uploaded release asset names to dots. The
+    // signed product manifest retains the pre-upload filename, so project the
+    // deterministic GitHub asset name before exposing the public download URL.
+    const filename = decodeURIComponent(encodedName).replaceAll(" ", ".");
+    url.pathname = `${releasePath}${filename}`;
     return {
       id: `${publishedEntry.platform}-${publishedEntry.architecture}`,
       platform: publishedEntry.platform,
       platformLabel,
       architectureLabel,
       url: url.href,
-      filename: decodeURIComponent(encodedName),
+      filename,
       size: artifact.size,
       digest: artifact.digest,
     };

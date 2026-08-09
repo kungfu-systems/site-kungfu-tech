@@ -232,7 +232,11 @@ test("imports signed channel and installers into mutable and immutable routes", 
     assert.match(page, /Download for Linux/);
     assert.match(
       page,
-      /Kungfu Episodes-4\.0\.0-alpha\.1\.AppImage/,
+      /Kungfu\.Episodes-4\.0\.0-alpha\.1\.AppImage/,
+    );
+    assert.match(
+      page,
+      /releases\/download\/v4\.0\.0-alpha\.1\/Kungfu\.Episodes-4\.0\.0-alpha\.1\.AppImage/,
     );
     assert.match(page, /Linux GUI:[\s\S]*sha256:777777/);
     assert.equal((page.match(/data-copy-command/g) || []).length, 2);

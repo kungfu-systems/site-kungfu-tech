@@ -632,6 +632,12 @@ grep -q 'data-desktop-platform="win32-x64"' public/install/index.html
 grep -q 'Download for macOS' public/install/index.html
 grep -q 'Download for Linux' public/install/index.html
 grep -q 'Download for Windows' public/install/index.html
+grep -q 'Kungfu.Episodes-4.0.0-alpha.1.AppImage' public/install/index.html
+grep -q 'Kungfu.Episodes.Setup.4.0.0-alpha.1.exe' public/install/index.html
+if grep -q 'Kungfu%20Episodes' public/install/index.html; then
+  echo "Get Kungfu must project GitHub-normalized desktop asset names" >&2
+  exit 1
+fi
 grep -q 'This is an Alpha, not a stable or generally available release.' public/install/index.html
 grep -q 'Kungfu v4.0.0-alpha.1 is publicly released as the first v4 Alpha.' public/about/index.html
 grep -q '<h2>Command Line</h2>' public/install/index.html
