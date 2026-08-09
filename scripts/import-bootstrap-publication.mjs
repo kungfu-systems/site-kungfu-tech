@@ -311,6 +311,86 @@ function verifyPublication(publication, sourceRoot, channel, channelBytes) {
   };
 }
 
+const DESKTOP_PLATFORM_LABELS = {
+  darwin: "macOS",
+  linux: "Linux",
+  win32: "Windows",
+};
+
+const DESKTOP_ARCHITECTURE_LABELS = {
+  arm64: "Apple silicon",
+  x64: "x64",
+};
+
+function desktopDownloads(channel, publication, version) {
+  const releasePath =
+    `/kungfu-systems/kungfu/releases/download/v${version}/`;
+  const channelEntries = new Map(
+    (channel.entries || []).map((entry) => [
+      `${entry.platform}/${entry.architecture}`,
+      entry,
+    ]),
+  );
+  const downloads = publication.entries.map((publishedEntry) => {
+    const identity =
+      `${publishedEntry.platform}/${publishedEntry.architecture}`;
+    const entry = channelEntries.get(identity);
+    const platformLabel = DESKTOP_PLATFORM_LABELS[publishedEntry.platform];
+    const architectureLabel =
+      DESKTOP_ARCHITECTURE_LABELS[publishedEntry.architecture]
+      || publishedEntry.architecture;
+    const desktopArtifacts = (entry?.manifest?.artifacts || []).filter(
+      (artifact) => artifact.kind === "desktop",
+    );
+    if (
+      !entry
+      || !platformLabel
+      || entry.manifest?.sourceCommit !== publication.sourceCommit
+      || entry.manifest?.productVersion !== version
+      || entry.manifestRoot !== publishedEntry.manifestRoot
+      || entry.artifactRoot !== publishedEntry.artifactRoot
+      || desktopArtifacts.length !== 1
+    ) {
+      throw new Error(`desktop download evidence is incomplete: ${identity}`);
+    }
+    const artifact = desktopArtifacts[0];
+    const url = publicUrl(artifact.url, `${identity} desktop URL`);
+    requireRoot(artifact.digest, `${identity} desktop digest`);
+    if (
+      url.hostname !== "github.com"
+      || !url.pathname.startsWith(releasePath)
+      || !Number.isSafeInteger(artifact.size)
+      || artifact.size < 1
+      || typeof artifact.signature !== "string"
+      || artifact.signature.length === 0
+    ) {
+      throw new Error(`desktop download authority is invalid: ${identity}`);
+    }
+    const encodedName = url.pathname.slice(releasePath.length);
+    if (!encodedName || encodedName.includes("/")) {
+      throw new Error(`desktop download asset name is invalid: ${identity}`);
+    }
+    return {
+      id: `${publishedEntry.platform}-${publishedEntry.architecture}`,
+      platform: publishedEntry.platform,
+      platformLabel,
+      architectureLabel,
+      url: url.href,
+      filename: decodeURIComponent(encodedName),
+      size: artifact.size,
+      digest: artifact.digest,
+    };
+  });
+  if (new Set(downloads.map((download) => download.id)).size !== downloads.length) {
+    throw new Error("desktop download identities must be unique");
+  }
+  return downloads;
+}
+
+function mebibytes(bytes) {
+  return `${Math.round(bytes / 1024 / 1024)} MiB`;
+}
+
 function appendVersion(manifest, publicationId, version) {
   let publication = manifest.publications.find(
     (item) => item.id === publicationId,
@@ -526,6 +606,7 @@ function renderInstallerPage({
   publication,
   version,
   platforms,
+  desktop,
   acquisition,
 }) {
   const pagePath = path.join(outputRoot, "install", "index.html");
@@ -549,47 +630,101 @@ function renderInstallerPage({
         <p><a href="${escapeHtml(new URL(asset.immutableUrl).pathname)}"><code>${escapeHtml(asset.name)}</code></a> · ${asset.size} bytes · <code>${escapeHtml(asset.digest)}</code></p>`,
     )
     .join("");
+  const platformTabs = desktop
+    .map(
+      (download, index) => `
+          <button type="button" role="tab" aria-selected="${index === 0}" aria-controls="desktop-panel-${escapeHtml(download.id)}" tabindex="${index === 0 ? "0" : "-1"}" data-desktop-platform="${escapeHtml(download.id)}">${escapeHtml(download.platformLabel)}</button>`,
+    )
+    .join("");
+  const platformPanels = desktop
+    .map(
+      (download, index) => `
+        <div class="desktop-download-panel" id="desktop-panel-${escapeHtml(download.id)}" role="tabpanel" data-desktop-panel="${escapeHtml(download.id)}"${index === 0 ? "" : " hidden"}>
+          <div>
+            <strong>${escapeHtml(download.platformLabel)} · ${escapeHtml(download.architectureLabel)}</strong>
+            <p>${escapeHtml(download.filename)} · ${escapeHtml(mebibytes(download.size))}</p>
+          </div>
+          <a class="download-button" href="${escapeHtml(download.url)}">Download for ${escapeHtml(download.platformLabel)}</a>
+        </div>`,
+    )
+    .join("");
+  const desktopDigests = desktop
+    .map(
+      (download) => `
+        <p>${escapeHtml(download.platformLabel)} GUI: <a href="${escapeHtml(download.url)}"><code>${escapeHtml(download.filename)}</code></a> · ${download.size} bytes · <code>${escapeHtml(download.digest)}</code></p>`,
+    )
+    .join("");
   const live = `${start}
-    <div class="state" id="command-line">
-      <strong>Signed Alpha ${escapeHtml(version)} is publicly available.</strong>
-      <p>The canonical channel, immutable installers, release artifacts, and public read-back bind source <code>${escapeHtml(publication.sourceCommit)}</code> and channel root <code>${escapeHtml(publication.channelPayloadRoot)}</code>.</p>
+    <div class="state release-summary">
+      <span class="status-dot" aria-hidden="true"></span>
+      <div>
+        <strong>Alpha ${escapeHtml(version)} is ready to install.</strong>
+        <p>Current signed release · ${escapeHtml(desktop.length)} desktop platforms · standalone CLI</p>
+      </div>
     </div>
 
     <div class="grid">
-      <section class="wide release-acquisition" data-ungfu-release-acquisition data-version="${escapeHtml(version)}" data-channel="${escapeHtml(publication.channel)}">
-        <h2>${EXACT_MARK}</h2>
-        <p>${SOFTWARE_DESCRIPTION}</p>
-        <p>Version <strong>${escapeHtml(version)}</strong> · Channel <strong>${escapeHtml(publication.channel)}</strong></p>
-        <p><a href="https://kungfu.tech/install.sh"><code>https://kungfu.tech/install.sh</code></a> installs the signed Alpha after local channel and artifact verification.</p>
-        <p><a href="/${escapeHtml(acquisition.immutablePath)}/acquisition.html">Rendered acquisition evidence</a> · <a href="/${escapeHtml(acquisition.immutablePath)}/index.json">machine-readable index</a></p>
-      </section>
-
-      <section>
-        <h2>macOS and Linux</h2>
-        <p>Convenience install from the revalidated canonical route:</p>
-        <div class="command-block">
-          <code class="command">curl --fail --proto '=https' --tlsv1.2 https://kungfu.tech/install.sh | sh</code>
-          <button class="copy-button" type="button" data-copy-command aria-label="Copy macOS and Linux install command" aria-live="polite">Copy</button>
+      <section class="wide release-acquisition command-line-section" id="command-line" data-ungfu-release-acquisition data-version="${escapeHtml(version)}" data-channel="${escapeHtml(publication.channel)}">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Start here</p>
+            <h2>Command Line</h2>
+          </div>
+          <span class="version-chip">${escapeHtml(version)} · ${escapeHtml(publication.channel)}</span>
         </div>
-        <p>For higher assurance, download the immutable script below, compare its digest, inspect it, then execute it.</p>
-      </section>
+        <p class="section-lead">Install the standalone Kungfu CLI from the signed release channel. Choose the command for your operating system.</p>
+        <div class="command-grid">
+          <article class="command-card">
+            <p class="command-platform">macOS &amp; Linux</p>
+            <div class="command-block">
+              <code class="command">curl -fsSL https://kungfu.tech/install.sh | sh</code>
+              <button class="copy-button" type="button" data-copy-command aria-label="Copy macOS and Linux install command" aria-live="polite">Copy</button>
+            </div>
+            <p>Per-user install. No <code>sudo</code> and no shell-profile edits.</p>
+          </article>
 
-      <section>
-        <h2>Windows PowerShell</h2>
-        <p>Convenience install from the revalidated canonical route:</p>
-        <div class="command-block">
-          <code class="command">irm https://kungfu.tech/install.ps1 | iex</code>
-          <button class="copy-button" type="button" data-copy-command aria-label="Copy Windows PowerShell install command" aria-live="polite">Copy</button>
+          <article class="command-card">
+            <p class="command-platform">Windows PowerShell</p>
+            <div class="command-block">
+              <code class="command">irm https://kungfu.tech/install.ps1 | iex</code>
+              <button class="copy-button" type="button" data-copy-command aria-label="Copy Windows PowerShell install command" aria-live="polite">Copy</button>
+            </div>
+            <p>Per-user install. No Administrator rights or registry edits.</p>
+          </article>
         </div>
-        <p>The qualified Windows Alpha archive may be unsigned: trust comes from signed release-channel evidence, an immutable URL, and a published SHA-256 digest. Authenticode is not a qualification requirement for this Alpha.</p>
       </section>
 
-      <section class="wide">
-        <h2>Inspect and pin before execution</h2>
+      <section class="wide desktop-downloads">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Visual workspace</p>
+            <h2>Desktop GUI</h2>
+          </div>
+          <span class="version-chip">Alpha available</span>
+        </div>
+        <p class="section-lead">Choose your platform and download the qualified GUI artifact directly from the Kungfu GitHub Release.</p>
+        <div class="platform-tabs" role="tablist" aria-label="Choose a desktop platform">${platformTabs}
+        </div>
+        <div class="desktop-download-panels">${platformPanels}
+        </div>
+        <p class="alpha-note">This is an Alpha, not a stable or generally available release. Existing package-manager installations remain under their current owner.</p>
+      </section>
+
+      <section class="wide release-evidence">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Release evidence</p>
+            <h2>Inspect and verify</h2>
+          </div>
+          <a href="/${escapeHtml(acquisition.immutablePath)}/acquisition.html">Rendered evidence</a>
+        </div>
+        <p>${EXACT_MARK} · ${SOFTWARE_DESCRIPTION}</p>
+        <p>Source: <code>${escapeHtml(publication.sourceCommit)}</code> · Channel root: <code>${escapeHtml(publication.channelPayloadRoot)}</code></p>
         <p>Channel: <a href="/.well-known/kungfu/alpha.json"><code>/.well-known/kungfu/alpha.json</code></a> · <code>${escapeHtml(publication.channelFileDigest)}</code></p>
         <p>Immutable channel: <a href="${escapeHtml(new URL(publication.channelSnapshotUrl).pathname)}"><code>${escapeHtml(new URL(publication.channelSnapshotUrl).pathname)}</code></a></p>
         <p>Release Passport: <code>${escapeHtml(publication.releasePassport.ref)}</code> · <code>${escapeHtml(publication.releasePassport.root)}</code></p>
-        <p>Qualified targets: <code>${escapeHtml(platforms.join(", "))}</code></p>${assets}
+        <p>Qualified targets: <code>${escapeHtml(platforms.join(", "))}</code></p>${desktopDigests}${assets}
+        <p><a href="/${escapeHtml(acquisition.immutablePath)}/index.json">Machine-readable evidence index</a></p>
       </section>
     ${end}`;
   return Buffer.from(
@@ -640,6 +775,7 @@ export function importBootstrapPublication({
     publication,
     version: verified.version,
     platforms: verified.platforms,
+    desktop: desktopDownloads(channel, publication, verified.version),
     acquisition,
   });
   const writes = [

@@ -41,6 +41,12 @@ only an active animation may advance to metadata loading. Reduced-motion
 visitors receive no timed chapter or animation transition and retain complete
 manual chapter, previous, next, play or pause, skip, and native media controls.
 
+The built homepage must import the proof-reel state module through its exact
+content-fingerprinted `/assets/proof-reel-state.<hash>.js` URL. The unversioned
+file is only a build input. Production may cache ordinary assets longer than
+mutable HTML, so an unversioned module URL could otherwise pair new HTML imports
+with stale exports and disable the complete interaction surface.
+
 The Problem to Three proofs label, stable proof counter, direct chapter tabs,
 and playback controls share one overlay in the card's bottom-right corner. The
 accessible live status retains the full chapter title and internal state. The
@@ -64,7 +70,13 @@ with the frame instead of overflowing.
 The supporting row places the three-line brand principle on the left, the
 execution-surface explanation in the center as a left-aligned text block, and
 the Agent-native loop plus Agent Builders links as two right-aligned rows.
-Installation remains the single primary action in the shared header.
+Immediately below it, one narrow full-width acquisition strip repeats the
+installation path for readers who finish the reel and continue down the page.
+It names the public Alpha boundary, desktop plus standalone CLI surfaces, and
+macOS, Linux, and Windows availability, then hands off to the canonical
+`/install/` route for exact platform and architecture details. The shared-header
+button remains the primary navigation action; the strip is the intentional
+post-proof acquisition path, not a second download authority.
 
 Do not restore the retired static continuity comparison card. It duplicated
 the Agent Work Lab replay and weakened the primary demonstration path.

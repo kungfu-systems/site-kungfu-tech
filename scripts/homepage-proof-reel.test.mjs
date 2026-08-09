@@ -55,6 +55,22 @@ test("homepage renders four semantic chapters from the rooted three-proof contra
   }
 });
 
+test("homepage repeats the canonical acquisition path directly after the proof reel", () => {
+  const page = html();
+  const detailsIndex = page.indexOf('class="hero-details"');
+  const installIndex = page.indexOf('class="hero-install-strip"');
+  const nextSectionIndex = page.indexOf('class="builder-entry"');
+  assert.ok(detailsIndex >= 0);
+  assert.ok(installIndex > detailsIndex);
+  assert.ok(nextSectionIndex > installIndex);
+  assert.match(page, /class="hero-install-strip" href="\/install\/"/u);
+  assert.match(page, /<strong>Download Kungfu<\/strong>/u);
+  assert.match(page, /Public Alpha · Desktop \+ standalone CLI/u);
+  for (const platform of ["macOS", "Linux", "Windows"]) {
+    assert.match(page, new RegExp(`<span>${platform}</span>`, "u"));
+  }
+});
+
 test("passive progression advances every text scene without overriding user or motion preferences", () => {
   assert.equal(PROBLEM_AUTOMATION_DELAY_MS, 7000);
   assert.equal(PROOF_PRELUDE_DELAY_MS, 5000);
