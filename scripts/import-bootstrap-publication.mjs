@@ -707,7 +707,7 @@ function renderInstallerPage({
         </div>
         <div class="desktop-download-panels">${platformPanels}
         </div>
-        <p class="alpha-note">This is an Alpha, not a stable or generally available release. Existing package-manager installations remain under their current owner.</p>
+        <p class="alpha-note">This is an Alpha, not a stable or generally available release. Existing package-manager installations remain under their current owner. The qualified Windows Alpha artifact may be unsigned; Authenticode is not a qualification requirement for this Alpha.</p>
       </section>
 
       <section class="wide release-evidence">
