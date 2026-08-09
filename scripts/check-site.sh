@@ -107,7 +107,7 @@ if grep -RInE 'fonts\.(googleapis|gstatic)\.com' public scripts site; then
 fi
 test -f public/.well-known/security.txt
 test -f public/.well-known/kungfu-release-status.json
-node -e 'const fs=require("fs"); const s=JSON.parse(fs.readFileSync("public/.well-known/kungfu-release-status.json","utf8")); if(s.schema!=="kungfu.release-status/v1" || s.status!=="unavailable" || s.releasedUseClaim!==false || s.release!==null || s.acquisitionEvidence!==null) throw new Error("pre-release status endpoint is not truthful")'
+node -e 'const fs=require("fs"); const source=JSON.parse(fs.readFileSync("site/installer-publication-source.json","utf8")); const s=JSON.parse(fs.readFileSync("public/.well-known/kungfu-release-status.json","utf8")); if(s.schema!=="kungfu.release-status/v1") throw new Error("release status schema drifted"); if(source.status==="available"){const p=JSON.parse(fs.readFileSync("public/installer-publication.json","utf8")); if(s.status!=="current-release" || s.releasedUseClaim!==true || s.release?.sourceSha!==source.buildchainSeal.sourceCommit || s.release?.tag!==source.buildchainSeal.releaseTag || s.release?.channelPayloadRoot!==p.channelPayloadRoot || !s.acquisitionEvidence) throw new Error("released status endpoint is not source-bound")}else if(s.status!=="unavailable" || s.releasedUseClaim!==false || s.release!==null || s.acquisitionEvidence!==null) throw new Error("pre-release status endpoint is not truthful")'
 test -f public/about/index.html
 test -f public/about/bootstrapping/index.html
 test -f public/about/bootstrapping/evidence/index.html

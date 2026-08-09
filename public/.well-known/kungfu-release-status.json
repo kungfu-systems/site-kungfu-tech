@@ -1,11 +1,25 @@
 {
   "schema": "kungfu.release-status/v1",
-  "status": "unavailable",
-  "releasedUseClaim": false,
-  "reason": "no-site-owned-qualified-bundle-pin",
+  "status": "current-release",
+  "releasedUseClaim": true,
+  "reason": "signed-publication-and-readback-qualified",
   "documentationUrl": "https://kungfu.tech/install/",
-  "release": null,
-  "acquisitionEvidence": null,
+  "release": {
+    "sourceSha": "ad7c7db6df076f969c5939728bcbe70ccd4771b3",
+    "siteSourceSha": "ad7c7db6df076f969c5939728bcbe70ccd4771b3",
+    "tag": "v4.0.0-alpha.1",
+    "channel": "alpha",
+    "version": "4.0.0-alpha.1",
+    "channelPayloadRoot": "sha256:6cc17282c81e82af34dbd07a9ea9f4263f6784dc99a77c4fb92758304815ad21",
+    "releasePassport": {
+      "ref": "buildchain:release-passport/ad7c7db6df076f969c5939728bcbe70ccd4771b3",
+      "root": "sha256:da44593e19c21d1dc2d62f7af567e9f86a96e1e87d0ec53da6c6365a047ae7d3"
+    }
+  },
+  "acquisitionEvidence": {
+    "url": "https://kungfu.tech/.well-known/kungfu/ungfu-release-acquisition.json",
+    "root": "sha256:2d47d0620d8b0e5e516e3958088f17ae8b73fcfaf5ae60f6d7a0b0cab7f22d82"
+  },
   "legalBoundary": {
     "firstUseDateClaim": null,
     "legalConclusion": "not-made",

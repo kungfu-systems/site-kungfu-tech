@@ -184,36 +184,49 @@
 
     <!-- bootstrap-publication:start -->
     <div class="state" id="command-line">
-      <strong>Public installer not released yet.</strong>
-      <p>The source contract is undergoing protected review and native-platform qualification. Until a signed Alpha publication and public read-back complete, <code>/install.sh</code> and <code>/install.ps1</code> return a machine-readable <code>unavailable</code> result and fail without changing the machine.</p>
+      <strong>Signed Alpha 4.0.0-alpha.1 is publicly available.</strong>
+      <p>The canonical channel, immutable installers, release artifacts, and public read-back bind source <code>ad7c7db6df076f969c5939728bcbe70ccd4771b3</code> and channel root <code>sha256:6cc17282c81e82af34dbd07a9ea9f4263f6784dc99a77c4fb92758304815ad21</code>.</p>
     </div>
 
     <div class="grid">
+      <section class="wide release-acquisition" data-ungfu-release-acquisition data-version="4.0.0-alpha.1" data-channel="alpha">
+        <h2>Kungfu UNGFU™</h2>
+        <p>Downloadable software for durable AI-agent work, inspection, and development workflows.</p>
+        <p>Version <strong>4.0.0-alpha.1</strong> · Channel <strong>alpha</strong></p>
+        <p><a href="https://kungfu.tech/install.sh"><code>https://kungfu.tech/install.sh</code></a> installs the signed Alpha after local channel and artifact verification.</p>
+        <p><a href="/evidence/ungfu/alpha/4.0.0-alpha.1/6cc17282c81e82af34dbd07a9ea9f4263f6784dc99a77c4fb92758304815ad21/acquisition.html">Rendered acquisition evidence</a> · <a href="/evidence/ungfu/alpha/4.0.0-alpha.1/6cc17282c81e82af34dbd07a9ea9f4263f6784dc99a77c4fb92758304815ad21/index.json">machine-readable index</a></p>
+      </section>
+
       <section>
         <h2>macOS and Linux</h2>
-        <p>After the page names an available signed channel, the convenience form will be:</p>
+        <p>Convenience install from the revalidated canonical route:</p>
         <div class="command-block">
           <code class="command">curl --fail --proto '=https' --tlsv1.2 https://kungfu.tech/install.sh | sh</code>
           <button class="copy-button" type="button" data-copy-command aria-label="Copy macOS and Linux install command" aria-live="polite">Copy</button>
         </div>
-        <p>The current route exits nonzero without downloading or installing anything. Do not substitute a source fixture for it.</p>
+        <p>For higher assurance, download the immutable script below, compare its digest, inspect it, then execute it.</p>
       </section>
 
       <section>
         <h2>Windows PowerShell</h2>
-        <p>After the page names an available signed channel, the convenience form will be:</p>
+        <p>Convenience install from the revalidated canonical route:</p>
         <div class="command-block">
           <code class="command">irm https://kungfu.tech/install.ps1 | iex</code>
           <button class="copy-button" type="button" data-copy-command aria-label="Copy Windows PowerShell install command" aria-live="polite">Copy</button>
         </div>
-        <p>The current route throws an unavailable error without downloading or installing anything. The qualified Windows Alpha archive may be unsigned: trust comes from signed release-channel evidence, an immutable URL, and a published SHA-256 digest. Authenticode is not a qualification requirement for this Alpha.</p>
+        <p>The qualified Windows Alpha archive may be unsigned: trust comes from signed release-channel evidence, an immutable URL, and a published SHA-256 digest. Authenticode is not a qualification requirement for this Alpha.</p>
       </section>
 
       <section class="wide">
         <h2>Inspect and pin before execution</h2>
-        <p>The released page will publish immutable installer URLs, exact byte sizes, SHA-256 digests, signed-channel and artifact roots, source SHA, platform matrix, and Release Passport coordinates. Higher-assurance and CI use should download the immutable file, compare the published digest, inspect it locally, then execute with an explicit channel or version.</p>
+        <p>Channel: <a href="/.well-known/kungfu/alpha.json"><code>/.well-known/kungfu/alpha.json</code></a> · <code>sha256:150cea40c9874fd59077cc30a6a8600d8a101f00e444107c1ddda5d33b246a15</code></p>
+        <p>Immutable channel: <a href="/channels/alpha/6cc17282c81e82af34dbd07a9ea9f4263f6784dc99a77c4fb92758304815ad21/index.json"><code>/channels/alpha/6cc17282c81e82af34dbd07a9ea9f4263f6784dc99a77c4fb92758304815ad21/index.json</code></a></p>
+        <p>Release Passport: <code>buildchain:release-passport/ad7c7db6df076f969c5939728bcbe70ccd4771b3</code> · <code>sha256:da44593e19c21d1dc2d62f7af567e9f86a96e1e87d0ec53da6c6365a047ae7d3</code></p>
+        <p>Qualified targets: <code>darwin/arm64, linux/x64, win32/x64</code></p>
+        <p><a href="/installers/v1/alpha/4.0.0-alpha.1/6cc17282c81e82af34dbd07a9ea9f4263f6784dc99a77c4fb92758304815ad21/install.sh"><code>install.sh</code></a> · 9630 bytes · <code>sha256:2ec93b8ae69f49e4104fcbe3c1ea37d432423ceadcc95a736058a85d11241cc8</code></p>
+        <p><a href="/installers/v1/alpha/4.0.0-alpha.1/6cc17282c81e82af34dbd07a9ea9f4263f6784dc99a77c4fb92758304815ad21/install.ps1"><code>install.ps1</code></a> · 6280 bytes · <code>sha256:62cf594eb7ed69d488f2f9ce2beed8015e2b1f589b1b5af71c0d1929635fbe68</code></p>
       </section>
-    <!-- bootstrap-publication:end -->
+        <!-- bootstrap-publication:end -->
 
       <section>
         <h2>No silent machine mutation</h2>

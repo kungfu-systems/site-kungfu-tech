@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 1,
+  "contract": "kungfu-bootstrap-installer-web-surface/v1",
+  "archivePolicy": {
+    "contract": "kungfu-buildchain-publication-archive-policy",
+    "deploymentBoundary": "append-only immutable version prefixes"
+  },
+  "installerPublication": "installer-publication.json",
+  "publications": [
+    {
+      "id": "kungfu-bootstrap-installer-alpha",
+      "versions": [
+        {
+          "version": "4.0.0-alpha.1",
+          "payloadRoot": "sha256:6cc17282c81e82af34dbd07a9ea9f4263f6784dc99a77c4fb92758304815ad21",
+          "immutablePath": "/installers/v1/alpha/4.0.0-alpha.1/6cc17282c81e82af34dbd07a9ea9f4263f6784dc99a77c4fb92758304815ad21/"
+        }
+      ]
+    },
+    {
+      "id": "kungfu-release-channel-alpha",
+      "versions": [
+        {
+          "version": "4.0.0-alpha.1",
+          "payloadRoot": "sha256:6cc17282c81e82af34dbd07a9ea9f4263f6784dc99a77c4fb92758304815ad21",
+          "immutablePath": "/channels/alpha/6cc17282c81e82af34dbd07a9ea9f4263f6784dc99a77c4fb92758304815ad21/"
+        }
+      ]
+    },
+    {
+      "id": "kungfu-ungfu-acquisition-evidence",
+      "versions": [
+        {
+          "version": "4.0.0-alpha.1",
+          "payloadRoot": "sha256:6cc17282c81e82af34dbd07a9ea9f4263f6784dc99a77c4fb92758304815ad21",
+          "immutablePath": "/evidence/ungfu/alpha/4.0.0-alpha.1/6cc17282c81e82af34dbd07a9ea9f4263f6784dc99a77c4fb92758304815ad21/"
+        }
+      ]
+    }
+  ],
+  "ungfuAcquisitionEvidence": ".well-known/kungfu/ungfu-release-acquisition.json"
+}

@@ -200,6 +200,49 @@ test("site resolves only a pinned and Buildchain-sealed package bundle", async (
   }
 });
 
+test("site follows only the official GitHub release asset redirect", async () => {
+  const value = fixture();
+  const manifestUrl = value.source.manifestUrl;
+  const redirectedUrl =
+    "https://release-assets.githubusercontent.com/github-production-release-asset/fixture?signature=public";
+  const fetchImpl = async (url) => {
+    if (url === manifestUrl) {
+      return {
+        status: 302,
+        headers: { get: (name) => (name === "location" ? redirectedUrl : null) },
+        async arrayBuffer() {
+          return Buffer.alloc(0);
+        },
+      };
+    }
+    if (url === redirectedUrl) {
+      return {
+        status: 200,
+        async arrayBuffer() {
+          return value.responseBytes.get(manifestUrl);
+        },
+      };
+    }
+    return value.fetchImpl(url);
+  };
+  const resolved = await resolveInstallerPublicationBundle({
+    source: value.source,
+    fetchImpl,
+  });
+  fs.rmSync(resolved.outputRoot, { recursive: true, force: true });
+
+  await assert.rejects(
+    resolveInstallerPublicationBundle({
+      source: value.source,
+      fetchImpl: async () => ({
+        status: 302,
+        headers: { get: () => "https://example.com/installer.json" },
+      }),
+    }),
+    /not an official GitHub release asset/,
+  );
+});
+
 test("site rejects unsealed, unsafe, and byte-drifted bundles", async () => {
   const unsealed = fixture();
   unsealed.source.buildchainSeal = null;
