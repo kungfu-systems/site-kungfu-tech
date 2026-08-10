@@ -715,6 +715,17 @@ function renderInstallerPage({
         <p class="alpha-note">This is an Alpha, not a stable or generally available release. Existing package-manager installations remain under their current owner. The qualified Windows Alpha artifact may be unsigned; Authenticode is not a qualification requirement for this Alpha.</p>
       </section>
 
+      <section class="wide workspace-guidance" aria-labelledby="workspace-git-heading">
+        <div class="workspace-guidance-heading">
+          <p class="eyebrow">First project use</p>
+          <h2 id="workspace-git-heading">When <code>.kungfu/</code> appears</h2>
+        </div>
+        <div class="workspace-guidance-copy">
+          <p>It is Kungfu's project-local workspace for durable Work and runtime state. Do not delete it or add the whole directory to Git. Before staging anything, ask your Agent to run <code>kungfu agent map --json</code> and follow its <code>workspaceGit</code> policy. Most contents stay local; Kungfu never stages, commits, or pushes files for you.</p>
+          <a href="https://github.com/kungfu-systems/kungfu/blob/dev/v4/v4.0/docs/architecture/kungfu-format-contract.md#git-publication-boundary">Read workspace and Git guidance</a>
+        </div>
+      </section>
+
       <section class="wide release-evidence">
         <div class="section-heading">
           <div>
