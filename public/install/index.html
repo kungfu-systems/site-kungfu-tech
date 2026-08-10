@@ -197,6 +197,24 @@
       border-top: 1px solid var(--line);
       font-size: 14px;
     }
+    .workspace-guidance {
+      display: grid;
+      grid-template-columns: minmax(220px, 0.72fr) minmax(0, 1.55fr);
+      gap: 30px;
+      align-items: start;
+      padding: 22px 30px;
+      background: color-mix(in srgb, var(--accent) 4%, var(--surface));
+    }
+    .workspace-guidance h2 {
+      margin: 2px 0 0;
+      font-size: clamp(22px, 3vw, 30px);
+    }
+    .workspace-guidance h2 code { font-size: 0.9em; }
+    .workspace-guidance-copy p {
+      color: var(--fg);
+      line-height: 1.6;
+    }
+    .workspace-guidance-copy a { display: inline-block; }
     .release-evidence { font-size: 14px; }
     .release-evidence .section-heading { margin-bottom: 16px; }
     @media (max-width: 760px) {
@@ -207,6 +225,7 @@
       .section-heading { align-items: flex-start; }
       .platform-tabs { grid-template-columns: 1fr; }
       .command-card { grid-template-columns: 1fr; }
+      .workspace-guidance { grid-template-columns: 1fr; gap: 12px; }
       .command-card > p:last-child,
       .command-card .command-block { grid-column: 1; grid-row: auto; }
       .command-card .command-block { margin: 12px 0; }
@@ -331,6 +350,17 @@
         <p class="alpha-note">This is an Alpha, not a stable or generally available release. Existing package-manager installations remain under their current owner. The qualified Windows Alpha artifact may be unsigned; Authenticode is not a qualification requirement for this Alpha.</p>
       </section>
 
+      <section class="wide workspace-guidance" aria-labelledby="workspace-git-heading">
+        <div class="workspace-guidance-heading">
+          <p class="eyebrow">First project use</p>
+          <h2 id="workspace-git-heading">When <code>.kungfu/</code> appears</h2>
+        </div>
+        <div class="workspace-guidance-copy">
+          <p>It is Kungfu's project-local workspace for durable Work and runtime state. Do not delete it or add the whole directory to Git. Before staging anything, ask your Agent to run <code>kungfu agent map --json</code> and follow its <code>workspaceGit</code> policy. Most contents stay local; Kungfu never stages, commits, or pushes files for you.</p>
+          <a href="https://github.com/kungfu-systems/kungfu/blob/dev/v4/v4.0/docs/architecture/kungfu-format-contract.md#git-publication-boundary">Read workspace and Git guidance</a>
+        </div>
+      </section>
+
       <section class="wide release-evidence">
         <div class="section-heading">
           <div>
@@ -398,44 +428,7 @@
       });
     </script>
     <!-- shared-footer:end -->
-    <script>
-      (() => {
-        const tablist = document.querySelector("[aria-label='Choose a desktop platform']");
-        if (!tablist) return;
-        const tabs = Array.from(tablist.querySelectorAll("[data-desktop-platform]"));
-        const panels = Array.from(document.querySelectorAll("[data-desktop-panel]"));
-        const activate = (tab, focus = false) => {
-          const platform = tab.dataset.desktopPlatform;
-          tabs.forEach((item) => {
-            const selected = item === tab;
-            item.setAttribute("aria-selected", String(selected));
-            item.tabIndex = selected ? 0 : -1;
-          });
-          panels.forEach((panel) => {
-            panel.hidden = panel.dataset.desktopPanel !== platform;
-          });
-          if (focus) tab.focus();
-        };
-        tabs.forEach((tab, index) => {
-          tab.addEventListener("click", () => activate(tab));
-          tab.addEventListener("keydown", (event) => {
-            let next = null;
-            if (event.key === "ArrowRight" || event.key === "ArrowDown") {
-              next = tabs[(index + 1) % tabs.length];
-            } else if (event.key === "ArrowLeft" || event.key === "ArrowUp") {
-              next = tabs[(index - 1 + tabs.length) % tabs.length];
-            } else if (event.key === "Home") {
-              next = tabs[0];
-            } else if (event.key === "End") {
-              next = tabs[tabs.length - 1];
-            }
-            if (!next) return;
-            event.preventDefault();
-            activate(next, true);
-          });
-        });
-      })();
-    </script>
+    <script type="module" src="/assets/install-platform-tabs.js"></script>
     <script src="/assets/command-copy.js" defer></script>
   </main>
 </body>

@@ -230,6 +230,19 @@ test("imports signed channel and installers into mutable and immutable routes", 
     );
     assert.match(page, /Choose your platform/);
     assert.match(page, /Download for Linux/);
+    assert.match(page, /When <code>\.kungfu\/<\/code> appears/);
+    assert.match(page, /kungfu agent map --json/);
+    assert.match(page, /workspaceGit/);
+    assert.match(page, /Kungfu never stages, commits, or pushes files for you/);
+    assert.match(page, /kungfu-format-contract\.md#git-publication-boundary/);
+    const desktopPosition = page.indexOf("<h2>Desktop GUI</h2>");
+    const workspacePosition = page.indexOf('id="workspace-git-heading"');
+    const evidencePosition = page.indexOf("<h2>Inspect and verify</h2>");
+    assert.ok(
+      desktopPosition >= 0
+        && desktopPosition < workspacePosition
+        && workspacePosition < evidencePosition,
+    );
     assert.match(
       page,
       /Kungfu\.Episodes-4\.0\.0-alpha\.1\.AppImage/,

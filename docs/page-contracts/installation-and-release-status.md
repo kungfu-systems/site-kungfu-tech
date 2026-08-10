@@ -48,6 +48,9 @@ the shortest useful acquisition path first:
 - the macOS/Linux and Windows command-line installers, with copy actions;
 - platform-selectable Desktop GUI downloads derived from the verified signed
   channel rather than handwritten release links; and
+- a compact, version-independent first-project-use notice that routes readers
+  to Kungfu's canonical `.kungfu/` Git publication boundary instead of asking
+  them to infer which workspace files belong in Git; and
 - the **Kungfu UNGFU™** mark, acquisition description, SHA-256 values, Release
   Passport, and immutable evidence below the primary installation actions.
 
@@ -55,6 +58,11 @@ The macOS/Linux convenience command stays compact as
 `curl -fsSL https://kungfu.tech/install.sh | sh`. The fetched installer still
 owns release-channel signature, platform, artifact, and digest verification;
 shortening the invocation must not weaken those checks.
+
+The Desktop GUI selector may use the browser's operating-system hints to choose
+the initial macOS, Linux, or Windows panel. Unsupported or ambiguous clients
+retain the markup default. Automatic selection must not remove the other
+platform choices, steal focus, or weaken mouse and keyboard tab navigation.
 
 The same import writes immutable acquisition HTML and JSON under
 `/evidence/ungfu/alpha/<version>/<channel-root>/`, plus a mutable discovery

@@ -5,6 +5,7 @@ repo_root=$(cd "$(dirname "$0")/.." && pwd)
 cd "$repo_root"
 
 node --test scripts/import-bootstrap-publication.test.mjs
+node --test scripts/install-platform-tabs.test.mjs
 node --test scripts/consume-installer-publication-bundle.test.mjs
 node --test scripts/import-auditable-demo.test.mjs
 node --test scripts/homepage-proof-reel.test.mjs
@@ -31,6 +32,7 @@ node scripts/check-dogfood-proof.mjs
 node scripts/check-trademark-use.mjs
 node scripts/check-trademark-use.mjs --self-test
 node --check public/assets/command-copy.js
+node --check public/assets/install-platform-tabs.js
 node --check scripts/check-copyable-code.mjs
 node scripts/check-copyable-code.mjs --root public
 
@@ -646,6 +648,12 @@ grep -q 'id="command-line"' public/install/index.html
 grep -q 'bootstrap-publication:start' public/install/index.html
 grep -q 'bootstrap-publication:end' public/install/index.html
 node -e 'const fs=require("fs"); const p=fs.readFileSync("public/install/index.html","utf8"); const cli=p.indexOf("<h2>Command Line</h2>"); const gui=p.indexOf("<h2>Desktop GUI</h2>"); const evidence=p.indexOf("<h2>Inspect and verify</h2>"); if(!(cli>=0 && cli<gui && gui<evidence)) throw new Error("install page acquisition order drifted")'
+grep -q 'When <code>.kungfu/</code> appears' public/install/index.html
+grep -q 'kungfu agent map --json' public/install/index.html
+grep -q 'workspaceGit' public/install/index.html
+grep -q 'Kungfu never stages, commits, or pushes files for you.' public/install/index.html
+grep -q 'src="/assets/install-platform-tabs.js"' public/install/index.html
+node -e 'const fs=require("fs"); const p=fs.readFileSync("public/install/index.html","utf8"); const gui=p.indexOf("<h2>Desktop GUI</h2>"); const workspace=p.indexOf("id=\"workspace-git-heading\""); const evidence=p.indexOf("<h2>Inspect and verify</h2>"); if(!(gui>=0 && gui<workspace && workspace<evidence)) throw new Error("workspace Git guidance order drifted")'
 if [ -f public/installer-publication.json ]; then
   grep -q 'is ready to install.' public/install/index.html
   grep -q 'data-ungfu-release-acquisition' public/install/index.html
