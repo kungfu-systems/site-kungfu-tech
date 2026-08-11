@@ -1,13 +1,13 @@
 {
-  "buildchainSha": "f63d43720ebb7d5099080b14c70cf04254057d80",
+  "buildchainSha": "41d4dce2f38aa4821c794b49dcfb2bcf59d0984a",
   "claims": [
     "The exact retained standalone Kungfu Linux artifact completed the declared bounded demo.",
     "The Gate and responsive media qualification bind two independently captured native PTY renditions."
   ],
   "demo": {
-    "catalogRoot": "sha256:84b3e06ea8fafb08da41cd3a66040ca7834fd3b3a476e63d71ec8da09c7b370d",
-    "commandLabel": "kungfu agent-work-lab project-tour --episode 2 --speed 1",
-    "descriptorRoot": "sha256:04cf3505bf59af19bb60f5843b4e29f1e5cff3b2abc62479b2397da6ddcd5f3a",
+    "catalogRoot": "sha256:6b7601fb0da94a3f1ba7954fde62aeb1660eace1c8880a0793cf577544da0292",
+    "commandLabel": "kungfu agent-work-lab project-tour --episode 2 --speed 4",
+    "descriptorRoot": "sha256:533e89e26b72c8b10c5ce65c0758f5df11679696005b746326616e68ac9f830f",
     "evidenceClass": "exact-standalone-binary-declarative-demo/v1",
     "id": "project-tour-episode-2",
     "publication": {
@@ -15,24 +15,24 @@
       "siteSlug": "project-tour-episode-2"
     },
     "sceneId": "project-tour-episode-2",
-    "title": "Kungfu Project Tour episode 2 at 1x"
+    "title": "Who is allowed to complete Work?"
   },
   "durationClass": "long-form",
   "evidenceClass": "exact-standalone-binary-declarative-demo/v1",
-  "gateRoot": "sha256:d984c0e77671d0b80a8a169fc1c8f0fcfcdba2805ba128fedc1e5dfe3b3d471c",
+  "gateRoot": "sha256:6e80fe12d4f2c2a020f987c556d949b81f004566b9c9161f89cc32d05b92cffb",
   "mediaProfile": "responsive-long-form-web-delivery-v1",
-  "mediaQualificationRoot": "sha256:ae9041272b4cd37729f513ead9cb6c9cbc3fc4e031d9e5928201457e0e6c5b6c",
-  "mediaRoot": "sha256:ce9a49c4b0e7e1192e8ebf9721b68444fdd6355c17ebca8a9cc08e726621df4c",
+  "mediaQualificationRoot": "sha256:069c20773820049c7ead014eef18f8463cc01f372e459ee8b8c5d301f3148443",
+  "mediaRoot": "sha256:7019e41937935af8a33454d90e3425ea111df43bd10616525196ccdf91c5ddfc",
   "nativeCaptures": [
     {
-      "captureRoot": "sha256:9ec582cd899f115a2ba78cbb6393908ebc7a27cca6d708a553ddafdbcb451d26",
+      "captureRoot": "sha256:27e2a4830c630e172ff4e91de538be50a48d20b55792007c0a2f0399abc7cfce",
       "height": 1080,
       "id": "1080p",
       "role": "primary",
       "width": 1920
     },
     {
-      "captureRoot": "sha256:3bc7460d9be0a8b0c744246ae72148b6443e17446e0e8534877d5547b734f182",
+      "captureRoot": "sha256:db7c06922a256a4288b5f12bcd0ba692c6e95ca7440c1bdf27a0ce7a493f5a00",
       "height": 720,
       "id": "720p",
       "role": "responsive",
@@ -40,57 +40,57 @@
     }
   ],
   "nonClaims": [
-    "This exact standalone Kungfu artifact proves only the bounded disposable Project Tour episode 2 observed at 1x in two independently captured native PTYs; Mock Agent output and terminal observations grant no Work, release, capability, or production authority."
+    "This exact standalone Kungfu artifact proves only the bounded disposable Project Tour episode 2 observed at 4x in two independently captured native PTYs; Mock Agent output and terminal observations grant no Work, release, capability, or production authority."
   ],
-  "passportRoot": "sha256:462f8f63643ec8c7a76b13f9c34cf07dcbafc4d3cadfc91186e449f1e260d64e",
-  "publicEvidencePath": "/evidence/auditable-demo/462f8f63643ec8c7a76b13f9c34cf07dcbafc4d3cadfc91186e449f1e260d64e/project-tour-episode-2",
-  "rendererImage": "ghcr.io/kungfu-systems/build-images/demo-renderer@sha256:c200589be9dda6f730f1cb3deb5b48a60af9144e7a3e4216b7ef70c8e9274000",
+  "passportRoot": "sha256:85de75648980c0c4340354b486a7a3706f2097504b6d5aeddcb730f241584d65",
+  "publicEvidencePath": "/evidence/auditable-demo/85de75648980c0c4340354b486a7a3706f2097504b6d5aeddcb730f241584d65/project-tour-episode-2",
+  "rendererImage": "ghcr.io/kungfu-systems/build-images/demo-renderer@sha256:3a49708163fedaaabe07b45bba910026a1828151b5d4e9bbdaf0d62e75c927c1",
   "renditions": {
     "alternate-video": {
       "height": 1080,
       "mimeType": "video/webm",
       "path": "demo.webm",
-      "root": "sha256:ceeca871ed8627ea98be9c7181086781cf8958a96c3d260bae22604a19d36264",
+      "root": "sha256:f5e0ec1441333a019b4cfeb93b3dd3d763123c35a703755d97a0816c90ff10e3",
       "width": 1920
     },
     "evidence-poster": {
       "height": 1080,
       "mimeType": "image/png",
       "path": "poster.png",
-      "root": "sha256:6bcebef4b225e5cb9721eea6f8f80eef44a7d0de85aa7e35ef42ab0e8471340f",
+      "root": "sha256:a4e4a6c6fe12fc0dc0737102f05fb65f7f3a53e4a3a100db692e9d0d10f32eb5",
       "width": 1920
     },
     "primary-video": {
       "height": 1080,
       "mimeType": "video/mp4",
       "path": "demo.mp4",
-      "root": "sha256:9f2a515d8a5590873a3d3c694d89ecd1d665396c09701cb73eafc6aad478ee09",
+      "root": "sha256:2f000496e61c65a60a1166449f1acd19ff22e4a2ab851abb75a6fc6c2f2b7f00",
       "width": 1920
     },
     "readme-compatibility": {
       "height": 720,
       "mimeType": "image/gif",
       "path": "demo.gif",
-      "root": "sha256:609e4183e0c28830497bb489ae677f05e3b6a4fce0626eb3705b5ed8067893a1",
+      "root": "sha256:55e8050f3d7d6d64fd4d9347adb0505a16f9526ebfe8b3657148c875fa3d2884",
       "width": 1280
     },
     "responsive-alternate-video": {
       "height": 720,
       "mimeType": "video/webm",
       "path": "demo-720p.webm",
-      "root": "sha256:6987e2547ba4f2d448ce69d0e7235d6a4ec3d6c6dde0233c87625131ad7cfb8c",
+      "root": "sha256:b6dd006eab0081ca1478701378a22fc074197dd94c98f48f0d50fa6021d19155",
       "width": 1280
     },
     "responsive-primary-video": {
       "height": 720,
       "mimeType": "video/mp4",
       "path": "demo-720p.mp4",
-      "root": "sha256:725cfdfe474cf6fc87d1388c83bee55cc5eda8782648d5e179e0560b5b249bd5",
+      "root": "sha256:4986d685fc33c7257ba146951494ba660dbefc80ab1cc2f003754c637b0e06a0",
       "width": 1280
     }
   },
   "schema": "kungfu.site.auditable-demo/v2",
-  "sourceSha": "383cdbedc8a2217d2197abcd37a7508bc2bfa8e6",
+  "sourceSha": "85d08e4247db2fbd08c4c63253d3ccfaee2afada",
   "status": "qualified",
-  "workflowUrl": "https://github.com/kungfu-systems/kungfu/actions/runs/30960668222"
+  "workflowUrl": "https://github.com/kungfu-systems/kungfu/actions/runs/31465577238"
 }

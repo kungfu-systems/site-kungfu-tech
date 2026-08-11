@@ -707,8 +707,7 @@ function verifyDeclarativeEvidence(evidenceDirectory, passport, rawPassport, dem
         && input.scene.path.width === width
         && input.scene.path.height === height
         && input.terminalCapture?.root === frameSet.captureRoot
-        && input.terminalCapture?.dimensions?.columns
-          === (id === "1080p" ? 150 : 100)
+        && input.terminalCapture?.dimensions?.columns === 150
         && input.terminalCapture?.dimensions?.rows
           === (id === "1080p" ? 36 : 28)
         && typeof input.transcript?.path === "string"

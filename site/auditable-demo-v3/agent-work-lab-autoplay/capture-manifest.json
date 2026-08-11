@@ -2,7 +2,7 @@
   "artifact": {
     "binaryRoot": "sha256:86d5c810f37c3e474dbde1682ed4a9d98aa2ab308c1349f8f754fa8fdd08c76b",
     "metadataContract": "kungfu.declarative-demo-binary/v1",
-    "metadataRoot": "sha256:6b906b378ba37102e0b4a8fea42a5f03158942da27ee84b423412b726e959729",
+    "metadataRoot": "sha256:47dc4295343d69359be1cfd9f062f644bdaa61f3ffd0b1d511636f107ec9137f",
     "platformId": "linux-x64",
     "runtimeDependencies": []
   },
@@ -23,7 +23,7 @@
   "demo": {
     "claimBoundary": "This exact standalone Kungfu artifact proves only the bounded offline Agent Work Lab autoplay observed in two independently captured native PTYs; it grants no Work, release, capability, or production authority.",
     "id": "agent-work-lab-autoplay",
-    "title": "Kungfu Agent Work Lab autoplay"
+    "title": "Can Work survive a new Agent?"
   },
   "execution": {
     "durationClass": "long-form"
@@ -43,29 +43,29 @@
       "role": "primary",
       "rows": 36,
       "runSummary": "renditions/1080p/run-summary.json",
-      "runSummaryRoot": "sha256:659ed7bd95052553b948740209d83712f009b181a31ed5f2bd59a5a3489bbccb",
+      "runSummaryRoot": "sha256:4767bec47cd2b4a435033eeff17d5c1c3dcd19671dece8b4c9ff380a1753182b",
       "terminalCapture": "renditions/1080p/terminal-capture.json",
-      "terminalCaptureRoot": "sha256:b1e5fd8992c731f8c0fd5d7a7ffc7bc6a36abc8dd8ec784d37a051f44d7a3ac0",
+      "terminalCaptureRoot": "sha256:5394299f4d7a6b4cfce0064fd8cc808f525615bc5349abe59ee9e8d10901768a",
       "transcript": "renditions/1080p/complete-transcript.txt",
       "width": 1920
     },
     {
-      "columns": 100,
+      "columns": 150,
       "height": 720,
       "id": "720p",
       "role": "responsive",
       "rows": 28,
       "runSummary": "renditions/720p/run-summary.json",
-      "runSummaryRoot": "sha256:ac7f047a5ced6876a3e418d3cdc962c07e9400e7e03fece13995058e9b7bc443",
+      "runSummaryRoot": "sha256:504dde0554c3d8460cd389b9b9b51d1323977ff433e4aab7c031892f1c626ba1",
       "terminalCapture": "renditions/720p/terminal-capture.json",
-      "terminalCaptureRoot": "sha256:3bdd2900916963505d168efb08656cca23419f7034ef383f53bca83cb47a1659",
+      "terminalCaptureRoot": "sha256:a76c90df87df45d1870511b5f3e695c42511e7b8977f7e2ba5696f0b6a853dfb",
       "transcript": "renditions/720p/complete-transcript.txt",
       "width": 1280
     }
   ],
-  "root": "sha256:fc0921d5b2ae18ef7f458c755b95250f2d0c9c1bc2a5986f2df595d04bfbdec6",
-  "scenarioRoot": "sha256:84b3e06ea8fafb08da41cd3a66040ca7834fd3b3a476e63d71ec8da09c7b370d",
+  "root": "sha256:caf5b3da490ed76184eabe24aefac9f22f093e5646cc5a0a0c69a518603fc97d",
+  "scenarioRoot": "sha256:6b7601fb0da94a3f1ba7954fde62aeb1660eace1c8880a0793cf577544da0292",
   "schema": "buildchain.declarative-demo-capture/v1",
-  "sourceCoordinateRoot": "sha256:1c76f76c74ff7e07d989cea6eafa7e103537aa2dea7f5bcefefaccf9713760ac",
+  "sourceCoordinateRoot": "sha256:e70dd6dce7daf37770403512bdb9435eb4ea2e6900b7a7125c33adf5a6989142",
   "status": "qualified"
 }

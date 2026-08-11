@@ -478,7 +478,7 @@ function declarativeFixture() {
           scene: { path: scene("720p", 1280, 720) },
           terminalCapture: {
             root: responsiveRoot,
-            dimensions: { columns: 100, rows: 28 },
+            dimensions: { columns: 150, rows: 28 },
           },
           transcript: { path: transcript, root: sha256(Buffer.from(transcript)) },
         },
@@ -1002,6 +1002,29 @@ test("rejects declarative evidence that collapses both native renditions", () =>
     assert.throws(
       () => importAuditableDemo(input),
       /distinct native capture roots/u,
+    );
+  } finally {
+    fs.rmSync(input.repoRoot, { recursive: true, force: true });
+  }
+});
+
+test("rejects the legacy narrow 100-column 720p capture", () => {
+  const input = declarativeFixture();
+  try {
+    const manifestPath = path.join(input.evidenceDirectory, "manifest.json");
+    const manifest = JSON.parse(fs.readFileSync(manifestPath, "utf8"));
+    manifest.inputs.renditions[1].terminalCapture.dimensions.columns = 100;
+    fs.writeFileSync(manifestPath, stableJson(manifest));
+    const publicEvidencePath = path.join(input.evidenceDirectory, "public-evidence.json");
+    const publicEvidence = JSON.parse(fs.readFileSync(publicEvidencePath, "utf8"));
+    const manifestBytes = fs.readFileSync(manifestPath);
+    const manifestEntry = publicEvidence.files.find(({ path: member }) => member === "manifest.json");
+    manifestEntry.root = sha256(manifestBytes);
+    manifestEntry.bytes = manifestBytes.length;
+    fs.writeFileSync(publicEvidencePath, stableJson(publicEvidence));
+    assert.throws(
+      () => importAuditableDemo(input),
+      /renderer native input 720p is invalid/u,
     );
   } finally {
     fs.rmSync(input.repoRoot, { recursive: true, force: true });
