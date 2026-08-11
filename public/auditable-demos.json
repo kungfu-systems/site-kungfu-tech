@@ -2,22 +2,22 @@
   "demos": [
     {
       "id": "agent-work-lab-autoplay",
-      "mediaRoot": "sha256:65d866bba80cb5fc8919049d3a9f6ad1a3d8ac783036ae00773823b7f3934fa3",
-      "passportRoot": "sha256:f69ede6927b8cea9ca25d2f552987a8eeeac1354809b5ae3f1fa0851db1b0aa1",
+      "mediaRoot": "sha256:f66e60fd5b5eeee62dbd129c588903b561701a477617366668122e86244226dd",
+      "passportRoot": "sha256:7e840909a737cf7d89cd87fded22bb34a948353034c9fd7cbbce3db2022ceea4",
       "projectionPath": "/auditable-demos/agent-work-lab-autoplay.json",
       "siteSlug": "agent-work-lab"
     },
     {
       "id": "project-tour-episode-1",
-      "mediaRoot": "sha256:0aa5b03b3e18ed1f5cddee9f642232a7874bb0cea084c6fba9ce6a58216dcac3",
-      "passportRoot": "sha256:9a62d7a4bd5f038465535db410e1c5daf068f16a3ef4049dc24a5ff7aa3a387e",
+      "mediaRoot": "sha256:6023abfad576ddc31d504d73dcd8dd3e5efa0e356a78cff43c7734528c476ed9",
+      "passportRoot": "sha256:872ed36f326b958152f69110b5b1476d49a45a22990c1cd033e2271a09b7db5b",
       "projectionPath": "/auditable-demos/project-tour-episode-1.json",
       "siteSlug": "project-tour-episode-1"
     },
     {
       "id": "project-tour-episode-2",
-      "mediaRoot": "sha256:ce9a49c4b0e7e1192e8ebf9721b68444fdd6355c17ebca8a9cc08e726621df4c",
-      "passportRoot": "sha256:462f8f63643ec8c7a76b13f9c34cf07dcbafc4d3cadfc91186e449f1e260d64e",
+      "mediaRoot": "sha256:7019e41937935af8a33454d90e3425ea111df43bd10616525196ccdf91c5ddfc",
+      "passportRoot": "sha256:85de75648980c0c4340354b486a7a3706f2097504b6d5aeddcb730f241584d65",
       "projectionPath": "/auditable-demos/project-tour-episode-2.json",
       "siteSlug": "project-tour-episode-2"
     }
@@ -29,8 +29,8 @@
       {
         "demoId": "agent-work-lab-autoplay",
         "label": "Continuity",
-        "mediaRoot": "sha256:65d866bba80cb5fc8919049d3a9f6ad1a3d8ac783036ae00773823b7f3934fa3",
-        "passportRoot": "sha256:f69ede6927b8cea9ca25d2f552987a8eeeac1354809b5ae3f1fa0851db1b0aa1",
+        "mediaRoot": "sha256:f66e60fd5b5eeee62dbd129c588903b561701a477617366668122e86244226dd",
+        "passportRoot": "sha256:7e840909a737cf7d89cd87fded22bb34a948353034c9fd7cbbce3db2022ceea4",
         "projectionPath": "/auditable-demos/agent-work-lab-autoplay.json",
         "question": "Can Work survive a new Agent?",
         "summary": "The first proof isolates continuity: one Work continues across two fresh Agent Sessions without copied chat.",
@@ -39,8 +39,8 @@
       {
         "demoId": "project-tour-episode-1",
         "label": "Failure retention",
-        "mediaRoot": "sha256:0aa5b03b3e18ed1f5cddee9f642232a7874bb0cea084c6fba9ce6a58216dcac3",
-        "passportRoot": "sha256:9a62d7a4bd5f038465535db410e1c5daf068f16a3ef4049dc24a5ff7aa3a387e",
+        "mediaRoot": "sha256:6023abfad576ddc31d504d73dcd8dd3e5efa0e356a78cff43c7734528c476ed9",
+        "passportRoot": "sha256:872ed36f326b958152f69110b5b1476d49a45a22990c1cd033e2271a09b7db5b",
         "projectionPath": "/auditable-demos/project-tour-episode-1.json",
         "question": "Can Work survive failure?",
         "summary": "Inside a disposable Project, a dropped connection and a crashed replacement process remain as Attempts under the same Work.",
@@ -49,8 +49,8 @@
       {
         "demoId": "project-tour-episode-2",
         "label": "Review and settlement",
-        "mediaRoot": "sha256:ce9a49c4b0e7e1192e8ebf9721b68444fdd6355c17ebca8a9cc08e726621df4c",
-        "passportRoot": "sha256:462f8f63643ec8c7a76b13f9c34cf07dcbafc4d3cadfc91186e449f1e260d64e",
+        "mediaRoot": "sha256:7019e41937935af8a33454d90e3425ea111df43bd10616525196ccdf91c5ddfc",
+        "passportRoot": "sha256:85de75648980c0c4340354b486a7a3706f2097504b6d5aeddcb730f241584d65",
         "projectionPath": "/auditable-demos/project-tour-episode-2.json",
         "question": "Who is allowed to complete Work?",
         "summary": "The final proof separates Agent exit, independent review, and Kungfu settlement: an Agent can produce a candidate and evidence, but cannot approve its own Work."
@@ -59,10 +59,10 @@
     "schema": "buildchain.declarative-demo-presentation/v1",
     "source": {
       "contractPath": "site/auditable-demo-presentation.json",
-      "contractSha256": "66c468cab16d747392d76554529360d112d13c0c4adb8f97d30d8b1a1977634c",
+      "contractSha256": "05db7e5995c4933ce53da8684169ad3ee333c8a281ad5581999a3c87735bdd64",
       "repository": "kungfu-systems/kungfu",
       "sourcePath": ".buildchain/auditable-demo.json",
-      "sourceSha": "ef1fe8d22b9289ce62efc5c6b1fa4d2f40094ce6"
+      "sourceSha": "85d08e4247db2fbd08c4c63253d3ccfaee2afada"
     }
   },
   "schema": "kungfu.site.auditable-demo-collection/v1",

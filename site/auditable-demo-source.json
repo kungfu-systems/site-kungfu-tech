@@ -4,10 +4,10 @@
   "homepageDemoId": "agent-work-lab-autoplay",
   "presentation": {
     "contractPath": "site/auditable-demo-presentation.json",
-    "contractSha256": "66c468cab16d747392d76554529360d112d13c0c4adb8f97d30d8b1a1977634c",
+    "contractSha256": "05db7e5995c4933ce53da8684169ad3ee333c8a281ad5581999a3c87735bdd64",
     "repository": "kungfu-systems/kungfu",
     "sourcePath": ".buildchain/auditable-demo.json",
-    "sourceSha": "ef1fe8d22b9289ce62efc5c6b1fa4d2f40094ce6"
+    "sourceSha": "85d08e4247db2fbd08c4c63253d3ccfaee2afada"
   },
   "demos": [
     {
@@ -18,13 +18,13 @@
     },
     {
       "id": "project-tour-episode-1",
-      "commandLabel": "kungfu agent-work-lab project-tour --episode 1 --speed 1",
+      "commandLabel": "kungfu agent-work-lab project-tour --episode 1 --speed 4",
       "siteSlug": "project-tour-episode-1",
       "evidenceDirectory": "site/auditable-demo-v3/project-tour-episode-1"
     },
     {
       "id": "project-tour-episode-2",
-      "commandLabel": "kungfu agent-work-lab project-tour --episode 2 --speed 1",
+      "commandLabel": "kungfu agent-work-lab project-tour --episode 2 --speed 4",
       "siteSlug": "project-tour-episode-2",
       "evidenceDirectory": "site/auditable-demo-v3/project-tour-episode-2"
     }

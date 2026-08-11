@@ -2,52 +2,52 @@
   "errors": [],
   "media": [
     {
-      "bytes": 1462721,
+      "bytes": 2126468,
       "codec": "h264",
-      "durationMs": 123900,
+      "durationMs": 69700,
       "frameRate": "10/1",
       "height": 1080,
       "name": "demo.mp4",
       "width": 1920
     },
     {
-      "bytes": 1528831,
+      "bytes": 1607182,
       "codec": "vp9",
-      "durationMs": 123900,
+      "durationMs": 69700,
       "frameRate": "10/1",
       "height": 1080,
       "name": "demo.webm",
       "width": 1920
     },
     {
-      "bytes": 782573,
+      "bytes": 1014369,
       "codec": "h264",
-      "durationMs": 123900,
+      "durationMs": 69700,
       "frameRate": "10/1",
       "height": 720,
       "name": "demo-720p.mp4",
       "width": 1280
     },
     {
-      "bytes": 811900,
+      "bytes": 853978,
       "codec": "vp9",
-      "durationMs": 123900,
+      "durationMs": 69700,
       "frameRate": "10/1",
       "height": 720,
       "name": "demo-720p.webm",
       "width": 1280
     },
     {
-      "bytes": 308818,
+      "bytes": 894502,
       "codec": "gif",
-      "durationMs": 123900,
+      "durationMs": 69700,
       "frameRate": "10/1",
       "height": 720,
       "name": "demo.gif",
       "width": 1280
     },
     {
-      "bytes": 195518,
+      "bytes": 174045,
       "codec": "png",
       "height": 1080,
       "name": "poster.png",
