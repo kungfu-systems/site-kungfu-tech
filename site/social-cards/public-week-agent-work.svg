@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
+  <title id="title">One Human. Agents. 1,026 Merged PRs in One Week.</title>
+  <desc id="desc">A fixed public week of Agent-mediated Kungfu work.</desc>
+  <rect width="1200" height="630" fill="#f5f6f3"/>
+  <rect x="0" y="0" width="1200" height="16" fill="#111820"/>
+  <rect x="0" y="16" width="1200" height="7" fill="#0b6f68"/>
+  <text x="72" y="85" fill="#0b6f68" font-family="Arial, Helvetica, sans-serif" font-size="23" font-weight="700">KUNGFU UNGFU / A FIXED PUBLIC WEEK</text>
+  <text x="72" y="177" fill="#111820" font-family="Arial, Helvetica, sans-serif" font-size="64" font-weight="700">One human. Agents.</text>
+  <text x="72" y="300" fill="#111820" font-family="Arial, Helvetica, sans-serif" font-size="108" font-weight="700">1,026 merged PRs</text>
+  <text x="72" y="390" fill="#111820" font-family="Arial, Helvetica, sans-serif" font-size="64" font-weight="700">in one week.</text>
+  <line x1="72" y1="438" x2="1128" y2="438" stroke="#c7cec9" stroke-width="2"/>
+  <text x="72" y="497" fill="#53636f" font-family="Arial, Helvetica, sans-serif" font-size="28">112 releases &#183; 15 repositories &#183; public GitHub evidence</text>
+  <text x="72" y="555" fill="#53636f" font-family="Arial, Helvetica, sans-serif" font-size="23">First-party declaration. Reproducible records. Explicit claim boundaries.</text>
+  <text x="1128" y="593" text-anchor="end" fill="#111820" font-family="Arial, Helvetica, sans-serif" font-size="24" font-weight="700">kungfu.tech/about/bootstrapping/evidence</text>
+</svg>
