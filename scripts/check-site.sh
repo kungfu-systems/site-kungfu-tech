@@ -113,6 +113,7 @@ node -e 'const fs=require("fs"); const source=JSON.parse(fs.readFileSync("site/i
 test -f public/about/index.html
 test -f public/about/bootstrapping/index.html
 test -f public/about/bootstrapping/evidence/index.html
+node scripts/check-social-cards.mjs
 test -f public/capital/index.html
 test -f public/capital/investor-perspective/index.html
 test -f public/services/index.html
