@@ -10,15 +10,15 @@
     "tag": "v4.0.0-alpha.2",
     "channel": "alpha",
     "version": "4.0.0-alpha.2",
-    "channelPayloadRoot": "sha256:c0744045cf8bf26d2f968bd8075c79bbde7709efa835539a3360f5843b261ae5",
+    "channelPayloadRoot": "sha256:8c031dd420e15ddde5b4e751cb4dcc3c0a2d4bd67956d295918e21165de6abdd",
     "releasePassport": {
       "ref": "buildchain:release-passport/f79a53d6983457788bb3f57fbfcf00fcc00cdd21",
-      "root": "sha256:4b37352b38833052370b336b41e35d03a381dcc393fafce39fcb41881dcf3f5a"
+      "root": "sha256:63116c9c3f035025ae0166863cc5ef43dab67dfba153d039a09d428f02dbe2c0"
     }
   },
   "acquisitionEvidence": {
     "url": "https://kungfu.tech/.well-known/kungfu/ungfu-release-acquisition.json",
-    "root": "sha256:107e2bcc433f5cc01ee268cbef7bf2e1082cec14e5c908f7de3d69fc1622529e"
+    "root": "sha256:5111ede2b1d83a10b2056b5d73608c75ba32db6f4bec1ef5e3b677adc7771932"
   },
   "legalBoundary": {
     "firstUseDateClaim": null,
