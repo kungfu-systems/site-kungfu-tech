@@ -661,8 +661,9 @@ grep -q 'data-desktop-platform="win32-x64"' public/install/index.html
 grep -q 'Download for macOS' public/install/index.html
 grep -q 'Download for Linux' public/install/index.html
 grep -q 'Download for Windows' public/install/index.html
-grep -q 'Kungfu.Episodes-4.0.0-alpha.1.AppImage' public/install/index.html
-grep -q 'Kungfu.Episodes.Setup.4.0.0-alpha.1.exe' public/install/index.html
+installer_version=$(node -e 'const p=require("./public/installer-publication.json"); const versions=[...new Set(p.entries.map((entry)=>entry.version))]; if(versions.length!==1) process.exit(1); process.stdout.write(versions[0])')
+grep -Fq "Kungfu.Episodes-${installer_version}.AppImage" public/install/index.html
+grep -Fq "Kungfu.Episodes.Setup.${installer_version}.exe" public/install/index.html
 if grep -q 'Kungfu%20Episodes' public/install/index.html; then
   echo "Get Kungfu must project GitHub-normalized desktop asset names" >&2
   exit 1

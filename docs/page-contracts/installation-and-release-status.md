@@ -1,7 +1,7 @@
 # Installation and Release Status Contract
 
 The committed `/install/` route reflects the current reviewed publication
-transaction. It presents Kungfu v4.0.0-alpha.1 as the first public v4 Alpha,
+transaction. It presents Kungfu v4.0.0-alpha.2 as the current public v4 Alpha,
 with exact acquisition evidence, while preserving the boundary that an Alpha
 is neither stable nor generally available.
 
