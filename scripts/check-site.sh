@@ -35,6 +35,24 @@ node --check public/assets/command-copy.js
 node --check public/assets/install-platform-tabs.js
 node --check scripts/check-copyable-code.mjs
 node scripts/check-copyable-code.mjs --root public
+node - <<'NODE'
+const fs = require("node:fs");
+const source = fs.readFileSync(".buildchain/buildchain.toml", "utf8");
+const section = (name) => source.match(new RegExp(`\\[deploy\\.${name}\\]([\\s\\S]*?)(?=\\n\\[|$)`, "u"))?.[1] || "";
+const expected = [
+  '{ from = "/install.sh", to = "https://libkungfu.dev/install.sh", status = 307 }',
+  '{ from = "/install.ps1", to = "https://libkungfu.dev/install.ps1", status = 307 }',
+];
+for (const channel of ["staging", "production"]) {
+  const body = section(channel);
+  if (!expected.every((entry) => body.includes(entry))) {
+    throw new Error(`deploy.${channel} must redirect both friendly installer routes to libkungfu.dev`);
+  }
+}
+if (/^redirects\s*=/mu.test(section("preview"))) {
+  throw new Error("deploy.preview redirects belong to the externally managed preview router");
+}
+NODE
 
 shared_block() {
   block_name=$1

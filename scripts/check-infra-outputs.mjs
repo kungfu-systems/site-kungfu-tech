@@ -5,7 +5,7 @@ const outputs = JSON.parse(fs.readFileSync("infra/outputs.json", "utf8"));
 const buildchainToml = fs.readFileSync(".buildchain/buildchain.toml", "utf8");
 const workflow = fs.readFileSync(".github/workflows/buildchain-web-surface.yml", "utf8");
 const expectedBuildchainShellRef =
-  "5f4c48f802f7463237e6e612fb238c08bdd31a26";
+  "5f367a96183ac211516725cec2ef8b645b0a35ed";
 const expectedBuildchainShell = `kungfu-systems/buildchain/.github/workflows/.web-surface.yml@${expectedBuildchainShellRef}`;
 
 function parseTomlSections(text) {
