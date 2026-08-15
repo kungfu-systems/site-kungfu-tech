@@ -344,7 +344,7 @@ test("imports signed channel and installers into mutable and immutable routes", 
   }
 });
 
-test("preserves prior immutable versions and rejects replacement", () => {
+test("preserves prior immutable coordinates and rejects byte replacement", () => {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), "kungfu-site-history-"));
   try {
     const outputRoot = path.join(root, "public");
@@ -357,16 +357,25 @@ test("preserves prior immutable versions and rejects replacement", () => {
       sourceCharacter: "b",
       version: "4.0.0-alpha.2",
     });
+    const repairedSecond = fixture(root, {
+      sourceCharacter: "c",
+      version: "4.0.0-alpha.2",
+    });
     importBootstrapPublication({ ...first, outputRoot });
     importBootstrapPublication({ ...second, outputRoot });
+    importBootstrapPublication({ ...repairedSecond, outputRoot });
     const manifest = JSON.parse(
       fs.readFileSync(path.join(outputRoot, "manifest.json"), "utf8"),
     );
     for (const publication of manifest.publications) {
-      assert.equal(publication.versions.length, 2);
+      assert.equal(publication.versions.length, 3);
       assert.deepEqual(
         publication.versions.map((item) => item.version),
-        ["4.0.0-alpha.1", "4.0.0-alpha.2"],
+        ["4.0.0-alpha.1", "4.0.0-alpha.2", "4.0.0-alpha.2"],
+      );
+      assert.equal(
+        new Set(publication.versions.map((item) => item.immutablePath)).size,
+        3,
       );
       assert.match(
         publication.versions[0].payloadRoot,
