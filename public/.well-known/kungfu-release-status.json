@@ -5,20 +5,20 @@
   "reason": "signed-publication-and-readback-qualified",
   "documentationUrl": "https://kungfu.tech/install/",
   "release": {
-    "sourceSha": "ad7c7db6df076f969c5939728bcbe70ccd4771b3",
-    "siteSourceSha": "ad7c7db6df076f969c5939728bcbe70ccd4771b3",
-    "tag": "v4.0.0-alpha.1",
+    "sourceSha": "b0cff8236b8b3746f8028b9d519ed3b0e26096c9",
+    "siteSourceSha": "b0cff8236b8b3746f8028b9d519ed3b0e26096c9",
+    "tag": "v4.0.0-alpha.2",
     "channel": "alpha",
-    "version": "4.0.0-alpha.1",
-    "channelPayloadRoot": "sha256:6cc17282c81e82af34dbd07a9ea9f4263f6784dc99a77c4fb92758304815ad21",
+    "version": "4.0.0-alpha.2",
+    "channelPayloadRoot": "sha256:5c4e0693d6aafe283a8934efeea532f7366a954313611a1b8d1506817a597994",
     "releasePassport": {
-      "ref": "buildchain:release-passport/ad7c7db6df076f969c5939728bcbe70ccd4771b3",
-      "root": "sha256:da44593e19c21d1dc2d62f7af567e9f86a96e1e87d0ec53da6c6365a047ae7d3"
+      "ref": "buildchain:release-passport/f79a53d6983457788bb3f57fbfcf00fcc00cdd21",
+      "root": "sha256:d4bde1614ae193097519da0da5f3e209779e09fd1db153da59a0a773795c6575"
     }
   },
   "acquisitionEvidence": {
     "url": "https://kungfu.tech/.well-known/kungfu/ungfu-release-acquisition.json",
-    "root": "sha256:2d47d0620d8b0e5e516e3958088f17ae8b73fcfaf5ae60f6d7a0b0cab7f22d82"
+    "root": "sha256:098721c84adb29da74739b0a31f810f5efacfaed3cd06c541db2fdcdac55a51b"
   },
   "legalBoundary": {
     "firstUseDateClaim": null,
