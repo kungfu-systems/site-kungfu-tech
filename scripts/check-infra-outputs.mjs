@@ -5,7 +5,7 @@ const outputs = JSON.parse(fs.readFileSync("infra/outputs.json", "utf8"));
 const buildchainToml = fs.readFileSync(".buildchain/buildchain.toml", "utf8");
 const workflow = fs.readFileSync(".github/workflows/buildchain-web-surface.yml", "utf8");
 const expectedBuildchainShellRef =
-  "5f367a96183ac211516725cec2ef8b645b0a35ed";
+  "a6dd3f9de8d2ca0ec66ae569c208791e48390e4f";
 const expectedBuildchainShell = `kungfu-systems/buildchain/.github/workflows/.web-surface.yml@${expectedBuildchainShellRef}`;
 
 function parseTomlSections(text) {
@@ -74,6 +74,8 @@ for (const lockInput of [
   ".buildchain/alpha-contract-lock.json",
   ".buildchain/contract-lock.json",
   "buildchain-contract-compatibility-policy: major-compatible",
+  "buildchain-contract-expected-channel: ${{",
+  "buildchain-contract-expected-major: \"3\"",
   "buildchain-contract-drift-issue-mode: compatible-and-breaking",
 ]) {
   if (!workflow.includes(lockInput)) {
