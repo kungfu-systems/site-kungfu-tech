@@ -19,6 +19,11 @@
           "version": "4.0.0-alpha.2",
           "payloadRoot": "sha256:5c4e0693d6aafe283a8934efeea532f7366a954313611a1b8d1506817a597994",
           "immutablePath": "/installers/v1/alpha/4.0.0-alpha.2/5c4e0693d6aafe283a8934efeea532f7366a954313611a1b8d1506817a597994/"
+        },
+        {
+          "version": "4.0.0-alpha.2",
+          "payloadRoot": "sha256:c0744045cf8bf26d2f968bd8075c79bbde7709efa835539a3360f5843b261ae5",
+          "immutablePath": "/installers/v1/alpha/4.0.0-alpha.2/c0744045cf8bf26d2f968bd8075c79bbde7709efa835539a3360f5843b261ae5/"
         }
       ]
     },
@@ -34,6 +39,11 @@
           "version": "4.0.0-alpha.2",
           "payloadRoot": "sha256:5c4e0693d6aafe283a8934efeea532f7366a954313611a1b8d1506817a597994",
           "immutablePath": "/channels/alpha/5c4e0693d6aafe283a8934efeea532f7366a954313611a1b8d1506817a597994/"
+        },
+        {
+          "version": "4.0.0-alpha.2",
+          "payloadRoot": "sha256:c0744045cf8bf26d2f968bd8075c79bbde7709efa835539a3360f5843b261ae5",
+          "immutablePath": "/channels/alpha/c0744045cf8bf26d2f968bd8075c79bbde7709efa835539a3360f5843b261ae5/"
         }
       ]
     },
@@ -49,6 +59,11 @@
           "version": "4.0.0-alpha.2",
           "payloadRoot": "sha256:5c4e0693d6aafe283a8934efeea532f7366a954313611a1b8d1506817a597994",
           "immutablePath": "/evidence/ungfu/alpha/4.0.0-alpha.2/5c4e0693d6aafe283a8934efeea532f7366a954313611a1b8d1506817a597994/"
+        },
+        {
+          "version": "4.0.0-alpha.2",
+          "payloadRoot": "sha256:c0744045cf8bf26d2f968bd8075c79bbde7709efa835539a3360f5843b261ae5",
+          "immutablePath": "/evidence/ungfu/alpha/4.0.0-alpha.2/c0744045cf8bf26d2f968bd8075c79bbde7709efa835539a3360f5843b261ae5/"
         }
       ]
     }

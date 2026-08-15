@@ -405,14 +405,15 @@ function appendVersion(manifest, publicationId, version) {
     manifest.publications.push(publication);
   }
   const existing = publication.versions.find(
-    (item) => item.version === version.version,
+    (item) =>
+      item.version === version.version &&
+      item.immutablePath === version.immutablePath,
   );
-  if (existing && existing.immutablePath !== version.immutablePath) {
-    throw new Error(`append-only publication version moved: ${version.version}`);
-  }
   if (!existing) publication.versions.push(version);
-  publication.versions.sort((left, right) =>
-    left.version.localeCompare(right.version),
+  publication.versions.sort(
+    (left, right) =>
+      left.version.localeCompare(right.version) ||
+      left.immutablePath.localeCompare(right.immutablePath),
   );
 }
 
