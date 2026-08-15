@@ -207,11 +207,19 @@ grep -q '5.8cqw' public/index.html
 grep -q 'Use the best Agent when it matters. Use a cheaper one when it does not.' public/index.html
 grep -q 'class="hero-actions" aria-label="Explore Kungfu"' public/index.html
 grep -q 'class="brand-motto">Never Guess. Facts Unfold.</span>' public/index.html
+grep -q 'class="hero-acquisition-row" aria-label="Evidence and installation"' public/index.html
+grep -q 'class="hero-dogfood-proof" href="https://libkungfu.dev/dogfood/"' public/index.html
+grep -q 'Built in public by one human working through agents.' public/index.html
+grep -q '3,467 merged public PRs across 16 repositories in 30 days.' public/index.html
+grep -q 'Inspect the evidence' public/index.html
 grep -q 'class="hero-install-strip" href="/install/"' public/index.html
 grep -q '<strong>Download Kungfu</strong><span>Public Alpha · Desktop + standalone CLI</span>' public/index.html
 grep -q 'aria-label="Available platforms"><span>macOS</span><span>Linux</span><span>Windows</span>' public/index.html
-assert_before public/index.html 'class="hero-details"' 'class="hero-install-strip"'
-assert_before public/index.html 'class="hero-install-strip"' 'class="builder-entry"'
+assert_before public/index.html 'class="hero-acquisition-row"' 'class="hero-dogfood-proof"'
+assert_before public/index.html 'class="hero-dogfood-proof"' 'class="hero-install-strip"'
+assert_before public/index.html 'class="hero-install-strip"' 'class="demo-showcase"'
+assert_before public/index.html 'class="demo-showcase"' 'class="hero-details"'
+assert_before public/index.html 'class="hero-details"' 'class="builder-entry"'
 grep -q 'window.setTimeout' public/index.html
 grep -q 'PROBLEM_AUTOMATION_DELAY_MS = 7000' public/assets/proof-reel-state.js
 grep -q 'event.key === "ArrowLeft"' public/index.html

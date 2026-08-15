@@ -55,14 +55,25 @@ test("homepage renders four semantic chapters from the rooted three-proof contra
   }
 });
 
-test("homepage repeats the canonical acquisition path directly after the proof reel", () => {
+test("homepage leads with dogfood proof beside the canonical acquisition path", () => {
   const page = html();
+  const heroIndex = page.indexOf('class="hero"');
   const detailsIndex = page.indexOf('class="hero-details"');
+  const acquisitionIndex = page.indexOf('class="hero-acquisition-row"');
+  const dogfoodIndex = page.indexOf('class="hero-dogfood-proof"');
   const installIndex = page.indexOf('class="hero-install-strip"');
+  const reelIndex = page.indexOf('class="demo-showcase"');
   const nextSectionIndex = page.indexOf('class="builder-entry"');
-  assert.ok(detailsIndex >= 0);
-  assert.ok(installIndex > detailsIndex);
-  assert.ok(nextSectionIndex > installIndex);
+  assert.ok(acquisitionIndex > heroIndex);
+  assert.ok(dogfoodIndex > acquisitionIndex);
+  assert.ok(installIndex > dogfoodIndex);
+  assert.ok(reelIndex > installIndex);
+  assert.ok(detailsIndex > reelIndex);
+  assert.ok(nextSectionIndex > detailsIndex);
+  assert.match(page, /class="hero-dogfood-proof" href="https:\/\/libkungfu\.dev\/dogfood\/"/u);
+  assert.match(page, /Built in public by one human working through agents\./u);
+  assert.match(page, /3,467 merged public PRs across 16 repositories in 30 days\./u);
+  assert.match(page, /Inspect the evidence/u);
   assert.match(page, /class="hero-install-strip" href="\/install\/"/u);
   assert.match(page, /<strong>Download Kungfu<\/strong>/u);
   assert.match(page, /Public Alpha · Desktop \+ standalone CLI/u);
