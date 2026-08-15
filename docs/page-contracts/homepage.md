@@ -5,8 +5,9 @@ architecture. Its reading order is claim, proof, explanation, and navigation.
 
 ## Pain-to-Proof Reel
 
-The page opens directly below the shared header with one full-width reel in a
-16:9 frame. It has four semantic chapters:
+The page opens directly below the shared header with a compact evidence and
+installation row, followed by one full-width reel in a 16:9 frame. The reel has
+four semantic chapters:
 
 1. Problem names the human burden of carrying context between Agents. Its
    supporting copy makes the economic consequence explicit: use the best Agent
@@ -67,16 +68,20 @@ scrolling, including on scaled 4K displays and browser viewports with reduced
 CSS-pixel height. Claim typography uses carousel container units so it shrinks
 with the frame instead of overflowing.
 
-The supporting row places the three-line brand principle on the left, the
-execution-surface explanation in the center as a left-aligned text block, and
-the Agent-native loop plus Agent Builders links as two right-aligned rows.
-Immediately below it, one narrow full-width acquisition strip repeats the
-installation path for readers who finish the reel and continue down the page.
-It names the public Alpha boundary, desktop plus standalone CLI surfaces, and
+One compact acquisition row above the reel keeps the public dogfood proof and
+installation path together within the first desktop viewport. The
+proof names the current rolling 30-day public PR observation and links to the
+canonical `libkungfu.dev/dogfood/` evidence page. Its adjacent installation card
+names the public Alpha boundary, desktop plus standalone CLI surfaces, and
 macOS, Linux, and Windows availability, then hands off to the canonical
 `/install/` route for exact platform and architecture details. The shared-header
-button remains the primary navigation action; the strip is the intentional
-post-proof acquisition path, not a second download authority.
+button remains the primary navigation action; this row is the intentional
+first-screen conversion path, not a second evidence or download authority.
+
+Below the reel, the supporting row places the three-line brand principle on the
+left, the execution-surface explanation in the center as a left-aligned text
+block, and the Agent-native loop plus Agent Builders links as two right-aligned
+rows.
 
 Do not restore the retired static continuity comparison card. It duplicated
 the Agent Work Lab replay and weakened the primary demonstration path.
