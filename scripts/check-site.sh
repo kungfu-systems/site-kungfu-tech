@@ -210,7 +210,7 @@ grep -q 'class="brand-motto">Never Guess. Facts Unfold.</span>' public/index.htm
 grep -q 'class="hero-acquisition-row" aria-label="Evidence and installation"' public/index.html
 grep -q 'class="hero-dogfood-proof" href="https://libkungfu.dev/dogfood/"' public/index.html
 grep -q 'Built in public by one human working through agents.' public/index.html
-grep -q '3,467 merged public PRs across 16 repositories in 30 days.' public/index.html
+grep -q '4,172 merged public PRs across 16 repositories in the featured 30-day window ending August 3, 2026.' public/index.html
 grep -q 'Inspect the evidence' public/index.html
 grep -q 'class="hero-install-strip" href="/install/"' public/index.html
 grep -q '<strong>Download Kungfu</strong><span>Public Alpha · Desktop + standalone CLI</span>' public/index.html

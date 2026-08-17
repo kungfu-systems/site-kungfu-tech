@@ -69,9 +69,11 @@ CSS-pixel height. Claim typography uses carousel container units so it shrinks
 with the frame instead of overflowing.
 
 One compact acquisition row above the reel keeps the public dogfood proof and
-installation path together within the first desktop viewport. The
-proof names the current rolling 30-day public PR observation and links to the
-canonical `libkungfu.dev/dogfood/` evidence page. Its adjacent installation card
+installation path together within the first desktop viewport. The proof names
+the stable featured 30-day public PR observation and its ending date, and links
+to the canonical `libkungfu.dev/dogfood/` evidence page where that observation
+is the reader default. It must not present the featured value as the latest
+rolling observation. Its adjacent installation card
 names the public Alpha boundary, desktop plus standalone CLI surfaces, and
 macOS, Linux, and Windows availability, then hands off to the canonical
 `/install/` route for exact platform and architecture details. The shared-header
