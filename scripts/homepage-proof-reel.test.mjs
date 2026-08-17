@@ -72,7 +72,7 @@ test("homepage leads with dogfood proof beside the canonical acquisition path", 
   assert.ok(nextSectionIndex > detailsIndex);
   assert.match(page, /class="hero-dogfood-proof" href="https:\/\/libkungfu\.dev\/dogfood\/"/u);
   assert.match(page, /Built in public by one human working through agents\./u);
-  assert.match(page, /3,467 merged public PRs across 16 repositories in 30 days\./u);
+  assert.match(page, /4,172 merged public PRs across 16 repositories in the featured 30-day window ending August 3, 2026\./u);
   assert.match(page, /Inspect the evidence/u);
   assert.match(page, /class="hero-install-strip" href="\/install\/"/u);
   assert.match(page, /<strong>Download Kungfu<\/strong>/u);
