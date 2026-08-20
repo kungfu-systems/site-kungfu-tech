@@ -42,15 +42,10 @@ node - <<'NODE'
 const fs = require("node:fs");
 const source = fs.readFileSync(".buildchain/buildchain.toml", "utf8");
 const section = (name) => source.match(new RegExp(`\\[deploy\\.${name}\\]([\\s\\S]*?)(?=\\n\\[|$)`, "u"))?.[1] || "";
-const productionRedirects = [
-  '{ from = "/install.sh", to = "https://libkungfu.dev/install.sh", status = 307 }',
-  '{ from = "/install.ps1", to = "https://libkungfu.dev/install.ps1", status = 307 }',
-];
-if (/^redirects\s*=/mu.test(section("staging"))) {
-  throw new Error("deploy.staging must serve site-owned installer bytes without edge redirects");
-}
-if (!productionRedirects.every((entry) => section("production").includes(entry))) {
-  throw new Error("deploy.production must retain both reviewed libkungfu.dev redirects");
+for (const channel of ["staging", "production"]) {
+  if (/^redirects\s*=/mu.test(section(channel))) {
+    throw new Error(`deploy.${channel} must serve site-owned installer bytes without edge redirects`);
+  }
 }
 if (/^redirects\s*=/mu.test(section("preview"))) {
   throw new Error("deploy.preview redirects belong to the externally managed preview router");
