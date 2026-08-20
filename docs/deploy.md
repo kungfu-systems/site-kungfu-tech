@@ -24,16 +24,11 @@ Default automation:
   function unless Buildchain also owns the preview alias-prefix routing logic.
 - Preview therefore keeps `directory_index_rewrite = "external"`. Staging and
   Production use Buildchain-managed directory-index rewrites.
-- Preview and Staging serve the generated site-owned `/install.sh` and
-  `/install.ps1` bytes from the exact web-surface artifact. Staging therefore
-  exercises the same resumable, verified, transactional installer bytes that
-  the site repository tests; it does not redirect or pass through an upstream
-  script.
-- Production deliberately retains the Buildchain-managed exact `307`
-  redirects from `/install.sh` and `/install.ps1` to the canonical
-  `https://libkungfu.dev` installer endpoints. Changing that Production edge
-  behavior requires a separate reviewed Production release and is outside the
-  Alpha.2 Staging qualification boundary.
+- Preview, Staging, and Production serve the generated site-owned `/install.sh`
+  and `/install.ps1` bytes from the exact web-surface artifact. The three
+  channels therefore exercise the same resumable, verified, transactional
+  installer bytes that the site repository tests; they do not redirect or pass
+  through an upstream script.
 - The build first verifies the pinned signed Alpha.2 publication bundle. It
   then deterministically projects the site-managed scripts, rooted catalog,
   exact digest-bound Alpha.2 compatibility adapter, and immutable
