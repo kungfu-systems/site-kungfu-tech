@@ -1,0 +1,131 @@
+{
+  "schema": "kungfu.site-managed-installer-catalog/v1",
+  "authority": {
+    "publicationBundleRoot": "sha256:7ef5e38c617f5afd8a37e3d521188a78125060e3359e9279bd00867fb988889f",
+    "installerPublicationRoot": "sha256:66471de268bec52f6e7fd276a6d3177350cca17de7998d6ac5a9096925567372",
+    "channelPayloadRoot": "sha256:8c031dd420e15ddde5b4e751cb4dcc3c0a2d4bd67956d295918e21165de6abdd",
+    "channelFileDigest": "sha256:8b01d6aab5d71949da2a9ff90f4d05fb725e9338979b52e38454ca653b7ee3ca",
+    "releasePassportRoot": "sha256:63116c9c3f035025ae0166863cc5ef43dab67dfba153d039a09d428f02dbe2c0",
+    "sourceCommit": "b0cff8236b8b3746f8028b9d519ed3b0e26096c9"
+  },
+  "release": {
+    "channel": "alpha",
+    "version": "4.0.0-alpha.2",
+    "tag": "v4.0.0-alpha.2"
+  },
+  "trust": {
+    "algorithm": "ed25519",
+    "keyId": "ed25519-3c473c24ca261745",
+    "publicKey": "bNB6syHpgY0RKMHPKUhekyQupwgvtwqQ6qqrUV2ecfQ=",
+    "productVerification": "kungfu.release_channel.verify_bootstrap_candidate",
+    "compatibilityAdapter": {
+      "schema": "kungfu.site-alpha2-bootstrap-adapter/v1",
+      "mode": "signed-alpha2-field-projection",
+      "channelPayloadRoot": "sha256:8c031dd420e15ddde5b4e751cb4dcc3c0a2d4bd67956d295918e21165de6abdd",
+      "digest": "sha256:4e91a89ec7ffc3f38cf9af6fa38ade062c158d627ca40b04400317948a0ccace"
+    }
+  },
+  "transaction": {
+    "cache": "content-addressed-sha256",
+    "resume": "http-range",
+    "retries": {
+      "attempts": 5,
+      "backoffSeconds": [
+        1,
+        2,
+        4,
+        8
+      ]
+    },
+    "activation": "atomic-current-previous",
+    "rollback": "verified-previous"
+  },
+  "implementation": {
+    "schema": "kungfu.site-managed-installer-implementation/v1",
+    "generator": "sha256:e71560969c0e35da9803c729326ca6ff89395c294770e96600f355b3d2016dd3",
+    "templates": {
+      "install.sh": "sha256:7091403328c018596312946e176690d4f51e8bf573e50df344f8b9d78769ba63",
+      "install.ps1": "sha256:6bea7139408bcea7c5604df6202ecb350781cf88cb5efd673cb9da4ff75e01db"
+    },
+    "compatibilityAdapter": "sha256:4e91a89ec7ffc3f38cf9af6fa38ade062c158d627ca40b04400317948a0ccace"
+  },
+  "entries": [
+    {
+      "platform": "darwin",
+      "architecture": "arm64",
+      "version": "4.0.0-alpha.2",
+      "sourceCommit": "b0cff8236b8b3746f8028b9d519ed3b0e26096c9",
+      "manifestRoot": "sha256:96e0a3f78bfa65a8ae06f4fd4bc035cc09211afad499ad6f905a380e1c49d2ae",
+      "artifactRoot": "sha256:09c1ac317ee471b803c0af86f0ec78d5296b572531eb393432c8485aa3e6bf14",
+      "releaseCutRoot": "sha256:a755016042e1d724f888d6cb6bd3c6a4650debfe6d80c338c62b56a5783526f1",
+      "platformSliceRoot": "sha256:53cd8e37aaa0426223c1ff6444474c23a8d72eacb8e8789260123e60c199ecab",
+      "artifactUrl": "https://github.com/kungfu-systems/kungfu/releases/download/v4.0.0-alpha.2/kungfu-episodes-cli-darwin-arm64.tar.gz",
+      "artifactSize": 145730301,
+      "artifactDigest": "sha256:d5e71be871d8f88e317eded6634bf8717c7006fbc7b10ad93a944384ce6705a8",
+      "archiveName": "kungfu-episodes-cli-darwin-arm64.tar.gz",
+      "archiveBase": "kungfu-episodes-cli-darwin-arm64",
+      "compatibility": {
+        "minimumGlibc": null
+      },
+      "archiveSafety": {
+        "exactDigestQualified": true,
+        "topLevel": "kungfu-episodes-cli-darwin-arm64",
+        "entries": 2684,
+        "links": 2,
+        "policy": "one-relative-root-no-escape"
+      }
+    },
+    {
+      "platform": "linux",
+      "architecture": "x64",
+      "version": "4.0.0-alpha.2",
+      "sourceCommit": "b0cff8236b8b3746f8028b9d519ed3b0e26096c9",
+      "manifestRoot": "sha256:a81d194ebe7ea874753a66adaa1db6d56121c87cb6e3bf0ae7f6a97045d3a280",
+      "artifactRoot": "sha256:5df9536f89cd2a531aeca4b7857e6e32b8ae34c09ee7fcd24b8e5e19079119dd",
+      "releaseCutRoot": "sha256:a755016042e1d724f888d6cb6bd3c6a4650debfe6d80c338c62b56a5783526f1",
+      "platformSliceRoot": "sha256:593235d04f85167548a9227b7aa37fd37805e0a9b38d63e3e4f467bde8a69996",
+      "artifactUrl": "https://github.com/kungfu-systems/kungfu/releases/download/v4.0.0-alpha.2/kungfu-episodes-cli-linux-x64.tar.gz",
+      "artifactSize": 205955896,
+      "artifactDigest": "sha256:78c8773ae5a33ae21d150b97af9ccbb3a11f8bfd4c740b83f99c04be519daeaa",
+      "archiveName": "kungfu-episodes-cli-linux-x64.tar.gz",
+      "archiveBase": "kungfu-episodes-cli-linux-x64",
+      "compatibility": {
+        "minimumGlibc": "2.39"
+      },
+      "archiveSafety": {
+        "exactDigestQualified": true,
+        "topLevel": "kungfu-episodes-cli-linux-x64",
+        "entries": 5055,
+        "links": 1041,
+        "policy": "one-relative-root-no-escape"
+      }
+    },
+    {
+      "platform": "win32",
+      "architecture": "x64",
+      "version": "4.0.0-alpha.2",
+      "sourceCommit": "b0cff8236b8b3746f8028b9d519ed3b0e26096c9",
+      "manifestRoot": "sha256:094448e272594dce2626fb9d4fe893e2608e700c1a86a5463f2bb3f4e2875551",
+      "artifactRoot": "sha256:cab0d927b4735b583b34a722e963154c44fd1e9b876ae72d389a2942bd5803de",
+      "releaseCutRoot": "sha256:a755016042e1d724f888d6cb6bd3c6a4650debfe6d80c338c62b56a5783526f1",
+      "platformSliceRoot": "sha256:c234d8e82f5f3c9868ae5db55f58af6b06c13226dcfa4107696b78a7c0a10c37",
+      "artifactUrl": "https://github.com/kungfu-systems/kungfu/releases/download/v4.0.0-alpha.2/kungfu-episodes-cli-windows-x64.zip",
+      "artifactSize": 1186367915,
+      "artifactDigest": "sha256:976aa3b5a7b7ab5525a6d0209dcb6ae77feefa9c68820ffcf4ee18d157c0ed7c",
+      "archiveName": "kungfu-episodes-cli-windows-x64.zip",
+      "archiveBase": "kungfu-episodes-cli-windows-x64",
+      "compatibility": {
+        "minimumGlibc": null
+      },
+      "archiveSafety": {
+        "exactDigestQualified": true,
+        "topLevel": "kungfu-episodes-cli-windows-x64",
+        "entries": 2244,
+        "links": 0,
+        "policy": "one-relative-root-no-escape"
+      }
+    }
+  ],
+  "sourcePinRoot": "sha256:ca425349c9e0ca9521f7bb83fcf03b6c8351443743d274d4d827012def478777",
+  "catalogRoot": "sha256:f68536e7050ca5911948db73e34a1ac5c563c27b8e565fc2cd11f34819c2feff"
+}
