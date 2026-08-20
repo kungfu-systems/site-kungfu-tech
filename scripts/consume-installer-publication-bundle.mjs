@@ -8,6 +8,7 @@ import path from "node:path";
 import { pathToFileURL } from "node:url";
 
 import { importBootstrapPublication } from "./import-bootstrap-publication.mjs";
+import { generateManagedInstallers } from "./generate-managed-installers.mjs";
 
 const SOURCE_SCHEMA = "kungfu-site-installer-publication-source/v1";
 const BUNDLE_SCHEMA = "kungfu.installer-publication-bundle/v1";
@@ -381,6 +382,8 @@ export async function consumeInstallerPublicationBundle({
   source,
   outputRoot,
   fetchImpl = globalThis.fetch,
+  managedPolicy = null,
+  managedTemplateRoot = null,
 }) {
   const destination = path.resolve(outputRoot);
   const resolved = await resolveInstallerPublicationBundle({
@@ -398,11 +401,38 @@ export async function consumeInstallerPublicationBundle({
       trustedKeysPath: path.join(resolved.outputRoot, "trusted-keys.json"),
       outputRoot: destination,
     });
+    const managed = managedPolicy
+      ? generateManagedInstallers({
+          policy: managedPolicy,
+          publication: JSON.parse(
+            fs.readFileSync(
+              path.join(resolved.outputRoot, "installer-publication.json"),
+              "utf8",
+            ),
+          ),
+          channel: JSON.parse(
+            fs.readFileSync(
+              path.join(resolved.outputRoot, "channel-index.json"),
+              "utf8",
+            ),
+          ),
+          trustedKeys: JSON.parse(
+            fs.readFileSync(
+              path.join(resolved.outputRoot, "trusted-keys.json"),
+              "utf8",
+            ),
+          ),
+          source,
+          outputRoot: destination,
+          templateRoot: managedTemplateRoot,
+        })
+      : null;
     return {
       status: "available",
       bundleRoot: resolved.bundleRoot,
       buildchainSealRoot: resolved.buildchainSealRoot,
       projection,
+      managed,
     };
   } finally {
     fs.rmSync(resolved.outputRoot, { recursive: true, force: true });
@@ -415,10 +445,15 @@ function parseArgs(args) {
     const value = args[index];
     if (value === "--source") options.sourcePath = args[++index];
     else if (value === "--output-root") options.outputRoot = args[++index];
+    else if (value === "--managed-policy") options.managedPolicyPath = args[++index];
+    else if (value === "--managed-template-root") options.managedTemplateRoot = args[++index];
     else throw new Error(`unknown argument: ${value}`);
   }
   if (!options.sourcePath || !options.outputRoot) {
     throw new Error("--source and --output-root are required");
+  }
+  if (Boolean(options.managedPolicyPath) !== Boolean(options.managedTemplateRoot)) {
+    throw new Error("--managed-policy and --managed-template-root must be provided together");
   }
   return options;
 }
@@ -429,6 +464,12 @@ async function main(args) {
   const result = await consumeInstallerPublicationBundle({
     source,
     outputRoot: options.outputRoot,
+    managedPolicy: options.managedPolicyPath
+      ? JSON.parse(fs.readFileSync(path.resolve(options.managedPolicyPath)))
+      : null,
+    managedTemplateRoot: options.managedTemplateRoot
+      ? path.resolve(options.managedTemplateRoot)
+      : null,
   });
   process.stdout.write(`${JSON.stringify(result)}\n`);
 }

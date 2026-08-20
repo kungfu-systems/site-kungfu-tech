@@ -24,17 +24,26 @@ Default automation:
   function unless Buildchain also owns the preview alias-prefix routing logic.
 - Preview therefore keeps `directory_index_rewrite = "external"`. Staging and
   Production use Buildchain-managed directory-index rewrites.
-- Staging and Production also use that Buildchain-managed viewer-request
-  function to return exact `307` redirects from `/install.sh` and
-  `/install.ps1` to the canonical `https://libkungfu.dev` installer endpoints.
-  Preview does not declare these redirects because its viewer-request function
-  is externally managed. Public install commands remain unchanged because
-  standard `curl` and PowerShell download flows follow the redirect.
-- The generated `public/install.sh` and `public/install.ps1` files remain in the
-  origin artifact as bounded rollback material, together with all immutable
-  `/installers/` evidence. On staging and production, the edge redirect is the
-  public authority and wins before S3 origin lookup, so later content deploys
-  cannot accidentally replace the canonical installer entrypoint.
+- Preview and Staging serve the generated site-owned `/install.sh` and
+  `/install.ps1` bytes from the exact web-surface artifact. Staging therefore
+  exercises the same resumable, verified, transactional installer bytes that
+  the site repository tests; it does not redirect or pass through an upstream
+  script.
+- Production deliberately retains the Buildchain-managed exact `307`
+  redirects from `/install.sh` and `/install.ps1` to the canonical
+  `https://libkungfu.dev` installer endpoints. Changing that Production edge
+  behavior requires a separate reviewed Production release and is outside the
+  Alpha.2 Staging qualification boundary.
+- The build first verifies the pinned signed Alpha.2 publication bundle. It
+  then deterministically projects the site-managed scripts, rooted catalog,
+  exact digest-bound Alpha.2 compatibility adapter, and immutable
+  `/installers/site/` evidence from tracked policy and templates.
+  The generated top-level installer publication binds Buildchain deployment
+  checks to those site-managed script bytes and immutable path; the original
+  upstream installer publication is retained inside the same immutable
+  closure and remains rooted by the managed catalog.
+  The upstream `/installers/v1/` publication bytes remain preserved as release
+  evidence rather than becoming the site's implementation source.
 - Closing or merging a pull request runs preview cleanup for the PR alias.
 - Ordinary pushes to `main` run staging planning, verification, and apply to
   `https://staging.kungfu.tech`.

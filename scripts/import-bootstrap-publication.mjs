@@ -698,6 +698,9 @@ function renderInstallerPage({
             <p>Per-user install. No Administrator rights or registry edits.</p>
           </article>
         </div>
+        <!-- managed-installer:start -->
+        <p class="managed-installer-note">This route is projected from the reviewed release bootstrap publication.</p>
+        <!-- managed-installer:end -->
       </section>
 
       <section class="wide desktop-downloads">
@@ -740,7 +743,7 @@ function renderInstallerPage({
         <p>Channel: <a href="/.well-known/kungfu/alpha.json"><code>/.well-known/kungfu/alpha.json</code></a> · <code>${escapeHtml(publication.channelFileDigest)}</code></p>
         <p>Immutable channel: <a href="${escapeHtml(new URL(publication.channelSnapshotUrl).pathname)}"><code>${escapeHtml(new URL(publication.channelSnapshotUrl).pathname)}</code></a></p>
         <p>Release Passport: <code>${escapeHtml(publication.releasePassport.ref)}</code> · <code>${escapeHtml(publication.releasePassport.root)}</code></p>
-        <p>Qualified targets: <code>${escapeHtml(platforms.join(", "))}</code></p>${desktopDigests}${assets}
+        <p>Qualified targets: <code>${escapeHtml(platforms.join(", "))}</code></p>${desktopDigests}<p>Published upstream bootstrap inputs:</p>${assets}
         <p><a href="/${escapeHtml(acquisition.immutablePath)}/index.json">Machine-readable evidence index</a></p>
       </section>
     ${end}`;

@@ -81,6 +81,16 @@
           "immutablePath": "/evidence/ungfu/alpha/4.0.0-alpha.2/c0744045cf8bf26d2f968bd8075c79bbde7709efa835539a3360f5843b261ae5/"
         }
       ]
+    },
+    {
+      "id": "kungfu-site-managed-installer-alpha",
+      "versions": [
+        {
+          "version": "4.0.0-alpha.2",
+          "payloadRoot": "sha256:ea9076eb1ea8b1ee486dd9cee5917a7bed689af502fc57487a274fd22dd4b93e",
+          "immutablePath": "/installers/site/v1/alpha/4.0.0-alpha.2/ea9076eb1ea8b1ee486dd9cee5917a7bed689af502fc57487a274fd22dd4b93e/"
+        }
+      ]
     }
   ],
   "ungfuAcquisitionEvidence": ".well-known/kungfu/ungfu-release-acquisition.json"

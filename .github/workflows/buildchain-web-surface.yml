@@ -45,6 +45,30 @@ permissions:
   pull-requests: write
 
 jobs:
+  managed-installer-windows:
+    runs-on: windows-2025
+    steps:
+      - name: Checkout site source
+        uses: actions/checkout@v7.0.0
+        with:
+          persist-credentials: false
+
+      - name: Parse and dry-run the generated PowerShell installer
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          [scriptblock]::Create([IO.File]::ReadAllText('public/install.ps1')) | Out-Null
+          $root = Join-Path $env:RUNNER_TEMP 'kungfu-managed-installer-dry-run'
+          $install = Join-Path $root 'install'
+          $cache = Join-Path $root 'cache'
+          $bin = Join-Path $root 'bin'
+          & ./public/install.ps1 -DryRun -InstallDir $install -CacheDir $cache -BinDir $bin
+          foreach ($path in @($install, $cache, $bin)) {
+            if (Test-Path -LiteralPath $path) {
+              throw "PowerShell dry-run mutated $path"
+            }
+          }
+
   activation-input-gate:
     if: ${{ github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-24.04
