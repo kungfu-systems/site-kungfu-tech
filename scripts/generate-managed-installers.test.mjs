@@ -15,10 +15,16 @@ function inputs() {
   const policy = JSON.parse(
     fs.readFileSync("site/managed-installer-alpha2.json", "utf8"),
   );
+  const catalog = JSON.parse(
+    fs.readFileSync("public/.well-known/kungfu/managed-installer.json", "utf8"),
+  );
+  const upstreamPublicationPath =
+    `public/installers/site/v1/alpha/${catalog.release.version}/${catalog.catalogRoot.slice(7)}` +
+    "/upstream-installer-publication.json";
   return {
     policy,
     publication: JSON.parse(
-      fs.readFileSync("public/installer-publication.json", "utf8"),
+      fs.readFileSync(upstreamPublicationPath, "utf8"),
     ),
     channel: JSON.parse(
       fs.readFileSync("public/.well-known/kungfu/alpha.json", "utf8"),
@@ -199,6 +205,28 @@ test("generates deterministic site-owned Alpha.2 installers and rooted catalog",
         path.join(left, first.immutablePath, "alpha2-bootstrap-adapter.py"),
       ),
       fs.readFileSync("site/managed-installer/alpha2-bootstrap-adapter.py"),
+    );
+    const publication = JSON.parse(
+      fs.readFileSync(path.join(left, "installer-publication.json"), "utf8"),
+    );
+    assert.equal(publication.immutablePath, first.immutablePath);
+    for (const asset of publication.assets) {
+      const bytes = fs.readFileSync(path.join(left, asset.name));
+      assert.equal(asset.size, bytes.length);
+      assert.equal(asset.digest, `sha256:${createHash("sha256").update(bytes).digest("hex")}`);
+      assert.equal(
+        new URL(asset.immutableUrl).pathname,
+        `/${first.immutablePath}/${asset.name}`,
+      );
+    }
+    assert.deepEqual(
+      JSON.parse(
+        fs.readFileSync(
+          path.join(left, first.immutablePath, "upstream-installer-publication.json"),
+          "utf8",
+        ),
+      ),
+      inputs().publication,
     );
   } finally {
     fs.rmSync(root, { recursive: true, force: true });

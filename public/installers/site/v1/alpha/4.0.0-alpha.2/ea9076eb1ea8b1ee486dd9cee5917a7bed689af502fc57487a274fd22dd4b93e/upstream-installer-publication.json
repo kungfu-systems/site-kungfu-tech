@@ -11,7 +11,7 @@
     "ref": "buildchain:release-passport/f79a53d6983457788bb3f57fbfcf00fcc00cdd21",
     "root": "sha256:63116c9c3f035025ae0166863cc5ef43dab67dfba153d039a09d428f02dbe2c0"
   },
-  "immutablePath": "installers/site/v1/alpha/4.0.0-alpha.2/ea9076eb1ea8b1ee486dd9cee5917a7bed689af502fc57487a274fd22dd4b93e",
+  "immutablePath": "installers/v1/alpha/4.0.0-alpha.2/8c031dd420e15ddde5b4e751cb4dcc3c0a2d4bd67956d295918e21165de6abdd",
   "entries": [
     {
       "platform": "darwin",
@@ -64,20 +64,20 @@
   ],
   "assets": [
     {
-      "name": "install.ps1",
-      "contentType": "text/plain; charset=utf-8",
-      "size": 31143,
-      "digest": "sha256:ccef26aad1122285c9869896ac271ad737320d73fa259e401ea50b9c6287f68e",
-      "immutableUrl": "https://kungfu.tech/installers/site/v1/alpha/4.0.0-alpha.2/ea9076eb1ea8b1ee486dd9cee5917a7bed689af502fc57487a274fd22dd4b93e/install.ps1",
-      "friendlyUrl": "https://kungfu.tech/install.ps1"
-    },
-    {
       "name": "install.sh",
       "contentType": "text/x-shellscript; charset=utf-8",
-      "size": 33792,
-      "digest": "sha256:84c88034aef5b5bd097b1cb5d3fb82679d19a242af51c2fd6f24380aa38bc5ac",
-      "immutableUrl": "https://kungfu.tech/installers/site/v1/alpha/4.0.0-alpha.2/ea9076eb1ea8b1ee486dd9cee5917a7bed689af502fc57487a274fd22dd4b93e/install.sh",
+      "size": 9630,
+      "digest": "sha256:d2556ee8b09a579310d7b26d80c7aca356229dd90477d9c5912cf099909b96b0",
+      "immutableUrl": "https://kungfu.tech/installers/v1/alpha/4.0.0-alpha.2/8c031dd420e15ddde5b4e751cb4dcc3c0a2d4bd67956d295918e21165de6abdd/install.sh",
       "friendlyUrl": "https://kungfu.tech/install.sh"
+    },
+    {
+      "name": "install.ps1",
+      "contentType": "text/plain; charset=utf-8",
+      "size": 6280,
+      "digest": "sha256:d24ab8f30dadde46e19f780ab44c8e9cfb573bf5603d5039e2db2421585d5858",
+      "immutableUrl": "https://kungfu.tech/installers/v1/alpha/4.0.0-alpha.2/8c031dd420e15ddde5b4e751cb4dcc3c0a2d4bd67956d295918e21165de6abdd/install.ps1",
+      "friendlyUrl": "https://kungfu.tech/install.ps1"
     }
   ]
 }
