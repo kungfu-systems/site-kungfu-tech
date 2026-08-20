@@ -38,6 +38,10 @@ Default automation:
   then deterministically projects the site-managed scripts, rooted catalog,
   exact digest-bound Alpha.2 compatibility adapter, and immutable
   `/installers/site/` evidence from tracked policy and templates.
+  The generated top-level installer publication binds Buildchain deployment
+  checks to those site-managed script bytes and immutable path; the original
+  upstream installer publication is retained inside the same immutable
+  closure and remains rooted by the managed catalog.
   The upstream `/installers/v1/` publication bytes remain preserved as release
   evidence rather than becoming the site's implementation source.
 - Closing or merging a pull request runs preview cleanup for the PR alias.

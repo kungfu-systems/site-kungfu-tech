@@ -97,11 +97,50 @@ for (const name of ["install.sh", "install.ps1"]) {
   if (!source.equals(immutable)) throw new Error(`${name} differs from its immutable site projection`);
 }
 const adapter = fs.readFileSync("site/managed-installer/alpha2-bootstrap-adapter.py");
+const immutableRoot =
+  `public/installers/site/v1/alpha/${catalog.release.version}/${catalog.catalogRoot.slice(7)}`;
 const immutableAdapter = fs.readFileSync(
-  `public/installers/site/v1/alpha/${catalog.release.version}/${catalog.catalogRoot.slice(7)}/alpha2-bootstrap-adapter.py`,
+  `${immutableRoot}/alpha2-bootstrap-adapter.py`,
 );
 if (!adapter.equals(immutableAdapter)) {
   throw new Error("Alpha.2 compatibility adapter differs from its immutable projection");
+}
+const upstreamPublication = JSON.parse(
+  fs.readFileSync(`${immutableRoot}/upstream-installer-publication.json`, "utf8"),
+);
+const canonical = (value) => Array.isArray(value)
+  ? value.map(canonical)
+  : value && typeof value === "object"
+    ? Object.fromEntries(Object.entries(value).sort(([left], [right]) => left.localeCompare(right)).map(([key, item]) => [key, canonical(item)]))
+    : value;
+const upstreamRoot = `sha256:${require("node:crypto").createHash("sha256").update(JSON.stringify(canonical(upstreamPublication))).digest("hex")}`;
+if (upstreamRoot !== catalog.authority.installerPublicationRoot) {
+  throw new Error("preserved upstream installer publication differs from catalog authority");
+}
+const publication = JSON.parse(fs.readFileSync("public/installer-publication.json", "utf8"));
+if (publication.immutablePath !== immutableRoot.slice("public/".length)) {
+  throw new Error("site-managed installer publication points at the wrong immutable root");
+}
+for (const asset of publication.assets || []) {
+  const bytes = fs.readFileSync(`public/${asset.name}`);
+  const observed = `sha256:${require("node:crypto").createHash("sha256").update(bytes).digest("hex")}`;
+  if (
+    asset.size !== bytes.length ||
+    asset.digest !== observed ||
+    new URL(asset.immutableUrl).pathname !== `/${publication.immutablePath}/${asset.name}`
+  ) {
+    throw new Error(`${asset.name} differs from site-managed publication metadata`);
+  }
+}
+const manifest = JSON.parse(fs.readFileSync("public/manifest.json", "utf8"));
+const managedVersion = manifest.publications
+  ?.find((item) => item.id === "kungfu-site-managed-installer-alpha")
+  ?.versions?.find((item) => item.version === catalog.release.version);
+if (
+  managedVersion?.payloadRoot !== catalog.catalogRoot ||
+  managedVersion?.immutablePath !== `/${publication.immutablePath}/`
+) {
+  throw new Error("site-managed immutable installer prefix is absent from the publication manifest");
 }
 NODE
 

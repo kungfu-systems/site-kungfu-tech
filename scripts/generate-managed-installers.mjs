@@ -295,6 +295,47 @@ function atomicWrite(destination, bytes) {
   fs.renameSync(temporary, destination);
 }
 
+function managedPublication(publication, immutablePath, scripts) {
+  const assets = publication.assets
+    .map((asset) => {
+      const bytes = scripts[asset.name];
+      if (!bytes) throw new Error(`managed publication has no ${asset.name}`);
+      const immutableUrl = new URL(asset.immutableUrl);
+      immutableUrl.pathname = `/${immutablePath}/${asset.name}`;
+      return {
+        ...asset,
+        size: bytes.length,
+        digest: digest(bytes),
+        immutableUrl: immutableUrl.href,
+      };
+    })
+    .sort((left, right) => left.name.localeCompare(right.name));
+  return { ...publication, immutablePath, assets };
+}
+
+function managedManifest(outputRoot, catalog, immutablePath) {
+  const manifestPath = path.join(outputRoot, "manifest.json");
+  if (!fs.existsSync(manifestPath)) return null;
+  const manifest = readJson(manifestPath, "site publication manifest");
+  const publication = {
+    id: "kungfu-site-managed-installer-alpha",
+    versions: [
+      {
+        version: catalog.release.version,
+        payloadRoot: catalog.catalogRoot,
+        immutablePath: `/${immutablePath}/`,
+      },
+    ],
+  };
+  const publications = (manifest.publications || []).filter(
+    (item) => item.id !== publication.id,
+  );
+  publications.push(publication);
+  return Buffer.from(
+    `${JSON.stringify({ ...manifest, publications }, null, 2)}\n`,
+  );
+}
+
 function assertImmutable(destination, bytes) {
   if (!fs.existsSync(destination)) return;
   if (!fs.lstatSync(destination).isFile() || !fs.readFileSync(destination).equals(bytes)) {
@@ -382,6 +423,13 @@ export function generateManagedInstallers({
   const immutablePath =
     `installers/site/v1/${catalog.release.channel}/${catalog.release.version}/${catalog.catalogRoot.slice(7)}`;
   const catalogBytes = Buffer.from(`${JSON.stringify(catalog, null, 2)}\n`);
+  const publicationBytes = Buffer.from(
+    `${JSON.stringify(managedPublication(publication, immutablePath, scripts), null, 2)}\n`,
+  );
+  const upstreamPublicationBytes = Buffer.from(
+    `${JSON.stringify(publication, null, 2)}\n`,
+  );
+  const manifestBytes = managedManifest(outputRoot, catalog, immutablePath);
   const pageBytes = managedPage(outputRoot, catalog, immutablePath, scripts);
   const writes = [
     ...Object.entries(scripts).flatMap(([name, bytes]) => [
@@ -395,10 +443,19 @@ export function generateManagedInstallers({
     },
     { path: `${immutablePath}/catalog.json`, bytes: catalogBytes, immutable: true },
     {
+      path: `${immutablePath}/upstream-installer-publication.json`,
+      bytes: upstreamPublicationBytes,
+      immutable: true,
+    },
+    {
       path: `${immutablePath}/alpha2-bootstrap-adapter.py`,
       bytes: adapterBytes,
       immutable: true,
     },
+    { path: "installer-publication.json", bytes: publicationBytes, immutable: false },
+    ...(manifestBytes
+      ? [{ path: "manifest.json", bytes: manifestBytes, immutable: false }]
+      : []),
     ...(pageBytes
       ? [{ path: "install/index.html", bytes: pageBytes, immutable: false }]
       : []),
