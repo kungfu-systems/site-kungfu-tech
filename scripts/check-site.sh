@@ -13,6 +13,7 @@ node --test scripts/homepage-proof-reel.test.mjs
 node --test scripts/structured-markdown.test.mjs
 node --test scripts/check-copyable-code.test.mjs
 node --test scripts/paper-propagation.test.mjs
+node --test scripts/pages-disaster-mirror.test.mjs
 node scripts/consume-installer-publication-bundle.mjs \
   --source site/installer-publication-source.json \
   --managed-policy site/managed-installer-alpha2.json \

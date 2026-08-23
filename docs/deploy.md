@@ -12,6 +12,33 @@ as `infra/outputs.json`. Site changes may update content, Buildchain wiring, and
 the mirrored outputs after an infra change, but CloudFormation templates and AWS
 resource lifecycle decisions belong in the infra repository.
 
+## GitHub Pages Disaster Mirror
+
+`https://mirror.kungfu.tech` is a non-canonical disaster mirror, not another
+Buildchain channel. `.github/workflows/pages-disaster-mirror.yml` reacts only
+to a successful GitHub `production` deployment status or an exact manual
+replay. Before Pages receives any bytes, it proves that the source run is a
+successful `Buildchain Web Surface` push on `main`, the deployment status came
+from that run, and the run contains exactly one production Release Passport
+and one artifact. The projector recomputes Buildchain's artifact hash and
+requires it to match the passport.
+
+The projected output preserves `kungfu.tech` canonical URLs, adds `noindex`
+and a visible disaster banner to every HTML page, and writes a public status
+document plus SHA-256 sidecar. A scheduled readback uses only public HTTP and
+fails if required routes, canonical links, the banner, `noindex`, status, or
+the status digest drift.
+
+Incident entry:
+
+1. Verify the primary from more than one network.
+2. Open `https://mirror.kungfu.tech/incident/` and inspect
+   `/.well-known/kungfu-mirror-status.json`.
+3. Use the mirror only for read-only documentation and downloads.
+4. Do not infer primary health or release qualification from mirror health.
+5. Return readers to the primary after recovery. DNS enable/disable steps are
+   owned by the infrastructure repository runbook.
+
 Default automation:
 
 - Pull requests run Buildchain v3 web-surface planning, verification, and
