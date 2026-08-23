@@ -6,6 +6,7 @@
   "scripts": {
     "build": "bash scripts/build-site.sh",
     "check": "bash scripts/check-site.sh",
+    "check:pages-mirror": "node --test scripts/pages-disaster-mirror.test.mjs",
     "check:dogfood": "node scripts/check-dogfood-proof.mjs"
   },
   "dependencies": {
