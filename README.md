@@ -4,16 +4,18 @@ Source for the public Kungfu product home at [kungfu.tech](https://kungfu.tech).
 
 ## Disaster Mirror
 
-[`mirror.kungfu.tech`](https://mirror.kungfu.tech) is the stable, read-only
+[`kungfu.systems`](https://kungfu.systems) is the stable, read-only
 disaster mirror. During a declared primary-site incident, start at
-[`/incident/`](https://mirror.kungfu.tech/incident/) and inspect the public
+[`/incident/`](https://kungfu.systems/incident/) and inspect the public
 source binding at
-[`/.well-known/kungfu-mirror-status.json`](https://mirror.kungfu.tech/.well-known/kungfu-mirror-status.json).
+[`/.well-known/kungfu-mirror-status.json`](https://kungfu.systems/.well-known/kungfu-mirror-status.json).
 
 The mirror never deploys from an ordinary branch build. It accepts only the
 exact artifact and production Release Passport from the same successful
 Buildchain production workflow run, then adds a visible disaster banner,
-`noindex`, and canonical links back to `kungfu.tech`. Mirror availability is
+`noindex,follow`, and canonical links back to `kungfu.tech`. Only the unique,
+self-canonical `/incident/` entry is indexable and listed in the mirror sitemap.
+Mirror availability is
 not production, certification, qualification, security, SLA, or fitness
 evidence, and AWS remains the canonical production delivery path.
 
