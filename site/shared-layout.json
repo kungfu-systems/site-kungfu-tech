@@ -96,6 +96,11 @@
       "href": "/legal/index.html"
     },
     {
+      "role": "link",
+      "text": "Disaster recovery",
+      "href": "https://kungfu.systems/incident/"
+    },
+    {
       "role": "license",
       "text": "Kungfu core software is licensed under the Apache License 2.0."
     },
