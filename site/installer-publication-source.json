@@ -1,63 +1,28 @@
 {
   "schema": "kungfu-site-installer-publication-source/v1",
   "status": "available",
-  "manifestUrl": "https://github.com/kungfu-systems/kungfu/releases/download/v4.0.0-alpha.2/kungfu-installer-publication-bundle.json",
-  "bundleRoot": "sha256:7ef5e38c617f5afd8a37e3d521188a78125060e3359e9279bd00867fb988889f",
-  "manifestDigest": "sha256:91ee3046c036d46d15ce53637c6362db20e107ffe01eee8079b65692d6bacda5",
+  "manifestUrl": "https://github.com/kungfu-systems/kungfu/releases/download/v4.0.0-alpha.3/kungfu-installer-publication-bundle.json",
+  "bundleRoot": "sha256:2f707c8873ea9336f71875bbb0b02d0b6d0d44628e51835d61a0dad84dc4c371",
+  "manifestDigest": "sha256:1bafe5fbcd50118490712d591ac5baa19bdd0e1ceaff71573450a2104eb6c136",
   "buildchainSeal": {
     "schema": "kungfu-buildchain-installer-publication-bundle-seal/v1",
-    "bundleRoot": "sha256:7ef5e38c617f5afd8a37e3d521188a78125060e3359e9279bd00867fb988889f",
-    "manifestDigest": "sha256:91ee3046c036d46d15ce53637c6362db20e107ffe01eee8079b65692d6bacda5",
-    "sourceCommit": "b0cff8236b8b3746f8028b9d519ed3b0e26096c9",
-    "releaseTag": "v4.0.0-alpha.2",
+    "bundleRoot": "sha256:2f707c8873ea9336f71875bbb0b02d0b6d0d44628e51835d61a0dad84dc4c371",
+    "manifestDigest": "sha256:1bafe5fbcd50118490712d591ac5baa19bdd0e1ceaff71573450a2104eb6c136",
+    "sourceCommit": "6d99af738b78eccb48885a5fd59b88a0e5e4900a",
+    "releaseTag": "v4.0.0-alpha.3",
     "releasePassport": {
-      "ref": "buildchain:release-passport/f79a53d6983457788bb3f57fbfcf00fcc00cdd21",
-      "root": "sha256:63116c9c3f035025ae0166863cc5ef43dab67dfba153d039a09d428f02dbe2c0"
+      "ref": "buildchain:release-passport/6d99af738b78eccb48885a5fd59b88a0e5e4900a",
+      "root": "sha256:445c0309e39b1db38637b9478fed01040dc7a08b3c8a3d4881cba0904563ecbd"
     },
     "observations": [
-      {
-        "path": "installer-publication.json",
-        "releaseUrl": "https://github.com/kungfu-systems/kungfu/releases/download/v4.0.0-alpha.2/kungfu-installer-publication.json",
-        "size": 5004,
-        "digest": "sha256:20b9e60ce94ca8471d4dc2c5974c6a9762ea96b4bd73bf343678b245dbfc1369"
-      },
-      {
-        "path": "channel-index.json",
-        "releaseUrl": "https://github.com/kungfu-systems/kungfu/releases/download/v4.0.0-alpha.2/kungfu-installer-channel-index.json",
-        "size": 26504,
-        "digest": "sha256:8b01d6aab5d71949da2a9ff90f4d05fb725e9338979b52e38454ca653b7ee3ca"
-      },
-      {
-        "path": "trusted-keys.json",
-        "releaseUrl": "https://github.com/kungfu-systems/kungfu/releases/download/v4.0.0-alpha.2/kungfu-installer-trusted-keys.json",
-        "size": 117,
-        "digest": "sha256:ad6412194eb02dab8583a9852aff07e26ecb5a3fa1cf13205205adb7ebfec1c7"
-      },
-      {
-        "path": "install.sh",
-        "releaseUrl": "https://github.com/kungfu-systems/kungfu/releases/download/v4.0.0-alpha.2/kungfu-install.sh",
-        "size": 9630,
-        "digest": "sha256:d2556ee8b09a579310d7b26d80c7aca356229dd90477d9c5912cf099909b96b0"
-      },
-      {
-        "path": "install.ps1",
-        "releaseUrl": "https://github.com/kungfu-systems/kungfu/releases/download/v4.0.0-alpha.2/kungfu-install.ps1",
-        "size": 6280,
-        "digest": "sha256:d24ab8f30dadde46e19f780ab44c8e9cfb573bf5603d5039e2db2421585d5858"
-      },
-      {
-        "path": "installers/v1/alpha/4.0.0-alpha.2/8c031dd420e15ddde5b4e751cb4dcc3c0a2d4bd67956d295918e21165de6abdd/install.sh",
-        "releaseUrl": "https://github.com/kungfu-systems/kungfu/releases/download/v4.0.0-alpha.2/kungfu-install.sh",
-        "size": 9630,
-        "digest": "sha256:d2556ee8b09a579310d7b26d80c7aca356229dd90477d9c5912cf099909b96b0"
-      },
-      {
-        "path": "installers/v1/alpha/4.0.0-alpha.2/8c031dd420e15ddde5b4e751cb4dcc3c0a2d4bd67956d295918e21165de6abdd/install.ps1",
-        "releaseUrl": "https://github.com/kungfu-systems/kungfu/releases/download/v4.0.0-alpha.2/kungfu-install.ps1",
-        "size": 6280,
-        "digest": "sha256:d24ab8f30dadde46e19f780ab44c8e9cfb573bf5603d5039e2db2421585d5858"
-      }
+      {"path":"installer-publication.json","releaseUrl":"https://github.com/kungfu-systems/kungfu/releases/download/v4.0.0-alpha.3/kungfu-installer-publication.json","size":6113,"digest":"sha256:51bf091c220f04a8f6b5e51a8dadf6d6ec942cf5a2d5e835b6c0045c6ba37055"},
+      {"path":"channel-index.json","releaseUrl":"https://github.com/kungfu-systems/kungfu/releases/download/v4.0.0-alpha.3/kungfu-installer-channel-index.json","size":41739,"digest":"sha256:2234799d7cc054f0c2a7009a4278cf45e2938761a3b66b9d850520ec155cabb3"},
+      {"path":"trusted-keys.json","releaseUrl":"https://github.com/kungfu-systems/kungfu/releases/download/v4.0.0-alpha.3/kungfu-installer-trusted-keys.json","size":117,"digest":"sha256:ad6412194eb02dab8583a9852aff07e26ecb5a3fa1cf13205205adb7ebfec1c7"},
+      {"path":"install.sh","releaseUrl":"https://github.com/kungfu-systems/kungfu/releases/download/v4.0.0-alpha.3/kungfu-install.sh","size":10476,"digest":"sha256:2624b1b4c1456e34b81722df4e39c71b81b9645cf335f0d14ccda82c40906eac"},
+      {"path":"install.ps1","releaseUrl":"https://github.com/kungfu-systems/kungfu/releases/download/v4.0.0-alpha.3/kungfu-install.ps1","size":6279,"digest":"sha256:ee8d9f797252436a43b1c3b23282fd192744a821b855111b42c7cde4975db6a6"},
+      {"path":"installers/v1/alpha/4.0.0-alpha.3/af360a051e2201d006e2c8f75627fc575f981e00c4f4cc998c90e130d9a40b5b/install.sh","releaseUrl":"https://github.com/kungfu-systems/kungfu/releases/download/v4.0.0-alpha.3/kungfu-install.sh","size":10476,"digest":"sha256:2624b1b4c1456e34b81722df4e39c71b81b9645cf335f0d14ccda82c40906eac"},
+      {"path":"installers/v1/alpha/4.0.0-alpha.3/af360a051e2201d006e2c8f75627fc575f981e00c4f4cc998c90e130d9a40b5b/install.ps1","releaseUrl":"https://github.com/kungfu-systems/kungfu/releases/download/v4.0.0-alpha.3/kungfu-install.ps1","size":6279,"digest":"sha256:ee8d9f797252436a43b1c3b23282fd192744a821b855111b42c7cde4975db6a6"}
     ],
-    "sealRoot": "sha256:185d6c20438a56c0421a6e637915f3c9e5b3289b11abe990cfffba64fa28a588"
+    "sealRoot": "sha256:530f078f9d2851ad79ccbe336707bf10dabc56ad3ce9d0d10c36737d686234ad"
   }
 }

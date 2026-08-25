@@ -29,6 +29,11 @@
           "version": "4.0.0-alpha.2",
           "payloadRoot": "sha256:c0744045cf8bf26d2f968bd8075c79bbde7709efa835539a3360f5843b261ae5",
           "immutablePath": "/installers/v1/alpha/4.0.0-alpha.2/c0744045cf8bf26d2f968bd8075c79bbde7709efa835539a3360f5843b261ae5/"
+        },
+        {
+          "version": "4.0.0-alpha.3",
+          "payloadRoot": "sha256:af360a051e2201d006e2c8f75627fc575f981e00c4f4cc998c90e130d9a40b5b",
+          "immutablePath": "/installers/v1/alpha/4.0.0-alpha.3/af360a051e2201d006e2c8f75627fc575f981e00c4f4cc998c90e130d9a40b5b/"
         }
       ]
     },
@@ -54,6 +59,21 @@
           "version": "4.0.0-alpha.2",
           "payloadRoot": "sha256:c0744045cf8bf26d2f968bd8075c79bbde7709efa835539a3360f5843b261ae5",
           "immutablePath": "/channels/alpha/c0744045cf8bf26d2f968bd8075c79bbde7709efa835539a3360f5843b261ae5/"
+        },
+        {
+          "version": "4.0.0-alpha.3",
+          "payloadRoot": "sha256:af360a051e2201d006e2c8f75627fc575f981e00c4f4cc998c90e130d9a40b5b",
+          "immutablePath": "/channels/alpha/af360a051e2201d006e2c8f75627fc575f981e00c4f4cc998c90e130d9a40b5b/"
+        }
+      ]
+    },
+    {
+      "id": "kungfu-site-managed-installer-alpha",
+      "versions": [
+        {
+          "version": "4.0.0-alpha.2",
+          "payloadRoot": "sha256:ea9076eb1ea8b1ee486dd9cee5917a7bed689af502fc57487a274fd22dd4b93e",
+          "immutablePath": "/installers/site/v1/alpha/4.0.0-alpha.2/ea9076eb1ea8b1ee486dd9cee5917a7bed689af502fc57487a274fd22dd4b93e/"
         }
       ]
     },
@@ -79,16 +99,11 @@
           "version": "4.0.0-alpha.2",
           "payloadRoot": "sha256:c0744045cf8bf26d2f968bd8075c79bbde7709efa835539a3360f5843b261ae5",
           "immutablePath": "/evidence/ungfu/alpha/4.0.0-alpha.2/c0744045cf8bf26d2f968bd8075c79bbde7709efa835539a3360f5843b261ae5/"
-        }
-      ]
-    },
-    {
-      "id": "kungfu-site-managed-installer-alpha",
-      "versions": [
+        },
         {
-          "version": "4.0.0-alpha.2",
-          "payloadRoot": "sha256:ea9076eb1ea8b1ee486dd9cee5917a7bed689af502fc57487a274fd22dd4b93e",
-          "immutablePath": "/installers/site/v1/alpha/4.0.0-alpha.2/ea9076eb1ea8b1ee486dd9cee5917a7bed689af502fc57487a274fd22dd4b93e/"
+          "version": "4.0.0-alpha.3",
+          "payloadRoot": "sha256:af360a051e2201d006e2c8f75627fc575f981e00c4f4cc998c90e130d9a40b5b",
+          "immutablePath": "/evidence/ungfu/alpha/4.0.0-alpha.3/af360a051e2201d006e2c8f75627fc575f981e00c4f4cc998c90e130d9a40b5b/"
         }
       ]
     }

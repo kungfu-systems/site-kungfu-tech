@@ -1,7 +1,7 @@
 # Installation and Release Status Contract
 
 The committed `/install/` route reflects the current reviewed publication
-transaction. It presents Kungfu v4.0.0-alpha.2 as the current public v4 Alpha,
+transaction. It presents Kungfu v4.0.0-alpha.3 as the current public v4 Alpha,
 with exact acquisition evidence, while preserving the boundary that an Alpha
 is neither stable nor generally available.
 
@@ -55,61 +55,22 @@ the shortest useful acquisition path first:
   Passport, and immutable evidence below the primary installation actions.
 
 The macOS/Linux convenience command stays compact as
-`curl -fsSL https://kungfu.tech/install.sh | sh`. The fetched site-owned
-installer is generated from `site/managed-installer-alpha2.json` only after the
-signed publication bundle is verified. It retains the exact release-channel,
-platform, artifact, digest, Release Passport, and product bootstrap-verification
-bindings; shortening the invocation must not weaken those checks.
+`curl -fsSL https://kungfu.tech/install.sh | sh`. The fetched product-owned
+installer is admitted only after the site verifies the exact signed publication
+bundle, Buildchain read-back seal, release channel, platform, artifact, digest,
+and Release Passport bindings; shortening the invocation must not weaken those
+checks.
 
-## Managed Alpha.2 Transaction
+## Alpha.3 Publication Transaction
 
-The exact Alpha.2 adapter is intentionally narrow: macOS arm64, glibc Linux
-x64 with glibc 2.39 or newer, and Windows x64. Unsupported architecture and a
-deterministically older Linux ABI fail before the archive download. The rooted
-machine catalog is published at
-`/.well-known/kungfu/managed-installer.json`; immutable copies of the catalog
-and both generated scripts live under its `/installers/site/v1/alpha/` path.
+Alpha.3 admits product-owned CLI installers for macOS arm64, Linux arm64,
+Linux x64, and Windows x64. The signed bundle projects the same friendly and
+immutable installer bytes under its `/installers/v1/alpha/` path.
 
-The installer keeps archive downloads in a content-addressed per-user cache.
-An interrupted transfer leaves its `.part` file for HTTP Range resume; retries
-use bounded backoff, and a complete cache entry is reused only after exact byte
-size and SHA-256 verification. Interactive sessions show transferred-byte
-progress, while CI output stays at phase and retry boundaries.
-
-Extraction is confined to one reviewed top-level directory. Exact archive
-entry/link counts and relative paths are checked before extraction, and the
-byte-exact signed archive digest binds the reviewed link topology. The complete
-archive closure is installed under a versioned directory, then the bundled
-`kungfu.release_channel.verify_bootstrap_candidate` hook checks the original
-signed channel bytes, trusted key, manifest root, artifact root, platform trust,
-and reported product version.
-
-Alpha.2 needs one version-specific compatibility projection because the final
-signed channel and the already-built CLI archives use two generations of field
-shape. `site/managed-installer/alpha2-bootstrap-adapter.py` is digest-bound in
-the catalog and permits only the reviewed `artifact.name` additions, combined
-archive platform labels, and the exact Darwin bundled-to-signed identity
-coordinate. It does not rewrite the channel, archive, or installed product
-files. Ed25519 verification and all native archive/product checks still run on
-the original inputs; the native bootstrap receipt and a separately rooted
-adapter receipt are retained before activation. Any other channel root,
-manifest root, target closure, field value, archive digest, or bundled identity
-fails closed.
-
-Only a verified version can become current. POSIX uses atomic `current` and
-`previous` symbolic-link replacement; Windows uses atomic `current.path` and
-`previous.path` coordinates plus an owned launcher. `--rollback` (or
-`-Rollback`) verifies both the prior managed receipt and native bootstrap
-receipt, then verifies the previous command before swapping it back. Failed
-product verification cannot activate anything, and failed activation restores
-the prior current command and launcher. Repeating an already-active exact
-installation exits without downloading or mutating its installation.
-
-`--dry-run` / `-DryRun` performs host selection and reports the exact plan but
-does not create directories, download bytes, or change activation state.
-Diagnostics retain distinct categories for host/ABI, download, size/digest,
-archive safety/closure, product verification, ownership, activation, and
-rollback failures.
+The product installers bind each selected archive to its exact version, size,
+and SHA-256 digest. The site does not apply Alpha.2's version-specific
+compatibility adapter to Alpha.3, and it does not mutate release-provided
+installer bytes.
 
 The Desktop GUI selector may use the browser's operating-system hints to choose
 the initial macOS, Linux, or Windows panel. Unsupported or ambiguous clients

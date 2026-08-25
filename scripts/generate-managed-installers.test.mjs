@@ -27,14 +27,19 @@ function inputs() {
       fs.readFileSync(upstreamPublicationPath, "utf8"),
     ),
     channel: JSON.parse(
-      fs.readFileSync("public/.well-known/kungfu/alpha.json", "utf8"),
+      fs.readFileSync(
+        `public/channels/alpha/${policy.channelPayloadRoot.slice(7)}/index.json`,
+        "utf8",
+      ),
     ),
     trustedKeys: {
       [policy.trustedKey.keyId]: policy.trustedKey.publicKey,
     },
-    source: JSON.parse(
-      fs.readFileSync("site/installer-publication-source.json", "utf8"),
-    ),
+    source: {
+      schema: "kungfu-site-installer-publication-source/v1",
+      status: "available",
+      bundleRoot: policy.publicationBundleRoot,
+    },
     templateRoot: path.resolve("site/managed-installer"),
   };
 }
@@ -110,6 +115,11 @@ function linuxArchiveFixture(root, configure) {
 }
 
 function channelCurl(root) {
+  const channelPath = path.resolve(
+    "public/channels/alpha",
+    inputs().policy.channelPayloadRoot.slice(7),
+    "index.json",
+  );
   const filePath = path.join(root, "host-bin", "curl");
   fs.mkdirSync(path.dirname(filePath), { recursive: true });
   executable(
@@ -119,7 +129,7 @@ function channelCurl(root) {
       `const args = process.argv.slice(2);\n` +
       `const index = args.indexOf('--output');\n` +
       `if (index < 0 || !args[index + 1]) process.exit(64);\n` +
-      `fs.copyFileSync(${JSON.stringify(path.resolve("public/.well-known/kungfu/alpha.json"))}, args[index + 1]);\n`,
+      `fs.copyFileSync(${JSON.stringify(channelPath)}, args[index + 1]);\n`,
   );
   return path.dirname(filePath);
 }
@@ -458,7 +468,7 @@ test("POSIX rejects a digest mismatch without activation", () => {
       `#!${process.execPath}\n` +
         `const fs = require('node:fs'); const args = process.argv.slice(2);\n` +
         `const output = args[args.indexOf('--output') + 1];\n` +
-        `if (args.at(-1).includes('/channels/alpha/')) fs.copyFileSync(${JSON.stringify(path.resolve("public/.well-known/kungfu/alpha.json"))}, output);\n` +
+        `if (args.at(-1).includes('/channels/alpha/')) fs.copyFileSync(${JSON.stringify(path.resolve("public/channels/alpha", inputs().policy.channelPayloadRoot.slice(7), "index.json"))}, output);\n` +
         `else fs.writeFileSync(output, Buffer.from(${JSON.stringify(received.toString())}));\n`,
     );
     const install = path.join(root, "install");
@@ -565,7 +575,13 @@ test("POSIX download resumes an interrupted faithful HTTP transfer with Range", 
     fixture.policy.targets["darwin/arm64"].archiveEntries = 1;
     fixture.policy.targets["darwin/arm64"].archiveLinks = 0;
 
-    const channel = fs.readFileSync("public/.well-known/kungfu/alpha.json");
+    const channel = fs.readFileSync(
+      path.join(
+        "public/channels/alpha",
+        inputs().policy.channelPayloadRoot.slice(7),
+        "index.json",
+      ),
+    );
     const split = 1024 * 1024 + 73;
     let interrupted = false;
     const ranges = [];

@@ -39,7 +39,11 @@ function contentRoot(value) {
   return sha256(canonicalBytes(value));
 }
 
-function fixture(root, { sourceCharacter = "a", version = "4.0.0-alpha.1" } = {}) {
+function fixture(root, {
+  sourceCharacter = "a",
+  version = "4.0.0-alpha.1",
+  includeCliOnlyLinuxArm64 = false,
+} = {}) {
   const publicationRoot = path.join(root, `publication-${sourceCharacter}`);
   fs.mkdirSync(publicationRoot, { recursive: true });
   const { privateKey, publicKey } = generateKeyPairSync("ed25519");
@@ -88,6 +92,21 @@ function fixture(root, { sourceCharacter = "a", version = "4.0.0-alpha.1" } = {}
         artifactRoot: `sha256:${"5".repeat(64)}`,
         documentationUrl: "https://kungfu.tech/install/",
       },
+      ...(includeCliOnlyLinuxArm64 ? [{
+        channel: "alpha",
+        platform: "linux",
+        architecture: "arm64",
+        installSource: "archive",
+        rollout: "current",
+        manifest: {
+          productVersion: version,
+          sourceCommit,
+          artifacts: [],
+        },
+        manifestRoot: `sha256:${"8".repeat(64)}`,
+        artifactRoot: `sha256:${"9".repeat(64)}`,
+        documentationUrl: "https://kungfu.tech/install/",
+      }] : []),
     ],
   };
   const signed = { ...payload, payloadRoot: contentRoot(payload) };
@@ -153,6 +172,19 @@ function fixture(root, { sourceCharacter = "a", version = "4.0.0-alpha.1" } = {}
         artifactDigest: `sha256:${"6".repeat(64)}`,
         artifactSignature: "fixture-signature",
       },
+      ...(includeCliOnlyLinuxArm64 ? [{
+        platform: "linux",
+        architecture: "arm64",
+        version,
+        sourceCommit,
+        manifestRoot: `sha256:${"8".repeat(64)}`,
+        artifactRoot: `sha256:${"9".repeat(64)}`,
+        artifactUrl:
+          `https://github.com/kungfu-systems/kungfu/releases/download/v${version}/kungfu-cli-linux-arm64.tar.gz`,
+        artifactSize: 1024,
+        artifactDigest: `sha256:${"a".repeat(64)}`,
+        artifactSignature: "fixture-signature",
+      }] : []),
     ],
     assets: assets.map(({ bytes: _bytes, ...asset }) => ({
       ...asset,
@@ -192,7 +224,7 @@ function prepareOutput(outputRoot) {
 test("imports signed channel and installers into mutable and immutable routes", () => {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), "kungfu-site-import-"));
   try {
-    const input = fixture(root);
+    const input = fixture(root, { includeCliOnlyLinuxArm64: true });
     const outputRoot = path.join(root, "public");
     prepareOutput(outputRoot);
     const result = importBootstrapPublication({
