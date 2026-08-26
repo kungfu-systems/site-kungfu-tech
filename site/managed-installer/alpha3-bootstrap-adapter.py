@@ -1,12 +1,14 @@
 # SPDX-License-Identifier: Apache-2.0
-"""Exact Alpha.2 bridge for the bundled product bootstrap verifier.
+"""Exact Alpha.3 identity bridge for the bundled product bootstrap verifier.
 
-The published Alpha.2 channel added two signed ``artifact.name`` fields after
-the Alpha.2 CLI archives were built, while those archives also retain their
-older combined product platform labels.  The bundled verifier rejects both
-representations.  This adapter keeps the original bytes as authority, permits
-only those exact field projections in the one reviewed channel root, and
-delegates every trust and product check to the bundled
+The published Alpha.3 CLI archives retain combined product platform labels
+(``darwin-arm64``, ``linux-x64``, and ``windows-x64``), while the signed
+channel identifies the same targets by platform and architecture.  The
+bundled verifier compares those representations directly and rejects the
+otherwise authentic archive.  The bundled release manifests also retain
+reviewed pre-channel roots. This adapter keeps the original bytes as authority,
+projects only those exact product and release-identity values in the signed
+channel closure, and delegates every trust and product check to the bundled
 ``verify_bootstrap_candidate`` implementation.
 """
 
@@ -17,32 +19,18 @@ import copy
 import hashlib
 import json
 from pathlib import Path
-from typing import Any, Mapping
+from typing import Any
 
 from kungfu import release_channel, runtime_upgrade
 
 
-ADAPTER_SCHEMA = "kungfu.site-alpha2-bootstrap-adapter/v1"
-ADAPTER_RECEIPT_SCHEMA = "kungfu.site-alpha2-bootstrap-adapter-receipt/v1"
+ADAPTER_SCHEMA = "kungfu.site-alpha3-bootstrap-adapter/v1"
+ADAPTER_RECEIPT_SCHEMA = "kungfu.site-alpha3-bootstrap-adapter-receipt/v1"
 CHANNEL_PAYLOAD_ROOT = (
-    "sha256:8c031dd420e15ddde5b4e751cb4dcc3c0a2d4bd67956d295918e21165de6abdd"
+    "sha256:af360a051e2201d006e2c8f75627fc575f981e00c4f4cc998c90e130d9a40b5b"
 )
-SOURCE_COMMIT = "b0cff8236b8b3746f8028b9d519ed3b0e26096c9"
-VERSION = "4.0.0-alpha.2"
-ALLOWED_NAMES = {
-    (
-        "desktop",
-        "Kungfu-Episodes-4.0.0-alpha.2-macos-arm64.zip",
-        "https://github.com/kungfu-systems/kungfu/releases/download/"
-        "v4.0.0-alpha.2/Kungfu-Episodes-4.0.0-alpha.2-macos-arm64.zip",
-    ),
-    (
-        "cli",
-        "kungfu-episodes-cli-darwin-arm64.tar.gz",
-        "https://github.com/kungfu-systems/kungfu/releases/download/"
-        "v4.0.0-alpha.2/kungfu-episodes-cli-darwin-arm64.tar.gz",
-    ),
-}
+SOURCE_COMMIT = "6d99af738b78eccb48885a5fd59b88a0e5e4900a"
+VERSION = "4.0.0-alpha.3"
 ALLOWED_PRODUCTS = {
     ("darwin-arm64", "kungfu-episodes-cli-darwin-arm64.tar.gz"): "darwin",
     ("linux-x64", "kungfu-episodes-cli-linux-x64.tar.gz"): "linux",
@@ -50,21 +38,34 @@ ALLOWED_PRODUCTS = {
 }
 SIGNED_MANIFEST_ROOTS = {
     ("darwin", "arm64"): (
-        "sha256:96e0a3f78bfa65a8ae06f4fd4bc035cc09211afad499ad6f905a380e1c49d2ae"
+        "sha256:485e5421107a8611b743c2aa325d021a63d410baef408997a61e4488e5f6e8bf"
+    ),
+    ("linux", "arm64"): (
+        "sha256:3fedc3677729e056dafdffe4292c85f7b04069be5fd98d56220eb9a090fcc3c7"
     ),
     ("linux", "x64"): (
-        "sha256:a81d194ebe7ea874753a66adaa1db6d56121c87cb6e3bf0ae7f6a97045d3a280"
+        "sha256:6d8d25473e4be07fea4373703dfb6db8d1c4d0406e6955282d0a101d8ec430e8"
     ),
     ("win32", "x64"): (
-        "sha256:094448e272594dce2626fb9d4fe893e2608e700c1a86a5463f2bb3f4e2875551"
+        "sha256:0f83d080f2480d9dc4b0888c9c9818bb61c0736f7b3c15b00f7a8f7603ab5dc7"
     ),
 }
 BUNDLED_IDENTITY_PROJECTIONS = {
     (
         "darwin",
         "arm64",
-        "sha256:3f37f5469e1ebc95d2bb44ba46e259a7bc98e262d7b84f1a51c7fcb9bf79d53c",
+        "sha256:e53f57f6118b2e3d12350e81a827c616ce40fe7aaaca87ede1d0ad1243019e21",
     ): SIGNED_MANIFEST_ROOTS[("darwin", "arm64")],
+    (
+        "linux",
+        "x64",
+        "sha256:c7e2faa5d7912c744949e38efa75d8bccb76ab5ecddfc54cd7249d856717b451",
+    ): SIGNED_MANIFEST_ROOTS[("linux", "x64")],
+    (
+        "win32",
+        "x64",
+        "sha256:478f7daf9e741d25996c6c7bee8fb341aece27989f60929bcf2dad21e463e1b4",
+    ): SIGNED_MANIFEST_ROOTS[("win32", "x64")],
 }
 
 
@@ -90,41 +91,14 @@ def read_channel(path: Path) -> dict[str, Any]:
     try:
         value = json.loads(payload.decode("utf-8"))
     except (UnicodeDecodeError, json.JSONDecodeError) as error:
-        raise AdapterError("the Alpha.2 channel is not valid JSON") from error
+        raise AdapterError("the Alpha.3 channel is not valid JSON") from error
     if not isinstance(value, dict):
-        raise AdapterError("the Alpha.2 channel must be an object")
+        raise AdapterError("the Alpha.3 channel must be an object")
     if value.get("payloadRoot") != CHANNEL_PAYLOAD_ROOT:
-        raise AdapterError("the channel is outside the exact Alpha.2 adapter boundary")
+        raise AdapterError("the channel is outside the exact Alpha.3 adapter boundary")
     if value.get("sourceCommit") != SOURCE_COMMIT:
-        raise AdapterError("the channel source commit differs from Alpha.2")
+        raise AdapterError("the channel source commit differs from Alpha.3")
     return value
-
-
-def project_manifest(
-    manifest: Mapping[str, Any],
-    original_validate: Any,
-) -> dict[str, Any]:
-    value = copy.deepcopy(dict(manifest))
-    if value.get("productVersion") != VERSION or value.get("sourceCommit") != SOURCE_COMMIT:
-        return original_validate(value)
-
-    removed: set[tuple[str, str, str]] = set()
-    artifacts = value.get("artifacts")
-    if not isinstance(artifacts, list):
-        return original_validate(value)
-    for artifact in artifacts:
-        if not isinstance(artifact, dict) or "name" not in artifact:
-            continue
-        coordinate = (artifact.get("kind"), artifact.get("name"), artifact.get("url"))
-        if value.get("platform") != "darwin" or value.get("architecture") != "arm64":
-            raise AdapterError("artifact.name appeared outside the reviewed Darwin slice")
-        if coordinate not in ALLOWED_NAMES:
-            raise AdapterError("artifact.name differs from the reviewed Alpha.2 projection")
-        removed.add(coordinate)
-        del artifact["name"]
-    if removed and removed != ALLOWED_NAMES:
-        raise AdapterError("the Alpha.2 artifact.name projection is incomplete")
-    return original_validate(value)
 
 
 class CompatibilityJson:
@@ -146,7 +120,7 @@ class CompatibilityJson:
             or value.get("install", {}).get("source") != "archive"
             or projected_platform is None
         ):
-            raise AdapterError("product.json differs from the reviewed Alpha.2 projection")
+            raise AdapterError("product.json differs from the reviewed Alpha.3 projection")
         projected = copy.deepcopy(value)
         projected["platform"] = projected_platform
         self.projected_product = True
@@ -174,7 +148,7 @@ def main() -> int:
     args = parse_args()
     channel = read_channel(args.channel_index)
     if args.version != VERSION or args.channel != "alpha":
-        raise AdapterError("the adapter only accepts the exact Alpha.2 alpha channel")
+        raise AdapterError("the adapter only accepts the exact Alpha.3 alpha channel")
     trusted_keys: dict[str, str] = {}
     for item in args.trusted_key:
         key_id, separator, public_key = item.partition("=")
@@ -185,21 +159,21 @@ def main() -> int:
     signed_manifests: dict[tuple[str, str], dict[str, Any]] = {}
     for entry in channel.get("entries", []):
         if not isinstance(entry, dict) or not isinstance(entry.get("manifest"), dict):
-            raise AdapterError("the Alpha.2 channel entries are malformed")
+            raise AdapterError("the Alpha.3 channel entries are malformed")
         coordinate = (entry.get("platform"), entry.get("architecture"))
         expected_root = SIGNED_MANIFEST_ROOTS.get(coordinate)
         if expected_root is None or entry.get("manifestRoot") != expected_root:
-            raise AdapterError("the Alpha.2 signed manifest roots differ from the adapter")
+            raise AdapterError("the Alpha.3 signed manifest roots differ from the adapter")
         signed_manifests[coordinate] = entry["manifest"]
     if set(signed_manifests) != set(SIGNED_MANIFEST_ROOTS):
-        raise AdapterError("the Alpha.2 signed target closure differs from the adapter")
+        raise AdapterError("the Alpha.3 signed target closure differs from the adapter")
 
     original_validate = runtime_upgrade.validate_manifest
     original_release_json = release_channel.json
     compatibility_json = CompatibilityJson(original_release_json)
     projected_bundled_identity = False
 
-    def exact_alpha2_validate(manifest: Mapping[str, Any]) -> dict[str, Any]:
+    def exact_alpha3_validate(manifest: dict[str, Any]) -> dict[str, Any]:
         nonlocal projected_bundled_identity
         bundled_coordinate = (
             manifest.get("platform"),
@@ -207,16 +181,16 @@ def main() -> int:
             content_root(manifest),
         )
         signed_root = BUNDLED_IDENTITY_PROJECTIONS.get(bundled_coordinate)
-        if signed_root is not None:
-            coordinate = bundled_coordinate[:2]
-            signed_manifest = signed_manifests[coordinate]
-            if content_root(signed_manifest) != signed_root:
-                raise AdapterError("the signed Alpha.2 identity projection root differs")
-            projected_bundled_identity = True
-            return project_manifest(signed_manifest, original_validate)
-        return project_manifest(manifest, original_validate)
+        if signed_root is None:
+            return original_validate(manifest)
+        coordinate = bundled_coordinate[:2]
+        signed_manifest = signed_manifests[coordinate]
+        if content_root(signed_manifest) != signed_root:
+            raise AdapterError("the signed Alpha.3 identity projection root differs")
+        projected_bundled_identity = True
+        return original_validate(signed_manifest)
 
-    runtime_upgrade.validate_manifest = exact_alpha2_validate
+    runtime_upgrade.validate_manifest = exact_alpha3_validate
     release_channel.json = compatibility_json
     try:
         receipt = release_channel.verify_bootstrap_candidate(
@@ -236,14 +210,14 @@ def main() -> int:
         runtime_upgrade.validate_manifest = original_validate
         release_channel.json = original_release_json
     if not compatibility_json.projected_product:
-        raise AdapterError("the expected Alpha.2 product platform projection was not used")
+        raise AdapterError("the expected Alpha.3 product platform projection was not used")
 
     adapter_digest = f"sha256:{hashlib.sha256(Path(__file__).read_bytes()).hexdigest()}"
     adapter_receipt = {
         "schema": ADAPTER_RECEIPT_SCHEMA,
         "state": "verified",
         "adapter": {"schema": ADAPTER_SCHEMA, "digest": adapter_digest},
-        "compatibilityMode": "signed-alpha2-field-projection",
+        "compatibilityMode": "signed-alpha3-identity-projection",
         "bundledIdentityProjection": projected_bundled_identity,
         "channelPayloadRoot": channel["payloadRoot"],
         "manifestRoot": args.manifest_root,
@@ -265,4 +239,4 @@ if __name__ == "__main__":
     try:
         raise SystemExit(main())
     except (AdapterError, OSError, release_channel.ReleaseChannelError) as error:
-        raise SystemExit(f"alpha2-bootstrap-adapter: {error}") from error
+        raise SystemExit(f"alpha3-bootstrap-adapter: {error}") from error

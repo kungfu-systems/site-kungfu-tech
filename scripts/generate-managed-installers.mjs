@@ -100,7 +100,7 @@ function validatePolicy({
     channel.sourceCommit !== policy.sourceCommit ||
     channel.releasePassport?.root !== policy.releasePassportRoot
   ) {
-    throw new Error("managed installer policy differs from verified Alpha.2 authority");
+    throw new Error("managed installer policy differs from verified release authority");
   }
   if (
     !SHA.test(policy.sourceCommit || "") ||
@@ -115,8 +115,8 @@ function validatePolicy({
   }
   if (
     policy.compatibilityAdapter?.schema !==
-      "kungfu.site-alpha2-bootstrap-adapter/v1" ||
-    policy.compatibilityAdapter?.mode !== "signed-alpha2-field-projection" ||
+      "kungfu.site-alpha3-bootstrap-adapter/v1" ||
+    policy.compatibilityAdapter?.mode !== "signed-alpha3-identity-projection" ||
     policy.compatibilityAdapter?.channelPayloadRoot !== policy.channelPayloadRoot ||
     policy.compatibilityAdapter?.digest !== adapterDigest
   ) {
@@ -131,13 +131,12 @@ function validatePolicy({
   if (
     expected.length !== 3 ||
     expected.join(",") !== "darwin/arm64,linux/x64,win32/x64" ||
-    expected.some((identity) => !entries.has(identity)) ||
-    entries.size !== expected.length
+    expected.some((identity) => !entries.has(identity))
   ) {
     throw new Error("managed installer target closure differs from publication");
   }
   if (policy.targets["linux/x64"].minimumGlibc !== "2.39") {
-    throw new Error("Alpha.2 Linux ABI policy must remain exact glibc 2.39");
+    throw new Error("Alpha.3 Linux ABI policy must remain exact glibc 2.39");
   }
   for (const identity of expected) {
     const safety = policy.targets[identity];
@@ -156,6 +155,7 @@ function validatePolicy({
 
 function catalogFrom({ policy, publication, source, implementation }) {
   const entries = publication.entries
+    .filter((entry) => policy.targets[`${entry.platform}/${entry.architecture}`])
     .map((entry) => {
       const identity = `${entry.platform}/${entry.architecture}`;
       const safety = policy.targets[identity];
@@ -247,8 +247,8 @@ function templateValues(catalog, adapter) {
     CHANNEL_DIGEST: catalog.authority.channelFileDigest.slice(7),
     TRUSTED_KEY: `${catalog.trust.keyId}=${catalog.trust.publicKey}`,
     RELEASE_PASSPORT_ROOT: catalog.authority.releasePassportRoot,
-    ALPHA2_ADAPTER: adapter,
-    ALPHA2_ADAPTER_DIGEST:
+    ALPHA3_ADAPTER: adapter,
+    ALPHA3_ADAPTER_DIGEST:
       catalog.trust.compatibilityAdapter.digest.slice(7),
   };
   for (const [prefix, identity] of [
@@ -388,7 +388,7 @@ export function generateManagedInstallers({
     "install.ps1": fs.readFileSync(path.join(templateRoot, "install.ps1.tmpl"), "utf8"),
   };
   const adapter = fs.readFileSync(
-    path.join(templateRoot, "alpha2-bootstrap-adapter.py"),
+    path.join(templateRoot, "alpha3-bootstrap-adapter.py"),
     "utf8",
   );
   const adapterBytes = Buffer.from(adapter);
@@ -448,7 +448,7 @@ export function generateManagedInstallers({
       immutable: true,
     },
     {
-      path: `${immutablePath}/alpha2-bootstrap-adapter.py`,
+      path: `${immutablePath}/alpha3-bootstrap-adapter.py`,
       bytes: adapterBytes,
       immutable: true,
     },

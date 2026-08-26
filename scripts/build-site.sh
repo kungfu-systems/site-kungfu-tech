@@ -17,7 +17,9 @@ node scripts/publish-bootstrap-evidence.mjs
 
 node scripts/consume-installer-publication-bundle.mjs \
   --source site/installer-publication-source.json \
-  --output-root dist
+  --output-root dist \
+  --managed-policy site/managed-installer-alpha3.json \
+  --managed-template-root site/managed-installer
 node scripts/render-whitepaper.mjs
 node scripts/render-agent-supply-chain.mjs
 node scripts/render-agent-hub.mjs

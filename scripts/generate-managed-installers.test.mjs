@@ -13,18 +13,12 @@ import { generateManagedInstallers } from "./generate-managed-installers.mjs";
 
 function inputs() {
   const policy = JSON.parse(
-    fs.readFileSync("site/managed-installer-alpha2.json", "utf8"),
+    fs.readFileSync("site/managed-installer-alpha3.json", "utf8"),
   );
-  const catalog = JSON.parse(
-    fs.readFileSync("public/.well-known/kungfu/managed-installer.json", "utf8"),
-  );
-  const upstreamPublicationPath =
-    `public/installers/site/v1/alpha/${catalog.release.version}/${catalog.catalogRoot.slice(7)}` +
-    "/upstream-installer-publication.json";
   return {
     policy,
     publication: JSON.parse(
-      fs.readFileSync(upstreamPublicationPath, "utf8"),
+      fs.readFileSync("public/installer-publication.json", "utf8"),
     ),
     channel: JSON.parse(
       fs.readFileSync("public/.well-known/kungfu/alpha.json", "utf8"),
@@ -140,7 +134,7 @@ function fakeLinuxPath(root) {
   return `${bin}:/usr/bin:/bin`;
 }
 
-test("generates deterministic site-owned Alpha.2 installers and rooted catalog", () => {
+test("generates deterministic site-owned Alpha.3 installers and rooted catalog", () => {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), "kungfu-managed-generate-"));
   try {
     const left = path.join(root, "left");
@@ -171,7 +165,7 @@ test("generates deterministic site-owned Alpha.2 installers and rooted catalog",
       ),
     );
     assert.equal(catalog.catalogRoot, first.catalogRoot);
-    assert.equal(catalog.release.version, "4.0.0-alpha.2");
+    assert.equal(catalog.release.version, "4.0.0-alpha.3");
     assert.deepEqual(
       catalog.entries.map((entry) => `${entry.platform}/${entry.architecture}`),
       ["darwin/arm64", "linux/x64", "win32/x64"],
@@ -194,7 +188,7 @@ test("generates deterministic site-owned Alpha.2 installers and rooted catalog",
     );
     assert.equal(
       catalog.trust.compatibilityAdapter.mode,
-      "signed-alpha2-field-projection",
+      "signed-alpha3-identity-projection",
     );
     assert.match(
       catalog.trust.compatibilityAdapter.digest,
@@ -202,9 +196,9 @@ test("generates deterministic site-owned Alpha.2 installers and rooted catalog",
     );
     assert.deepEqual(
       fs.readFileSync(
-        path.join(left, first.immutablePath, "alpha2-bootstrap-adapter.py"),
+        path.join(left, first.immutablePath, "alpha3-bootstrap-adapter.py"),
       ),
-      fs.readFileSync("site/managed-installer/alpha2-bootstrap-adapter.py"),
+      fs.readFileSync("site/managed-installer/alpha3-bootstrap-adapter.py"),
     );
     const publication = JSON.parse(
       fs.readFileSync(path.join(left, "installer-publication.json"), "utf8"),
@@ -245,7 +239,7 @@ test("rejects authority, trust, and target-closure drift", () => {
           ...authority,
           outputRoot: path.join(root, "authority"),
         }),
-      /differs from verified Alpha\.2 authority/u,
+      /differs from verified release authority/u,
     );
     const abi = inputs();
     abi.policy = structuredClone(abi.policy);
@@ -363,7 +357,7 @@ test("templates retain resumable cache, product verification, activation, and ro
     ]) {
       for (const token of [
         "verify_bootstrap_candidate",
-        "alpha2-bootstrap-adapter-receipt.json",
+        "alpha3-bootstrap-adapter-receipt.json",
         "artifact-digest-mismatch",
         "archive-unsafe",
         "product-verification-failed",
@@ -521,7 +515,7 @@ test("POSIX product-hook failure cannot activate staged content", () => {
       fs.mkdirSync(path.join(candidate, "runtime", "python", "bin"), { recursive: true });
       executable(path.join(candidate, "runtime", "kungfu"), "#!/bin/sh\nexit 0\n");
       executable(path.join(candidate, "runtime", "python", "bin", "python3"), "#!/bin/sh\nexit 42\n");
-      executable(path.join(candidate, "kungfu"), "#!/bin/sh\nprintf '%s\\n' 4.0.0-alpha.2\n");
+      executable(path.join(candidate, "kungfu"), "#!/bin/sh\nprintf '%s\\n' 4.0.0-alpha.3\n");
       fs.writeFileSync(path.join(candidate, "product.json"), "{}\n");
     });
     const install = path.join(root, "install");
@@ -681,7 +675,7 @@ test("POSIX activation verification failure restores the prior command", () => {
       );
       executable(
         path.join(candidate, "kungfu"),
-        `#!/bin/sh\ncount=0\n[ ! -f '${counter}' ] || count=$(cat '${counter}')\ncount=$((count + 1))\nprintf '%s\\n' "$count" > '${counter}'\nif [ "$count" -eq 1 ]; then printf '%s\\n' 4.0.0-alpha.2; else printf '%s\\n' broken; fi\n`,
+        `#!/bin/sh\ncount=0\n[ ! -f '${counter}' ] || count=$(cat '${counter}')\ncount=$((count + 1))\nprintf '%s\\n' "$count" > '${counter}'\nif [ "$count" -eq 1 ]; then printf '%s\\n' 4.0.0-alpha.3; else printf '%s\\n' broken; fi\n`,
       );
       fs.writeFileSync(path.join(candidate, "product.json"), "{}\n");
     });
