@@ -331,7 +331,7 @@ function desktopDownloads(channel, publication, version) {
       entry,
     ]),
   );
-  const downloads = publication.entries.map((publishedEntry) => {
+  const downloads = publication.entries.flatMap((publishedEntry) => {
     const identity =
       `${publishedEntry.platform}/${publishedEntry.architecture}`;
     const entry = channelEntries.get(identity);
@@ -349,9 +349,12 @@ function desktopDownloads(channel, publication, version) {
       || entry.manifest?.productVersion !== version
       || entry.manifestRoot !== publishedEntry.manifestRoot
       || entry.artifactRoot !== publishedEntry.artifactRoot
-      || desktopArtifacts.length !== 1
     ) {
       throw new Error(`desktop download evidence is incomplete: ${identity}`);
+    }
+    if (desktopArtifacts.length === 0) return [];
+    if (desktopArtifacts.length !== 1) {
+      throw new Error(`desktop download evidence is ambiguous: ${identity}`);
     }
     const artifact = desktopArtifacts[0];
     const url = publicUrl(artifact.url, `${identity} desktop URL`);
@@ -375,7 +378,7 @@ function desktopDownloads(channel, publication, version) {
     // deterministic GitHub asset name before exposing the public download URL.
     const filename = decodeURIComponent(encodedName).replaceAll(" ", ".");
     url.pathname = `${releasePath}${filename}`;
-    return {
+    return [{
       id: `${publishedEntry.platform}-${publishedEntry.architecture}`,
       platform: publishedEntry.platform,
       platformLabel,
@@ -384,7 +387,7 @@ function desktopDownloads(channel, publication, version) {
       filename,
       size: artifact.size,
       digest: artifact.digest,
-    };
+    }];
   });
   if (new Set(downloads.map((download) => download.id)).size !== downloads.length) {
     throw new Error("desktop download identities must be unique");
