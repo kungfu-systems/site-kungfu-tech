@@ -39,7 +39,10 @@ function contentRoot(value) {
   return sha256(canonicalBytes(value));
 }
 
-function fixture(root, { sourceCharacter = "a", version = "4.0.0-alpha.1" } = {}) {
+function fixture(
+  root,
+  { sourceCharacter = "a", version = "4.0.0-alpha.1", cliOnly = false } = {},
+) {
   const publicationRoot = path.join(root, `publication-${sourceCharacter}`);
   fs.mkdirSync(publicationRoot, { recursive: true });
   const { privateKey, publicKey } = generateKeyPairSync("ed25519");
@@ -73,7 +76,7 @@ function fixture(root, { sourceCharacter = "a", version = "4.0.0-alpha.1" } = {}
         manifest: {
           productVersion: version,
           sourceCommit,
-          artifacts: [
+          artifacts: cliOnly ? [] : [
             {
               kind: "desktop",
               url:
@@ -339,6 +342,21 @@ test("imports signed channel and installers into mutable and immutable routes", 
     assert.equal(status.release.releasePassport.root, input.publication.releasePassport.root);
     assert.match(status.acquisitionEvidence.url, /ungfu-release-acquisition\.json$/);
     assert.match(status.acquisitionEvidence.root, /^sha256:[0-9a-f]{64}$/);
+  } finally {
+    fs.rmSync(root, { recursive: true, force: true });
+  }
+});
+
+test("imports a qualified CLI-only target without inventing a desktop download", () => {
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), "kungfu-site-cli-only-"));
+  try {
+    const input = fixture(root, { cliOnly: true });
+    const outputRoot = path.join(root, "public");
+    prepareOutput(outputRoot);
+    importBootstrapPublication({ ...input, outputRoot });
+    const page = fs.readFileSync(path.join(outputRoot, "install", "index.html"), "utf8");
+    assert.doesNotMatch(page, /Download for Linux/);
+    assert.match(page, /curl -fsSL https:\/\/kungfu\.tech\/install\.sh \| sh/);
   } finally {
     fs.rmSync(root, { recursive: true, force: true });
   }
