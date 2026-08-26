@@ -371,7 +371,10 @@ test("projects the known Alpha.3 PowerShell parse correction without replacing u
   const root = fs.mkdtempSync(path.join(os.tmpdir(), "kungfu-site-alpha3-compat-"));
   try {
     const source = "owned outside $Launcher: $($Existing.Source)";
-    const powerShellSource = fs.readFileSync("public/install.ps1", "utf8");
+    const powerShellSource = fs.readFileSync(
+      "public/installers/v1/alpha/4.0.0-alpha.3/af360a051e2201d006e2c8f75627fc575f981e00c4f4cc998c90e130d9a40b5b/install.ps1",
+      "utf8",
+    );
     assert.match(powerShellSource, /owned outside \$Launcher: \$\(\$Existing\.Source\)/);
     const input = fixture(root, {
       sourceCharacter: "d",
