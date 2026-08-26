@@ -39,7 +39,16 @@ function contentRoot(value) {
   return sha256(canonicalBytes(value));
 }
 
-function fixture(root, { sourceCharacter = "a", version = "4.0.0-alpha.1" } = {}) {
+function fixture(
+  root,
+  {
+    sourceCharacter = "a",
+    sourceCommit = sourceCharacter.repeat(40),
+    version = "4.0.0-alpha.1",
+    cliOnly = false,
+    powerShellSource = "exit 0\n",
+  } = {},
+) {
   const publicationRoot = path.join(root, `publication-${sourceCharacter}`);
   fs.mkdirSync(publicationRoot, { recursive: true });
   const { privateKey, publicKey } = generateKeyPairSync("ed25519");
@@ -53,7 +62,6 @@ function fixture(root, { sourceCharacter = "a", version = "4.0.0-alpha.1" } = {}
     trustedKeysPath,
     `${JSON.stringify({ [keyId]: rawPublicKey })}\n`,
   );
-  const sourceCommit = sourceCharacter.repeat(40);
   const payload = {
     schema: "kungfu.release-channel-index/v1",
     generatedAt: "2026-07-24T00:00:00Z",
@@ -73,7 +81,7 @@ function fixture(root, { sourceCharacter = "a", version = "4.0.0-alpha.1" } = {}
         manifest: {
           productVersion: version,
           sourceCommit,
-          artifacts: [
+          artifacts: cliOnly ? [] : [
             {
               kind: "desktop",
               url:
@@ -104,7 +112,7 @@ function fixture(root, { sourceCharacter = "a", version = "4.0.0-alpha.1" } = {}
   fs.writeFileSync(channelIndexPath, channelBytes);
   const assets = [
     ["install.sh", Buffer.from("#!/bin/sh\nexit 0\n")],
-    ["install.ps1", Buffer.from("exit 0\n")],
+    ["install.ps1", Buffer.from(powerShellSource)],
   ].map(([name, bytes]) => ({
     name,
     contentType:
@@ -339,6 +347,70 @@ test("imports signed channel and installers into mutable and immutable routes", 
     assert.equal(status.release.releasePassport.root, input.publication.releasePassport.root);
     assert.match(status.acquisitionEvidence.url, /ungfu-release-acquisition\.json$/);
     assert.match(status.acquisitionEvidence.root, /^sha256:[0-9a-f]{64}$/);
+  } finally {
+    fs.rmSync(root, { recursive: true, force: true });
+  }
+});
+
+test("imports a qualified CLI-only target without inventing a desktop download", () => {
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), "kungfu-site-cli-only-"));
+  try {
+    const input = fixture(root, { cliOnly: true });
+    const outputRoot = path.join(root, "public");
+    prepareOutput(outputRoot);
+    importBootstrapPublication({ ...input, outputRoot });
+    const page = fs.readFileSync(path.join(outputRoot, "install", "index.html"), "utf8");
+    assert.doesNotMatch(page, /Download for Linux/);
+    assert.match(page, /curl -fsSL https:\/\/kungfu\.tech\/install\.sh \| sh/);
+  } finally {
+    fs.rmSync(root, { recursive: true, force: true });
+  }
+});
+
+test("projects the known Alpha.3 PowerShell parse correction without replacing upstream evidence", () => {
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), "kungfu-site-alpha3-compat-"));
+  try {
+    const source = "owned outside $Launcher: $($Existing.Source)";
+    const powerShellSource = fs.readFileSync(
+      "public/installers/v1/alpha/4.0.0-alpha.3/af360a051e2201d006e2c8f75627fc575f981e00c4f4cc998c90e130d9a40b5b/install.ps1",
+      "utf8",
+    );
+    assert.match(powerShellSource, /owned outside \$Launcher: \$\(\$Existing\.Source\)/);
+    const input = fixture(root, {
+      sourceCharacter: "d",
+      sourceCommit: "6d99af738b78eccb48885a5fd59b88a0e5e4900a",
+      version: "4.0.0-alpha.3",
+      powerShellSource,
+    });
+    const outputRoot = path.join(root, "public");
+    prepareOutput(outputRoot);
+    importBootstrapPublication({ ...input, outputRoot });
+    const publication = JSON.parse(
+      fs.readFileSync(path.join(outputRoot, "installer-publication.json"), "utf8"),
+    );
+    assert.match(
+      publication.immutablePath,
+      /^installers\/site\/v1\/alpha\/4\.0\.0-alpha\.3\/792c48e70c68ef6a8d8d9cafe0fb16c46bef06806ab98d84044eefbaaf66dfb0$/,
+    );
+    assert.equal(
+      fs.readFileSync(
+        path.join(outputRoot, input.publication.immutablePath, "install.ps1"),
+        "utf8",
+      ),
+      powerShellSource,
+    );
+    assert.equal(
+      fs.readFileSync(path.join(outputRoot, "install.ps1"), "utf8"),
+      powerShellSource.replace(source, "owned outside ${Launcher}: $($Existing.Source)"),
+    );
+    const receipt = JSON.parse(
+      fs.readFileSync(
+        path.join(outputRoot, ".well-known/kungfu/installer-compatibility.json"),
+        "utf8",
+      ),
+    );
+    assert.equal(receipt.source.digest, "sha256:ee8d9f797252436a43b1c3b23282fd192744a821b855111b42c7cde4975db6a6");
+    assert.equal(receipt.projection.digest, "sha256:792c48e70c68ef6a8d8d9cafe0fb16c46bef06806ab98d84044eefbaaf66dfb0");
   } finally {
     fs.rmSync(root, { recursive: true, force: true });
   }

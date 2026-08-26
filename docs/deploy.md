@@ -53,21 +53,14 @@ Default automation:
   function unless Buildchain also owns the preview alias-prefix routing logic.
 - Preview therefore keeps `directory_index_rewrite = "external"`. Staging and
   Production use Buildchain-managed directory-index rewrites.
-- Preview, Staging, and Production serve the generated site-owned `/install.sh`
-  and `/install.ps1` bytes from the exact web-surface artifact. The three
-  channels therefore exercise the same resumable, verified, transactional
-  installer bytes that the site repository tests; they do not redirect or pass
-  through an upstream script.
-- The build first verifies the pinned signed Alpha.2 publication bundle. It
-  then deterministically projects the site-managed scripts, rooted catalog,
-  exact digest-bound Alpha.2 compatibility adapter, and immutable
-  `/installers/site/` evidence from tracked policy and templates.
-  The generated top-level installer publication binds Buildchain deployment
-  checks to those site-managed script bytes and immutable path; the original
-  upstream installer publication is retained inside the same immutable
-  closure and remains rooted by the managed catalog.
-  The upstream `/installers/v1/` publication bytes remain preserved as release
-  evidence rather than becoming the site's implementation source.
+- Preview, Staging, and Production serve `/install.sh` and `/install.ps1` from
+  the exact web-surface artifact. The build verifies the pinned Alpha.3
+  Buildchain-sealed publication bundle, then projects its installers, signed
+  channel, immutable evidence path, and release-status record into that
+  artifact. The Alpha.3 PowerShell projection is a digest-bound Site-only
+  compatibility correction; the exact upstream bytes remain published under
+  their upstream immutable path. The site never redirects convenience routes to
+  an unverified upstream URL.
 - Closing or merging a pull request runs preview cleanup for the PR alias.
 - Ordinary pushes to `main` run staging planning, verification, and apply to
   `https://staging.kungfu.tech`.

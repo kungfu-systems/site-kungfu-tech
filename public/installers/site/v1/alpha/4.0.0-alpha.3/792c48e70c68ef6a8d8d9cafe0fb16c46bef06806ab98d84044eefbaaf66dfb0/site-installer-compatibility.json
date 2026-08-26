@@ -1,0 +1,21 @@
+{
+  "schema": "kungfu.site-installer-compatibility/v1",
+  "id": "alpha3-windows-launcher-variable-delimiter",
+  "release": {
+    "sourceCommit": "6d99af738b78eccb48885a5fd59b88a0e5e4900a",
+    "version": "4.0.0-alpha.3",
+    "tag": "v4.0.0-alpha.3",
+    "upstreamImmutablePath": "installers/v1/alpha/4.0.0-alpha.3/af360a051e2201d006e2c8f75627fc575f981e00c4f4cc998c90e130d9a40b5b",
+    "siteImmutablePath": "installers/site/v1/alpha/4.0.0-alpha.3/792c48e70c68ef6a8d8d9cafe0fb16c46bef06806ab98d84044eefbaaf66dfb0"
+  },
+  "source": {
+    "asset": "install.ps1",
+    "digest": "sha256:ee8d9f797252436a43b1c3b23282fd192744a821b855111b42c7cde4975db6a6"
+  },
+  "projection": {
+    "asset": "install.ps1",
+    "digest": "sha256:792c48e70c68ef6a8d8d9cafe0fb16c46bef06806ab98d84044eefbaaf66dfb0",
+    "replacementCount": 1,
+    "reason": "PowerShell variable-name delimiter required before a colon"
+  }
+}
