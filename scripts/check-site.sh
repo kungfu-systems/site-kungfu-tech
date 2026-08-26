@@ -62,20 +62,40 @@ grep -Fq "version='4.0.0-alpha.3'" public/install.sh
 grep -Fq "\$Version = '4.0.0-alpha.3'" public/install.ps1
 node - <<'NODE'
 const fs = require("node:fs");
+const crypto = require("node:crypto");
 const publication = JSON.parse(fs.readFileSync("public/installer-publication.json", "utf8"));
-const expectedPath = "installers/v1/alpha/4.0.0-alpha.3/af360a051e2201d006e2c8f75627fc575f981e00c4f4cc998c90e130d9a40b5b";
-if (publication.sourceCommit !== "6d99af738b78eccb48885a5fd59b88a0e5e4900a" || publication.immutablePath !== expectedPath) throw new Error("Alpha.3 installer publication identity drifted");
+const upstreamPath = "installers/v1/alpha/4.0.0-alpha.3/af360a051e2201d006e2c8f75627fc575f981e00c4f4cc998c90e130d9a40b5b";
+const sitePath = "installers/site/v1/alpha/4.0.0-alpha.3/792c48e70c68ef6a8d8d9cafe0fb16c46bef06806ab98d84044eefbaaf66dfb0";
+const digest = (bytes) => `sha256:${crypto.createHash("sha256").update(bytes).digest("hex")}`;
+if (publication.sourceCommit !== "6d99af738b78eccb48885a5fd59b88a0e5e4900a" || publication.immutablePath !== sitePath) throw new Error("Alpha.3 Site installer projection identity drifted");
 for (const asset of publication.assets || []) {
   const bytes = fs.readFileSync(`public/${asset.name}`);
-  const observed = `sha256:${require("node:crypto").createHash("sha256").update(bytes).digest("hex")}`;
+  const observed = digest(bytes);
   if (
     asset.size !== bytes.length ||
     asset.digest !== observed ||
-    new URL(asset.immutableUrl).pathname !== `/${expectedPath}/${asset.name}` ||
-    !bytes.equals(fs.readFileSync(`public/${expectedPath}/${asset.name}`))
+    new URL(asset.immutableUrl).pathname !== `/${sitePath}/${asset.name}` ||
+    !bytes.equals(fs.readFileSync(`public/${sitePath}/${asset.name}`))
   ) {
-    throw new Error(`${asset.name} differs from the pinned Alpha.3 publication`);
+    throw new Error(`${asset.name} differs from the pinned Alpha.3 Site projection`);
   }
+}
+const upstreamPowerShell = fs.readFileSync(`public/${upstreamPath}/install.ps1`);
+if (digest(upstreamPowerShell) !== "sha256:ee8d9f797252436a43b1c3b23282fd192744a821b855111b42c7cde4975db6a6") {
+  throw new Error("Alpha.3 upstream PowerShell evidence drifted");
+}
+if (digest(fs.readFileSync("public/install.ps1")) !== "sha256:792c48e70c68ef6a8d8d9cafe0fb16c46bef06806ab98d84044eefbaaf66dfb0") {
+  throw new Error("Alpha.3 Site PowerShell compatibility projection drifted");
+}
+const compatibility = JSON.parse(fs.readFileSync("public/.well-known/kungfu/installer-compatibility.json", "utf8"));
+if (
+  compatibility.release?.upstreamImmutablePath !== upstreamPath ||
+  compatibility.release?.siteImmutablePath !== sitePath ||
+  compatibility.source?.digest !== "sha256:ee8d9f797252436a43b1c3b23282fd192744a821b855111b42c7cde4975db6a6" ||
+  compatibility.projection?.digest !== "sha256:792c48e70c68ef6a8d8d9cafe0fb16c46bef06806ab98d84044eefbaaf66dfb0" ||
+  compatibility.projection?.replacementCount !== 1
+) {
+  throw new Error("Alpha.3 Site installer compatibility receipt drifted");
 }
 NODE
 

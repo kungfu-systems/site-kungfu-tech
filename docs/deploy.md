@@ -55,10 +55,12 @@ Default automation:
   Production use Buildchain-managed directory-index rewrites.
 - Preview, Staging, and Production serve `/install.sh` and `/install.ps1` from
   the exact web-surface artifact. The build verifies the pinned Alpha.3
-  Buildchain-sealed publication bundle, then projects its exact installer bytes,
-  signed channel, immutable evidence path, and release-status record into that
-  artifact. The site never redirects the convenience routes to an unverified
-  upstream URL.
+  Buildchain-sealed publication bundle, then projects its installers, signed
+  channel, immutable evidence path, and release-status record into that
+  artifact. The Alpha.3 PowerShell projection is a digest-bound Site-only
+  compatibility correction; the exact upstream bytes remain published under
+  their upstream immutable path. The site never redirects convenience routes to
+  an unverified upstream URL.
 - Closing or merging a pull request runs preview cleanup for the PR alias.
 - Ordinary pushes to `main` run staging planning, verification, and apply to
   `https://staging.kungfu.tech`.

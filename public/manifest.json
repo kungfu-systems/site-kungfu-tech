@@ -33,6 +33,11 @@
         {
           "version": "4.0.0-alpha.3",
           "payloadRoot": "sha256:af360a051e2201d006e2c8f75627fc575f981e00c4f4cc998c90e130d9a40b5b",
+          "immutablePath": "/installers/site/v1/alpha/4.0.0-alpha.3/792c48e70c68ef6a8d8d9cafe0fb16c46bef06806ab98d84044eefbaaf66dfb0/"
+        },
+        {
+          "version": "4.0.0-alpha.3",
+          "payloadRoot": "sha256:af360a051e2201d006e2c8f75627fc575f981e00c4f4cc998c90e130d9a40b5b",
           "immutablePath": "/installers/v1/alpha/4.0.0-alpha.3/af360a051e2201d006e2c8f75627fc575f981e00c4f4cc998c90e130d9a40b5b/"
         }
       ]

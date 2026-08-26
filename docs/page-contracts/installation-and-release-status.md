@@ -55,10 +55,15 @@ the shortest useful acquisition path first:
   Passport, and immutable evidence below the primary installation actions.
 
 The macOS/Linux convenience command stays compact as
-`curl -fsSL https://kungfu.tech/install.sh | sh`. The fetched site-owned
+`curl -fsSL https://kungfu.tech/install.sh | sh`. The fetched site-owned shell
 installer is the byte-exact projection of the pinned, Buildchain-sealed Alpha.3
-publication after its signed bundle is verified. It retains the exact
-release-channel, platform, artifact, digest, Release Passport, and product
+publication after its signed bundle is verified. The PowerShell route is a
+fail-closed Site-only compatibility projection: it is admitted only for the
+exact Alpha.3 source digest, performs one checked replacement required by
+PowerShell variable syntax, and publishes both the source and projected digest
+in `/.well-known/kungfu/installer-compatibility.json`. The exact upstream
+PowerShell bytes remain under the upstream immutable path. Both routes retain
+the release-channel, platform, artifact, digest, Release Passport, and product
 bootstrap-verification bindings; shortening the invocation must not weaken
 those checks.
 

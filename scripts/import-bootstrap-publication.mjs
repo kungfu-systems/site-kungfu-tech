@@ -17,6 +17,16 @@ const CANONICAL_ORIGIN = "https://kungfu.tech";
 const EXACT_MARK = "Kungfu UNGFU™";
 const SOFTWARE_DESCRIPTION =
   "Downloadable software for durable AI-agent work, inspection, and development workflows.";
+const ALPHA3_WINDOWS_COMPATIBILITY = {
+  sourceCommit: "6d99af738b78eccb48885a5fd59b88a0e5e4900a",
+  version: "4.0.0-alpha.3",
+  sourceDigest:
+    "sha256:ee8d9f797252436a43b1c3b23282fd192744a821b855111b42c7cde4975db6a6",
+  projectedDigest:
+    "sha256:792c48e70c68ef6a8d8d9cafe0fb16c46bef06806ab98d84044eefbaaf66dfb0",
+  sourceText: "owned outside $Launcher: $($Existing.Source)",
+  projectedText: "owned outside ${Launcher}: $($Existing.Source)",
+};
 
 function canonical(value) {
   if (Array.isArray(value)) return value.map(canonical);
@@ -585,6 +595,84 @@ function releaseStatus(publication, version, acquisition, siteSourceSha) {
   };
 }
 
+function projectSiteInstallerCompatibility(publication, verified) {
+  const compatibility = ALPHA3_WINDOWS_COMPATIBILITY;
+  if (
+    publication.sourceCommit !== compatibility.sourceCommit
+    || verified.version !== compatibility.version
+  ) {
+    return {
+      publication,
+      assets: verified.assets,
+      immutablePath: verified.immutablePath,
+      receipt: null,
+    };
+  }
+  const sourceAsset = verified.assets.find((asset) => asset.name === "install.ps1");
+  if (!sourceAsset || sha256(sourceAsset.bytes) !== compatibility.sourceDigest) {
+    throw new Error("Alpha.3 Windows installer compatibility source digest drifted");
+  }
+  const source = sourceAsset.bytes.toString("utf8");
+  const occurrences = source.split(compatibility.sourceText).length - 1;
+  if (occurrences !== 1) {
+    throw new Error("Alpha.3 Windows installer compatibility source text drifted");
+  }
+  const projectedBytes = Buffer.from(
+    source.replace(compatibility.sourceText, compatibility.projectedText),
+    "utf8",
+  );
+  if (sha256(projectedBytes) !== compatibility.projectedDigest) {
+    throw new Error("Alpha.3 Windows installer compatibility projection digest drifted");
+  }
+  const immutablePath =
+    `installers/site/v1/alpha/${verified.version}/${compatibility.projectedDigest.slice(7)}`;
+  const assets = verified.assets.map((asset) =>
+    asset.name === "install.ps1" ? { ...asset, bytes: projectedBytes } : asset,
+  );
+  const publicationAssets = publication.assets.map((asset) => {
+    const bytes = assets.find((candidate) => candidate.name === asset.name)?.bytes;
+    if (!bytes) throw new Error(`missing projected installer asset: ${asset.name}`);
+    return {
+      ...asset,
+      size: bytes.length,
+      digest: sha256(bytes),
+      immutableUrl: `${CANONICAL_ORIGIN}/${immutablePath}/${asset.name}`,
+    };
+  });
+  const sitePublication = {
+    ...publication,
+    immutablePath,
+    assets: publicationAssets,
+  };
+  const receipt = {
+    schema: "kungfu.site-installer-compatibility/v1",
+    id: "alpha3-windows-launcher-variable-delimiter",
+    release: {
+      sourceCommit: publication.sourceCommit,
+      version: verified.version,
+      tag: `v${verified.version}`,
+      upstreamImmutablePath: verified.immutablePath,
+      siteImmutablePath: immutablePath,
+    },
+    source: {
+      asset: "install.ps1",
+      digest: compatibility.sourceDigest,
+    },
+    projection: {
+      asset: "install.ps1",
+      digest: compatibility.projectedDigest,
+      replacementCount: occurrences,
+      reason: "PowerShell variable-name delimiter required before a colon",
+    },
+  };
+  return {
+    publication: sitePublication,
+    assets,
+    immutablePath,
+    receipt,
+  };
+}
+
 function assertImmutable(destination, bytes) {
   if (!fs.existsSync(destination)) return;
   if (!fs.lstatSync(destination).isFile()) {
@@ -780,34 +868,42 @@ export function importBootstrapPublication({
     channel,
     channelBytes,
   );
+  const projected = projectSiteInstallerCompatibility(publication, verified);
   const { manifest, channelPath } = publicationManifest(
     destinationRoot,
-    publication,
-    verified.immutablePath,
+    projected.publication,
+    projected.immutablePath,
     verified.version,
   );
   const acquisition = acquisitionEvidence(publication, verified.version);
   const status = releaseStatus(
-    publication,
+    projected.publication,
     verified.version,
     acquisition,
     siteSourceSha || publication.sourceCommit,
   );
   const installerPage = renderInstallerPage({
     outputRoot: destinationRoot,
-    publication,
+    publication: projected.publication,
     version: verified.version,
     platforms: verified.platforms,
     desktop: desktopDownloads(channel, publication, verified.version),
     acquisition,
   });
   const writes = [
-    ...verified.assets.flatMap((asset) => [
-      {
-        immutable: true,
-        path: `${verified.immutablePath}/${asset.name}`,
-        bytes: asset.bytes,
-      },
+    ...verified.assets.map((asset) => ({
+      immutable: true,
+      path: `${verified.immutablePath}/${asset.name}`,
+      bytes: asset.bytes,
+    })),
+    ...projected.assets.flatMap((asset) => [
+      ...(projected.immutablePath === verified.immutablePath
+        ? []
+        : [{
+            immutable: true,
+            path: `${projected.immutablePath}/${asset.name}`,
+            bytes: asset.bytes,
+          }]),
       { immutable: false, path: asset.name, bytes: asset.bytes },
     ]),
     {
@@ -823,7 +919,7 @@ export function importBootstrapPublication({
     {
       immutable: false,
       path: "installer-publication.json",
-      bytes: publicationBytes,
+      bytes: Buffer.from(`${JSON.stringify(projected.publication, null, 2)}\n`),
     },
     {
       immutable: false,
@@ -855,6 +951,20 @@ export function importBootstrapPublication({
       path: ".well-known/kungfu-release-status.json",
       bytes: Buffer.from(`${JSON.stringify(status, null, 2)}\n`),
     },
+    ...(projected.receipt
+      ? [
+          {
+            immutable: true,
+            path: `${projected.immutablePath}/site-installer-compatibility.json`,
+            bytes: Buffer.from(`${JSON.stringify(projected.receipt, null, 2)}\n`),
+          },
+          {
+            immutable: false,
+            path: ".well-known/kungfu/installer-compatibility.json",
+            bytes: Buffer.from(`${JSON.stringify(projected.receipt, null, 2)}\n`),
+          },
+        ]
+      : []),
   ];
   for (const item of writes.filter((item) => item.immutable)) {
     assertImmutable(path.join(destinationRoot, item.path), item.bytes);
@@ -868,7 +978,7 @@ export function importBootstrapPublication({
     sourceCommit: publication.sourceCommit,
     channelPayloadRoot: publication.channelPayloadRoot,
     channelFileDigest: publication.channelFileDigest,
-    installerImmutablePath: verified.immutablePath,
+    installerImmutablePath: projected.immutablePath,
     channelImmutablePath: channelPath,
     acquisitionEvidencePath: acquisition.immutablePath,
     files: writes.map((item) => item.path).sort(),

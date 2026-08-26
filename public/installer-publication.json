@@ -11,7 +11,7 @@
     "ref": "buildchain:release-passport/6d99af738b78eccb48885a5fd59b88a0e5e4900a",
     "root": "sha256:445c0309e39b1db38637b9478fed01040dc7a08b3c8a3d4881cba0904563ecbd"
   },
-  "immutablePath": "installers/v1/alpha/4.0.0-alpha.3/af360a051e2201d006e2c8f75627fc575f981e00c4f4cc998c90e130d9a40b5b",
+  "immutablePath": "installers/site/v1/alpha/4.0.0-alpha.3/792c48e70c68ef6a8d8d9cafe0fb16c46bef06806ab98d84044eefbaaf66dfb0",
   "entries": [
     {
       "platform": "darwin",
@@ -84,15 +84,15 @@
       "contentType": "text/x-shellscript; charset=utf-8",
       "size": 10476,
       "digest": "sha256:2624b1b4c1456e34b81722df4e39c71b81b9645cf335f0d14ccda82c40906eac",
-      "immutableUrl": "https://kungfu.tech/installers/v1/alpha/4.0.0-alpha.3/af360a051e2201d006e2c8f75627fc575f981e00c4f4cc998c90e130d9a40b5b/install.sh",
+      "immutableUrl": "https://kungfu.tech/installers/site/v1/alpha/4.0.0-alpha.3/792c48e70c68ef6a8d8d9cafe0fb16c46bef06806ab98d84044eefbaaf66dfb0/install.sh",
       "friendlyUrl": "https://kungfu.tech/install.sh"
     },
     {
       "name": "install.ps1",
       "contentType": "text/plain; charset=utf-8",
-      "size": 6279,
-      "digest": "sha256:ee8d9f797252436a43b1c3b23282fd192744a821b855111b42c7cde4975db6a6",
-      "immutableUrl": "https://kungfu.tech/installers/v1/alpha/4.0.0-alpha.3/af360a051e2201d006e2c8f75627fc575f981e00c4f4cc998c90e130d9a40b5b/install.ps1",
+      "size": 6281,
+      "digest": "sha256:792c48e70c68ef6a8d8d9cafe0fb16c46bef06806ab98d84044eefbaaf66dfb0",
+      "immutableUrl": "https://kungfu.tech/installers/site/v1/alpha/4.0.0-alpha.3/792c48e70c68ef6a8d8d9cafe0fb16c46bef06806ab98d84044eefbaaf66dfb0/install.ps1",
       "friendlyUrl": "https://kungfu.tech/install.ps1"
     }
   ]

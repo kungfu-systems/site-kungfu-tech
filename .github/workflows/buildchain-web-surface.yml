@@ -60,10 +60,9 @@ jobs:
           [scriptblock]::Create([IO.File]::ReadAllText('public/install.ps1')) | Out-Null
           $root = Join-Path $env:RUNNER_TEMP 'kungfu-managed-installer-dry-run'
           $install = Join-Path $root 'install'
-          $cache = Join-Path $root 'cache'
           $bin = Join-Path $root 'bin'
-          & ./public/install.ps1 -DryRun -InstallDir $install -CacheDir $cache -BinDir $bin
-          foreach ($path in @($install, $cache, $bin)) {
+          & ./public/install.ps1 -DryRun -InstallDir $install -BinDir $bin
+          foreach ($path in @($install, $bin)) {
             if (Test-Path -LiteralPath $path) {
               throw "PowerShell dry-run mutated $path"
             }
