@@ -1,0 +1,42 @@
+{
+  "schema": "kungfu-site-managed-installer-policy/v1",
+  "status": "active",
+  "channel": "alpha",
+  "version": "4.0.0-alpha.3",
+  "sourceCommit": "6d99af738b78eccb48885a5fd59b88a0e5e4900a",
+  "publicationBundleRoot": "sha256:2f707c8873ea9336f71875bbb0b02d0b6d0d44628e51835d61a0dad84dc4c371",
+  "channelPayloadRoot": "sha256:af360a051e2201d006e2c8f75627fc575f981e00c4f4cc998c90e130d9a40b5b",
+  "channelFileDigest": "sha256:2234799d7cc054f0c2a7009a4278cf45e2938761a3b66b9d850520ec155cabb3",
+  "releasePassportRoot": "sha256:445c0309e39b1db38637b9478fed01040dc7a08b3c8a3d4881cba0904563ecbd",
+  "compatibilityAdapter": {
+    "schema": "kungfu.site-alpha3-bootstrap-adapter/v1",
+    "mode": "signed-alpha3-identity-projection",
+    "channelPayloadRoot": "sha256:af360a051e2201d006e2c8f75627fc575f981e00c4f4cc998c90e130d9a40b5b",
+    "digest": "sha256:69ff436d497cecb2d948b236958a03eb197ddfe19150dbd71ba968e70608a0dc"
+  },
+  "trustedKey": {
+    "keyId": "ed25519-3c473c24ca261745",
+    "publicKey": "bNB6syHpgY0RKMHPKUhekyQupwgvtwqQ6qqrUV2ecfQ="
+  },
+  "download": {
+    "attempts": 5,
+    "backoffSeconds": [1, 2, 4, 8]
+  },
+  "targets": {
+    "darwin/arm64": {
+      "archiveEntries": 2895,
+      "archiveLinks": 2,
+      "minimumGlibc": null
+    },
+    "linux/x64": {
+      "archiveEntries": 5226,
+      "archiveLinks": 1041,
+      "minimumGlibc": "2.39"
+    },
+    "win32/x64": {
+      "archiveEntries": 2415,
+      "archiveLinks": 0,
+      "minimumGlibc": null
+    }
+  }
+}
