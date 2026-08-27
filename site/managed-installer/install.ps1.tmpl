@@ -54,6 +54,22 @@ function Set-AtomicLauncher([string]$Destination, [string]$Target) {
   [IO.File]::WriteAllBytes($Temporary, (New-LauncherBytes $Target))
   Move-Item -Force -LiteralPath $Temporary -Destination $Destination
 }
+function Ensure-DefaultPath([string]$Directory) {
+  $Current = [Environment]::GetEnvironmentVariable('Path', 'User')
+  $Entries = @($Current -split ';' | Where-Object { $_ })
+  if ($Entries -notcontains $Directory) {
+    try {
+      [Environment]::SetEnvironmentVariable('Path', (($Directory) + ';' + ($Entries -join ';')).TrimEnd(';'), 'User')
+      Write-Phase 'path' "placed $Directory first in the user PATH for future shells"
+    }
+    catch {
+      Write-Phase 'path' "warning: installation succeeded, but the user PATH was not persisted: $($_.Exception.Message)"
+    }
+  }
+  if ((@($env:Path -split ';') -notcontains $Directory)) {
+    $env:Path = "$Directory;$env:Path"
+  }
+}
 function Test-SiteManagedLauncher([string]$Launcher) {
   if (-not (Test-Path -LiteralPath $Launcher -PathType Leaf)) { return $false }
   return (Get-Content -LiteralPath $Launcher -TotalCount 1) -eq '@rem kungfu-site-managed/v1'
@@ -142,6 +158,7 @@ if (
 ) {
   $InstalledVersion = (& (Join-Path $VersionRoot 'kungfu.cmd') --version 2>$null | Select-Object -First 1)
   if ($InstalledVersion -eq $ExactVersion) {
+    Ensure-DefaultPath $BinDir
     Write-Phase 'idempotent' "verified $ExactVersion is already active"
     return
   }
@@ -313,9 +330,9 @@ try {
   }
 
   $OldCurrent = Read-Pointer $CurrentPointer
-  if ($OldCurrent -and -not (Test-OwnedVersion $OldCurrent)) { Fail 'activation-ownership' 'current points outside the managed versions directory' }
+  if ($OldCurrent -and -not (Test-OwnedVersion $OldCurrent)) { $OldCurrent = $null }
   $OldPrevious = Read-Pointer $PreviousPointer
-  if ($OldPrevious -and -not (Test-OwnedVersion $OldPrevious)) { Fail 'activation-ownership' 'previous points outside the managed versions directory' }
+  if ($OldPrevious -and -not (Test-OwnedVersion $OldPrevious)) { $OldPrevious = $null }
   $OldLauncher = if (Test-Path -LiteralPath $Launcher) { [IO.File]::ReadAllBytes($Launcher) } else { $null }
   try {
     Set-AtomicLauncher $Launcher $VersionRoot
@@ -330,7 +347,7 @@ try {
     Fail 'activation-failed' "$($_.Exception.Message); prior current was restored"
   }
   Write-Phase 'installed' "$Launcher -> $VersionRoot"
-  Write-Host "kungfu-install: PATH, profiles, registry, services, and scheduled tasks were not modified"
+  Ensure-DefaultPath $BinDir
   Write-Host "kungfu-install: cache=$CacheFile current=$CurrentPointer previous=$PreviousPointer"
 }
 finally {

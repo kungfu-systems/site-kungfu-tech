@@ -371,9 +371,13 @@ test("templates retain resumable cache, product verification, activation, and ro
     assert.match(shell, /--continue-at -/u);
     assert.match(shell, /\.part/u);
     assert.match(shell, /replace_pointer "\$current_tmp" "\$current_link"/u);
+    assert.match(shell, /ensure_default_path/u);
+    assert.match(shell, /kungfu-site-managed PATH/u);
     assert.match(powershell, /RangeHeaderValue/u);
     assert.match(powershell, /ResponseHeadersRead/u);
     assert.match(powershell, /Set-AtomicText \$CurrentPointer/u);
+    assert.match(powershell, /Ensure-DefaultPath/u);
+    assert.match(powershell, /SetEnvironmentVariable\('Path',/u);
     assert.doesNotMatch(powershell, /\bexit\b/u);
     assert.doesNotMatch(powershell, /RuntimeInformation/u);
     execFileSync("/bin/sh", ["-n", path.join(root, "install.sh")]);

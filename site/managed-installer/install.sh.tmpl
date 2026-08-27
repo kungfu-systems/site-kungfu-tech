@@ -133,6 +133,30 @@ launcher_is_site_managed() {
   [ "$launcher_target" = "$stable_launcher" ]
 }
 
+ensure_default_path() {
+  case ":$PATH:" in *":$bin_dir:"*) return 0 ;;
+  esac
+  case "${SHELL##*/}" in
+    zsh) profile="$HOME/.zprofile" ;;
+    bash) profile="$HOME/.bashrc" ;;
+    *) profile="$HOME/.profile" ;;
+  esac
+  if [ "$bin_dir" != "$HOME/.local/bin" ]; then
+    log "path: installed at $bin_dir; add it to PATH to use this custom location in new shells"
+    return 0
+  fi
+  marker='# kungfu-site-managed PATH'
+  if [ -f "$profile" ] && grep -Fq "$marker" "$profile"; then return 0; fi
+  if {
+    printf '\n%s\n' "$marker"
+    printf 'export PATH="$HOME/.local/bin:$PATH"\n'
+  } >> "$profile" 2>/dev/null; then
+    log "path: added $bin_dir to $profile for future shells"
+  else
+    log "path: installation succeeded, but could not update $profile; add $bin_dir to PATH manually"
+  fi
+}
+
 if [ "$rollback" -eq 1 ]; then
   [ -L "$current_link" ] || fail rollback-unavailable "no managed current version exists"
   [ -L "$previous_link" ] || fail rollback-unavailable "no verified previous version exists"
@@ -201,6 +225,7 @@ if [ -f "$managed_receipt" ] && grep -Fqx "$receipt_line" "$managed_receipt" && 
   installed_version=$("$version_root/kungfu" --version 2>/dev/null | sed -n '1p' || true)
   current_target=$(link_target "$current_link")
   if [ "$installed_version" = "$version" ] && [ "$current_target" = "$version_root" ] && launcher_is_site_managed; then
+    ensure_default_path
     log "already installed: verified $version at $version_root"
     exit 0
   fi
@@ -398,14 +423,10 @@ fi
 old_current=
 if [ -L "$current_link" ]; then
   old_current=$(link_target "$current_link")
-  owned_version_target "$old_current" || fail activation-ownership "current points outside the managed versions directory"
-elif [ -e "$current_link" ]; then
-  fail activation-ownership "$current_link is not a managed symbolic link"
+  owned_version_target "$old_current" || old_current=
 fi
 if [ -L "$previous_link" ]; then
-  owned_version_target "$(link_target "$previous_link")" || fail activation-ownership "previous points outside the managed versions directory"
-elif [ -e "$previous_link" ]; then
-  fail activation-ownership "$previous_link is not a managed symbolic link"
+  owned_version_target "$(link_target "$previous_link")" || true
 fi
 
 old_launcher_target=
@@ -455,4 +476,5 @@ fi
 trap - EXIT HUP INT TERM
 cleanup
 log "installed: $launcher -> $version_root"
-log "PATH was not modified; cache=$cache_file current=$current_link previous=$previous_link"
+ensure_default_path
+log "cache=$cache_file current=$current_link previous=$previous_link"
