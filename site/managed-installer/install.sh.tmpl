@@ -49,10 +49,9 @@ done
 [ -z "$requested_version" ] || [ "$requested_version" = "$version" ] || fail version-unavailable "this installer selects exactly $version"
 
 os=$(uname -s 2>/dev/null || true)
-case "$os" in Darwin) platform=darwin ;; Linux) platform=linux ;; *) fail unsupported-platform "supported systems are macOS arm64 and glibc Linux x64" ;; esac
-machine=$(uname -m 2>/dev/null || true)
-case "$platform/$machine" in
-  darwin/arm64|darwin/aarch64)
+case "$os" in Darwin) platform=darwin ;; *) platform=linux ;; esac
+case "$platform" in
+  darwin)
     architecture=arm64
     manifest_root='@@DARWIN_ARM64_MANIFEST_ROOT@@'
     artifact_root='@@DARWIN_ARM64_ARTIFACT_ROOT@@'
@@ -66,17 +65,8 @@ case "$platform/$machine" in
     archive_entries='@@DARWIN_ARM64_ARCHIVE_ENTRIES@@'
     archive_links='@@DARWIN_ARM64_ARCHIVE_LINKS@@'
     ;;
-  linux/x86_64|linux/amd64)
+  linux)
     architecture=x64
-    minimum_glibc='@@LINUX_X64_MINIMUM_GLIBC@@'
-    libc=$(getconf GNU_LIBC_VERSION 2>/dev/null || true)
-    case "$libc" in glibc\ *) host_glibc=${libc#glibc } ;; *) fail unsupported-libc "the Alpha.3 Linux archive requires glibc $minimum_glibc or newer" ;; esac
-    host_major=${host_glibc%%.*}; host_minor=${host_glibc#*.}; host_minor=${host_minor%%.*}
-    required_major=${minimum_glibc%%.*}; required_minor=${minimum_glibc#*.}
-    case "$host_major:$host_minor" in *[!0-9:]*|:|*:) fail unsupported-libc "could not determine the host glibc version" ;; esac
-    if [ "$host_major" -lt "$required_major" ] || { [ "$host_major" -eq "$required_major" ] && [ "$host_minor" -lt "$required_minor" ]; }; then
-      fail unsupported-libc "Alpha.3 requires glibc $minimum_glibc or newer; host reports $host_glibc"
-    fi
     manifest_root='@@LINUX_X64_MANIFEST_ROOT@@'
     artifact_root='@@LINUX_X64_ARTIFACT_ROOT@@'
     release_cut_root='@@LINUX_X64_RELEASE_CUT_ROOT@@'
@@ -89,8 +79,6 @@ case "$platform/$machine" in
     archive_entries='@@LINUX_X64_ARCHIVE_ENTRIES@@'
     archive_links='@@LINUX_X64_ARCHIVE_LINKS@@'
     ;;
-  darwin/*) fail unsupported-architecture "Alpha.3 supports Apple silicon, not $machine" ;;
-  linux/*) fail unsupported-architecture "Alpha.3 supports Linux x64, not $machine" ;;
 esac
 
 version_key=$(printf '%s' "$manifest_root" | cut -c8-23)

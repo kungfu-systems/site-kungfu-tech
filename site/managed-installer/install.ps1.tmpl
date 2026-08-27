@@ -79,17 +79,6 @@ if ($Channel -ne '@@CHANNEL@@') { Fail 'channel-unavailable' 'this installer is 
 if ($RequestedVersion -and $RequestedVersion -ne $ExactVersion) {
   Fail 'version-unavailable' "this installer selects exactly $ExactVersion"
 }
-if (-not [Environment]::Is64BitOperatingSystem) { Fail 'unsupported-platform' '64-bit Windows is required' }
-$NativeArchitecture = if ($env:PROCESSOR_ARCHITEW6432) {
-  $env:PROCESSOR_ARCHITEW6432
-}
-else {
-  $env:PROCESSOR_ARCHITECTURE
-}
-if ($NativeArchitecture -notin @('AMD64', 'x64')) {
-  Fail 'unsupported-architecture' 'Alpha.3 supports Windows x64 only'
-}
-
 $Architecture = 'x64'
 $Platform = 'win32'
 $ManifestRoot = '@@WIN32_X64_MANIFEST_ROOT@@'
