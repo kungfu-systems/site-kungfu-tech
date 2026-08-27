@@ -374,6 +374,8 @@ test("templates retain resumable cache, product verification, activation, and ro
     assert.match(powershell, /RangeHeaderValue/u);
     assert.match(powershell, /ResponseHeadersRead/u);
     assert.match(powershell, /Set-AtomicText \$CurrentPointer/u);
+    assert.doesNotMatch(powershell, /\bexit\b/u);
+    assert.doesNotMatch(powershell, /RuntimeInformation/u);
     execFileSync("/bin/sh", ["-n", path.join(root, "install.sh")]);
     const pwsh = spawnSync("/usr/bin/env", ["sh", "-c", "command -v pwsh"], {
       encoding: "utf8",
@@ -384,60 +386,38 @@ test("templates retain resumable cache, product verification, activation, and ro
         "-Command",
         `[scriptblock]::Create([IO.File]::ReadAllText('${path.join(root, "install.ps1").replaceAll("'", "''")}')) | Out-Null`,
       ]);
+      const powershellDryRun = path.join(root, "powershell-dry-run.ps1");
+      fs.writeFileSync(
+        powershellDryRun,
+        `$env:LOCALAPPDATA = ${JSON.stringify(root)}\n` +
+          `$env:PROCESSOR_ARCHITECTURE = 'AMD64'\n` +
+          `& ([scriptblock]::Create([IO.File]::ReadAllText('${path.join(root, "install.ps1").replaceAll("'", "''")}'))) -DryRun\n` +
+          `Write-Output 'host-still-alive'\n`,
+      );
+      assert.match(
+        execFileSync(pwsh, ["-NoProfile", "-File", powershellDryRun], { encoding: "utf8" }),
+        /host-still-alive/u,
+      );
     }
   } finally {
     fs.rmSync(root, { recursive: true, force: true });
   }
 });
 
-test("PowerShell migrates only the exact legacy product launcher", () => {
+test("PowerShell takes over its launcher path without historical ownership checks", () => {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), "kungfu-managed-powershell-owner-"));
   try {
     generate(root);
     const powershell = fs.readFileSync(path.join(root, "install.ps1"), "utf8");
-    const helperEnd = powershell.indexOf("\nif ($Channel -ne '");
-    assert.notEqual(helperEnd, -1);
-    const legacyLauncher = path.join(root, "legacy-kungfu.cmd");
-    const unownedLauncher = path.join(root, "unowned-kungfu.cmd");
-    fs.writeFileSync(
-      legacyLauncher,
-      [
-        "@echo off",
-        'set "KUNGFU_PRODUCT_MANIFEST=%~dp0product.json"',
-        'set "KUNGFU_UPGRADE_MANIFEST=%~dp0upgrade\\kungfu-release-manifest.json"',
-        'set "KF_BUNDLED_EXTENSION_ROOT=%~dp0extensions"',
-        'set "KUNGFU_AGENT_SESSION_EXECUTABLE=%~dp0runtime\\kungfu.exe"',
-        'set "KUNGFU_CONTROLLER_ENTRYPOINT=%~dp0runtime\\kungfu.exe"',
-        'set "PYTHONUTF8=1"',
-        'set "PYTHONIOENCODING=utf-8"',
-        '"%~dp0runtime\\kungfu.exe" %*',
-        "",
-      ].join("\r\n"),
-    );
-    fs.writeFileSync(unownedLauncher, "@echo off\r\necho third party\r\n");
-    const ownershipTest = path.join(root, "launcher-ownership.ps1");
-    fs.writeFileSync(
-      ownershipTest,
-      `${powershell.slice(0, helperEnd)}\n` +
-        "if (-not (Test-OwnedLauncher $args[0])) { exit 1 }\n" +
-        "if (Test-OwnedLauncher $args[1]) { exit 2 }\n",
-    );
-    const pwsh = spawnSync("/usr/bin/env", ["sh", "-c", "command -v pwsh"], {
-      encoding: "utf8",
-    }).stdout.trim();
-    if (pwsh) {
-      execFileSync(pwsh, ["-NoProfile", "-File", ownershipTest, legacyLauncher, unownedLauncher]);
-    } else {
-      assert.match(powershell, /function Test-LegacyProductLauncher/u);
-      assert.match(powershell, /KUNGFU_PRODUCT_MANIFEST=%~dp0product\.json/u);
-      assert.match(powershell, /KUNGFU_CONTROLLER_ENTRYPOINT=%~dp0runtime\\kungfu\.exe/u);
-    }
+    assert.doesNotMatch(powershell, /ownership-conflict/u);
+    assert.doesNotMatch(powershell, /Test-LegacyProductLauncher/u);
+    assert.match(powershell, /Set-AtomicLauncher \$Launcher \$VersionRoot/u);
   } finally {
     fs.rmSync(root, { recursive: true, force: true });
   }
 });
 
-test("POSIX rejects an unowned launcher before download or install mutation", () => {
+test("POSIX starts installation when its launcher path already exists", () => {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), "kungfu-managed-owner-"));
   try {
     const output = path.join(root, "output");
@@ -467,9 +447,128 @@ test("POSIX rejects an unowned launcher before download or install mutation", ()
       },
     );
     assert.notEqual(result.status, 0);
-    assert.match(result.stderr, /ownership-conflict/u);
-    assert.equal(fs.existsSync(path.join(root, "curl-called")), false);
-    assert.equal(fs.existsSync(install), false);
+    assert.doesNotMatch(result.stderr, /ownership-conflict/u);
+    assert.equal(fs.existsSync(path.join(root, "curl-called")), true);
+  } finally {
+    fs.rmSync(root, { recursive: true, force: true });
+  }
+});
+
+test("POSIX migrates the exact legacy product launcher", () => {
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), "kungfu-managed-legacy-owner-"));
+  try {
+    const output = path.join(root, "output");
+    generate(output);
+    const curlMarker = path.join(root, "curl-called");
+    const hostBin = fakeHost(root, {
+      system: "Linux",
+      machine: "x86_64",
+      glibc: "2.39",
+      curlMarker,
+    });
+    const managedBin = path.join(root, "managed-bin");
+    fs.mkdirSync(managedBin);
+    fs.writeFileSync(
+      path.join(managedBin, "kungfu"),
+      [
+        "#!/bin/sh",
+        "set -e",
+        "target=$0",
+        'while [ -L "$target" ]; do',
+        '  link=$(readlink "$target")',
+        "  case $link in",
+        "    /*) target=$link ;;",
+        '    *) target=$(dirname "$target")/$link ;;',
+        "  esac",
+        "done",
+        'here=$(cd "$(dirname "$target")" && pwd)',
+        "export KUNGFU_INSTALL_SOURCE=archive",
+        'export KUNGFU_DIR="$here/runtime"',
+        'export KUNGFU_PRODUCT_MANIFEST="$here/product.json"',
+        'export KUNGFU_UPGRADE_MANIFEST="$here/upgrade/kungfu-release-manifest.json"',
+        'export KF_BUNDLED_EXTENSION_ROOT="$here/extensions"',
+        'export KUNGFU_CLI_BIN="$here/kungfu"',
+        'export KUNGFU_AGENT_SESSION_EXECUTABLE="$here/runtime/kungfu"',
+        'export KUNGFU_CONTROLLER_ENTRYPOINT="$here/runtime/kungfu"',
+        'exec "$here/runtime/kungfu" "$@"',
+        "",
+      ].join("\\n"),
+      { mode: 0o755 },
+    );
+    const result = spawnSync(
+      "/bin/sh",
+      [
+        path.join(output, "install.sh"),
+        "--install-dir",
+        path.join(root, "install"),
+        "--bin-dir",
+        managedBin,
+      ],
+      {
+        encoding: "utf8",
+        env: { ...process.env, PATH: `${managedBin}:${hostBin}:/usr/bin:/bin` },
+      },
+    );
+    assert.notEqual(result.status, 0);
+    assert.doesNotMatch(result.stderr, /ownership-conflict/u);
+    assert.equal(fs.existsSync(curlMarker), true);
+  } finally {
+    fs.rmSync(root, { recursive: true, force: true });
+  }
+});
+
+test("POSIX migrates the exact legacy archive launcher", () => {
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), "kungfu-managed-legacy-archive-owner-"));
+  try {
+    const output = path.join(root, "output");
+    generate(output);
+    const curlMarker = path.join(root, "curl-called");
+    const hostBin = fakeHost(root, {
+      system: "Linux",
+      machine: "x86_64",
+      glibc: "2.39",
+      curlMarker,
+    });
+    const managedBin = path.join(root, "managed-bin");
+    fs.mkdirSync(managedBin);
+    fs.writeFileSync(
+      path.join(managedBin, "kungfu"),
+      [
+        "#!/bin/sh",
+        "set -e",
+        "target=$0",
+        'while [ -L "$target" ]; do',
+        '  link=$(readlink "$target")',
+        "  case $link in",
+        "    /*) target=$link ;;",
+        '    *) target=$(dirname "$target")/$link ;;',
+        "  esac",
+        "done",
+        'version_root=$(CDPATH= cd -- "$(dirname "$target")/.." && pwd)',
+        "export KUNGFU_INSTALL_SOURCE=archive",
+        'export KUNGFU_DIR="$version_root/runtime"',
+        'exec "$version_root/kungfu" "$@"',
+        "",
+      ].join("\\n"),
+      { mode: 0o755 },
+    );
+    const result = spawnSync(
+      "/bin/sh",
+      [
+        path.join(output, "install.sh"),
+        "--install-dir",
+        path.join(root, "install"),
+        "--bin-dir",
+        managedBin,
+      ],
+      {
+        encoding: "utf8",
+        env: { ...process.env, PATH: `${managedBin}:${hostBin}:/usr/bin:/bin` },
+      },
+    );
+    assert.notEqual(result.status, 0);
+    assert.doesNotMatch(result.stderr, /ownership-conflict/u);
+    assert.equal(fs.existsSync(curlMarker), true);
   } finally {
     fs.rmSync(root, { recursive: true, force: true });
   }

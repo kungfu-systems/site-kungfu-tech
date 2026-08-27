@@ -54,35 +54,9 @@ function Set-AtomicLauncher([string]$Destination, [string]$Target) {
   [IO.File]::WriteAllBytes($Temporary, (New-LauncherBytes $Target))
   Move-Item -Force -LiteralPath $Temporary -Destination $Destination
 }
-function Test-LegacyProductLauncher([string]$Launcher) {
-  # The product bootstrap predates the Site-managed marker. Require its full,
-  # product-specific command shape before replacing it during migration.
-  $Expected = @(
-    '@echo off',
-    'set "KUNGFU_PRODUCT_MANIFEST=%~dp0product.json"',
-    'set "KUNGFU_UPGRADE_MANIFEST=%~dp0upgrade\kungfu-release-manifest.json"',
-    'set "KF_BUNDLED_EXTENSION_ROOT=%~dp0extensions"',
-    'set "KUNGFU_AGENT_SESSION_EXECUTABLE=%~dp0runtime\kungfu.exe"',
-    'set "KUNGFU_CONTROLLER_ENTRYPOINT=%~dp0runtime\kungfu.exe"',
-    'set "PYTHONUTF8=1"',
-    'set "PYTHONIOENCODING=utf-8"',
-    '"%~dp0runtime\kungfu.exe" %*'
-  )
-  $Actual = @(Get-Content -LiteralPath $Launcher)
-  if ($Actual.Count -ne $Expected.Count) { return $false }
-  for ($Index = 0; $Index -lt $Expected.Count; $Index += 1) {
-    if ($Actual[$Index] -cne $Expected[$Index]) { return $false }
-  }
-  return $true
-}
-function Test-OwnedLauncher([string]$Launcher) {
-  if (-not (Test-Path -LiteralPath $Launcher)) { return $true }
+function Test-SiteManagedLauncher([string]$Launcher) {
   if (-not (Test-Path -LiteralPath $Launcher -PathType Leaf)) { return $false }
-  if ((Get-Content -LiteralPath $Launcher -TotalCount 1) -in @(
-    '@rem kungfu-site-managed/v1',
-    '@rem kungfu-archive-bootstrap/v1'
-  )) { return $true }
-  return Test-LegacyProductLauncher $Launcher
+  return (Get-Content -LiteralPath $Launcher -TotalCount 1) -eq '@rem kungfu-site-managed/v1'
 }
 
 if ($Channel -ne '@@CHANNEL@@') { Fail 'channel-unavailable' 'this installer is pinned to alpha' }
@@ -90,7 +64,13 @@ if ($RequestedVersion -and $RequestedVersion -ne $ExactVersion) {
   Fail 'version-unavailable' "this installer selects exactly $ExactVersion"
 }
 if (-not [Environment]::Is64BitOperatingSystem) { Fail 'unsupported-platform' '64-bit Windows is required' }
-if ([Runtime.InteropServices.RuntimeInformation]::OSArchitecture.ToString() -ne 'x64') {
+$NativeArchitecture = if ($env:PROCESSOR_ARCHITEW6432) {
+  $env:PROCESSOR_ARCHITEW6432
+}
+else {
+  $env:PROCESSOR_ARCHITECTURE
+}
+if ($NativeArchitecture -notin @('AMD64', 'x64')) {
   Fail 'unsupported-architecture' 'Alpha.3 supports Windows x64 only'
 }
 
@@ -115,15 +95,7 @@ $Launcher = Join-Path $BinDir 'kungfu.cmd'
 $ReceiptLine = "catalog=$CatalogRoot version=$ExactVersion source=$SourceCommit manifest=$ManifestRoot artifact=$ArtifactRoot passport=$ReleasePassportRoot"
 Write-Phase 'plan' "$Channel $ExactVersion $Platform/$Architecture -> $VersionRoot"
 if ($Rollback) { Write-Phase 'plan' "rollback current=$CurrentPointer previous=$PreviousPointer" }
-if ($DryRun) { exit 0 }
-
-if (-not (Test-OwnedLauncher $Launcher)) {
-  Fail 'ownership-conflict' "$Launcher is not owned by the Kungfu managed installer"
-}
-$Existing = Get-Command kungfu -ErrorAction SilentlyContinue
-if ($Existing -and [IO.Path]::GetFullPath($Existing.Source) -ne [IO.Path]::GetFullPath($Launcher)) {
-  Fail 'ownership-conflict' "existing Kungfu is owned outside ${Launcher}: $($Existing.Source)"
-}
+if ($DryRun) { return }
 
 if ($Rollback) {
   $CurrentTarget = Read-Pointer $CurrentPointer
@@ -158,7 +130,7 @@ if ($Rollback) {
     Fail 'rollback-failed' $_.Exception.Message
   }
   Write-Phase 'rollback' "$Launcher -> $PreviousTarget ($PreviousVersion)"
-  exit 0
+  return
 }
 
 $ManagedReceipt = Join-Path $VersionRoot 'install\site-managed-receipt'
@@ -166,12 +138,12 @@ if (
   (Test-Path -LiteralPath $ManagedReceipt -PathType Leaf) -and
   ((Get-Content -LiteralPath $ManagedReceipt -Raw).TrimEnd() -eq $ReceiptLine) -and
   ((Read-Pointer $CurrentPointer) -eq $VersionRoot) -and
-  (Test-OwnedLauncher $Launcher)
+  (Test-SiteManagedLauncher $Launcher)
 ) {
   $InstalledVersion = (& (Join-Path $VersionRoot 'kungfu.cmd') --version 2>$null | Select-Object -First 1)
   if ($InstalledVersion -eq $ExactVersion) {
     Write-Phase 'idempotent' "verified $ExactVersion is already active"
-    exit 0
+    return
   }
 }
 
