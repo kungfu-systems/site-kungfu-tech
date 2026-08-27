@@ -390,6 +390,53 @@ test("templates retain resumable cache, product verification, activation, and ro
   }
 });
 
+test("PowerShell migrates only the exact legacy product launcher", () => {
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), "kungfu-managed-powershell-owner-"));
+  try {
+    generate(root);
+    const powershell = fs.readFileSync(path.join(root, "install.ps1"), "utf8");
+    const helperEnd = powershell.indexOf("\nif ($Channel -ne '");
+    assert.notEqual(helperEnd, -1);
+    const legacyLauncher = path.join(root, "legacy-kungfu.cmd");
+    const unownedLauncher = path.join(root, "unowned-kungfu.cmd");
+    fs.writeFileSync(
+      legacyLauncher,
+      [
+        "@echo off",
+        'set "KUNGFU_PRODUCT_MANIFEST=%~dp0product.json"',
+        'set "KUNGFU_UPGRADE_MANIFEST=%~dp0upgrade\\kungfu-release-manifest.json"',
+        'set "KF_BUNDLED_EXTENSION_ROOT=%~dp0extensions"',
+        'set "KUNGFU_AGENT_SESSION_EXECUTABLE=%~dp0runtime\\kungfu.exe"',
+        'set "KUNGFU_CONTROLLER_ENTRYPOINT=%~dp0runtime\\kungfu.exe"',
+        'set "PYTHONUTF8=1"',
+        'set "PYTHONIOENCODING=utf-8"',
+        '"%~dp0runtime\\kungfu.exe" %*',
+        "",
+      ].join("\r\n"),
+    );
+    fs.writeFileSync(unownedLauncher, "@echo off\r\necho third party\r\n");
+    const ownershipTest = path.join(root, "launcher-ownership.ps1");
+    fs.writeFileSync(
+      ownershipTest,
+      `${powershell.slice(0, helperEnd)}\n` +
+        "if (-not (Test-OwnedLauncher $args[0])) { exit 1 }\n" +
+        "if (Test-OwnedLauncher $args[1]) { exit 2 }\n",
+    );
+    const pwsh = spawnSync("/usr/bin/env", ["sh", "-c", "command -v pwsh"], {
+      encoding: "utf8",
+    }).stdout.trim();
+    if (pwsh) {
+      execFileSync(pwsh, ["-NoProfile", "-File", ownershipTest, legacyLauncher, unownedLauncher]);
+    } else {
+      assert.match(powershell, /function Test-LegacyProductLauncher/u);
+      assert.match(powershell, /KUNGFU_PRODUCT_MANIFEST=%~dp0product\.json/u);
+      assert.match(powershell, /KUNGFU_CONTROLLER_ENTRYPOINT=%~dp0runtime\\kungfu\.exe/u);
+    }
+  } finally {
+    fs.rmSync(root, { recursive: true, force: true });
+  }
+});
+
 test("POSIX rejects an unowned launcher before download or install mutation", () => {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), "kungfu-managed-owner-"));
   try {
