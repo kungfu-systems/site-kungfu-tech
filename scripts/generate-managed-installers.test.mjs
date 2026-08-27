@@ -305,21 +305,19 @@ test("POSIX dry-run performs no download or filesystem mutation", () => {
 
 for (const host of [
   {
-    name: "unsupported Linux architecture",
+    name: "Linux arm architecture",
     system: "Linux",
     machine: "aarch64",
     glibc: "2.39",
-    error: /unsupported-architecture/u,
   },
   {
-    name: "incompatible Linux ABI",
+    name: "Linux older glibc",
     system: "Linux",
     machine: "x86_64",
     glibc: "2.38",
-    error: /unsupported-libc.*requires glibc 2\.39/u,
   },
 ]) {
-  test(`${host.name} fails before network and install-root mutation`, () => {
+  test(`${host.name} still attempts the pinned Linux installation`, () => {
     const root = fs.mkdtempSync(path.join(os.tmpdir(), "kungfu-managed-host-"));
     try {
       const output = path.join(root, "output");
@@ -336,9 +334,8 @@ for (const host of [
         },
       );
       assert.notEqual(result.status, 0);
-      assert.match(result.stderr, host.error);
-      assert.equal(fs.existsSync(curlMarker), false);
-      assert.equal(fs.existsSync(install), false);
+      assert.doesNotMatch(result.stderr, /unsupported-(architecture|libc|platform)/u);
+      assert.equal(fs.existsSync(curlMarker), true);
     } finally {
       fs.rmSync(root, { recursive: true, force: true });
     }
