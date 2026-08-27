@@ -399,10 +399,17 @@ chmod 755 "$candidate/install/kungfu-site-launcher"
 
 if [ -d "$version_root" ]; then
   if [ ! -f "$managed_receipt" ] || ! grep -Fqx "$receipt_line" "$managed_receipt"; then
-    fail installed-content-conflict "$version_root exists without the exact managed receipt"
+    displaced_version_root="$version_root.legacy.$$"
+    mv "$version_root" "$displaced_version_root" || fail publish-failed "could not preserve pre-existing content at $version_root"
+    if ! mv "$candidate" "$version_root"; then
+      mv "$displaced_version_root" "$version_root" || true
+      fail publish-failed "could not publish verified content at $version_root"
+    fi
+    log "phase[publish]: preserved legacy content at $displaced_version_root and installed verified Alpha.3 content"
+  else
+    rm -rf "$candidate"
+    log "phase[publish]: verified installed content reused"
   fi
-  rm -rf "$candidate"
-  log "phase[publish]: verified installed content reused"
 else
   mv "$candidate" "$version_root" || fail publish-failed "could not publish the verified version"
   log "phase[publish]: installed complete archive closure at $version_root"
