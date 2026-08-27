@@ -127,17 +127,11 @@ link_target() {
   esac
 }
 
-launcher_is_owned() {
-  [ ! -e "$launcher" ] && [ ! -L "$launcher" ] && return 0
+launcher_is_site_managed() {
   [ -L "$launcher" ] || return 1
   launcher_target=$(link_target "$launcher")
-  [ "$launcher_target" = "$stable_launcher" ] && return 0
-  case "$launcher_target" in "$install_root"/versions/*/install/kungfu-archive-launcher) return 0 ;; *) return 1 ;; esac
+  [ "$launcher_target" = "$stable_launcher" ]
 }
-
-launcher_is_owned || fail ownership-conflict "$launcher is not owned by the Kungfu managed installer"
-existing=$(command -v kungfu 2>/dev/null || true)
-[ -z "$existing" ] || [ "$existing" = "$launcher" ] || fail ownership-conflict "existing Kungfu is owned outside $launcher: $existing"
 
 if [ "$rollback" -eq 1 ]; then
   [ -L "$current_link" ] || fail rollback-unavailable "no managed current version exists"
@@ -206,7 +200,7 @@ managed_receipt="$version_root/install/site-managed-receipt"
 if [ -f "$managed_receipt" ] && grep -Fqx "$receipt_line" "$managed_receipt" && [ -x "$version_root/kungfu" ]; then
   installed_version=$("$version_root/kungfu" --version 2>/dev/null | sed -n '1p' || true)
   current_target=$(link_target "$current_link")
-  if [ "$installed_version" = "$version" ] && [ "$current_target" = "$version_root" ] && launcher_is_owned; then
+  if [ "$installed_version" = "$version" ] && [ "$current_target" = "$version_root" ] && launcher_is_site_managed; then
     log "already installed: verified $version at $version_root"
     exit 0
   fi
