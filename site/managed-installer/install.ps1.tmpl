@@ -307,11 +307,20 @@ try {
 
   if (Test-Path -LiteralPath $VersionRoot) {
     $ExistingReceipt = Join-Path $VersionRoot 'install\site-managed-receipt'
-    if (-not (Test-Path -LiteralPath $ExistingReceipt -PathType Leaf) -or (Get-Content -LiteralPath $ExistingReceipt -Raw).TrimEnd() -ne $ReceiptLine) {
-      Fail 'installed-content-conflict' "$VersionRoot exists without the exact managed receipt"
+    if ((Test-Path -LiteralPath $ExistingReceipt -PathType Leaf) -and (Get-Content -LiteralPath $ExistingReceipt -Raw).TrimEnd() -eq $ReceiptLine) {
+      Remove-Item -Recurse -Force -LiteralPath $Candidate
+      Write-Phase 'publish' 'verified installed content reused'
     }
-    Remove-Item -Recurse -Force -LiteralPath $Candidate
-    Write-Phase 'publish' 'verified installed content reused'
+    else {
+      $DisplacedVersionRoot = "$VersionRoot.legacy.$PID"
+      Move-Item -LiteralPath $VersionRoot -Destination $DisplacedVersionRoot
+      try { Move-Item -LiteralPath $Candidate -Destination $VersionRoot }
+      catch {
+        Move-Item -LiteralPath $DisplacedVersionRoot -Destination $VersionRoot -ErrorAction SilentlyContinue
+        throw
+      }
+      Write-Phase 'publish' "preserved legacy content at $DisplacedVersionRoot and installed verified Alpha.3 content"
+    }
   }
   else {
     Move-Item -LiteralPath $Candidate -Destination $VersionRoot

@@ -377,6 +377,10 @@ test("templates retain resumable cache, product verification, activation, and ro
     assert.match(powershell, /SetEnvironmentVariable\('Path',/u);
     assert.doesNotMatch(powershell, /\bexit\b/u);
     assert.doesNotMatch(powershell, /RuntimeInformation/u);
+    assert.doesNotMatch(powershell, /installed-content-conflict/u);
+    assert.doesNotMatch(shell, /installed-content-conflict/u);
+    assert.match(powershell, /preserved legacy content/u);
+    assert.match(shell, /preserved legacy content/u);
     execFileSync("/bin/sh", ["-n", path.join(root, "install.sh")]);
     const pwsh = spawnSync("/usr/bin/env", ["sh", "-c", "command -v pwsh"], {
       encoding: "utf8",
