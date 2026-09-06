@@ -5,8 +5,8 @@ const outputs = JSON.parse(fs.readFileSync("infra/outputs.json", "utf8"));
 const buildchainToml = fs.readFileSync(".buildchain/buildchain.toml", "utf8");
 const workflow = fs.readFileSync(".github/workflows/buildchain-web-surface.yml", "utf8");
 const expectedBuildchainShellRef =
-  "a6dd3f9de8d2ca0ec66ae569c208791e48390e4f";
-const expectedBuildchainShell = `kungfu-systems/buildchain/.github/workflows/.web-surface.yml@${expectedBuildchainShellRef}`;
+  "v4-alpha";
+const expectedBuildchainShell = `kungfu-systems/buildchain/.github/workflows/public-release-web.yml@${expectedBuildchainShellRef}`;
 
 function parseTomlSections(text) {
   const sections = {};
@@ -42,15 +42,15 @@ if (fs.existsSync("buildchain.toml") || fs.existsSync("buildchain.contract-lock.
   throw new Error("legacy Buildchain root layout files are not allowed");
 }
 for (const [channel, lockPath, expectedRef] of [
-  ["stable", ".buildchain/contract-lock.json", "v3"],
-  ["alpha", ".buildchain/alpha-contract-lock.json", "v3-alpha"],
+  ["stable", ".buildchain/contract-lock.json", "v4"],
+  ["alpha", ".buildchain/alpha-contract-lock.json", "v4-alpha"],
 ]) {
   if (!fs.existsSync(lockPath)) throw new Error(`missing Buildchain ${channel} contract lock: ${lockPath}`);
   const lock = JSON.parse(fs.readFileSync(lockPath, "utf8"));
   if (
     lock.contract !== "kungfu-buildchain-contract-lock" ||
     lock.buildchain?.ref !== expectedRef ||
-    lock.buildchain?.majorLine !== "v3" ||
+    lock.buildchain?.majorLine !== "v4" ||
     lock.buildchain?.compatibilityPolicy !== "major-compatible" ||
     !lock.buildchain?.resolvedSha ||
     !lock.buildchain?.contractDigest ||
@@ -61,13 +61,11 @@ for (const [channel, lockPath, expectedRef] of [
 }
 if (!workflow.includes(expectedBuildchainShell)) {
   throw new Error(
-    `Buildchain web-surface workflow must use exact activation shell ${expectedBuildchainShellRef}`,
+    `Buildchain web-surface workflow must use public v4 shell ${expectedBuildchainShellRef}`,
   );
 }
-if (workflow.includes("buildchain-ref:")) {
-  throw new Error(
-    "Buildchain runtime must resolve from the exact reusable workflow shell, not an event-scoped override",
-  );
+if (!workflow.includes("buildchain-ref: ${{") || !workflow.includes("&& 'v4' || 'v4-alpha'")) {
+  throw new Error("Buildchain runtime must select official v4 channels for the reviewed event intent");
 }
 for (const lockInput of [
   "buildchain-contract-lock-path: ${{",
@@ -75,7 +73,7 @@ for (const lockInput of [
   ".buildchain/contract-lock.json",
   "buildchain-contract-compatibility-policy: major-compatible",
   "buildchain-contract-expected-channel: ${{",
-  "buildchain-contract-expected-major: \"3\"",
+  "buildchain-contract-expected-major: \"4\"",
   "buildchain-contract-drift-issue-mode: compatible-and-breaking",
 ]) {
   if (!workflow.includes(lockInput)) {
@@ -137,7 +135,7 @@ for (const activationBinding of [
 }
 for (const governanceBinding of [
   "github-governance-receipt:",
-  `ref: ${expectedBuildchainShellRef}`,
+  "ref: v4",
   "git -C .buildchain/governance-runtime rev-parse HEAD",
   "governance verifier does not match the exact Buildchain release runtime",
   "KUNGFU_GOVERNANCE_AUDITOR_APP_ID",
@@ -159,7 +157,7 @@ if (
   )
 ) {
   throw new Error(
-    "Buildchain web-surface workflow must keep production on the official v3 channel instead of using a PR-event SHA override",
+    "Buildchain web-surface workflow must keep production on the official v4 channel instead of using a PR-event SHA override",
   );
 }
 

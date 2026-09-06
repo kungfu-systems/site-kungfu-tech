@@ -1,4 +1,28 @@
+---
+status: active
+period: ongoing
+theme: site-deployment
+doc_type: runbook
+source_level: local-files
+confidence: high
+sensitivity: internal
+evidence_grade: B
+review_state: self-reviewed
+last_reviewed: 2026-09-06
+ai_provenance:
+  model_family: GPT-6
+  product: Codex
+  generated_at: 2026-09-06
+  visible_context: Site caller workflow and Buildchain public channel contracts.
+  invisible_context_boundary: No private credentials or provider internals inspected.
+---
+
 # Deploy
+
+The public workflow entry is `public-release-web.yml@v4-alpha`. Runtime
+selection uses `v4-alpha` for development and `v4` for the existing protected
+main/production path, with matching consumer contract locks. Content package
+pins are separate from Buildchain execution authority.
 
 Production deploy is modeled as an explicit Buildchain release operation. It
 is approved by merging a final release pull request. The GitHub merge button is
@@ -43,7 +67,7 @@ Incident entry:
 
 Default automation:
 
-- Pull requests run Buildchain v3 web-surface planning, verification, and
+- Pull requests run Buildchain v4 web-surface planning, verification, and
   preview apply for `pr-N.preview.kungfu.tech`.
 - Fork pull requests still build and plan, but skip AWS-backed preview apply
   because GitHub does not provide OIDC identity to fork events.
