@@ -191,7 +191,7 @@ jobs:
       - github-governance-receipt
     if: >-
       ${{
-        always() &&
+        always() && !((github.event_name == 'workflow_dispatch' && inputs.production_approved) || (github.event_name == 'push' && github.ref == 'refs/heads/main') || (github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true && contains(github.event.pull_request.labels.*.name, 'buildchain-release'))) &&
         (
           needs.activation-input-gate.result == 'success' ||
           needs.activation-input-gate.result == 'skipped'
@@ -203,10 +203,55 @@ jobs:
       }}
     uses: kungfu-systems/buildchain/.github/workflows/public-release-web.yml@v4-alpha
     with:
-      buildchain-ref: ${{ (((github.event_name == 'workflow_dispatch' && inputs.production_approved) || (github.event_name == 'push' && github.ref == 'refs/heads/main') || (github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true && contains(github.event.pull_request.labels.*.name, 'buildchain-release')))) && 'v4' || 'v4-alpha' }}
-      buildchain-contract-lock-path: ${{ (((github.event_name == 'workflow_dispatch' && inputs.production_approved) || (github.event_name == 'push' && github.ref == 'refs/heads/main') || (github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true && contains(github.event.pull_request.labels.*.name, 'buildchain-release')))) && '.buildchain/contract-lock.json' || '.buildchain/alpha-contract-lock.json' }}
+      buildchain-ref: v4-alpha
+      buildchain-contract-lock-path: .buildchain/alpha-contract-lock.json
       buildchain-contract-compatibility-policy: major-compatible
-      buildchain-contract-expected-channel: ${{ (((github.event_name == 'workflow_dispatch' && inputs.production_approved) || (github.event_name == 'push' && github.ref == 'refs/heads/main') || (github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true && contains(github.event.pull_request.labels.*.name, 'buildchain-release')))) && 'stable' || 'alpha' }}
+      buildchain-contract-expected-channel: alpha
+      buildchain-contract-expected-major: "4"
+      buildchain-contract-drift-issue-mode: compatible-and-breaking
+      node-version: "24"
+      build-command: pnpm run build
+      verify-command: pnpm run check
+      artifact-path: dist
+      preview-apply: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository }}
+      preview-cleanup-apply: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository }}
+      preview-aws-role-arn: arn:aws:iam::727884401362:role/site-kungfu-tech-preview-github-actions
+      staging-apply: true
+      staging-aws-role-arn: arn:aws:iam::727884401362:role/site-kungfu-tech-staging-github-actions
+      production-apply: true
+      production-approved: ${{ github.event_name == 'workflow_dispatch' && inputs.production_approved }}
+      production-release-on-main: true
+      production-release-app-client-id: ${{ vars.KUNGFU_RELEASE_APP_CLIENT_ID }}
+      production-release-label: buildchain-release
+      production-release-head-prefix: feature/release-
+      production-aws-role-arn: arn:aws:iam::727884401362:role/site-kungfu-tech-production-github-actions
+      production-environment: production
+      github-governance-receipt-json: ${{ needs.github-governance-receipt.outputs.receipt-json || '' }}
+    secrets:
+      production-release-app-private-key: ${{ secrets.KUNGFU_RELEASE_APP_PRIVATE_KEY }}
+
+  web-surface-stable:
+    needs:
+      - activation-input-gate
+      - github-governance-receipt
+    if: >-
+      ${{
+        always() && ((github.event_name == 'workflow_dispatch' && inputs.production_approved) || (github.event_name == 'push' && github.ref == 'refs/heads/main') || (github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true && contains(github.event.pull_request.labels.*.name, 'buildchain-release'))) &&
+        (
+          needs.activation-input-gate.result == 'success' ||
+          needs.activation-input-gate.result == 'skipped'
+        ) &&
+        (
+          needs.github-governance-receipt.result == 'success' ||
+          needs.github-governance-receipt.result == 'skipped'
+        )
+      }}
+    uses: kungfu-systems/buildchain/.github/workflows/.web-surface.yml@v4
+    with:
+      buildchain-ref: v4
+      buildchain-contract-lock-path: .buildchain/contract-lock.json
+      buildchain-contract-compatibility-policy: major-compatible
+      buildchain-contract-expected-channel: stable
       buildchain-contract-expected-major: "4"
       buildchain-contract-drift-issue-mode: compatible-and-breaking
       node-version: "24"
