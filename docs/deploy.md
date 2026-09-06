@@ -19,10 +19,12 @@ ai_provenance:
 
 # Deploy
 
-The public workflow entry is `public-release-web.yml@v4-alpha`. Runtime
-selection uses `v4-alpha` for development and `v4` for the existing protected
-main/production path, with matching consumer contract locks. Content package
-pins are separate from Buildchain execution authority.
+Development calls `public-release-web.yml@v4-alpha`; the protected main/production
+path calls the supported stable entry `.web-surface.yml@v4`. Each job uses its
+matching runtime, expected channel and consumer contract lock. The stable tag
+does not yet publish the renamed entry, so the jobs keep separate static calls
+in accordance with Buildchain workflow migration guidance. Content package pins
+are separate from Buildchain execution authority.
 
 Production deploy is modeled as an explicit Buildchain release operation. It
 is approved by merging a final release pull request. The GitHub merge button is

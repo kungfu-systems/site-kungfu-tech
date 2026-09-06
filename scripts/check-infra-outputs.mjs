@@ -64,15 +64,22 @@ if (!workflow.includes(expectedBuildchainShell)) {
     `Buildchain web-surface workflow must use public v4 shell ${expectedBuildchainShellRef}`,
   );
 }
-if (!workflow.includes("buildchain-ref: ${{") || !workflow.includes("&& 'v4' || 'v4-alpha'")) {
-  throw new Error("Buildchain runtime must select official v4 channels for the reviewed event intent");
+for (const [jobName, shell, runtime, lockPath, channel] of [
+  ["web-surface", "public-release-web.yml@v4-alpha", "v4-alpha", ".buildchain/alpha-contract-lock.json", "alpha"],
+  ["web-surface-stable", ".web-surface.yml@v4", "v4", ".buildchain/contract-lock.json", "stable"],
+]) {
+  const job = workflow.split(`  ${jobName}:\n`)[1]?.split(/\n  [a-z][a-z-]*:\n/)[0] || "";
+  for (const binding of [shell, `buildchain-ref: ${runtime}\n`, `buildchain-contract-lock-path: ${lockPath}\n`, `buildchain-contract-expected-channel: ${channel}\n`]) {
+    if (!job.includes(binding)) throw new Error(`${jobName} must retain its matching ${channel} shell, runtime and lock: ${binding}`);
+  }
+  if (!job.includes(`always() && ${channel === "alpha" ? "!" : ""}((github.event_name`)) {
+    throw new Error(`${jobName} must retain mutually exclusive channel routing`);
+  }
 }
 for (const lockInput of [
-  "buildchain-contract-lock-path: ${{",
   ".buildchain/alpha-contract-lock.json",
   ".buildchain/contract-lock.json",
   "buildchain-contract-compatibility-policy: major-compatible",
-  "buildchain-contract-expected-channel: ${{",
   "buildchain-contract-expected-major: \"4\"",
   "buildchain-contract-drift-issue-mode: compatible-and-breaking",
 ]) {
